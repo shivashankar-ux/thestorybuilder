@@ -202,11 +202,7 @@ ${form.message}
                   >
                     <option value="">Select a service...</option>
                     <option value="Website Design">Website Design</option>
-                    <option value="Web Development">Web Development</option>
-                    <option value="UI/UX Design">UI/UX Design</option>
                     <option value="Landing Page">Landing Page</option>
-                    <option value="Brand Identity">Brand Identity</option>
-                    <option value="Other">Other</option>
                   </select>
                 </div>
 

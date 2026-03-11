@@ -594,8 +594,15 @@ body.hovering .cur-dot  { opacity:0; }
    RESPONSIVE
 ========================================= */
 @media (max-width:860px) {
-  .nav-links,.nav-cta { display:none; }
+  .nav-links, .nav-cta, .theme-toggle { display:none; }
   .burger { display:flex; }
+}
+
+/* Tablet */
+@media (max-width:900px) {
+  .ww-card-inner { padding: 28px 28px; gap: 24px; }
+  .about-grid { gap: 40px; }
+  .proj-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width:768px) {
@@ -642,8 +649,37 @@ body.hovering .cur-dot  { opacity:0; }
   .foot-nav { justify-content:center; }
 }
 
+@media (max-width:480px) {
+  /* Contact form full width on small phones */
+  .contact-layout { gap: 32px; }
+  .cf-input { font-size: 14px; padding: 11px 14px; }
+  .reach-card { flex-direction: column; align-items: flex-start; }
+  .reach-card .btn { width: 100%; justify-content: center; }
+
+  /* Nav */
+  .mob-link { font-size: 16px; }
+
+  /* Hero */
+  .hero-ctas { gap: 10px; }
+
+  /* Footer */
+  .foot-nav { flex-wrap: wrap; gap: 12px; }
+
+  /* Why section */
+  .ww-cta p { font-size: 15px; }
+  .ww-stat { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .ww-stat-num { font-size: 22px; }
+}
+
 @media (max-width:380px) {
   .skill-grid { grid-template-columns:1fr; }
+  .hero-title { letter-spacing: -1px; }
+  .sec-h { letter-spacing: -1px; font-size: 26px; }
+  .contact-btns .btn { font-size: 13px; padding: 12px 18px; }
+  .photo-wrap { border-radius: 14px; }
+  .card-body h3 { font-size: 16px; }
+  .ww-card-inner { padding: 20px 16px; }
+  .btn { padding: 11px 20px; font-size: 13px; }
 }
 /* =========================================
    CONTACT FORM
