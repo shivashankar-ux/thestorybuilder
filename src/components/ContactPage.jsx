@@ -178,7 +178,17 @@ ${form.message}
                     required
                   />
                 </div>
-
+                <div className="cf-group">
+                  <label className="cf-label">Phone Number</label>
+                  <input
+                    className="cf-input"
+                    type="tel"
+                    name="phone"
+                    placeholder="+91 98765 43210"
+                    value={form.phone}
+                    onChange={handle}
+                  />
+                </div>
                 <div className="cf-group">
                   <label className="cf-label">Project Type</label>
                   <select
