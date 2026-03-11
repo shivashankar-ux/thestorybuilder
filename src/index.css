@@ -594,7 +594,8 @@ body.hovering .cur-dot  { opacity:0; }
    RESPONSIVE
 ========================================= */
 @media (max-width:860px) {
-  .nav-links, .nav-cta, .theme-toggle { display:none; }
+  .nav-links, .nav-cta { display:none; }
+  .theme-toggle { display:none; }
   .burger { display:flex; }
 }
 
