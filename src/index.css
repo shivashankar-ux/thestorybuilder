@@ -19,7 +19,9 @@
   --r:      14px;
 }
 
-/* Light mode overrides */
+/* =========================================
+   LIGHT MODE
+========================================= */
 [data-theme="light"] {
   --bg:     #f5f6fa;
   --surf:   #ffffff;
@@ -29,11 +31,16 @@
   --muted:  #64748b;
   --gold-a: rgba(250,204,21,.18);
 }
-[data-theme="light"] body { background: var(--bg); }
-[data-theme="light"] .header.scrolled { background: rgba(245,246,250,.92); }
-[data-theme="light"] .mob-menu { background: #ffffff; border-top: 1px solid var(--border); }
+[data-theme="light"] body { background: var(--bg); color: var(--text); }
+[data-theme="light"] .header.scrolled .nav-inner { background: rgba(245,246,250,.95); }
+[data-theme="light"] .mob-menu { background: #ffffff; }
 [data-theme="light"] .grain { opacity: .015; }
-[data-theme="light"] .hero-bg { opacity: .4; }
+[data-theme="light"] .hero-bg { opacity: .35; }
+[data-theme="light"] .about { background: #f8fafc; }
+[data-theme="light"] .contact { background: #f8fafc; }
+[data-theme="light"] .ww-card-inner { background: #ffffff; }
+[data-theme="light"] .cf-input { background: #f8fafc; color: #0f172a; }
+[data-theme="light"] .cf-select option { background: #ffffff; color: #0f172a; }
 
 html { scroll-behavior:smooth; }
 body {
