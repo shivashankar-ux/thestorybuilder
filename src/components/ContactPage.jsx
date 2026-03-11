@@ -49,7 +49,7 @@ export function ContactSection({ setPage }) {
 // ContactPage — the FULL contact page with Telegram form
 // ============================================================
 export default function ContactPage() {
-  const [form, setForm]     = useState({ name: "", email: "", project: "", message: "" });
+  const [form, setForm]     = useState({ name: "", email: "", phone: "", project: "", message: "" });
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
 
   const handle = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -63,6 +63,7 @@ export default function ContactPage() {
 
 👤 *Name:* ${form.name}
 📧 *Email:* ${form.email}
+📱 *Phone:* ${form.phone || "Not provided"}
 💼 *Project Type:* ${form.project || "Not specified"}
 💬 *Message:*
 ${form.message}
@@ -78,7 +79,7 @@ ${form.message}
       const data = await res.json();
       if (data.ok) {
         setStatus("success");
-        setForm({ name: "", email: "", project: "", message: "" });
+        setForm({ name: "", email: "", phone: "", project: "", message: "" });
       } else {
         setStatus("error");
       }
@@ -178,6 +179,7 @@ ${form.message}
                     required
                   />
                 </div>
+
                 <div className="cf-group">
                   <label className="cf-label">Phone Number</label>
                   <input
@@ -189,6 +191,7 @@ ${form.message}
                     onChange={handle}
                   />
                 </div>
+
                 <div className="cf-group">
                   <label className="cf-label">Project Type</label>
                   <select
@@ -199,11 +202,11 @@ ${form.message}
                   >
                     <option value="">Select a service...</option>
                     <option value="Website Design">Website Design</option>
-                    
-                    
+                    <option value="Web Development">Web Development</option>
+                    <option value="UI/UX Design">UI/UX Design</option>
                     <option value="Landing Page">Landing Page</option>
-                    
-                    
+                    <option value="Brand Identity">Brand Identity</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
 
