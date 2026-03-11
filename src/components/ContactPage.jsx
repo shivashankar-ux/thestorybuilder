@@ -159,7 +159,7 @@ ${form.message}
                     className="cf-input"
                     type="text"
                     name="name"
-                    placeholder="John Doe"
+                    placeholder="Shiva"
                     value={form.name}
                     onChange={handle}
                     required
@@ -172,7 +172,7 @@ ${form.message}
                     className="cf-input"
                     type="email"
                     name="email"
-                    placeholder="john@example.com"
+                    placeholder="shiva@example.com"
                     value={form.email}
                     onChange={handle}
                     required
