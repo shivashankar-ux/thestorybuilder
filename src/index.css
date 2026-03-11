@@ -151,10 +151,12 @@ body.hovering .cur-dot  { opacity:0; }
 .nav-cta {
   font-family:var(--fd); font-size:13px; font-weight:700;
   padding:9px 22px; border:1.5px solid var(--gold);
-  border-radius:100px; color:var(--gold);
-  transition:background .25s, color .25s; flex-shrink:0;
+  border-radius:100px; background:var(--gold); color:#000;
+  transition:background .25s, color .25s, box-shadow .25s, transform .2s; flex-shrink:0;
 }
-.nav-cta:hover { background:var(--gold); color:#000; }
+.nav-cta:hover { background:#fff; color:#000; border-color:#fff; box-shadow:0 6px 20px rgba(250,204,21,.4); transform:translateY(-1px); }
+[data-theme="light"] .nav-cta { background:var(--gold); color:#000; border-color:var(--gold); }
+[data-theme="light"] .nav-cta:hover { background:#000; color:#fff; border-color:#000; }
 
 /* Hamburger */
 .burger {
