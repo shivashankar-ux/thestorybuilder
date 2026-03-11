@@ -63,6 +63,17 @@
 [data-theme="light"] .tech-tags span { background: rgba(120,90,40,.06); border-color: rgba(120,90,40,.12); }
 [data-theme="light"] .dots { background-image: radial-gradient(rgba(120,90,40,.12) 1px, transparent 1px); }
 
+/* Fix yellow text in light mode */
+[data-theme="light"] .tag { color: #1a1208; background: rgba(26,18,8,.08); border-color: rgba(26,18,8,.2); }
+[data-theme="light"] em { color: #b45309; }
+[data-theme="light"] .gold { color: #b45309; }
+[data-theme="light"] .gold-name { color: #b45309; }
+[data-theme="light"] .gold-name::after { background: #b45309; }
+[data-theme="light"] .card-tag { color: #b45309; }
+[data-theme="light"] .ww-stat-num { color: var(--accent); }
+[data-theme="light"] .typed-cursor { color: #b45309; }
+[data-theme="light"] .hero-role span { color: #1a1208; }
+
 html { scroll-behavior:smooth; }
 body {
   background:var(--bg); color:var(--text);
