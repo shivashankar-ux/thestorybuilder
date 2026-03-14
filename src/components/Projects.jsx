@@ -42,6 +42,16 @@ const projects = [
     tech: ["Web Design", "UI/UX", "Responsive"],
     url: "https://unbentmartialfitness.com",
   },
+  {
+    id: 5,
+    img: "https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=800&q=80",
+    alt: "DigitalWithChirag website",
+    tag: "Digital Marketing · 2026",
+    title: "DigitalWithChirag",
+    desc: "Personal brand website for a digital marketer — designed to build authority, attract clients and convert visitors.",
+    tech: ["Web Design", "Personal Brand", "Responsive"],
+    url: "https://digitalwithchirag.vercel.app/",
+  },
 ];
 
 // Arrow SVG reused in multiple places — stored as a variable
