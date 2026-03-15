@@ -50,7 +50,7 @@ const projects = [
     title: "DigitalWithChirag",
     desc: "Personal brand website for a digital marketer — designed to build authority, attract clients and convert visitors.",
     tech: ["Web Design", "Personal Brand", "Responsive"],
-    url: "https://digitalwithchirag.vercel.app/",
+    url: "https://www.digitalwithchirag.com/",
   },
 ];
 
