@@ -55,7 +55,7 @@ export default function Hero({ setPage }) {
             </svg>
           </button>
           {/* 🔑 Navigating to another "page" — we call setPage, no href needed */}
-          <button className="btn btn-ghost" onClick={() => setPage("contact")}>
+          <button className="btn btn-ghost" onClick={() => window.open("https://intake-form-thestorybuilder.vercel.app/", "_blank")}>
             Get In Touch
           </button>
         </div>
