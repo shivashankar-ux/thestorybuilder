@@ -1,3 +1,6 @@
+// 🔑 DATA DRIVEN UI: All project info lives here as a JS array.
+// To add a new project — just add a new object. Zero HTML editing needed!
+
 const projects = [
   {
     id: 1,
@@ -60,3 +63,73 @@ const projects = [
     url: "https://siolimcafe.vercel.app/",
   },
 ];
+
+const ArrowIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+    <path d="M5 15L15 5M15 5H8M15 5v7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+function ProjectCard({ project }) {
+  return (
+    <article className="card sr" style={{ "--i": `${project.id * 0.1}s` }}>
+      <div className="card-img-wrap">
+        <img src={project.img} alt={project.alt} loading="lazy" />
+        <div className="card-overlay">
+          <a href={project.url} target="_blank" rel="noopener noreferrer" className="visit-btn">
+            <ArrowIcon /> Visit Site
+          </a>
+        </div>
+      </div>
+      <div className="card-body">
+        <span className="card-tag">{project.tag}</span>
+        <h3>{project.title}</h3>
+        <p>{project.desc}</p>
+        <div className="card-foot">
+          <div className="tech-tags">
+            {project.tech.map((t) => <span key={t}>{t}</span>)}
+          </div>
+          <a href={project.url} target="_blank" rel="noopener noreferrer" className="ext-link" aria-label={`Visit ${project.title}`}>
+            <ArrowIcon />
+          </a>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+export default function Projects({ setPage }) {
+  return (
+    <section className="projects" id="projects">
+      <div className="wrap">
+        <span className="tag sr">Portfolio</span>
+        <div className="proj-header sr">
+          <h2 className="sec-h">Selected <em>Work</em></h2>
+          <p className="muted">A curated look at what I've built</p>
+        </div>
+
+        <div className="proj-grid">
+          {projects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+
+          <article className="card card-cta sr" style={{ "--i": "0.5s" }}>
+            <div className="cta-icon">
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M14 4v20M4 14h20" stroke="#facc15" strokeWidth="2.2" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <h3>Have a project in mind?</h3>
+            <p>Let's collaborate and build something amazing together.</p>
+            <button className="btn btn-gold" onClick={() => setPage("contact")}>
+              Start a Project
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </article>
+        </div>
+      </div>
+    </section>
+  );
+}
