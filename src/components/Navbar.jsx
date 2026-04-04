@@ -67,7 +67,7 @@ export default function Navbar({ page, setPage }) {
       <div className="nav-inner">
 
         <button className="logo" onClick={() => handleNav("home")}
-          style={{ background:"none", border:"none", color:"var(--text)" }}>
+          style={{ background:"none", border:"none", color:"var(--text)", whiteSpace: "nowrap" }}>
           <span>S</span>hiva
         </button>
 
