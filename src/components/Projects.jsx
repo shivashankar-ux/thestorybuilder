@@ -237,9 +237,9 @@ export default function Projects({ setPage }) {
 
         {/* Extra cards revealed on "More" */}
         {showAll && (
-          <div className="proj-grid" ref={extraRef} style={{ marginTop: 22 }}>
+          <div className="proj-extra-grid" ref={extraRef}>
             {hidden.map((project, i) => (
-              <div key={project.id} className="extra-card sr" style={{ "--i": `${i * 0.1}s` }}>
+              <div key={project.id} className="extra-card sr" style={{ "--i": `${i * 0.12}s` }}>
                 <ProjectCard project={project} />
               </div>
             ))}
