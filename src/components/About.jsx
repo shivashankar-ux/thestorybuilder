@@ -3,16 +3,6 @@ import { useEffect } from "react";
 const skills = [
   {
     id: 1,
-    title: "UI/UX Design",
-    desc: "Intuitive interfaces with stunning visual design",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
-  {
-    id: 2,
     title: "Web Development",
     desc: "Clean, performant code for modern browsers",
     icon: (
@@ -23,24 +13,13 @@ const skills = [
     ),
   },
   {
-    id: 3,
+    id: 2,
     title: "AI Voice Agents",
     desc: "Intelligent voice receptionists & automation for businesses",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
         <path d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
-  {
-    id: 4,
-    title: "SEO & Performance",
-    desc: "Fast-loading sites that rank and convert",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="10" stroke="#facc15" strokeWidth="1.5"/>
-        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="#facc15" strokeWidth="1.5"/>
       </svg>
     ),
   },
