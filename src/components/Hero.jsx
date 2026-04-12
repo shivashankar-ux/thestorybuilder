@@ -38,11 +38,7 @@ export default function Hero({ setPage }) {
           I'm a <span ref={typedRef} />
         </p>
 
-        <p className="hero-sub fi" style={{ "--i": 3 }}>
-          I craft modern, high-performance websites and AI-powered experiences that help businesses and startups stand out online.
-        </p>
-
-        <div className="hero-ctas fi" style={{ "--i": 4 }}>
+        <div className="hero-ctas fi" style={{ "--i": 3 }}>
           <button className="btn btn-gold" onClick={() => scrollTo("projects")}>
             View My Work
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none">

@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
-// First 4 are shown by default; rest revealed on "More" click
 const projects = [
   {
     id: 1,
@@ -34,7 +33,8 @@ const projects = [
   },
   {
     id: 4,
-    img: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80",
+    // Chess-specific image
+    img: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=800&q=80",
     alt: "Chess Academy website",
     tag: "Education · AI · 2026",
     title: "Chess Academy",
@@ -42,7 +42,7 @@ const projects = [
     tech: ["Next.js", "AI Features", "Responsive"],
     url: "https://chessacademy-next-js-chirag-client.vercel.app/",
   },
-  // — hidden behind "More" button —
+  // hidden behind "More"
   {
     id: 5,
     img: "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=800&q=80",
@@ -83,7 +83,7 @@ const ArrowIcon = () => (
 
 function ProjectCard({ project }) {
   return (
-    <article className="card sr" style={{ "--i": `${project.id * 0.1}s` }}>
+    <article className="card">
       <div className="card-img-wrap">
         <img src={project.img} alt={project.alt} loading="lazy" />
         <div className="card-overlay">
@@ -109,7 +109,6 @@ function ProjectCard({ project }) {
   );
 }
 
-// AI Vision section — new block for voice agents work
 function AIVisionBlock() {
   return (
     <div className="ai-vision-block sr">
@@ -150,8 +149,34 @@ function AIVisionBlock() {
 
 export default function Projects({ setPage }) {
   const [showAll, setShowAll] = useState(false);
+  const extraRef = useRef(null);
 
-  const visibleProjects = showAll ? projects : projects.slice(0, 4);
+  // When "More" is clicked, show all and scroll smoothly to the newly revealed cards
+  const handleShowMore = () => {
+    setShowAll(true);
+    // slight delay so DOM renders first
+    setTimeout(() => {
+      if (extraRef.current) {
+        extraRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 80);
+  };
+
+  // Re-run scroll reveal on extra cards after they appear
+  useEffect(() => {
+    if (!showAll) return;
+    const els = document.querySelectorAll(".extra-card.sr");
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); } }),
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [showAll]);
+
+  const visible = projects.slice(0, 4);
+  const hidden  = projects.slice(4);
 
   return (
     <section className="projects" id="projects">
@@ -162,16 +187,16 @@ export default function Projects({ setPage }) {
           <p className="muted">A curated look at what I've built</p>
         </div>
 
-        {/* AI Vision Block — new work highlight */}
         <AIVisionBlock />
 
         <div className="proj-grid">
-          {visibleProjects.map((project) => (
+          {visible.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
 
+          {/* "More" card — only shown when not expanded */}
           {!showAll && (
-            <article className="card card-more sr" style={{ "--i": "0.4s" }}>
+            <article className="card card-more">
               <div className="more-inner">
                 <div className="more-icon">
                   <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
@@ -180,9 +205,9 @@ export default function Projects({ setPage }) {
                     <circle cx="21" cy="14" r="2.5" fill="#facc15"/>
                   </svg>
                 </div>
-                <h3>{projects.length - 4} more projects</h3>
+                <h3>{hidden.length} more projects</h3>
                 <p>Including fitness brands, cafés, marketing sites and more.</p>
-                <button className="btn btn-gold" onClick={() => setShowAll(true)}>
+                <button className="btn btn-gold" onClick={handleShowMore}>
                   See All Work
                   <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -192,6 +217,7 @@ export default function Projects({ setPage }) {
             </article>
           )}
 
+          {/* CTA card always visible */}
           <article className="card card-cta sr" style={{ "--i": "0.5s" }}>
             <div className="cta-icon">
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
@@ -208,6 +234,17 @@ export default function Projects({ setPage }) {
             </button>
           </article>
         </div>
+
+        {/* Extra cards revealed on "More" */}
+        {showAll && (
+          <div className="proj-grid" ref={extraRef} style={{ marginTop: 22 }}>
+            {hidden.map((project, i) => (
+              <div key={project.id} className="extra-card sr" style={{ "--i": `${i * 0.1}s` }}>
+                <ProjectCard project={project} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
