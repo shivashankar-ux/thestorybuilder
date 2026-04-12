@@ -1,6 +1,6 @@
-// 🔑 DATA DRIVEN UI: All project info lives here as a JS array.
-// To add a new project — just add a new object. Zero HTML editing needed!
+import { useState } from "react";
 
+// First 4 are shown by default; rest revealed on "More" click
 const projects = [
   {
     id: 1,
@@ -34,6 +34,17 @@ const projects = [
   },
   {
     id: 4,
+    img: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80",
+    alt: "Chess Academy website",
+    tag: "Education · AI · 2026",
+    title: "Chess Academy",
+    desc: "A next-gen chess academy platform with AI-powered features, clean layouts, and student-first UX — built to inspire the next generation of players.",
+    tech: ["Next.js", "AI Features", "Responsive"],
+    url: "https://chessacademy-next-js-chirag-client.vercel.app/",
+  },
+  // — hidden behind "More" button —
+  {
+    id: 5,
     img: "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=800&q=80",
     alt: "Unbent Martial Fitness website",
     tag: "Martial Arts · 2026",
@@ -43,7 +54,7 @@ const projects = [
     url: "https://unbentmartialfitness.com",
   },
   {
-    id: 5,
+    id: 6,
     img: "https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=800&q=80",
     alt: "DigitalWithChirag website",
     tag: "Digital Marketing · 2026",
@@ -53,7 +64,7 @@ const projects = [
     url: "https://www.digitalwithchirag.com/",
   },
   {
-    id: 6,
+    id: 7,
     img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80",
     alt: "Siolim Cafe website",
     tag: "Cafe & Dining · 2026",
@@ -98,7 +109,50 @@ function ProjectCard({ project }) {
   );
 }
 
+// AI Vision section — new block for voice agents work
+function AIVisionBlock() {
+  return (
+    <div className="ai-vision-block sr">
+      <div className="ai-vision-inner">
+        <div className="ai-vision-img">
+          <img
+            src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80"
+            alt="AI Voice Agents"
+            loading="lazy"
+          />
+          <div className="ai-vision-badge">
+            <span className="pulse-dot" style={{ background: "#4ade80" }} /> Live & Active
+          </div>
+        </div>
+        <div className="ai-vision-content">
+          <span className="card-tag" style={{ marginBottom: 12 }}>AI Vision · New Work · 2026</span>
+          <h3 className="ai-vision-title">AI Voice Agents</h3>
+          <p className="muted" style={{ marginBottom: 16 }}>
+            Expanding beyond web — now building intelligent AI voice receptionists for clinics,
+            dental offices, and service businesses. Agents that answer calls, book appointments,
+            and handle FAQs 24/7 without missing a beat.
+          </p>
+          <div className="ai-vision-tags">
+            <span>Vapi</span>
+            <span>n8n</span>
+            <span>Twilio</span>
+            <span>Google Calendar</span>
+            <span>WhatsApp</span>
+          </div>
+          <p className="ai-vision-note">
+            🚀 Currently in build phase — pilot launching soon.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Projects({ setPage }) {
+  const [showAll, setShowAll] = useState(false);
+
+  const visibleProjects = showAll ? projects : projects.slice(0, 4);
+
   return (
     <section className="projects" id="projects">
       <div className="wrap">
@@ -108,10 +162,35 @@ export default function Projects({ setPage }) {
           <p className="muted">A curated look at what I've built</p>
         </div>
 
+        {/* AI Vision Block — new work highlight */}
+        <AIVisionBlock />
+
         <div className="proj-grid">
-          {projects.map((project) => (
+          {visibleProjects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
+
+          {!showAll && (
+            <article className="card card-more sr" style={{ "--i": "0.4s" }}>
+              <div className="more-inner">
+                <div className="more-icon">
+                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                    <circle cx="7" cy="14" r="2.5" fill="#facc15"/>
+                    <circle cx="14" cy="14" r="2.5" fill="#facc15"/>
+                    <circle cx="21" cy="14" r="2.5" fill="#facc15"/>
+                  </svg>
+                </div>
+                <h3>{projects.length - 4} more projects</h3>
+                <p>Including fitness brands, cafés, marketing sites and more.</p>
+                <button className="btn btn-gold" onClick={() => setShowAll(true)}>
+                  See All Work
+                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+            </article>
+          )}
 
           <article className="card card-cta sr" style={{ "--i": "0.5s" }}>
             <div className="cta-icon">

@@ -914,3 +914,140 @@ body.hovering .cur-dot  { opacity:0; }
   border-color: var(--gold);
   color: var(--gold);
 }
+/* =========================================
+   AI VISION BLOCK — new work section
+========================================= */
+.ai-vision-block {
+  margin-bottom: 40px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1.5px solid rgba(99,66,245,.35);
+  background: linear-gradient(135deg, var(--card) 0%, rgba(99,66,245,.06) 50%, rgba(250,204,21,.04) 100%);
+  transition: border-color .35s, box-shadow .35s, transform .35s;
+}
+.ai-vision-block:hover {
+  border-color: rgba(99,66,245,.6);
+  box-shadow: 0 20px 60px rgba(99,66,245,.18);
+  transform: translateY(-4px);
+}
+.ai-vision-inner {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 0;
+  min-height: 300px;
+}
+.ai-vision-img {
+  position: relative;
+  overflow: hidden;
+}
+.ai-vision-img img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform .6s var(--ease);
+}
+.ai-vision-block:hover .ai-vision-img img { transform: scale(1.05); }
+.ai-vision-badge {
+  position: absolute;
+  top: 14px; left: 14px;
+  display: inline-flex; align-items: center; gap: 7px;
+  font-size: 11px; font-weight: 700; letter-spacing: .06em;
+  background: rgba(5,7,15,.82); backdrop-filter: blur(10px);
+  border: 1px solid rgba(74,222,128,.3); border-radius: 100px;
+  padding: 5px 13px; color: #4ade80;
+}
+.ai-vision-content {
+  padding: 36px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.ai-vision-title {
+  font-family: var(--fd);
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 800;
+  letter-spacing: -.6px;
+  margin-bottom: 14px;
+}
+.ai-vision-tags {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 16px;
+}
+.ai-vision-tags span {
+  font-size: 12px; font-weight: 600;
+  color: #818cf8;
+  background: rgba(99,66,245,.12);
+  border: 1px solid rgba(99,66,245,.25);
+  border-radius: 100px;
+  padding: 4px 12px;
+}
+.ai-vision-note {
+  font-size: 13px;
+  color: var(--muted);
+  padding: 10px 14px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: inline-block;
+}
+
+/* More projects card */
+.card-more {
+  background: linear-gradient(145deg, var(--card) 0%, rgba(99,66,245,.06) 100%);
+  border-style: dashed;
+  border-color: rgba(99,66,245,.3);
+  align-items: center; justify-content: center;
+  min-height: 300px;
+}
+.card-more:hover {
+  border-color: rgba(99,66,245,.6);
+  background: linear-gradient(145deg, var(--card) 0%, rgba(99,66,245,.1) 100%);
+  transform: translateY(-4px);
+}
+.more-inner {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 10px; padding: 44px 28px;
+}
+.more-icon {
+  width: 58px; height: 58px;
+  border: 1.5px solid rgba(250,204,21,.3); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 4px;
+}
+.more-inner h3 { font-family: var(--fd); font-size: 18px; font-weight: 800; }
+.more-inner p  { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+
+/* Light mode overrides for new blocks */
+[data-theme="light"] .ai-vision-block { background: linear-gradient(135deg, #fffdf9 0%, rgba(99,66,245,.05) 50%, rgba(250,204,21,.04) 100%); }
+[data-theme="light"] .ai-vision-note { background: rgba(0,0,0,.03); }
+[data-theme="light"] .card-more { background: linear-gradient(145deg, #fffdf9 0%, rgba(99,66,245,.05) 100%); }
+
+@media (max-width: 768px) {
+  .ai-vision-inner { grid-template-columns: 1fr; }
+  .ai-vision-img { height: 220px; }
+  .ai-vision-content { padding: 24px 22px; }
+}
+
+/* =========================================
+   LOGO & HERO NAME adjustments for "The Story Builder"
+========================================= */
+.logo {
+  font-size: 18px !important; /* slightly smaller to fit full name */
+}
+@media (max-width: 400px) {
+  .gold-name { font-size: clamp(32px, 8vw, 72px); }
+}
+/* Brighter dark mode — increase vibrancy of orbs */
+.o1 { background: radial-gradient(circle, rgba(99,66,245,.32) 0%, transparent 70%); }
+.o2 { background: radial-gradient(circle, rgba(250,204,21,.16) 0%, transparent 70%); }
+.o3 { background: radial-gradient(circle, rgba(56,189,248,.22) 0%, transparent 70%); }
+
+/* Brighter cards in dark mode */
+.card { box-shadow: 0 2px 16px rgba(0,0,0,.25); }
+.card:hover { box-shadow: 0 24px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(250,204,21,.12); }
+
+/* Better light mode — crisper whites and stronger shadows */
+[data-theme="light"] .card { box-shadow: 0 2px 12px rgba(0,0,0,.07); }
+[data-theme="light"] .card:hover { box-shadow: 0 16px 48px rgba(0,0,0,.12); }
+[data-theme="light"] .sk:hover { box-shadow: 0 8px 28px rgba(0,0,0,.1); }
+[data-theme="light"] .ai-vision-block { border-color: rgba(99,66,245,.25); }
+[data-theme="light"] .ai-vision-block:hover { box-shadow: 0 20px 60px rgba(99,66,245,.1); }

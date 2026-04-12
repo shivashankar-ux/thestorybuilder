@@ -5,11 +5,9 @@ export default function Navbar({ page, setPage }) {
   const [menuOpen,  setMenuOpen]  = useState(false);
   const [activeNav, setActiveNav] = useState("home");
   const [dark,      setDark]      = useState(() => {
-    // Remember user's preference from localStorage
     return localStorage.getItem("theme") !== "light";
   });
 
-  // Apply theme to <html> element whenever it changes
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", dark ? "dark" : "light");
     localStorage.setItem("theme", dark ? "dark" : "light");
@@ -68,7 +66,7 @@ export default function Navbar({ page, setPage }) {
 
         <button className="logo" onClick={() => handleNav("home")}
           style={{ background:"none", border:"none", color:"var(--text)", whiteSpace: "nowrap" }}>
-          <span>S</span>hiva
+          <span>The </span>Story Builder
         </button>
 
         <nav className="nav-links">
@@ -84,7 +82,6 @@ export default function Navbar({ page, setPage }) {
           ))}
         </nav>
 
-        {/* Theme Toggle */}
         <button
           className="theme-toggle"
           onClick={() => setDark(!dark)}
@@ -92,13 +89,11 @@ export default function Navbar({ page, setPage }) {
           title={dark ? "Light mode" : "Dark mode"}
         >
           {dark ? (
-            /* Sun icon */
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             </svg>
           ) : (
-            /* Moon icon */
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
@@ -127,7 +122,6 @@ export default function Navbar({ page, setPage }) {
               {item.label}
             </button>
           ))}
-          {/* Theme toggle in mobile menu too */}
           <button
             className="mob-theme-toggle"
             onClick={() => setDark(!dark)}

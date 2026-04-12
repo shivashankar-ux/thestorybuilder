@@ -1,22 +1,18 @@
 import { useEffect, useRef } from "react";
 
-// 🔑 setPage is passed as a PROP so this component can navigate
 export default function Hero({ setPage }) {
   const typedRef = useRef(null);
 
   useEffect(() => {
-    // Typed.js is loaded via CDN in index.html — same as before.
-    // We wait for it to be available on window.
     if (!window.Typed) return;
     const t = new window.Typed(typedRef.current, {
-      strings: ["Web Designer.", "Web Developer.", "UI/UX Designer.", "Freelancer.", "Brand Builder."],
+      strings: ["Web Designer.", "Web Developer.", "AI Builder.", "Voice Agent Creator.", "Brand Builder."],
       typeSpeed: 58, backSpeed: 32, backDelay: 1800,
       startDelay: 600, loop: true, smartBackspace: true,
     });
-    return () => t.destroy(); // cleanup on unmount
+    return () => t.destroy();
   }, []);
 
-  // Smooth scroll helper
   const scrollTo = (id) => {
     const el = document.getElementById(id);
     if (el) window.scrollTo({ top: el.offsetTop - 68, behavior: "smooth" });
@@ -35,7 +31,7 @@ export default function Hero({ setPage }) {
         </div>
 
         <h1 className="hero-title fi" style={{ "--i": 1 }}>
-          Hello, I'm<br /><span className="gold-name">Shiva</span>
+          Hello, I'm<br /><span className="gold-name">The Story Builder</span>
         </h1>
 
         <p className="hero-role fi" style={{ "--i": 2 }}>
@@ -43,18 +39,16 @@ export default function Hero({ setPage }) {
         </p>
 
         <p className="hero-sub fi" style={{ "--i": 3 }}>
-          I craft modern, high-performance websites that help businesses and startups stand out online.
+          I craft modern, high-performance websites and AI-powered experiences that help businesses and startups stand out online.
         </p>
 
         <div className="hero-ctas fi" style={{ "--i": 4 }}>
-          {/* 🔑 onClick with arrow function — a clean one-liner handler */}
           <button className="btn btn-gold" onClick={() => scrollTo("projects")}>
             View My Work
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
-          {/* 🔑 Navigating to another "page" — we call setPage, no href needed */}
           <button className="btn btn-ghost" onClick={() => window.open("https://intake-form-thestorybuilder.vercel.app/", "_blank")}>
             Get In Touch
           </button>

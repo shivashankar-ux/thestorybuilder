@@ -1,9 +1,5 @@
 import { useEffect } from "react";
 
-// 🔑 DATA IN REACT: Instead of writing HTML cards by hand,
-// we store data in arrays/objects and loop over them.
-// Want to add a new skill? Just add one object to the array!
-
 const skills = [
   {
     id: 1,
@@ -28,12 +24,12 @@ const skills = [
   },
   {
     id: 3,
-    title: "Responsive Design",
-    desc: "Pixel-perfect across all devices and screens",
+    title: "AI Voice Agents",
+    desc: "Intelligent voice receptionists & automation for businesses",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <rect x="2" y="3" width="20" height="14" rx="2" stroke="#facc15" strokeWidth="1.5"/>
-        <path d="M8 21h8M12 17v4" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M12 2a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V5a3 3 0 0 1 3-3z" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3M8 22h8" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },
@@ -51,7 +47,6 @@ const skills = [
 ];
 
 export default function About({ setPage }) {
-  // Scroll reveal — same IntersectionObserver logic as before
   useEffect(() => {
     const els = document.querySelectorAll(".sr");
     if (!els.length) return;
@@ -73,13 +68,13 @@ export default function About({ setPage }) {
               Crafting digital<br /><em>experiences</em><br />that leave a mark.
             </h2>
             <p className="muted">
-              I'm Shiva — a web designer and entrepreneur passionate about building modern, clean websites
-              that help businesses establish a powerful online presence. Every pixel is intentional, every
-              interaction purposeful.
+              I'm The Story Builder — a web designer, developer, and AI entrepreneur passionate about
+              building modern websites and intelligent voice agents that help businesses grow. From pixel-perfect
+              designs to AI receptionists, every project is built with purpose.
             </p>
             <p className="muted">
-              From concept to deployment, I handle the full journey — blending strong design instincts
-              with solid development skills to deliver work that's both beautiful and functional.
+              Currently expanding into AI Vision — building voice agents for clinics, businesses, and
+              brands that need to stay available 24/7. From concept to deployment, I handle the full journey.
             </p>
             <button className="btn btn-gold" onClick={() => setPage("contact")} style={{ marginTop: 24 }}>
               Work With Me
@@ -89,7 +84,6 @@ export default function About({ setPage }) {
             </button>
           </div>
 
-          {/* 🔑 .map() — renders one <div class="sk"> per skill object */}
           <div className="skill-grid sr">
             {skills.map((skill) => (
               <div className="sk" key={skill.id}>
