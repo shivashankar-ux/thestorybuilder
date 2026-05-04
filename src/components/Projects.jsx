@@ -109,43 +109,6 @@ function ProjectCard({ project }) {
   );
 }
 
-function AIVisionBlock() {
-  return (
-    <div className="ai-vision-block sr">
-      <div className="ai-vision-inner">
-        <div className="ai-vision-img">
-          <img
-            src="https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=800&q=80"
-            alt="AI Voice Agents"
-            loading="lazy"
-          />
-          <div className="ai-vision-badge">
-            <span className="pulse-dot" style={{ background: "#4ade80" }} /> Live & Active
-          </div>
-        </div>
-        <div className="ai-vision-content">
-          <span className="card-tag" style={{ marginBottom: 12 }}>AI Vision · New Work · 2026</span>
-          <h3 className="ai-vision-title">AI Voice Agents</h3>
-          <p className="muted" style={{ marginBottom: 16 }}>
-            Expanding beyond web — now building intelligent AI voice receptionists for clinics,
-            dental offices, and service businesses. Agents that answer calls, book appointments,
-            and handle FAQs 24/7 without missing a beat.
-          </p>
-          <div className="ai-vision-tags">
-            <span>Vapi</span>
-            <span>n8n</span>
-            <span>Twilio</span>
-            <span>Google Calendar</span>
-            <span>WhatsApp</span>
-          </div>
-          <p className="ai-vision-note">
-            🚀 Currently in build phase — pilot launching soon.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function Projects({ setPage }) {
   const [showAll, setShowAll] = useState(false);
@@ -187,7 +150,7 @@ export default function Projects({ setPage }) {
           <p className="muted">A curated look at what I've built</p>
         </div>
 
-        <AIVisionBlock />
+      
 
         <div className="proj-grid">
           {visible.map((project) => (
