@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
+import { createTyped } from "../utils/typed";
 
 export default function Hero({ setPage }) {
   const typedRef = useRef(null);
 
   useEffect(() => {
-    if (!window.Typed) return;
-    const t = new window.Typed(typedRef.current, {
+    const t = createTyped(typedRef.current, {
       strings: [
         "Performance Marketer.",
         "SEO Specialist.",

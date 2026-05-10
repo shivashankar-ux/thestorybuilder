@@ -1,4 +1,6 @@
 import { useState } from "react";
+import CalendlyEmbed from "./CalendlyEmbed";
+import { trackEvent } from "../utils/tracking";
 
 const BOT_TOKEN = "8712967453:AAGMQV1SneKzT2FGFkdNTrh2GvZD_Q_vgcY";
 const CHAT_ID   = "1340316382";
@@ -14,24 +16,26 @@ export function ContactSection({ setPage }) {
           <span className="tag">Get In Touch</span>
           <h2 className="sec-h">Let's build something<br /><em>great together.</em></h2>
           <p className="muted">
-            Whether you have a project, a question, or just want to say hi — reach out and I'll get back to you fast.
+            Whether you're scaling, launching, or just exploring — tell us about your business and we'll map a growth plan in 48 hours.
           </p>
           <div className="contact-btns">
             <a
-              href="https://mail.google.com/mail/?view=cm&to=shivashankar.7991@gmail.com&su=Project%20Enquiry&body=Hi%20Shiva%2C%20I%27d%20love%20to%20work%20with%20you!"
+              href="https://mail.google.com/mail/?view=cm&to=shivashankar.7991@gmail.com&su=Growth%20Enquiry&body=Hi%20team%2C%20I%27d%20love%20to%20discuss%20a%20project!"
               target="_blank" rel="noopener noreferrer"
               className="btn btn-gold btn-lg"
+              data-track="home_email_click"
             >
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
                 <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="1.8"/>
                 <path d="M2 7l10 7 10-7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
               </svg>
-              Email on Gmail
+              Email Us
             </a>
             <a
-              href="https://wa.me/918341928526?text=Hi%20Shiva%2C%20I%20saw%20your%20portfolio%20and%20I%27d%20love%20to%20discuss%20a%20project!"
+              href="https://wa.me/918341928526?text=Hi%2C%20I%20saw%20your%20website%20and%20I%27d%20love%20to%20discuss%20a%20project!"
               target="_blank" rel="noopener noreferrer"
               className="btn btn-wa btn-lg"
+              data-track="home_whatsapp_click"
             >
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
                 <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -71,6 +75,9 @@ export default function ContactPage() {
     ].join("\n");
 
     try {
+      trackEvent("contact_form_submitted", {
+        project: form.project || "unspecified",
+      });
       const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
       const res = await fetch(url, {
         method: "POST",
@@ -107,17 +114,16 @@ export default function ContactPage() {
           {/* LEFT — Photo + intro */}
           <div className="contact-left fi" style={{ "--i": 0 }}>
             <div className="photo-wrap">
-              <img src="/shiva.jpg" alt="Shiva — Web Designer & Developer" />
+              <img src="/shiva.jpg" alt="The Story Builder — Founder" />
               <div className="photo-badge">
-                <span className="pulse-dot" /> Available for work
+                <span className="pulse-dot" /> Now onboarding clients
               </div>
             </div>
 
             <div className="contact-intro">
-              <h1>Hey, I'm <span className="gold">Shiva</span> 👋</h1>
+              <h1>Talk to <span className="gold">The Story Builder</span></h1>
               <p>
-                Web designer &amp; developer based in India. I build clean, modern websites
-                that help businesses stand out online. Got a project? Let's talk.
+                A full-service digital marketing agency working with founders and growing brands across India and abroad. Tell us where you are and where you want to be — we'll map the path.
               </p>
               <div className="contact-detail">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
@@ -212,8 +218,12 @@ export default function ContactPage() {
                     onChange={handle}
                   >
                     <option value="">Select a service...</option>
-                    <option value="Website Design">Website Design</option>
-                    <option value="Landing Page">Landing Page</option>
+                    <option value="Performance Marketing (Meta + Google)">Performance Marketing (Meta + Google)</option>
+                    <option value="SEO + Content">SEO + Content</option>
+                    <option value="Website / Landing Page">Website / Landing Page</option>
+                    <option value="Brand Strategy">Brand Strategy</option>
+                    <option value="Full-Funnel Growth Partner">Full-Funnel Growth Partner</option>
+                    <option value="Not Sure Yet — Need Audit">Not Sure Yet — Need Audit</option>
                   </select>
                 </div>
 
@@ -260,10 +270,22 @@ export default function ContactPage() {
                 <circle cx="12" cy="12" r="10" stroke="var(--muted)" strokeWidth="1.5"/>
                 <polyline points="12 6 12 12 16 14" stroke="var(--muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              I typically respond within <strong>24 hours.</strong>
+              We typically respond within <strong>24 hours.</strong>
             </div>
           </div>
 
+        </div>
+
+        {/* Calendly — book a strategy call */}
+        <div className="contact-calendly-block">
+          <div className="contact-calendly-head">
+            <span className="tag">Or Book Direct</span>
+            <h3>Pick a 30-min strategy slot.</h3>
+            <p className="muted">
+              Skip the form — book a free 30-minute call. Bring your numbers, leave with a plan.
+            </p>
+          </div>
+          <CalendlyEmbed />
         </div>
       </div>
     </main>

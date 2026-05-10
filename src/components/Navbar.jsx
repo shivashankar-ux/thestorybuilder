@@ -16,11 +16,11 @@ export default function Navbar({ page, setPage }) {
   useEffect(() => {
     if (page !== "home") {
       setScrolled(true);
-      setActiveNav("contact");
+      setActiveNav(page === "contact" ? "contact" : "");
       return;
     }
     setActiveNav("home");
-    const sections = ["home", "about", "projects", "contact"];
+    const sections = ["home", "about", "process", "projects", "pricing", "contact"];
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
       let cur = "home";
@@ -55,8 +55,10 @@ export default function Navbar({ page, setPage }) {
 
   const navItems = [
     { id: "home",     label: "Home" },
-    { id: "about",    label: "About" },
-    { id: "projects", label: "Projects" },
+    { id: "about",    label: "Services" },
+    { id: "process",  label: "Process" },
+    { id: "projects", label: "Work" },
+    { id: "pricing",  label: "Pricing" },
     { id: "contact",  label: "Contact" },
   ];
 

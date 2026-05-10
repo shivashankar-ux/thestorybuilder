@@ -11,6 +11,7 @@ const projects = [
     services: ["Web Development", "SEO", "Performance Marketing"],
     metric: "Lead-gen funnel",
     url: "https://legacysolar.in",
+    caseSlug: "legacy-solar",
   },
   {
     id: 2,
@@ -44,6 +45,7 @@ const projects = [
     services: ["Next.js Development", "Funnel Design", "AI Integration"],
     metric: "Student acquisition",
     url: "https://chessacademy-next-js-chirag-client.vercel.app/",
+    caseSlug: "chess-academy",
   },
   {
     id: 5,
@@ -119,7 +121,7 @@ const ArrowIcon = () => (
   </svg>
 );
 
-function ShowcaseRow({ project, index }) {
+function ShowcaseRow({ project, index, navigate }) {
   const reversed = index % 2 === 1;
   return (
     <article
@@ -158,21 +160,33 @@ function ShowcaseRow({ project, index }) {
             <span className="metric-dot" />
             <span>{project.metric}</span>
           </div>
-          <a
-            href={project.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="showcase-link"
-          >
-            View Project <ArrowIcon />
-          </a>
+          <div className="showcase-actions">
+            {project.caseSlug && navigate && (
+              <button
+                type="button"
+                className="showcase-link showcase-case"
+                data-track={`case_${project.caseSlug}`}
+                onClick={() => navigate({ page: "case", caseSlug: project.caseSlug })}
+              >
+                Read Case Study <ArrowIcon />
+              </button>
+            )}
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="showcase-link"
+            >
+              View Live <ArrowIcon />
+            </a>
+          </div>
         </div>
       </div>
     </article>
   );
 }
 
-export default function Projects({ setPage }) {
+export default function Projects({ setPage, navigate }) {
   useEffect(() => {
     const els = document.querySelectorAll(".projects .sr");
     if (!els.length) return;
@@ -205,7 +219,7 @@ export default function Projects({ setPage }) {
 
         <div className="showcase-list">
           {projects.map((project, i) => (
-            <ShowcaseRow key={project.id} project={project} index={i} />
+            <ShowcaseRow key={project.id} project={project} index={i} navigate={navigate} />
           ))}
         </div>
 
