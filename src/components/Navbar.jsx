@@ -20,7 +20,7 @@ export default function Navbar({ page, setPage }) {
       return;
     }
     setActiveNav("home");
-    const sections = ["home", "about", "process", "projects", "pricing", "contact"];
+    const sections = ["home", "about", "process", "projects", "contact"];
     const onScroll = () => {
       setScrolled(window.scrollY > 20);
       let cur = "home";
@@ -58,7 +58,6 @@ export default function Navbar({ page, setPage }) {
     { id: "about",    label: "Services" },
     { id: "process",  label: "Process" },
     { id: "projects", label: "Work" },
-    { id: "pricing",  label: "Pricing" },
     { id: "contact",  label: "Contact" },
   ];
 

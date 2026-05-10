@@ -6,8 +6,6 @@ import TrustedBy from "./components/TrustedBy";
 import About from "./components/About";
 import Process from "./components/Process";
 import Projects from "./components/Projects";
-import Testimonials from "./components/Testimonials";
-import Pricing from "./components/Pricing";
 import WhyWebsite from "./components/WhyWebsite";
 import { ContactSection } from "./components/ContactPage";
 import ContactPage from "./components/ContactPage";
@@ -86,8 +84,6 @@ export default function App() {
           <About setPage={navigate} />
           <Process />
           <Projects setPage={navigate} navigate={navigate} />
-          <Testimonials />
-          <Pricing setPage={navigate} />
           <WhyWebsite setPage={navigate} />
           <ContactSection setPage={navigate} />
         </main>

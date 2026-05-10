@@ -2,9 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 const stats = [
   { value: 10, suffix: "+", label: "Brands launched" },
-  { value: 5, suffix: "M+", prefix: "₹", label: "Ad spend managed" },
   { value: 3.4, suffix: "x", label: "Avg ROAS delivered" },
-  { value: 4, suffix: "+", label: "Countries served" },
 ];
 
 function CountUp({ end, prefix = "", suffix = "", duration = 1400 }) {
