@@ -1,77 +1,115 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect } from "react";
 
 const projects = [
   {
     id: 1,
-    img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&q=80",
+    img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=1200&q=80",
     alt: "Legacy Solar website",
-    tag: "Solar Energy · 2026",
+    tag: "Solar Energy · Lead Generation",
     title: "Legacy Solar",
-    desc: "Professional solar energy company website with modern UI and strong conversion focus.",
-    tech: ["HTML/CSS", "JavaScript", "Responsive"],
+    desc: "Conversion-focused website backed by paid search and SEO — built to capture high-intent solar leads and turn page visits into qualified consultations.",
+    services: ["Web Development", "SEO", "Performance Marketing"],
+    metric: "Lead-gen funnel",
     url: "https://legacysolar.in",
   },
   {
     id: 2,
-    img: "https://images.unsplash.com/photo-1550345332-09e3ac987658?w=800&q=80",
+    img: "https://images.unsplash.com/photo-1550345332-09e3ac987658?w=1200&q=80",
     alt: "Star Fitness Studio website",
-    tag: "Fitness · 2026",
+    tag: "Fitness · Local Growth",
     title: "Star Fitness Studio",
-    desc: "High-energy fitness studio site built to attract members and showcase classes beautifully.",
-    tech: ["Web Design", "UI/UX", "Mobile-first"],
+    desc: "Mobile-first studio site engineered with local SEO and Meta ads to drive consistent membership sign-ups across the city.",
+    services: ["Web Development", "Local SEO", "Meta Ads"],
+    metric: "Membership growth",
     url: "https://starfitnessstudio.in",
   },
   {
     id: 3,
-    img: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=800&q=80",
+    img: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=1200&q=80",
     alt: "WafflesHub website",
-    tag: "Food & Lifestyle · 2026",
+    tag: "Food & Beverage · D2C",
     title: "WafflesHub",
-    desc: "Modern food brand website with a clean, appetizing design built to attract customers and drive orders.",
-    tech: ["Web Design", "UI/UX", "Responsive"],
+    desc: "Appetising D2C brand experience with an order-driven layout and Meta retargeting in place to keep customers coming back.",
+    services: ["Brand Strategy", "Web Development", "Meta Ads"],
+    metric: "Online orders",
     url: "https://waffleshub.com/",
   },
   {
     id: 4,
-    // Chess-specific image
-    img: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=800&q=80",
+    img: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=1200&q=80",
     alt: "Chess Academy website",
-    tag: "Education · AI · 2026",
+    tag: "Education · AI",
     title: "Chess Academy",
-    desc: "A next-gen chess academy platform with AI-powered features, clean layouts, and student-first UX — built to inspire the next generation of players.",
-    tech: ["Next.js", "AI Features", "Responsive"],
+    desc: "AI-powered education platform built on Next.js with a student-first funnel — clean acquisition flow, automated nurture, and conversion-led design.",
+    services: ["Next.js Development", "Funnel Design", "AI Integration"],
+    metric: "Student acquisition",
     url: "https://chessacademy-next-js-chirag-client.vercel.app/",
   },
-  // hidden behind "More"
   {
     id: 5,
-    img: "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=800&q=80",
+    img: "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=1200&q=80",
     alt: "Unbent Martial Fitness website",
-    tag: "Martial Arts · 2026",
+    tag: "Martial Arts · Performance Ads",
     title: "Unbent Martial Fitness",
-    desc: "Bold, high-energy website for a martial arts fitness brand — built to inspire action and drive sign-ups.",
-    tech: ["Web Design", "UI/UX", "Responsive"],
+    desc: "Bold, high-energy brand site paired with performance ad campaigns engineered to drive trial sign-ups and walk-ins.",
+    services: ["Brand Strategy", "Web Development", "Paid Ads"],
+    metric: "Trial sign-ups",
     url: "https://unbentmartialfitness.com",
   },
   {
     id: 6,
-    img: "https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=800&q=80",
+    img: "https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=1200&q=80",
     alt: "DigitalWithChirag website",
-    tag: "Digital Marketing · 2026",
+    tag: "Personal Brand · Authority",
     title: "DigitalWithChirag",
-    desc: "Personal brand website for a digital marketer — designed to build authority, attract clients and convert visitors.",
-    tech: ["Web Design", "Personal Brand", "Responsive"],
+    desc: "Personal brand experience built to position the founder as a category authority — credibility-led design plus content-led SEO for inbound clients.",
+    services: ["Personal Branding", "Web Development", "Content SEO"],
+    metric: "Inbound enquiries",
     url: "https://www.digitalwithchirag.com/",
   },
   {
     id: 7,
-    img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80",
+    img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1200&q=80",
     alt: "Siolim Cafe website",
-    tag: "Cafe & Dining · 2026",
+    tag: "Hospitality · Local SEO",
     title: "Siolim Cafe",
-    desc: "Warm and inviting cafe website designed to showcase the menu, ambiance and drive footfall.",
-    tech: ["Web Design", "UI/UX", "Responsive"],
+    desc: "Warm, mobile-first hospitality site optimised for Google Maps and 'near-me' search — designed to convert browsers into walk-in customers.",
+    services: ["Web Development", "Local SEO", "Google Business"],
+    metric: "Footfall growth",
     url: "https://siolimcafe.vercel.app/",
+  },
+  {
+    id: 8,
+    img: "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=1200&q=80",
+    alt: "SevAction Foundation website",
+    tag: "Non-Profit · Donations",
+    title: "SevAction Foundation",
+    desc: "Mission-driven non-profit website engineered to communicate impact and convert empathy into donations — clear story, clear ask, frictionless giving.",
+    services: ["Web Development", "Donation Funnel", "Storytelling"],
+    metric: "Donation conversions",
+    url: "https://sevactionfoundation.in/",
+  },
+  {
+    id: 9,
+    img: "https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=1200&q=80",
+    alt: "The White Closet website",
+    tag: "Fashion · D2C E-Commerce",
+    title: "The White Closet",
+    desc: "Elegant fashion D2C storefront built for the modern shopper — curated visual story, optimised product pages, and Meta ads tuned for ROAS.",
+    services: ["E-Commerce", "Web Development", "Meta Ads"],
+    metric: "Return on Ad Spend",
+    url: "https://the-white-closet.vercel.app/",
+  },
+  {
+    id: 10,
+    img: "https://images.unsplash.com/photo-1528819622765-d6bcf132f793?w=1200&q=80",
+    alt: "CheckVsMate Academy website",
+    tag: "Education · Coaching Funnel",
+    title: "CheckVsMate Academy",
+    desc: "Premium chess coaching platform with a multi-step enrolment funnel, parent-first messaging, and search-led acquisition for serious students.",
+    services: ["Web Development", "Funnel Design", "SEO"],
+    metric: "Course enrolments",
+    url: "https://www.checkvsmateacademy.com/",
   },
 ];
 
@@ -81,27 +119,52 @@ const ArrowIcon = () => (
   </svg>
 );
 
-function ProjectCard({ project }) {
+function ShowcaseRow({ project, index }) {
+  const reversed = index % 2 === 1;
   return (
-    <article className="card">
-      <div className="card-img-wrap">
+    <article
+      className={`showcase-row sr ${reversed ? "reversed" : ""}`}
+      style={{ "--i": `${index * 0.08}s` }}
+    >
+      <a
+        href={project.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="showcase-media"
+        aria-label={`Visit ${project.title}`}
+      >
         <img src={project.img} alt={project.alt} loading="lazy" />
-        <div className="card-overlay">
-          <a href={project.url} target="_blank" rel="noopener noreferrer" className="visit-btn">
-            <ArrowIcon /> Visit Site
-          </a>
+        <span className="showcase-num">{String(index + 1).padStart(2, "0")}</span>
+        <div className="showcase-hover">
+          <span className="showcase-hover-btn">
+            <ArrowIcon /> Visit Live Site
+          </span>
         </div>
-      </div>
-      <div className="card-body">
+      </a>
+
+      <div className="showcase-body">
         <span className="card-tag">{project.tag}</span>
-        <h3>{project.title}</h3>
-        <p>{project.desc}</p>
-        <div className="card-foot">
-          <div className="tech-tags">
-            {project.tech.map((t) => <span key={t}>{t}</span>)}
+        <h3 className="showcase-title">{project.title}</h3>
+        <p className="showcase-desc">{project.desc}</p>
+
+        <div className="showcase-services">
+          {project.services.map((s) => (
+            <span key={s}>{s}</span>
+          ))}
+        </div>
+
+        <div className="showcase-foot">
+          <div className="showcase-metric">
+            <span className="metric-dot" />
+            <span>{project.metric}</span>
           </div>
-          <a href={project.url} target="_blank" rel="noopener noreferrer" className="ext-link" aria-label={`Visit ${project.title}`}>
-            <ArrowIcon />
+          <a
+            href={project.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="showcase-link"
+          >
+            View Project <ArrowIcon />
           </a>
         </div>
       </div>
@@ -109,105 +172,58 @@ function ProjectCard({ project }) {
   );
 }
 
-
 export default function Projects({ setPage }) {
-  const [showAll, setShowAll] = useState(false);
-  const extraRef = useRef(null);
-
-  // When "More" is clicked, show all and scroll smoothly to the newly revealed cards
-  const handleShowMore = () => {
-    setShowAll(true);
-    // slight delay so DOM renders first
-    setTimeout(() => {
-      if (extraRef.current) {
-        extraRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    }, 80);
-  };
-
-  // Re-run scroll reveal on extra cards after they appear
   useEffect(() => {
-    if (!showAll) return;
-    const els = document.querySelectorAll(".extra-card.sr");
+    const els = document.querySelectorAll(".projects .sr");
     if (!els.length) return;
     const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); } }),
-      { threshold: 0.1 }
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            io.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, [showAll]);
-
-  const visible = projects.slice(0, 4);
-  const hidden  = projects.slice(4);
+  }, []);
 
   return (
     <section className="projects" id="projects">
       <div className="wrap">
-        <span className="tag sr">Portfolio</span>
+        <span className="tag sr">Selected Work</span>
         <div className="proj-header sr">
-          <h2 className="sec-h">Selected <em>Work</em></h2>
-          <p className="muted">A curated look at what I've built</p>
+          <h2 className="sec-h">
+            Brands we've helped <em>grow</em>
+          </h2>
+          <p className="muted">
+            Performance marketing, SEO, and high-converting websites — built for measurable outcomes.
+          </p>
         </div>
 
-      
-
-        <div className="proj-grid">
-          {visible.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+        <div className="showcase-list">
+          {projects.map((project, i) => (
+            <ShowcaseRow key={project.id} project={project} index={i} />
           ))}
-
-          {/* "More" card — only shown when not expanded */}
-          {!showAll && (
-            <article className="card card-more">
-              <div className="more-inner">
-                <div className="more-icon">
-                  <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                    <circle cx="7" cy="14" r="2.5" fill="#facc15"/>
-                    <circle cx="14" cy="14" r="2.5" fill="#facc15"/>
-                    <circle cx="21" cy="14" r="2.5" fill="#facc15"/>
-                  </svg>
-                </div>
-                <h3>{hidden.length} more projects</h3>
-                <p>Including fitness brands, cafés, marketing sites and more.</p>
-                <button className="btn btn-gold" onClick={handleShowMore}>
-                  See All Work
-                  <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-              </div>
-            </article>
-          )}
-
-          {/* CTA card always visible */}
-          <article className="card card-cta sr" style={{ "--i": "0.5s" }}>
-            <div className="cta-icon">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <path d="M14 4v20M4 14h20" stroke="#facc15" strokeWidth="2.2" strokeLinecap="round"/>
-              </svg>
-            </div>
-            <h3>Have a project in mind?</h3>
-            <p>Let's collaborate and build something amazing together.</p>
-            <button className="btn btn-gold" onClick={() => setPage("contact")}>
-              Start a Project
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-          </article>
         </div>
 
-        {/* Extra cards revealed on "More" */}
-        {showAll && (
-          <div className="proj-extra-grid" ref={extraRef}>
-            {hidden.map((project, i) => (
-              <div key={project.id} className="extra-card sr" style={{ "--i": `${i * 0.12}s` }}>
-                <ProjectCard project={project} />
-              </div>
-            ))}
+        <article className="card card-cta sr showcase-cta" style={{ "--i": "0.4s" }}>
+          <div className="cta-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M14 4v20M4 14h20" stroke="#facc15" strokeWidth="2.2" strokeLinecap="round" />
+            </svg>
           </div>
-        )}
+          <h3>Ready to be the next case study?</h3>
+          <p>Tell us about your business — we'll map a growth plan in 48 hours.</p>
+          <button className="btn btn-gold" data-track="projects_start_project" onClick={() => setPage("contact")}>
+            Start a Project
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </article>
       </div>
     </section>
   );

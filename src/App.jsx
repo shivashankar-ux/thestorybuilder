@@ -7,12 +7,29 @@ import WhyWebsite from "./components/WhyWebsite";
 import { ContactSection } from "./components/ContactPage";
 import ContactPage from "./components/ContactPage";
 import Footer from "./components/Footer";
+import {
+  trackPageView,
+  trackEvent,
+  startEngagementTimer,
+  bindAutoTracking,
+} from "./utils/tracking";
 
 export default function App() {
   const [page, setPage] = useState("home");
 
+  // First load: log pageview, start 30s engagement timer, bind data-track clicks
+  useEffect(() => {
+    trackPageView();
+    startEngagementTimer();
+    bindAutoTracking();
+  }, []);
+
+  // Internal page changes (home <-> contact) also log + alert on contact view
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    if (page === "contact") {
+      trackEvent("viewed_contact_page");
+    }
   }, [page]);
 
   return (

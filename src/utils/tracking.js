@@ -1,0 +1,169 @@
+/* ----------------------------------------------------------
+   Visitor tracking — logs to a Google Sheet via Apps Script
+   webhook and fires email alerts on key events.
+
+   SETUP: paste your Apps Script Web App URL below.
+   Until this is set, tracking silently no-ops.
+---------------------------------------------------------- */
+const WEBHOOK_URL = ""; // <-- paste Apps Script /exec URL here
+
+const SESSION_KEY = "tsb_session";
+const SEEN_EVENT_KEY = "tsb_seen_events";
+
+function isEnabled() {
+  return typeof WEBHOOK_URL === "string" && WEBHOOK_URL.startsWith("https://");
+}
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+
+function getSession() {
+  try {
+    let s = sessionStorage.getItem(SESSION_KEY);
+    if (!s) {
+      s = uid();
+      sessionStorage.setItem(SESSION_KEY, s);
+    }
+    return s;
+  } catch {
+    return "no-storage";
+  }
+}
+
+function getDeviceType() {
+  const ua = navigator.userAgent || "";
+  if (/iPad|Tablet/i.test(ua)) return "tablet";
+  if (/Mobi|Android|iPhone/i.test(ua)) return "mobile";
+  return "desktop";
+}
+
+function getReferrer() {
+  const r = document.referrer || "direct";
+  try {
+    if (r === "direct") return "direct";
+    const u = new URL(r);
+    if (u.hostname === window.location.hostname) return "internal";
+    return u.hostname;
+  } catch {
+    return r;
+  }
+}
+
+let cachedGeo = null;
+async function fetchGeo() {
+  if (cachedGeo) return cachedGeo;
+  try {
+    const res = await fetch("https://ipapi.co/json/", { method: "GET" });
+    if (!res.ok) throw new Error("geo fetch failed");
+    const data = await res.json();
+    cachedGeo = {
+      ip: data.ip || "",
+      city: data.city || "",
+      region: data.region || "",
+      country: data.country_name || "",
+      org: data.org || "",
+    };
+  } catch {
+    cachedGeo = { ip: "", city: "", region: "", country: "", org: "" };
+  }
+  return cachedGeo;
+}
+
+async function send(payload) {
+  if (!isEnabled()) return;
+  try {
+    // text/plain content-type avoids CORS preflight; Apps Script reads e.postData.contents
+    await fetch(WEBHOOK_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload),
+      keepalive: true,
+    });
+  } catch {
+    /* silent — never break the site */
+  }
+}
+
+function basePayload() {
+  return {
+    sessionId: getSession(),
+    timestamp: new Date().toISOString(),
+    page: window.location.pathname + window.location.hash,
+    referrer: getReferrer(),
+    device: getDeviceType(),
+    userAgent: navigator.userAgent,
+    language: navigator.language || "",
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
+    screen: `${window.screen.width}x${window.screen.height}`,
+  };
+}
+
+/* Public API ------------------------------------------------- */
+
+let pageviewSent = false;
+
+export async function trackPageView(page) {
+  if (!isEnabled()) return;
+  const geo = await fetchGeo();
+  await send({
+    type: "pageview",
+    alert: !pageviewSent, // first pageview of session triggers email
+    ...basePayload(),
+    page: page || basePayload().page,
+    ...geo,
+  });
+  pageviewSent = true;
+}
+
+export async function trackEvent(name, extra = {}) {
+  if (!isEnabled()) return;
+  // dedupe per session: don't email about the same event repeatedly
+  const seen = (() => {
+    try { return JSON.parse(sessionStorage.getItem(SEEN_EVENT_KEY) || "[]"); }
+    catch { return []; }
+  })();
+  const isFirstThisSession = !seen.includes(name);
+  if (isFirstThisSession) {
+    try {
+      sessionStorage.setItem(SEEN_EVENT_KEY, JSON.stringify([...seen, name]));
+    } catch { /* ignore */ }
+  }
+  const geo = await fetchGeo();
+  await send({
+    type: "event",
+    name,
+    alert: isFirstThisSession, // only email once per session per event
+    ...basePayload(),
+    ...geo,
+    ...extra,
+  });
+}
+
+/* Engagement timer — fires once after 30s on the site */
+let engagedFired = false;
+export function startEngagementTimer() {
+  if (engagedFired) return;
+  setTimeout(() => {
+    if (engagedFired) return;
+    engagedFired = true;
+    trackEvent("engaged_30s");
+  }, 30_000);
+}
+
+/* Auto-bind clicks on elements with data-track attribute */
+export function bindAutoTracking() {
+  if (!isEnabled()) return;
+  document.addEventListener(
+    "click",
+    (e) => {
+      const t = e.target.closest("[data-track]");
+      if (!t) return;
+      trackEvent(t.getAttribute("data-track") || "click", {
+        text: (t.innerText || "").slice(0, 80),
+      });
+    },
+    { passive: true, capture: true }
+  );
+}
