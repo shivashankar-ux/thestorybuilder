@@ -7,7 +7,6 @@ import TrustedBy from "./components/TrustedBy";
 import About from "./components/About";
 import Process from "./components/Process";
 import Projects from "./components/Projects";
-import TechStack from "./components/TechStack";
 import FAQ from "./components/FAQ";
 import WhyWebsite from "./components/WhyWebsite";
 import CTABanner from "./components/CTABanner";
@@ -91,7 +90,6 @@ export default function App() {
             <About setPage={navigate} />
             <Process />
             <Projects setPage={navigate} navigate={navigate} />
-            <TechStack />
             <WhyWebsite setPage={navigate} />
             <FAQ setPage={navigate} />
             <CTABanner setPage={navigate} />

@@ -57,6 +57,10 @@ export default function Hero({ setPage }) {
     if (el) window.scrollTo({ top: el.offsetTop - 68, behavior: "smooth" });
   };
 
+  // Prefer a transparent cutout PNG if present, fall back to the JPG
+  const photoPng = "/shiva-cutout.png";
+  const photoJpg = "/shiva.jpg";
+
   return (
     <section className="hero" id="home">
       <div className="hero-bg" aria-hidden="true">
@@ -128,6 +132,20 @@ export default function Hero({ setPage }) {
             <strong>10+ happy clients</strong> across India &amp; abroad
           </span>
         </motion.div>
+      </motion.div>
+
+      <motion.div
+        className="hero-photo-wrap"
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.9, delay: 0.35, ease: [0.4, 0, 0.2, 1] }}
+        aria-hidden="true"
+      >
+        <span className="hero-photo-glow" />
+        <picture className="hero-photo">
+          <source srcSet={photoPng} type="image/png" />
+          <img src={photoJpg} alt="" loading="eager" />
+        </picture>
       </motion.div>
 
       <div className="scroll-hint" aria-hidden="true">
