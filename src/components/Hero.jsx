@@ -57,10 +57,6 @@ export default function Hero({ setPage }) {
     if (el) window.scrollTo({ top: el.offsetTop - 68, behavior: "smooth" });
   };
 
-  // Prefer a transparent cutout PNG if present, fall back to the JPG
-  const photoPng = "/shiva-cutout.png";
-  const photoJpg = "/shiva.jpg";
-
   return (
     <section className="hero" id="home">
       <div className="hero-bg" aria-hidden="true">
@@ -142,10 +138,10 @@ export default function Hero({ setPage }) {
         aria-hidden="true"
       >
         <span className="hero-photo-glow" />
-        <picture className="hero-photo">
-          <source srcSet={photoPng} type="image/png" />
-          <img src={photoJpg} alt="" loading="eager" />
-        </picture>
+        <div className="hero-photo">
+          <img src="/shiva.jpg" alt="The Story Builder — Founder" loading="eager" />
+          <span className="hero-photo-veil" />
+        </div>
       </motion.div>
 
       <div className="scroll-hint" aria-hidden="true">

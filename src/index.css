@@ -343,21 +343,55 @@ em { font-style:italic; color:var(--gold); }
   max-width: 480px;
   aspect-ratio: 4/5;
   margin: 0 auto;
+  overflow: hidden;
 }
 .hero-photo img {
   width: 100%; height: 100%;
   object-fit: cover;
-  object-position: 60% 35%;
+  object-position: 70% 65%;
   -webkit-mask-image:
-    radial-gradient(ellipse 62% 72% at 55% 55%, #000 38%, transparent 88%);
+    radial-gradient(ellipse 60% 78% at 58% 60%, #000 30%, rgba(0,0,0,.7) 55%, transparent 92%);
   mask-image:
-    radial-gradient(ellipse 62% 72% at 55% 55%, #000 38%, transparent 88%);
-  filter: contrast(1.05) saturate(.78) brightness(.94);
+    radial-gradient(ellipse 60% 78% at 58% 60%, #000 30%, rgba(0,0,0,.7) 55%, transparent 92%);
+  filter: contrast(1.08) saturate(.7) brightness(.92);
   transition: transform .9s var(--ease);
 }
+/* Veil hides the bright sky at the top and grounds the photo into the hero bg */
+.hero-photo-veil {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      var(--bg) 0%,
+      rgba(5,7,15,.85) 12%,
+      rgba(5,7,15,.35) 28%,
+      transparent 50%,
+      rgba(5,7,15,.4) 88%,
+      var(--bg) 100%
+    ),
+    radial-gradient(ellipse 90% 90% at 55% 60%, transparent 35%, rgba(5,7,15,.5) 70%, var(--bg) 100%);
+  -webkit-mask-image:
+    radial-gradient(ellipse 70% 85% at 58% 60%, #000 25%, #000 75%, transparent 100%);
+  mask-image:
+    radial-gradient(ellipse 70% 85% at 58% 60%, #000 25%, #000 75%, transparent 100%);
+}
 .hero-photo:hover img { transform: scale(1.03); }
+
 [data-theme="light"] .hero-photo img {
-  filter: contrast(1.04) saturate(.85) brightness(.98);
+  filter: contrast(1.04) saturate(.82) brightness(1);
+}
+[data-theme="light"] .hero-photo-veil {
+  background:
+    linear-gradient(
+      180deg,
+      var(--bg) 0%,
+      rgba(250,247,242,.85) 12%,
+      rgba(250,247,242,.35) 28%,
+      transparent 50%,
+      rgba(250,247,242,.4) 88%,
+      var(--bg) 100%
+    );
 }
 [data-theme="light"] .hero-photo-glow {
   background:
@@ -377,10 +411,15 @@ em { font-style:italic; color:var(--gold); }
   .hero-photo-wrap { order: 1; min-height: 280px; }
   .hero-photo { max-width: 280px; aspect-ratio: 1/1; }
   .hero-photo img {
+    object-position: 70% 65%;
     -webkit-mask-image:
-      radial-gradient(circle 52% at 55% 50%, #000 40%, transparent 80%);
+      radial-gradient(circle 52% at 58% 58%, #000 40%, transparent 80%);
     mask-image:
-      radial-gradient(circle 52% at 55% 50%, #000 40%, transparent 80%);
+      radial-gradient(circle 52% at 58% 58%, #000 40%, transparent 80%);
+  }
+  .hero-photo-veil {
+    -webkit-mask-image: radial-gradient(circle 60% at 58% 58%, #000 30%, transparent 80%);
+    mask-image: radial-gradient(circle 60% at 58% 58%, #000 30%, transparent 80%);
   }
   .hero-photo-glow { inset: -25% -15%; }
 }
