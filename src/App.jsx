@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import Stats from "./components/Stats";
@@ -6,8 +7,10 @@ import TrustedBy from "./components/TrustedBy";
 import About from "./components/About";
 import Process from "./components/Process";
 import Projects from "./components/Projects";
+import TechStack from "./components/TechStack";
+import FAQ from "./components/FAQ";
 import WhyWebsite from "./components/WhyWebsite";
-import { ContactSection } from "./components/ContactPage";
+import CTABanner from "./components/CTABanner";
 import ContactPage from "./components/ContactPage";
 import CaseStudy from "./components/CaseStudy";
 import WhatsAppButton from "./components/WhatsAppButton";
@@ -20,14 +23,18 @@ import {
   bindAutoTracking,
 } from "./utils/tracking";
 
+const pageTransition = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -8 },
+  transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] },
+};
+
 export default function App() {
-  /* page = "home" | "contact" | "case"
-     caseSlug = which case study (when page === "case") */
   const [page, setPage] = useState("home");
   const [caseSlug, setCaseSlug] = useState(null);
   const [pendingScroll, setPendingScroll] = useState(null);
 
-  // Compatibility: old setPage("contact"|"home") still works
   const navigate = (dest) => {
     if (typeof dest === "string") {
       setPage(dest);
@@ -46,21 +53,18 @@ export default function App() {
     }
   };
 
-  // Tracker boot
   useEffect(() => {
     trackPageView();
     startEngagementTimer();
     bindAutoTracking();
   }, []);
 
-  // Scroll behavior + per-page event
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (page === "contact") trackEvent("viewed_contact_page");
     if (page === "case" && caseSlug) trackEvent("viewed_case_study", { slug: caseSlug });
   }, [page, caseSlug]);
 
-  // After landing on home, scroll to a section if requested
   useEffect(() => {
     if (page !== "home" || !pendingScroll) return;
     const id = pendingScroll;
@@ -68,29 +72,44 @@ export default function App() {
     setTimeout(() => {
       const el = document.getElementById(id);
       if (el) window.scrollTo({ top: el.offsetTop - 68, behavior: "smooth" });
-    }, 120);
+    }, 280);
   }, [page, pendingScroll]);
+
+  const pageKey = page === "case" ? `case-${caseSlug}` : page;
 
   return (
     <div>
       <div className="grain" aria-hidden="true" />
       <Navbar page={page} setPage={navigate} />
 
-      {page === "home" && (
-        <main>
-          <Hero setPage={navigate} />
-          <Stats />
-          <TrustedBy />
-          <About setPage={navigate} />
-          <Process />
-          <Projects setPage={navigate} navigate={navigate} />
-          <WhyWebsite setPage={navigate} />
-          <ContactSection setPage={navigate} />
-        </main>
-      )}
+      <AnimatePresence mode="wait">
+        {page === "home" && (
+          <motion.main key="home" {...pageTransition}>
+            <Hero setPage={navigate} />
+            <Stats />
+            <TrustedBy />
+            <About setPage={navigate} />
+            <Process />
+            <Projects setPage={navigate} navigate={navigate} />
+            <TechStack />
+            <WhyWebsite setPage={navigate} />
+            <FAQ setPage={navigate} />
+            <CTABanner setPage={navigate} />
+          </motion.main>
+        )}
 
-      {page === "contact" && <ContactPage />}
-      {page === "case" && <CaseStudy slug={caseSlug} navigate={navigate} />}
+        {page === "contact" && (
+          <motion.div key="contact" {...pageTransition}>
+            <ContactPage />
+          </motion.div>
+        )}
+
+        {page === "case" && (
+          <motion.div key={pageKey} {...pageTransition}>
+            <CaseStudy slug={caseSlug} navigate={navigate} />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <Footer setPage={navigate} />
 
