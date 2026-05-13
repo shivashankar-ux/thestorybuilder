@@ -89,25 +89,25 @@ export default function Hero({ setPage }) {
 
         <motion.div className="hero-ctas" variants={rise}>
           <motion.button
-            className="btn btn-gold"
+            className="btn btn-ghost"
             data-track="hero_view_work"
             onClick={() => scrollTo("projects")}
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.97 }}
           >
             See Our Work
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
           </motion.button>
           <motion.button
-            className="btn btn-ghost"
+            className="btn btn-gold"
             data-track="hero_get_in_touch"
             onClick={() => window.open("https://intake-form-thestorybuilder.vercel.app/", "_blank")}
             whileHover={{ y: -2 }}
             whileTap={{ scale: 0.97 }}
           >
             Book a Strategy Call
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </motion.button>
         </motion.div>
 

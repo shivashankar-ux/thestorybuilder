@@ -69,15 +69,10 @@ export default function About({ setPage }) {
               We build brands<br /><em>that grow</em><br />in a measurable way.
             </h2>
             <p className="muted">
-              The Story Builder is a full-service digital marketing agency working with
-              founders and growing brands across India and beyond. We pair strategy
-              with execution — websites, paid media, SEO and brand systems that move
-              real numbers, not just impressions.
+              <strong className="lead">Full-service digital marketing</strong> for founders and growing brands across India and beyond. We pair strategy with execution — websites, paid media, SEO and brand systems that move real numbers, not just impressions.
             </p>
             <p className="muted">
-              Every engagement starts with the same question: what does success look
-              like in revenue? From there we reverse-engineer the funnel, ship fast,
-              and report honestly. No fluff, no jargon, no recycled templates.
+              <strong className="lead">Revenue first, vanity metrics never.</strong> Every engagement starts with the same question: what does success look like in revenue? From there we reverse-engineer the funnel, ship fast, and report honestly.
             </p>
             <button className="btn btn-gold" onClick={() => setPage("contact")} style={{ marginTop: 24 }}>
               Work With Us
