@@ -312,134 +312,24 @@ a:focus-visible,
 }
 
 /* =========================================
-   HOME HERO — F-pattern, photo on right
+   HOME HERO — F-pattern anchored top-left
 ========================================= */
 .hero {
   min-height:100vh;
-  display:grid;
-  grid-template-columns: 1.1fr 1fr;
-  align-items:center;
-  gap: clamp(40px, 6vw, 100px);
+  display:flex; align-items:center; justify-content:flex-start;
   text-align:left;
   padding:calc(var(--nav) + 60px) clamp(24px,8vw,120px) 100px;
   position:relative; overflow:hidden;
 }
 .hero-body {
-  position:relative; z-index:2;
+  position:relative; z-index:1;
   display:flex; flex-direction:column; align-items:flex-start;
-  max-width:680px; width:100%;
+  max-width:880px; width:100%;
 }
-
-/* Right-side photo, blended into the bg */
-.hero-photo-wrap {
-  position: relative;
-  z-index: 1;
-  display: flex; align-items: center; justify-content: center;
-  width: 100%;
-  height: 100%;
-  min-height: 480px;
-}
-.hero-photo-glow {
-  position: absolute;
-  inset: -8% -10%;
-  background:
-    radial-gradient(circle at 50% 48%, rgba(250,204,21,.30) 0%, rgba(250,204,21,.10) 28%, transparent 60%),
-    radial-gradient(circle at 30% 70%, rgba(250,204,21,.12) 0%, transparent 50%);
-  filter: blur(30px);
-  pointer-events: none;
-  z-index: 0;
-}
-.hero-photo {
-  position: relative;
-  z-index: 1;
-  display: block;
-  width: 100%;
-  max-width: 480px;
-  aspect-ratio: 4/5;
-  margin: 0 auto;
-  overflow: hidden;
-}
-.hero-photo img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: 70% 65%;
-  -webkit-mask-image:
-    radial-gradient(ellipse 60% 78% at 58% 60%, #000 30%, rgba(0,0,0,.7) 55%, transparent 92%);
-  mask-image:
-    radial-gradient(ellipse 60% 78% at 58% 60%, #000 30%, rgba(0,0,0,.7) 55%, transparent 92%);
-  filter: contrast(1.08) saturate(.7) brightness(.92);
-  transition: transform .9s var(--ease);
-}
-/* Veil hides the bright sky at the top and grounds the photo into the hero bg */
-.hero-photo-veil {
-  position: absolute; inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      var(--bg) 0%,
-      rgba(5,7,15,.85) 12%,
-      rgba(5,7,15,.35) 28%,
-      transparent 50%,
-      rgba(5,7,15,.4) 88%,
-      var(--bg) 100%
-    ),
-    radial-gradient(ellipse 90% 90% at 55% 60%, transparent 35%, rgba(5,7,15,.5) 70%, var(--bg) 100%);
-  -webkit-mask-image:
-    radial-gradient(ellipse 70% 85% at 58% 60%, #000 25%, #000 75%, transparent 100%);
-  mask-image:
-    radial-gradient(ellipse 70% 85% at 58% 60%, #000 25%, #000 75%, transparent 100%);
-}
-.hero-photo:hover img { transform: scale(1.03); }
-
-[data-theme="light"] .hero-photo img {
-  filter: contrast(1.04) saturate(.82) brightness(1);
-}
-[data-theme="light"] .hero-photo-veil {
-  background:
-    linear-gradient(
-      180deg,
-      var(--bg) 0%,
-      rgba(250,247,242,.85) 12%,
-      rgba(250,247,242,.35) 28%,
-      transparent 50%,
-      rgba(250,247,242,.4) 88%,
-      var(--bg) 100%
-    );
-}
-[data-theme="light"] .hero-photo-glow {
-  background:
-    radial-gradient(circle at 50% 48%, rgba(180,83,9,.20) 0%, rgba(250,204,21,.10) 28%, transparent 60%),
-    radial-gradient(circle at 30% 70%, rgba(250,204,21,.10) 0%, transparent 50%);
-}
-
-/* Mobile / tablet: photo above the text, smaller */
 @media (max-width: 980px) {
   .hero {
-    grid-template-columns: 1fr;
-    text-align: left;
     padding: calc(var(--nav) + 40px) clamp(20px, 6vw, 48px) 80px;
-    gap: 24px;
   }
-  .hero-body { order: 2; max-width: 680px; }
-  .hero-photo-wrap { order: 1; min-height: 280px; }
-  .hero-photo { max-width: 280px; aspect-ratio: 1/1; }
-  .hero-photo img {
-    object-position: 70% 65%;
-    -webkit-mask-image:
-      radial-gradient(circle 52% at 58% 58%, #000 40%, transparent 80%);
-    mask-image:
-      radial-gradient(circle 52% at 58% 58%, #000 40%, transparent 80%);
-  }
-  .hero-photo-veil {
-    -webkit-mask-image: radial-gradient(circle 60% at 58% 58%, #000 30%, transparent 80%);
-    mask-image: radial-gradient(circle 60% at 58% 58%, #000 30%, transparent 80%);
-  }
-  .hero-photo-glow { inset: -25% -15%; }
-}
-@media (max-width: 540px) {
-  .hero-photo { max-width: 240px; }
-  .hero-photo-wrap { min-height: 240px; }
 }
 @keyframes pulse {
   0%,100% { box-shadow:0 0 0 0 rgba(34,197,94,.5); }

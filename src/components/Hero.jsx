@@ -130,28 +130,6 @@ export default function Hero({ setPage }) {
         </motion.div>
       </motion.div>
 
-      <motion.div
-        className="hero-photo-wrap"
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.9, delay: 0.35, ease: [0.4, 0, 0.2, 1] }}
-        aria-hidden="true"
-      >
-        <span className="hero-photo-glow" />
-        <div className="hero-photo">
-          <img
-            src="/shiva.jpg"
-            alt="The Story Builder — Founder"
-            loading="eager"
-            decoding="async"
-            fetchpriority="high"
-            width="480"
-            height="600"
-          />
-          <span className="hero-photo-veil" />
-        </div>
-      </motion.div>
-
       <div className="scroll-hint" aria-hidden="true">
         <div className="sh-track"><div className="sh-bar" /></div>
         <span>Scroll</span>
