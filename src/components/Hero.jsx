@@ -139,7 +139,15 @@ export default function Hero({ setPage }) {
       >
         <span className="hero-photo-glow" />
         <div className="hero-photo">
-          <img src="/shiva.jpg" alt="The Story Builder — Founder" loading="eager" />
+          <img
+            src="/shiva.jpg"
+            alt="The Story Builder — Founder"
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
+            width="480"
+            height="600"
+          />
           <span className="hero-photo-veil" />
         </div>
       </motion.div>

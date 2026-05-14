@@ -5,53 +5,6 @@ import { trackEvent } from "../utils/tracking";
 const BOT_TOKEN = "8712967453:AAGMQV1SneKzT2FGFkdNTrh2GvZD_Q_vgcY";
 const CHAT_ID   = "1340316382";
 
-// ============================================================
-// ContactSection — the small contact block on the HOME page
-// ============================================================
-export function ContactSection({ setPage }) {
-  return (
-    <section className="contact" id="contact">
-      <div className="wrap">
-        <div className="contact-box sr">
-          <span className="tag">Get In Touch</span>
-          <h2 className="sec-h">Let's build something<br /><em>great together.</em></h2>
-          <p className="muted">
-            Whether you're scaling, launching, or just exploring — tell us about your business and we'll map a growth plan in 48 hours.
-          </p>
-          <div className="contact-btns">
-            <a
-              href="https://mail.google.com/mail/?view=cm&to=shivashankar.7991@gmail.com&su=Growth%20Enquiry&body=Hi%20team%2C%20I%27d%20love%20to%20discuss%20a%20project!"
-              target="_blank" rel="noopener noreferrer"
-              className="btn btn-gold btn-lg"
-              data-track="home_email_click"
-            >
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
-                <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="1.8"/>
-                <path d="M2 7l10 7 10-7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-              </svg>
-              Email Us
-            </a>
-            <a
-              href="https://wa.me/918341928526?text=Hi%2C%20I%20saw%20your%20website%20and%20I%27d%20love%20to%20discuss%20a%20project!"
-              target="_blank" rel="noopener noreferrer"
-              className="btn btn-wa btn-lg"
-              data-track="home_whatsapp_click"
-            >
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none">
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              Message on WhatsApp
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ============================================================
-// ContactPage — the FULL contact page with Telegram form
-// ============================================================
 export default function ContactPage() {
   const [form, setForm]     = useState({ name: "", email: "", phone: "", project: "", message: "" });
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
