@@ -29,6 +29,18 @@ const stats = [
   { value: "5★",    label: "CLIENT RATING" },
 ];
 
+const projectShowcase = [
+  { img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=600&q=80", title: "Legacy Solar",          tag: "Solar · Lead Gen" },
+  { img: "https://images.unsplash.com/photo-1550345332-09e3ac987658?w=600&q=80", title: "Star Fitness Studio",   tag: "Fitness · Local" },
+  { img: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=600&q=80", title: "WafflesHub",            tag: "F&B · D2C" },
+  { img: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=600&q=80", title: "Chess Academy",        tag: "EdTech · AI" },
+  { img: "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=600&q=80", title: "Unbent Martial Fitness", tag: "Fitness · Brand" },
+  { img: "https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=600&q=80", title: "DigitalWithChirag",    tag: "Personal Brand" },
+  { img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80", title: "Siolim Cafe",            tag: "Hospitality · Local SEO" },
+  { img: "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&q=80", title: "SevAction Foundation", tag: "Non-Profit · Donations" },
+  { img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80", title: "The White Closet",     tag: "Interior Design" },
+];
+
 const whatYouGet = [
   {
     title: "Custom design built for your business",
@@ -246,7 +258,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div style={{ background: BG, color: INK, minHeight: "100vh", paddingBottom: 110 }}>
+    <div style={{ background: BG, color: INK, minHeight: "100vh" }}>
 
       {/* ============ HERO ============ */}
       <section style={{ padding: "70px 20px 30px" }}>
@@ -721,39 +733,118 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ============ TRUSTED BY ============ */}
-      <section style={{ padding: "30px 20px 50px" }}>
-        <div style={{ maxWidth: 960, margin: "0 auto", textAlign: "center" }}>
+      {/* ============ PROJECT MARQUEE — left-to-right infinite scroll ============ */}
+      <section style={{ padding: "30px 0 50px" }}>
+        <div style={{ textAlign: "center", padding: "0 20px 26px" }}>
           <p style={{
             fontSize: 12,
             color: INK_SOFT,
             letterSpacing: 2.5,
             margin: 0,
-            marginBottom: 18,
+            marginBottom: 8,
             fontWeight: 700,
           }}>
-            WEBSITES BUILT FOR AMBITIOUS BRANDS
+            WEBSITES WE&apos;VE BUILT
           </p>
-          <div style={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "10px 28px",
-            justifyContent: "center",
+          <h3 style={{
+            fontSize: "clamp(22px, 3vw, 30px)",
+            fontWeight: 900,
             color: INK,
-            fontWeight: 700,
-            fontSize: 13,
-            opacity: 0.65,
-            letterSpacing: 0.5,
+            letterSpacing: -0.5,
+            margin: 0,
           }}>
-            <span>LEGACY SOLAR</span>
-            <span>STAR FITNESS</span>
-            <span>WAFFLESHUB</span>
-            <span>CHESS ACADEMY</span>
-            <span>UNBENT</span>
-            <span>SIOLIM CAFE</span>
-            <span>WHITE CLOSET</span>
-            <span>SEVACTION</span>
-          </div>
+            Real businesses. Real websites. Real customers.
+          </h3>
+        </div>
+
+        <div style={{ overflow: "hidden", position: "relative" }}>
+          {/* fade edges */}
+          <div style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: 80,
+            height: "100%",
+            background: `linear-gradient(90deg, ${BG} 0%, transparent 100%)`,
+            zIndex: 2,
+            pointerEvents: "none",
+          }} />
+          <div style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: 80,
+            height: "100%",
+            background: `linear-gradient(-90deg, ${BG} 0%, transparent 100%)`,
+            zIndex: 2,
+            pointerEvents: "none",
+          }} />
+
+          <motion.div
+            animate={{ x: ["-50%", "0%"] }}
+            transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+            style={{
+              display: "flex",
+              gap: 20,
+              width: "max-content",
+              paddingLeft: 20,
+              paddingRight: 20,
+            }}
+          >
+            {[...projectShowcase, ...projectShowcase].map((p, i) => (
+              <div
+                key={i}
+                style={{
+                  width: 280,
+                  flexShrink: 0,
+                  background: "#fff",
+                  borderRadius: 14,
+                  overflow: "hidden",
+                  border: "1px solid rgba(0,0,0,.06)",
+                  boxShadow: "0 6px 22px rgba(0,0,0,.06)",
+                }}
+              >
+                <div style={{
+                  aspectRatio: "16 / 10",
+                  overflow: "hidden",
+                  background: "#eee",
+                }}>
+                  <img
+                    src={p.img}
+                    alt={p.title}
+                    loading="lazy"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      display: "block",
+                    }}
+                  />
+                </div>
+                <div style={{ padding: "14px 18px 16px" }}>
+                  <div style={{
+                    fontSize: 11,
+                    color: ORANGE,
+                    letterSpacing: 1.2,
+                    marginBottom: 5,
+                    fontWeight: 700,
+                    textTransform: "uppercase",
+                  }}>
+                    {p.tag}
+                  </div>
+                  <div style={{
+                    fontSize: 16,
+                    fontWeight: 800,
+                    color: INK,
+                    lineHeight: 1.25,
+                    letterSpacing: -0.2,
+                  }}>
+                    {p.title}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -979,6 +1070,142 @@ export default function LandingPage() {
               </div>
             </div>
             <InlineCTA track="landing_faq_cta" label="CALL US NOW" />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ============ DARK CLOSER — final pitch before sticky bar ============ */}
+      <section style={{
+        background: "#0a0a0a",
+        padding: "80px 20px 130px",
+        position: "relative",
+        overflow: "hidden",
+      }}>
+        {/* subtle radial glow behind headline */}
+        <div style={{
+          position: "absolute",
+          top: "20%",
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: 600,
+          height: 600,
+          background: "radial-gradient(circle, rgba(247,107,58,.08) 0%, transparent 60%)",
+          pointerEvents: "none",
+        }} />
+
+        <div style={{
+          maxWidth: 880,
+          margin: "0 auto",
+          textAlign: "center",
+          position: "relative",
+          zIndex: 1,
+        }}>
+          <motion.h2
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.55 }}
+            style={{
+              fontSize: "clamp(26px, 4vw, 42px)",
+              fontWeight: 800,
+              color: "#fff",
+              lineHeight: 1.25,
+              margin: 0,
+              letterSpacing: -0.5,
+            }}
+          >
+            You Can Keep Wondering Why Your Website<br />
+            Isn&apos;t Bringing Customers.<br />
+            <span style={{ color: ORANGE }}>Or You Can Find Out In 30 Minutes.</span>
+          </motion.h2>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.55, delay: 0.1 }}
+            style={{
+              fontSize: 17,
+              color: "rgba(255,255,255,.6)",
+              margin: "26px auto 0",
+              lineHeight: 1.6,
+              maxWidth: 640,
+            }}
+          >
+            No fluff. No hard sell. Just the most honest 30 minutes your website has ever had.
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.55, delay: 0.15 }}
+            style={{
+              display: "inline-block",
+              background: "rgba(255,255,255,.05)",
+              border: "1px solid rgba(255,255,255,.12)",
+              padding: "14px 28px",
+              borderRadius: 12,
+              marginTop: 32,
+              color: "rgba(255,255,255,.88)",
+              fontSize: 15,
+              fontWeight: 600,
+            }}
+          >
+            FREE — and a real, honest quote if you want one.
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.55, delay: 0.2 }}
+            style={{ marginTop: 36 }}
+          >
+            <motion.a
+              href={TEL_HREF}
+              data-track="landing_closer_call"
+              onClick={() => trackEvent("landing_closer_call")}
+              whileHover={{ y: -2, scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+              style={{
+                background: "linear-gradient(180deg, #2ee06f 0%, #1bb558 100%)",
+                color: "#fff",
+                padding: "20px 48px",
+                borderRadius: 12,
+                fontWeight: 900,
+                fontSize: 17,
+                letterSpacing: 0.6,
+                textDecoration: "none",
+                boxShadow: "0 12px 32px rgba(34,197,94,.4)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 12,
+              }}
+            >
+              <PhoneIcon size={20} />
+              CALL FOR FREE 1:1
+            </motion.a>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.55, delay: 0.25 }}
+            style={{
+              marginTop: 30,
+              display: "flex",
+              justifyContent: "center",
+              flexWrap: "wrap",
+              gap: "10px 28px",
+              color: "rgba(255,255,255,.5)",
+              fontSize: 13.5,
+            }}
+          >
+            <span><span style={{ color: ORANGE, marginRight: 6 }}>●</span>30 mins</span>
+            <span><span style={{ color: ORANGE, marginRight: 6 }}>●</span>Phone or video</span>
+            <span><span style={{ color: ORANGE, marginRight: 6 }}>●</span>100% no commitment</span>
           </motion.div>
         </div>
       </section>
