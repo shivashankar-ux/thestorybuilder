@@ -371,63 +371,73 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ============ STICKY BOTTOM CTA BAR — dark, compact, green CTA ============ */}
+      {/* ============ STICKY BOTTOM CTA BAR — Rajiv-style: logo | tagline | big green CTA ============ */}
       <div style={{
         position: "fixed",
         bottom: 0,
         left: 0,
         right: 0,
         background: "#0f0f0f",
-        padding: "10px 18px",
+        padding: "14px 22px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         zIndex: 100,
         boxShadow: "0 -10px 30px rgba(0,0,0,.25)",
-        gap: 14,
+        gap: 20,
       }}>
-        {/* LEFT — brand badge + tagline */}
+        {/* LEFT — brand wordmark + divider + tagline */}
         <div style={{
           display: "flex",
           alignItems: "center",
-          gap: 14,
+          gap: 20,
           flex: "1 1 auto",
           minWidth: 0,
         }}>
+          {/* Brand wordmark */}
           <div style={{
-            width: 42,
-            height: 42,
-            borderRadius: 10,
-            background: ORANGE_GRAD,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontWeight: 900,
-            color: "#fff",
-            fontSize: 13,
             flexShrink: 0,
-            letterSpacing: 0.5,
-            boxShadow: "0 4px 14px rgba(247,107,58,.35)",
+            borderRight: "1px solid rgba(255,255,255,.15)",
+            paddingRight: 20,
           }}>
-            TSB
+            <div style={{
+              fontSize: 17,
+              fontWeight: 900,
+              color: "#fff",
+              letterSpacing: -0.3,
+              lineHeight: 1,
+              whiteSpace: "nowrap",
+            }}>
+              The Story Builder
+            </div>
+            <div style={{
+              fontSize: 10,
+              color: ORANGE,
+              letterSpacing: 2.5,
+              marginTop: 5,
+              fontWeight: 800,
+            }}>
+              DIGITAL AGENCY
+            </div>
           </div>
+
+          {/* Tagline */}
           <div style={{ minWidth: 0 }}>
             <div style={{
               color: "#fff",
               fontSize: 15,
-              fontWeight: 800,
-              lineHeight: 1.2,
-              letterSpacing: -0.2,
+              fontWeight: 600,
+              lineHeight: 1.3,
             }}>
-              Free 1:1 Strategy Call
+              Book a free strategy call, walk away with a plan.
             </div>
             <div style={{
-              color: "rgba(255,255,255,.62)",
-              fontSize: 12.5,
+              color: "rgba(255,255,255,.6)",
+              fontSize: 13,
               marginTop: 3,
               lineHeight: 1.3,
             }}>
-              30 mins · No pitch, no pressure · We map your plan
+              30 minutes. No pitch. No commitment.
             </div>
           </div>
         </div>
@@ -444,22 +454,22 @@ export default function LandingPage() {
           style={{
             background: "linear-gradient(180deg, #2ee06f 0%, #1bb558 100%)",
             color: "#fff",
-            padding: "14px 24px",
+            padding: "17px 32px",
             borderRadius: 10,
             fontWeight: 900,
             textDecoration: "none",
-            fontSize: 14,
+            fontSize: 15,
             letterSpacing: 0.6,
             boxShadow: "0 8px 24px rgba(34,197,94,.38)",
             display: "inline-flex",
             alignItems: "center",
-            gap: 8,
+            gap: 10,
             whiteSpace: "nowrap",
             flexShrink: 0,
           }}
         >
           <WhatsAppIcon size={18} />
-          CHAT FREE NOW
+          BOOK FREE 1:1 CALL
         </motion.a>
       </div>
     </div>
