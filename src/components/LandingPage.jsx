@@ -1,5 +1,5 @@
-import { useLayoutEffect } from "react";
-import { motion } from "framer-motion";
+import { useLayoutEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { trackEvent } from "../utils/tracking";
 
 const WA_HREF =
@@ -20,13 +20,110 @@ const benefits = [
   "Live performance dashboards so you see exactly which channels are working",
 ];
 
+const faqs = [
+  {
+    q: "Is this really free?",
+    a: "Yes — the 30-min strategy call has zero cost and zero commitment. We'll audit your current site or talk through your goals, and you'll leave with a clear plan whether you hire us or not.",
+  },
+  {
+    q: "Do I have to hire you after the call?",
+    a: "No. About half the people we talk to walk away with the plan and execute it themselves — we're only the right fit if you actually need a partner. The call helps both of us figure that out.",
+  },
+  {
+    q: "I don't have a website yet — is this for me?",
+    a: "Especially for you. We'll talk through what kind of website your business actually needs, what it should cost, and how fast it can ship. No assumptions, no upsells.",
+  },
+  {
+    q: "I already have a website — can you redesign it?",
+    a: "Yes — most of our work is redesigns. We'll audit what's not working (design, copy, conversion path, page speed, SEO) and map out exactly what to fix.",
+  },
+  {
+    q: "How long does building or redesigning a website take?",
+    a: "Live in 14 days for most projects. Bigger builds (e-commerce, multi-language, custom integrations) typically run 3–4 weeks. We'll quote a real timeline on the call, not a marketing one.",
+  },
+  {
+    q: "Do you handle SEO and paid ads too?",
+    a: "Yes. A website is step one — but if you want it to actually bring customers, you need traffic. We set up SEO, Google Ads, and Meta Ads as a full package or à la carte. We'll talk through what makes sense for your stage.",
+  },
+];
+
 const WhatsAppIcon = ({ size = 18 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
     <path d="M20.5 3.5A11.8 11.8 0 0 0 12.05 0C5.5 0 .15 5.35.15 11.9c0 2.1.55 4.15 1.6 5.95L0 24l6.35-1.65a11.85 11.85 0 0 0 5.7 1.45h.01c6.55 0 11.9-5.35 11.9-11.9 0-3.18-1.24-6.17-3.46-8.4zM12.05 21.6h-.01a9.7 9.7 0 0 1-4.95-1.35l-.36-.21-3.77.98 1.01-3.67-.23-.38a9.7 9.7 0 0 1-1.5-5.17c0-5.39 4.4-9.78 9.81-9.78 2.62 0 5.07 1.02 6.92 2.86a9.7 9.7 0 0 1 2.87 6.93c0 5.39-4.39 9.79-9.79 9.79zm5.36-7.34c-.29-.15-1.74-.86-2-.96-.27-.1-.46-.15-.66.15s-.76.96-.93 1.16-.34.22-.63.07c-.29-.15-1.24-.46-2.36-1.46-.87-.78-1.46-1.74-1.63-2.03-.17-.29-.02-.45.13-.6.13-.13.29-.34.44-.51.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.51-.07-.15-.66-1.6-.91-2.18-.24-.57-.49-.5-.66-.51l-.56-.01c-.2 0-.51.07-.78.37-.27.29-1.02 1-1.02 2.43s1.04 2.81 1.19 3c.15.19 2.05 3.13 4.97 4.39.69.3 1.23.48 1.65.61.69.22 1.32.19 1.82.11.55-.08 1.74-.71 1.99-1.4.24-.69.24-1.27.17-1.4-.07-.13-.27-.2-.56-.34z"/>
   </svg>
 );
 
+function FAQItem({ q, a, isOpen, onToggle, isLast }) {
+  return (
+    <div style={{
+      borderBottom: isLast ? "none" : "1px solid rgba(0,0,0,.1)",
+    }}>
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={isOpen}
+        style={{
+          width: "100%",
+          padding: "22px 0",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          textAlign: "left",
+          color: INK,
+          fontSize: 17,
+          fontWeight: 600,
+          fontFamily: "inherit",
+          letterSpacing: -0.1,
+        }}
+      >
+        <span>{q}</span>
+        <span
+          aria-hidden="true"
+          style={{
+            color: ORANGE,
+            fontSize: 26,
+            fontWeight: 300,
+            flexShrink: 0,
+            marginLeft: 20,
+            lineHeight: 1,
+            transition: "transform 0.25s ease",
+            transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
+            display: "inline-block",
+          }}
+        >+</span>
+      </button>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
+            style={{ overflow: "hidden" }}
+          >
+            <p style={{
+              margin: 0,
+              padding: "0 0 22px 0",
+              fontSize: 15.5,
+              color: INK_SOFT,
+              lineHeight: 1.65,
+              maxWidth: 760,
+            }}>
+              {a}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function LandingPage() {
+  const [openFaq, setOpenFaq] = useState(-1);
+
   useLayoutEffect(() => {
     const prevBodyBg = document.body.style.background;
     const prevHtmlBg = document.documentElement.style.background;
@@ -541,6 +638,46 @@ export default function LandingPage() {
                 }}
               />
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ FAQ — Honest Answers To Real Questions ============ */}
+      <section style={{ padding: "30px 20px 60px" }}>
+        <div style={{ maxWidth: 880, margin: "0 auto" }}>
+          <motion.h2
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5 }}
+            style={{
+              fontSize: "clamp(26px, 4vw, 42px)",
+              fontWeight: 900,
+              color: INK,
+              letterSpacing: -0.8,
+              margin: 0,
+              marginBottom: 36,
+              textAlign: "center",
+            }}
+          >
+            HONEST ANSWERS TO REAL QUESTIONS
+          </motion.h2>
+
+          <div style={{ borderTop: "1px solid rgba(0,0,0,.1)" }}>
+            {faqs.map((f, i) => (
+              <FAQItem
+                key={i}
+                q={f.q}
+                a={f.a}
+                isOpen={openFaq === i}
+                onToggle={() => {
+                  const next = openFaq === i ? -1 : i;
+                  setOpenFaq(next);
+                  if (next !== -1) trackEvent("landing_faq_opened", { q: f.q });
+                }}
+                isLast={i === faqs.length - 1}
+              />
+            ))}
           </div>
         </div>
       </section>
