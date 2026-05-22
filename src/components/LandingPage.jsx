@@ -371,20 +371,23 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ============ STICKY BOTTOM CTA BAR — Rajiv-style: logo | tagline | big green CTA ============ */}
+      {/* ============ STICKY FLOATING CTA PILL — rounded, centred, breathing room from edges ============ */}
       <div style={{
         position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
+        bottom: 16,
+        left: "50%",
+        transform: "translateX(-50%)",
+        width: "calc(100% - 32px)",
+        maxWidth: 920,
         background: "#0f0f0f",
-        padding: "14px 22px",
+        padding: "12px 18px",
+        borderRadius: 18,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         zIndex: 100,
-        boxShadow: "0 -10px 30px rgba(0,0,0,.25)",
-        gap: 20,
+        boxShadow: "0 18px 48px rgba(0,0,0,.45), 0 4px 14px rgba(0,0,0,.22)",
+        gap: 18,
       }}>
         {/* LEFT — brand wordmark + divider + tagline */}
         <div style={{
