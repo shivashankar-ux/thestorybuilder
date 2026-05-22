@@ -259,6 +259,23 @@ export default function LandingPage() {
 
   return (
     <div style={{ background: BG, color: INK, minHeight: "100vh" }}>
+      <style>{`
+        @media (max-width: 640px) {
+          .lp-sticky { justify-content: center !important; gap: 0 !important; padding: 10px 14px !important; }
+          .lp-sticky-left { display: none !important; }
+          .lp-sticky-button { padding: 16px 28px !important; font-size: 14px !important; }
+        }
+        @media (max-width: 600px) {
+          .lp-stat-cell { border-right: none !important; border-bottom: 1px dashed rgba(0,0,0,.08); padding-top: 14px !important; padding-bottom: 14px !important; }
+          .lp-stat-cell:last-child { border-bottom: none !important; }
+          .lp-hero-card { padding: 50px 22px 36px !important; }
+          .lp-about-h2 { font-size: 28px !important; }
+        }
+        @media (max-width: 480px) {
+          .lp-hero-pill { font-size: 14px !important; padding: 14px 22px !important; }
+          .lp-section-pad { padding-left: 16px !important; padding-right: 16px !important; }
+        }
+      `}</style>
 
       {/* ============ HERO ============ */}
       <section style={{ padding: "70px 20px 30px" }}>
@@ -588,6 +605,7 @@ export default function LandingPage() {
             {stats.map((s, i) => (
               <div
                 key={s.label}
+                className="lp-stat-cell"
                 style={{
                   textAlign: "center",
                   padding: "4px 8px",
@@ -1114,8 +1132,7 @@ export default function LandingPage() {
               letterSpacing: -0.5,
             }}
           >
-            You Can Keep Wondering Why Your Website<br />
-            Isn&apos;t Bringing Customers.<br />
+            You Can Keep Wondering Why Your Website Isn&apos;t Bringing Customers.{" "}
             <span style={{ color: ORANGE }}>Or You Can Find Out In 30 Minutes.</span>
           </motion.h2>
 
@@ -1211,7 +1228,7 @@ export default function LandingPage() {
       </section>
 
       {/* ============ STICKY FLOATING CTA PILL — rounded, centred, breathing room from edges ============ */}
-      <div style={{
+      <div className="lp-sticky" style={{
         position: "fixed",
         bottom: 16,
         left: "50%",
@@ -1229,7 +1246,7 @@ export default function LandingPage() {
         gap: 18,
       }}>
         {/* LEFT — brand wordmark + divider + tagline */}
-        <div style={{
+        <div className="lp-sticky-left" style={{
           display: "flex",
           alignItems: "center",
           gap: 20,
@@ -1286,6 +1303,7 @@ export default function LandingPage() {
 
         {/* RIGHT — big green phone-call CTA */}
         <motion.a
+          className="lp-sticky-button"
           href={TEL_HREF}
           data-track="landing_sticky_call"
           onClick={() => trackEvent("landing_sticky_call")}
