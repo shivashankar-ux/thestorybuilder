@@ -96,7 +96,7 @@ export default function LandingPage() {
               marginInline: "auto",
               letterSpacing: -0.5,
             }}>
-              Get a <span style={{ borderBottom: `4px solid ${ORANGE}`, paddingBottom: 2 }}>Better Website</span><br />
+              Get a Better Website<br />
               That Brings You <em style={{ color: ORANGE, fontStyle: "normal" }}>Real Customers</em>
             </h1>
 
