@@ -401,6 +401,149 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ============ ABOUT SHIVA SHANKAR — credibility section, Rajiv-style ============ */}
+      <section style={{ padding: "60px 20px 70px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+
+          {/* Section header */}
+          <motion.h2
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5 }}
+            style={{
+              fontSize: "clamp(28px, 4.2vw, 44px)",
+              fontWeight: 900,
+              color: INK,
+              letterSpacing: -0.8,
+              margin: 0,
+              marginBottom: 22,
+            }}
+          >
+            ABOUT SHIVA SHANKAR
+          </motion.h2>
+
+          {/* Top divider */}
+          <div style={{ height: 1, background: "rgba(0,0,0,.12)", marginBottom: 28 }} />
+
+          {/* Tagline */}
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            style={{
+              fontSize: "clamp(20px, 2.4vw, 26px)",
+              fontWeight: 500,
+              color: INK,
+              lineHeight: 1.35,
+              margin: 0,
+              marginBottom: 28,
+              maxWidth: 720,
+              letterSpacing: -0.2,
+            }}
+          >
+            I&apos;m not here to sell you a website. I&apos;m here because most
+            businesses are wasting money on sites that don&apos;t bring customers.
+          </motion.p>
+
+          {/* Bottom divider */}
+          <div style={{ height: 1, background: "rgba(0,0,0,.12)", marginBottom: 40 }} />
+
+          {/* 2-col body + photo */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gap: 48,
+            alignItems: "start",
+          }}>
+            {/* LEFT — body paragraphs */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.55 }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 18,
+              }}
+            >
+              <p style={{
+                fontSize: 16,
+                color: INK,
+                lineHeight: 1.65,
+                margin: 0,
+                maxWidth: 540,
+              }}>
+                Shiva founded <strong>The Story Builder</strong> after watching
+                the same pattern repeat — businesses spending lakhs on websites
+                and ads that never bring customers. Since then, the agency has
+                shipped <strong>10+ high-converting websites</strong> and run
+                paid campaigns delivering an <strong>average 3.4× return on
+                ad spend</strong> for ambitious brands across India and beyond.
+              </p>
+              <p style={{
+                fontSize: 16,
+                color: INK,
+                lineHeight: 1.65,
+                margin: 0,
+                maxWidth: 540,
+              }}>
+                He says the things most agencies won&apos;t — that the problem
+                usually isn&apos;t traffic, it&apos;s the website itself. That a
+                pretty design without a clear conversion path is just an
+                expensive brochure. That paid ads pointing at a broken funnel
+                only burn money faster.
+              </p>
+              <p style={{
+                fontSize: 16,
+                color: INK,
+                lineHeight: 1.65,
+                margin: 0,
+                maxWidth: 540,
+              }}>
+                You don&apos;t have to hire The Story Builder after this call.
+                But you&apos;ll leave with a clearer picture of what&apos;s
+                actually broken in your business online — and exactly what it
+                would take to fix it.
+              </p>
+            </motion.div>
+
+            {/* RIGHT — photo */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.55, delay: 0.1 }}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-start",
+              }}
+            >
+              <img
+                src="/shiva-about.png"
+                alt="Shiva Shankar, founder of The Story Builder"
+                onError={(e) => {
+                  if (!e.currentTarget.dataset.fallback) {
+                    e.currentTarget.dataset.fallback = "1";
+                    e.currentTarget.src = "/shiva-landing.png";
+                  }
+                }}
+                style={{
+                  width: "100%",
+                  maxWidth: 420,
+                  height: "auto",
+                  display: "block",
+                  filter: "drop-shadow(0 18px 28px rgba(0,0,0,.12))",
+                }}
+              />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* ============ STICKY FLOATING CTA PILL — rounded, centred, breathing room from edges ============ */}
       <div style={{
         position: "fixed",
