@@ -14,10 +14,10 @@ const ORANGE   = "#f76b3a";
 const ORANGE_GRAD = "linear-gradient(180deg, #ff9558 0%, #f76b3a 100%)";
 
 const benefits = [
-  "A website built specifically to convert visitors into customers",
+  "A high-converting website designed for your business — new build or full redesign",
   "Live in 14 days — no drawn-out timelines or surprise costs",
-  "Paid ads & SEO setup so you start getting traffic from day one",
-  "Live dashboards so you see exactly what's working",
+  "Google Ads + SEO setup so your website starts getting customers from day one",
+  "Live performance dashboards so you see exactly which channels are working",
 ];
 
 const WhatsAppIcon = ({ size = 18 }) => (
@@ -32,9 +32,39 @@ export default function LandingPage() {
     const prevHtmlBg = document.documentElement.style.background;
     document.body.style.background = BG;
     document.documentElement.style.background = BG;
+
+    // SEO meta tags scoped to /landing — restored when the user leaves
+    const prevTitle = document.title;
+    document.title =
+      "Website Design & Redesign for Small Businesses in India | The Story Builder";
+
+    const setMeta = (selector, value) => {
+      const el = document.querySelector(selector);
+      if (!el) return null;
+      const prev = el.getAttribute("content");
+      el.setAttribute("content", value);
+      return { el, prev };
+    };
+
+    const DESC =
+      "Get a high-converting website for your business — new build or full redesign. We design & ship websites that bring real customers. Free 30-min strategy call, no pitch, no commitment.";
+
+    const desc      = setMeta('meta[name="description"]', DESC);
+    const ogTitle   = setMeta('meta[property="og:title"]',       "Website Design & Redesign for Small Businesses in India | The Story Builder");
+    const ogDesc    = setMeta('meta[property="og:description"]', DESC);
+    const twTitle   = setMeta('meta[name="twitter:title"]',      "Website Design & Redesign for Small Businesses in India | The Story Builder");
+    const twDesc    = setMeta('meta[name="twitter:description"]', DESC);
+    const keywords  = setMeta('meta[name="keywords"]',
+      "website design, website redesign, small business website, high-converting website, website for business, redo my website, website that brings customers, website design India, website strategy call, lead generation website, business website design, affordable website design"
+    );
+
     return () => {
       document.body.style.background = prevBodyBg;
       document.documentElement.style.background = prevHtmlBg;
+      document.title = prevTitle;
+      [desc, ogTitle, ogDesc, twTitle, twDesc, keywords].forEach((m) => {
+        if (m && m.prev !== null) m.el.setAttribute("content", m.prev);
+      });
     };
   }, []);
 
@@ -68,9 +98,9 @@ export default function LandingPage() {
                 letterSpacing: 0.3,
               }}
             >
-              FREE 1:1 STRATEGY CONSULTATION<br />
-              FOR FOUNDERS WHO WANT A<br />
-              HIGH-CONVERTING WEBSITE
+              FREE WEBSITE STRATEGY CALL<br />
+              NEW SITES &amp; REDESIGNS<br />
+              THAT BRING REAL CUSTOMERS
             </motion.div>
           </div>
 
@@ -96,7 +126,7 @@ export default function LandingPage() {
               marginInline: "auto",
               letterSpacing: -0.5,
             }}>
-              Get a Better Website<br />
+              Get a High-Converting Website<br />
               That Brings You <em style={{ color: ORANGE, fontStyle: "normal" }}>Real Customers</em>
             </h1>
 
@@ -115,7 +145,7 @@ export default function LandingPage() {
               marginInline: "auto",
               lineHeight: 1.55,
             }}>
-              Book a free 30-min strategy call. We&apos;ll audit your current site, your funnel, and map out exactly what to fix to bring in more customers.
+              Whether you don&apos;t have a website yet or your current one isn&apos;t bringing customers — book a free 30-min strategy call. We&apos;ll map out exactly what to build, redesign, or fix.
             </p>
           </motion.div>
         </div>
@@ -218,10 +248,10 @@ export default function LandingPage() {
                 color: "#fff",
                 lineHeight: 1.3,
               }}>
-                I&apos;ll show you{" "}
-                <span style={{ color: ORANGE }}>what&apos;s broken.</span>
+                I&apos;ll tell you whether you need a{" "}
+                <span style={{ color: ORANGE }}>new website, a redesign,</span>
                 <br />
-                And exactly how to fix it.
+                or just a fix.
               </div>
               <div style={{
                 display: "flex",
@@ -346,7 +376,7 @@ export default function LandingPage() {
             marginBottom: 18,
             fontWeight: 700,
           }}>
-            TRUSTED BY AMBITIOUS BRANDS
+            WEBSITE DESIGN &amp; GROWTH PARTNER FOR AMBITIOUS BRANDS
           </p>
           <div style={{
             display: "flex",
@@ -432,7 +462,7 @@ export default function LandingPage() {
               fontWeight: 600,
               lineHeight: 1.3,
             }}>
-              Book a free strategy call, walk away with a plan.
+              Free website strategy call — new site or full redesign.
             </div>
             <div style={{
               color: "rgba(255,255,255,.6)",
