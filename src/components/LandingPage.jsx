@@ -958,7 +958,7 @@ export default function LandingPage() {
               </p>
             </motion.div>
 
-            {/* RIGHT — photo */}
+            {/* RIGHT — photo (cropped chest-up, vertically centred in column) */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -967,7 +967,7 @@ export default function LandingPage() {
               style={{
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "flex-start",
+                alignItems: "center",
               }}
             >
               <img
@@ -981,10 +981,10 @@ export default function LandingPage() {
                 }}
                 style={{
                   width: "100%",
-                  maxWidth: 420,
+                  maxWidth: 340,
                   height: "auto",
                   display: "block",
-                  clipPath: "inset(0 0 8% 0)",
+                  clipPath: "inset(10% 0 20% 0)",
                   filter: "drop-shadow(0 18px 28px rgba(0,0,0,.12))",
                 }}
               />
