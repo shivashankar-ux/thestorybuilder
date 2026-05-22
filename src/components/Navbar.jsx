@@ -1,9 +1,4 @@
 import { useState, useEffect } from "react";
-import { trackEvent } from "../utils/tracking";
-
-const LANDING_WA_HREF =
-  "https://wa.me/918341928526?text=" +
-  encodeURIComponent("Hi! I saw your ad and want to get my business online.");
 
 export default function Navbar({ page, setPage }) {
   const [scrolled,  setScrolled]  = useState(false);
@@ -19,11 +14,6 @@ export default function Navbar({ page, setPage }) {
   }, [dark]);
 
   useEffect(() => {
-    if (page === "landing") {
-      setScrolled(true);
-      setActiveNav("");
-      return;
-    }
     if (page !== "home") {
       setScrolled(true);
       setActiveNav(page === "contact" ? "contact" : "");
@@ -70,32 +60,6 @@ export default function Navbar({ page, setPage }) {
     { id: "projects", label: "Work" },
     { id: "contact",  label: "Contact" },
   ];
-
-  if (page === "landing") {
-    return (
-      <header className="header scrolled" id="header">
-        <div className="nav-inner">
-          <span
-            className="logo"
-            style={{ color: "var(--text)", whiteSpace: "nowrap", cursor: "default" }}
-          >
-            <span>The </span>Story Builder
-          </span>
-          <a
-            className="nav-cta"
-            href={LANDING_WA_HREF}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-track="landing_nav_whatsapp"
-            onClick={() => trackEvent("landing_nav_whatsapp")}
-            style={{ marginLeft: "auto", textDecoration: "none" }}
-          >
-            Chat on WhatsApp
-          </a>
-        </div>
-      </header>
-    );
-  }
 
   return (
     <header className={`header${scrolled ? " scrolled" : ""}`} id="header">

@@ -30,10 +30,6 @@ const pageTransition = {
   transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] },
 };
 
-const LANDING_WA_HREF =
-  "https://wa.me/918341928526?text=" +
-  encodeURIComponent("Hi! I saw your ad and want to get my business online.");
-
 export default function App() {
   const [page, setPage] = useState(() => {
     if (typeof window !== "undefined" && window.location.pathname === "/landing") {
@@ -60,18 +56,6 @@ export default function App() {
         if (dest.scrollTo) setPendingScroll(dest.scrollTo);
       }
     }
-  };
-
-  const landingNavigate = (dest) => {
-    const wantsContact =
-      dest === "contact" ||
-      (dest && typeof dest === "object" && dest.page === "contact");
-    if (wantsContact) {
-      trackEvent("landing_cta_to_whatsapp");
-      window.open(LANDING_WA_HREF, "_blank", "noopener,noreferrer");
-      return;
-    }
-    navigate(dest);
   };
 
   useEffect(() => {
@@ -116,7 +100,7 @@ export default function App() {
   return (
     <div>
       <div className="grain" aria-hidden="true" />
-      <Navbar page={page} setPage={navigate} />
+      {page !== "landing" && <Navbar page={page} setPage={navigate} />}
 
       <AnimatePresence mode="wait">
         {page === "home" && (
@@ -135,7 +119,7 @@ export default function App() {
 
         {page === "landing" && (
           <motion.main key="landing" {...pageTransition}>
-            <LandingPage navigate={landingNavigate} />
+            <LandingPage />
           </motion.main>
         )}
 
@@ -152,10 +136,10 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <Footer setPage={navigate} />
+      {page !== "landing" && <Footer setPage={navigate} />}
 
-      <WhatsAppButton />
-      <ExitIntent setPage={page === "landing" ? landingNavigate : navigate} />
+      {page !== "landing" && <WhatsAppButton />}
+      {page !== "landing" && <ExitIntent setPage={navigate} />}
     </div>
   );
 }
