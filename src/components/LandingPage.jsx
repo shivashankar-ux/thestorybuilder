@@ -14,10 +14,10 @@ const ORANGE   = "#f76b3a";
 const ORANGE_GRAD = "linear-gradient(180deg, #ff9558 0%, #f76b3a 100%)";
 
 const benefits = [
-  "A high-converting website designed for your business — new build or full redesign",
-  "Live in 14 days — no drawn-out timelines or surprise costs",
-  "Google Ads + SEO setup so your website starts getting customers from day one",
-  "Live performance dashboards so you see exactly which channels are working",
+  "A website designed and built to convert visitors into customers — not just look pretty",
+  "Live in 14 days for most projects — no drawn-out timelines or hidden costs",
+  "Conversion-focused copy and design baked in — clear CTAs, sharp positioning, real outcomes",
+  "Mobile-optimised, fast-loading, and search-friendly from day one",
 ];
 
 const faqs = [
@@ -42,8 +42,8 @@ const faqs = [
     a: "Live in 14 days for most projects. Bigger builds (e-commerce, multi-language, custom integrations) typically run 3–4 weeks. We'll quote a real timeline on the call, not a marketing one.",
   },
   {
-    q: "Do you handle SEO and paid ads too?",
-    a: "Yes. A website is step one — but if you want it to actually bring customers, you need traffic. We set up SEO, Google Ads, and Meta Ads as a full package or à la carte. We'll talk through what makes sense for your stage.",
+    q: "What does a website cost?",
+    a: "It depends on what you actually need — a 5-page brochure site, a lead-generation landing page, and an e-commerce store all sit at different price points. We'll give you a real, honest quote on the call — not a vague 'starts from' range or a high-pressure 'limited-time' offer.",
   },
 ];
 
@@ -144,7 +144,7 @@ export default function LandingPage() {
     };
 
     const DESC =
-      "Get a high-converting website for your business — new build or full redesign. We design & ship websites that bring real customers. Free 30-min strategy call, no pitch, no commitment.";
+      "Get a high-converting website built for your business — new build or full redesign. A website studio that designs sites built to turn visitors into customers. Free 30-min strategy call, no pitch, no commitment.";
 
     const desc      = setMeta('meta[name="description"]', DESC);
     const ogTitle   = setMeta('meta[property="og:title"]',       "Website Design & Redesign for Small Businesses in India | The Story Builder");
@@ -152,7 +152,7 @@ export default function LandingPage() {
     const twTitle   = setMeta('meta[name="twitter:title"]',      "Website Design & Redesign for Small Businesses in India | The Story Builder");
     const twDesc    = setMeta('meta[name="twitter:description"]', DESC);
     const keywords  = setMeta('meta[name="keywords"]',
-      "website design, website redesign, small business website, high-converting website, website for business, redo my website, website that brings customers, website design India, website strategy call, lead generation website, business website design, affordable website design"
+      "website design, website redesign, small business website, high-converting website, website for business, redo my website, website that brings customers, website design India, website design studio, business website, affordable website design, custom website design, web design India, website rebuild, landing page design"
     );
 
     return () => {
@@ -384,7 +384,7 @@ export default function LandingPage() {
                     lineHeight: 1,
                     letterSpacing: -0.5,
                   }}>
-                    3.4x
+                    14
                   </div>
                   <div style={{
                     fontSize: 10.5,
@@ -393,7 +393,7 @@ export default function LandingPage() {
                     marginTop: 4,
                     fontWeight: 600,
                   }}>
-                    AVG ROAS
+                    DAYS AVG BUILD
                   </div>
                 </div>
               </div>
@@ -473,7 +473,7 @@ export default function LandingPage() {
             marginBottom: 18,
             fontWeight: 700,
           }}>
-            WEBSITE DESIGN &amp; GROWTH PARTNER FOR AMBITIOUS BRANDS
+            WEBSITES BUILT FOR AMBITIOUS BRANDS
           </p>
           <div style={{
             display: "flex",
@@ -575,10 +575,11 @@ export default function LandingPage() {
               }}>
                 Shiva founded <strong>The Story Builder</strong> after watching
                 the same pattern repeat — businesses spending lakhs on websites
-                and ads that never bring customers. Since then, the agency has
-                shipped <strong>10+ high-converting websites</strong> and run
-                paid campaigns delivering an <strong>average 3.4× return on
-                ad spend</strong> for ambitious brands across India and beyond.
+                that look great but never bring customers. Since then, the
+                studio has shipped <strong>10+ high-converting websites</strong> for
+                ambitious businesses across India and beyond — most live in
+                under 14 days, all built around one question: <em>does this
+                actually turn visitors into paying customers?</em>
               </p>
               <p style={{
                 fontSize: 16,
@@ -587,11 +588,11 @@ export default function LandingPage() {
                 margin: 0,
                 maxWidth: 540,
               }}>
-                He says the things most agencies won&apos;t — that the problem
-                usually isn&apos;t traffic, it&apos;s the website itself. That a
-                pretty design without a clear conversion path is just an
-                expensive brochure. That paid ads pointing at a broken funnel
-                only burn money faster.
+                He says the things most web designers won&apos;t — that the problem
+                usually isn&apos;t prettier visuals, it&apos;s a clearer conversion
+                path. That a beautiful homepage without a clear next step is just
+                an expensive brochure. That fast, mobile-friendly, search-ready
+                basics matter more than flashy animations.
               </p>
               <p style={{
                 fontSize: 16,
@@ -602,8 +603,8 @@ export default function LandingPage() {
               }}>
                 You don&apos;t have to hire The Story Builder after this call.
                 But you&apos;ll leave with a clearer picture of what&apos;s
-                actually broken in your business online — and exactly what it
-                would take to fix it.
+                actually broken on your website — and exactly what it would
+                take to fix it.
               </p>
             </motion.div>
 
@@ -731,7 +732,7 @@ export default function LandingPage() {
               marginTop: 5,
               fontWeight: 800,
             }}>
-              DIGITAL AGENCY
+              WEBSITE STUDIO
             </div>
           </div>
 
