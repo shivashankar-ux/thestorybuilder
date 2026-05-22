@@ -128,25 +128,24 @@ export default function LandingPage() {
           margin: "0 auto",
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-          gap: 32,
-          alignItems: "end",
+          gap: 40,
+          alignItems: "center",
         }}>
 
-          {/* LEFT — Photo composed onto dark card */}
+          {/* LEFT — Photo + dark card stacked, photo's lower body overlaps card top */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6 }}
             style={{
-              position: "relative",
-              minHeight: 620,
               display: "flex",
-              alignItems: "flex-end",
-              justifyContent: "center",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "100%",
             }}
           >
-            {/* Photo — absolute, anchored so its lower body overlaps card top */}
+            {/* Photo — sized & in normal flow, negative margin pulls card up */}
             <img
               src="/shiva-landing.png"
               alt="Shiva Shankar, founder of The Story Builder"
@@ -157,30 +156,30 @@ export default function LandingPage() {
                 }
               }}
               style={{
-                position: "absolute",
-                bottom: 140,
-                left: "50%",
-                transform: "translateX(-50%)",
                 width: "100%",
-                maxWidth: 380,
+                maxWidth: 300,
                 height: "auto",
+                display: "block",
+                marginBottom: -80,
+                position: "relative",
                 zIndex: 2,
-                filter: "drop-shadow(0 24px 32px rgba(0,0,0,.18))",
+                filter: "drop-shadow(0 18px 28px rgba(0,0,0,.15))",
                 pointerEvents: "none",
               }}
             />
 
-            {/* Dark statement card — sits at bottom, photo's lower body covers its top */}
+            {/* Dark statement card — photo's lower 80px overlaps its top */}
             <div style={{
-              position: "relative",
               background: "#0e0e0e",
               color: "#fff",
-              padding: "26px 28px 28px",
+              padding: "100px 28px 26px",
               borderRadius: 18,
               width: "100%",
               maxWidth: 400,
+              position: "relative",
               zIndex: 1,
               boxShadow: "0 18px 40px rgba(0,0,0,.18)",
+              textAlign: "center",
             }}>
               <div style={{
                 fontSize: 11,
@@ -210,10 +209,11 @@ export default function LandingPage() {
               <div style={{
                 height: 1,
                 background: "rgba(255,255,255,.12)",
-                margin: "16px 0 14px",
+                margin: "16px auto 14px",
+                width: 60,
               }} />
               <div style={{
-                fontSize: 18,
+                fontSize: 17,
                 fontWeight: 700,
                 color: "#fff",
                 lineHeight: 1.3,
@@ -227,6 +227,7 @@ export default function LandingPage() {
                 display: "flex",
                 gap: 28,
                 marginTop: 18,
+                justifyContent: "center",
               }}>
                 <div>
                   <div style={{
