@@ -536,6 +536,7 @@ export default function LandingPage() {
                   maxWidth: 420,
                   height: "auto",
                   display: "block",
+                  clipPath: "inset(0 0 8% 0)",
                   filter: "drop-shadow(0 18px 28px rgba(0,0,0,.12))",
                 }}
               />
