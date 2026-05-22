@@ -121,29 +121,32 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ============ FOUNDER ROW — big photo + name ============ */}
-      <section style={{ padding: "40px 20px 20px" }}>
+      {/* ============ FOUNDER COMPOSITION — photo overlaps dark card ============ */}
+      <section style={{ padding: "40px 20px 30px" }}>
         <div style={{
-          maxWidth: 1080,
+          maxWidth: 1100,
           margin: "0 auto",
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-          gap: 48,
-          alignItems: "center",
+          gap: 32,
+          alignItems: "end",
         }}>
 
-          {/* LEFT — BIG founder photo, full colour, soft bottom fade */}
+          {/* LEFT — Photo composed onto dark card */}
           <motion.div
-            initial={{ opacity: 0, x: -24 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.6 }}
             style={{
+              position: "relative",
+              minHeight: 620,
               display: "flex",
-              justifyContent: "center",
               alignItems: "flex-end",
+              justifyContent: "center",
             }}
           >
+            {/* Photo — absolute, anchored so its lower body overlaps card top */}
             <img
               src="/shiva-landing.png"
               alt="Shiva Shankar, founder of The Story Builder"
@@ -154,161 +157,181 @@ export default function LandingPage() {
                 }
               }}
               style={{
+                position: "absolute",
+                bottom: 140,
+                left: "50%",
+                transform: "translateX(-50%)",
                 width: "100%",
-                maxWidth: 480,
+                maxWidth: 380,
                 height: "auto",
-                display: "block",
-                filter: "drop-shadow(0 16px 24px rgba(0,0,0,.12))",
+                zIndex: 2,
+                filter: "drop-shadow(0 24px 32px rgba(0,0,0,.18))",
+                pointerEvents: "none",
               }}
             />
+
+            {/* Dark statement card — sits at bottom, photo's lower body covers its top */}
+            <div style={{
+              position: "relative",
+              background: "#0e0e0e",
+              color: "#fff",
+              padding: "26px 28px 28px",
+              borderRadius: 18,
+              width: "100%",
+              maxWidth: 400,
+              zIndex: 1,
+              boxShadow: "0 18px 40px rgba(0,0,0,.18)",
+            }}>
+              <div style={{
+                fontSize: 11,
+                color: "rgba(255,255,255,.55)",
+                letterSpacing: 2,
+                fontWeight: 700,
+              }}>
+                I&apos;LL BE YOUR STRATEGIST
+              </div>
+              <div style={{
+                fontSize: 30,
+                fontWeight: 900,
+                color: ORANGE,
+                lineHeight: 1,
+                letterSpacing: -0.8,
+                marginTop: 8,
+              }}>
+                SHIVA SHANKAR
+              </div>
+              <div style={{
+                fontSize: 13,
+                color: "rgba(255,255,255,.6)",
+                marginTop: 6,
+              }}>
+                Founder · The Story Builder
+              </div>
+              <div style={{
+                height: 1,
+                background: "rgba(255,255,255,.12)",
+                margin: "16px 0 14px",
+              }} />
+              <div style={{
+                fontSize: 18,
+                fontWeight: 700,
+                color: "#fff",
+                lineHeight: 1.3,
+              }}>
+                I&apos;ll show you{" "}
+                <span style={{ color: ORANGE }}>what&apos;s broken.</span>
+                <br />
+                And exactly how to fix it.
+              </div>
+              <div style={{
+                display: "flex",
+                gap: 28,
+                marginTop: 18,
+              }}>
+                <div>
+                  <div style={{
+                    fontSize: 24,
+                    fontWeight: 900,
+                    color: "#fff",
+                    lineHeight: 1,
+                    letterSpacing: -0.5,
+                  }}>
+                    10+
+                  </div>
+                  <div style={{
+                    fontSize: 10.5,
+                    color: "rgba(255,255,255,.55)",
+                    letterSpacing: 1,
+                    marginTop: 4,
+                    fontWeight: 600,
+                  }}>
+                    BRANDS LAUNCHED
+                  </div>
+                </div>
+                <div>
+                  <div style={{
+                    fontSize: 24,
+                    fontWeight: 900,
+                    color: "#fff",
+                    lineHeight: 1,
+                    letterSpacing: -0.5,
+                  }}>
+                    3.4x
+                  </div>
+                  <div style={{
+                    fontSize: 10.5,
+                    color: "rgba(255,255,255,.55)",
+                    letterSpacing: 1,
+                    marginTop: 4,
+                    fontWeight: 600,
+                  }}>
+                    AVG ROAS
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.div>
 
-          {/* RIGHT — Name, title, blurb, stats */}
+          {/* RIGHT — What Happens On The Call card */}
           <motion.div
-            initial={{ opacity: 0, x: 24 }}
+            initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            transition={{ duration: 0.55, delay: 0.1 }}
+            style={{
+              background: "#fff",
+              padding: "30px 32px",
+              borderRadius: 18,
+              border: "1px solid rgba(0,0,0,.06)",
+              boxShadow: "0 6px 24px rgba(0,0,0,.06)",
+            }}
           >
-            <div style={{ fontSize: 15, color: INK_SOFT, marginBottom: 8 }}>
-              I&apos;ll be your strategist for 30 mins
-            </div>
-            <h2 style={{
-              fontSize: "clamp(40px, 6.5vw, 68px)",
-              fontWeight: 900,
-              color: ORANGE,
-              lineHeight: 0.95,
-              letterSpacing: -1.5,
-              margin: 0,
-            }}>
-              SHIVA<br />SHANKAR
-            </h2>
-            <div style={{
-              fontSize: 16,
-              color: INK_SOFT,
-              marginTop: 14,
-              fontWeight: 500,
-            }}>
-              Founder · The Story Builder
-            </div>
-            <div style={{
-              width: 48,
-              height: 2,
-              background: "rgba(0,0,0,.18)",
-              margin: "18px 0",
-            }} />
-            <p style={{
-              fontSize: 16,
+            <h3 style={{
+              fontSize: 22,
+              fontWeight: 800,
               color: INK,
-              lineHeight: 1.55,
               margin: 0,
-              maxWidth: 460,
+              marginBottom: 18,
             }}>
-              Helped <strong>10+ ambitious brands</strong> get online and grow across India &amp; abroad — performance-tuned websites, paid ads that actually pay back, and honest reporting.
-            </p>
-
-            <div style={{
-              marginTop: 26,
+              What Happens On The Call
+            </h3>
+            <ul style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
               display: "flex",
-              gap: 32,
-              flexWrap: "wrap",
+              flexDirection: "column",
+              gap: 14,
             }}>
-              <div>
-                <div style={{
-                  fontSize: 32,
-                  fontWeight: 900,
+              {benefits.map((b, i) => (
+                <li key={i} style={{
+                  display: "flex",
+                  gap: 14,
+                  alignItems: "flex-start",
+                  fontSize: 15.5,
                   color: INK,
-                  lineHeight: 1,
-                  letterSpacing: -0.5,
+                  lineHeight: 1.5,
                 }}>
-                  10+
-                </div>
-                <div style={{ fontSize: 12, color: INK_SOFT, marginTop: 6, letterSpacing: 1 }}>
-                  BRANDS LAUNCHED
-                </div>
-              </div>
-              <div>
-                <div style={{
-                  fontSize: 32,
-                  fontWeight: 900,
-                  color: INK,
-                  lineHeight: 1,
-                  letterSpacing: -0.5,
-                }}>
-                  3.4x
-                </div>
-                <div style={{ fontSize: 12, color: INK_SOFT, marginTop: 6, letterSpacing: 1 }}>
-                  AVG ROAS DELIVERED
-                </div>
-              </div>
-            </div>
+                  <span style={{
+                    background: ORANGE,
+                    color: "#fff",
+                    width: 24,
+                    height: 24,
+                    borderRadius: 12,
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: 13,
+                    fontWeight: 800,
+                    flexShrink: 0,
+                    marginTop: 1,
+                  }}>✓</span>
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
           </motion.div>
         </div>
-      </section>
-
-      {/* ============ WHAT HAPPENS ON THE CALL — own row ============ */}
-      <section style={{ padding: "40px 20px 40px" }}>
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.55 }}
-          style={{
-            maxWidth: 720,
-            margin: "0 auto",
-            background: "#fff",
-            padding: "32px 36px",
-            borderRadius: 18,
-            border: "1px solid rgba(0,0,0,.06)",
-            boxShadow: "0 6px 24px rgba(0,0,0,.06)",
-          }}
-        >
-          <h3 style={{
-            fontSize: 22,
-            fontWeight: 800,
-            color: INK,
-            margin: 0,
-            marginBottom: 18,
-            textAlign: "center",
-          }}>
-            What Happens On The Call
-          </h3>
-          <ul style={{
-            listStyle: "none",
-            padding: 0,
-            margin: 0,
-            display: "flex",
-            flexDirection: "column",
-            gap: 14,
-          }}>
-            {benefits.map((b, i) => (
-              <li key={i} style={{
-                display: "flex",
-                gap: 14,
-                alignItems: "flex-start",
-                fontSize: 15.5,
-                color: INK,
-                lineHeight: 1.5,
-              }}>
-                <span style={{
-                  background: ORANGE,
-                  color: "#fff",
-                  width: 24,
-                  height: 24,
-                  borderRadius: 12,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 13,
-                  fontWeight: 800,
-                  flexShrink: 0,
-                  marginTop: 1,
-                }}>✓</span>
-                <span>{b}</span>
-              </li>
-            ))}
-          </ul>
-        </motion.div>
       </section>
 
       {/* ============ TRUSTED BY ============ */}
