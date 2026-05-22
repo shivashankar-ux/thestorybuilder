@@ -6,6 +6,8 @@ const WA_HREF =
   "https://wa.me/918341928526?text=" +
   encodeURIComponent("Hi! I'd like to book the free 1:1 consultation to build a better website.");
 
+const TEL_HREF = "tel:+918341928526";
+
 const BG       = "#f5f2eb";
 const CARD     = "#e8e3d8";
 const INK      = "#0e0e0e";
@@ -95,12 +97,16 @@ const WhatsAppIcon = ({ size = 18 }) => (
   </svg>
 );
 
-function InlineWA({ track, label }) {
+const PhoneIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+  </svg>
+);
+
+function InlineCTA({ track, label }) {
   return (
     <motion.a
-      href={WA_HREF}
-      target="_blank"
-      rel="noopener noreferrer"
+      href={TEL_HREF}
       data-track={track}
       onClick={() => trackEvent(track)}
       whileHover={{ y: -1, scale: 1.02 }}
@@ -121,7 +127,7 @@ function InlineWA({ track, label }) {
         whiteSpace: "nowrap",
       }}
     >
-      <WhatsAppIcon size={18} />
+      <PhoneIcon size={18} />
       {label}
     </motion.a>
   );
@@ -320,7 +326,7 @@ export default function LandingPage() {
             </p>
 
             <div style={{ marginTop: 32, display: "flex", justifyContent: "center" }}>
-              <InlineWA track="landing_hero_cta" label="BOOK YOUR FREE CALL" />
+              <InlineCTA track="landing_hero_cta" label="BOOK YOUR FREE CALL" />
             </div>
             <p style={{
               fontSize: 13,
@@ -702,7 +708,7 @@ export default function LandingPage() {
             transition={{ duration: 0.5 }}
             style={{ textAlign: "center", marginTop: 40 }}
           >
-            <InlineWA track="landing_whats_included_cta" label="GET YOUR WEBSITE BUILT" />
+            <InlineCTA track="landing_whats_included_cta" label="GET YOUR WEBSITE BUILT" />
             <p style={{
               fontSize: 13,
               color: INK_SOFT,
@@ -969,10 +975,10 @@ export default function LandingPage() {
                 marginTop: 6,
                 lineHeight: 1.5,
               }}>
-                Just message us on WhatsApp — we usually reply within an hour.
+                Give us a call — we answer during business hours, IST.
               </div>
             </div>
-            <InlineWA track="landing_faq_cta" label="CHAT WITH US" />
+            <InlineCTA track="landing_faq_cta" label="CALL US NOW" />
           </motion.div>
         </div>
       </section>
@@ -1051,13 +1057,11 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* RIGHT — big green WhatsApp CTA */}
+        {/* RIGHT — big green phone-call CTA */}
         <motion.a
-          href={WA_HREF}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-track="landing_sticky_whatsapp"
-          onClick={() => trackEvent("landing_sticky_whatsapp")}
+          href={TEL_HREF}
+          data-track="landing_sticky_call"
+          onClick={() => trackEvent("landing_sticky_call")}
           whileHover={{ y: -1, scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
           style={{
@@ -1077,8 +1081,8 @@ export default function LandingPage() {
             flexShrink: 0,
           }}
         >
-          <WhatsAppIcon size={18} />
-          BOOK FREE 1:1 CALL
+          <PhoneIcon size={18} />
+          CALL FOR FREE 1:1
         </motion.a>
       </div>
     </div>
