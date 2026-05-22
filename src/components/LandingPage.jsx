@@ -132,7 +132,7 @@ export default function LandingPage() {
           alignItems: "center",
         }}>
 
-          {/* LEFT — BIG founder photo, bg blended into page */}
+          {/* LEFT — BIG founder photo, full colour, soft bottom fade */}
           <motion.div
             initial={{ opacity: 0, x: -24 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -145,20 +145,25 @@ export default function LandingPage() {
             }}
           >
             <img
-              src="/shiva.jpg"
+              src="/shiva-landing.jpg"
               alt="Shiva Shankar, founder of The Story Builder"
+              onError={(e) => {
+                if (!e.currentTarget.dataset.fallback) {
+                  e.currentTarget.dataset.fallback = "1";
+                  e.currentTarget.src = "/shiva.jpg";
+                }
+              }}
               style={{
                 width: "100%",
-                maxWidth: 420,
+                maxWidth: 440,
                 aspectRatio: "4 / 5",
                 objectFit: "cover",
-                objectPosition: "center 20%",
-                filter: "grayscale(0.85) contrast(1.08) brightness(1.02)",
-                mixBlendMode: "multiply",
+                objectPosition: "center 18%",
+                filter: "saturate(1.05) contrast(1.04)",
                 WebkitMaskImage:
-                  "linear-gradient(180deg, transparent 0%, black 12%, black 78%, transparent 100%)",
+                  "linear-gradient(180deg, black 0%, black 82%, transparent 100%)",
                 maskImage:
-                  "linear-gradient(180deg, transparent 0%, black 12%, black 78%, transparent 100%)",
+                  "linear-gradient(180deg, black 0%, black 82%, transparent 100%)",
               }}
             />
           </motion.div>
@@ -347,63 +352,95 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ============ STICKY BOTTOM CTA BAR ============ */}
+      {/* ============ STICKY BOTTOM CTA BAR — dark, compact, green CTA ============ */}
       <div style={{
         position: "fixed",
         bottom: 0,
         left: 0,
         right: 0,
-        background: "#fff",
-        borderTop: "1px solid rgba(0,0,0,.08)",
-        padding: "12px 16px",
+        background: "#0f0f0f",
+        padding: "10px 18px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         zIndex: 100,
-        boxShadow: "0 -6px 24px rgba(0,0,0,.1)",
-        flexWrap: "wrap",
-        gap: 10,
+        boxShadow: "0 -10px 30px rgba(0,0,0,.25)",
+        gap: 14,
       }}>
-        <div style={{ flex: "1 1 auto", minWidth: 160 }}>
+        {/* LEFT — brand badge + tagline */}
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 14,
+          flex: "1 1 auto",
+          minWidth: 0,
+        }}>
           <div style={{
-            fontSize: 22,
+            width: 42,
+            height: 42,
+            borderRadius: 10,
+            background: ORANGE_GRAD,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             fontWeight: 900,
-            color: INK,
-            lineHeight: 1,
-            letterSpacing: -0.5,
+            color: "#fff",
+            fontSize: 13,
+            flexShrink: 0,
+            letterSpacing: 0.5,
+            boxShadow: "0 4px 14px rgba(247,107,58,.35)",
           }}>
-            FREE
+            TSB
           </div>
-          <div style={{ fontSize: 12, color: INK_SOFT, marginTop: 4 }}>
-            1:1 Consultation · 30 mins · No commitment
+          <div style={{ minWidth: 0 }}>
+            <div style={{
+              color: "#fff",
+              fontSize: 15,
+              fontWeight: 800,
+              lineHeight: 1.2,
+              letterSpacing: -0.2,
+            }}>
+              Free 1:1 Strategy Call
+            </div>
+            <div style={{
+              color: "rgba(255,255,255,.62)",
+              fontSize: 12.5,
+              marginTop: 3,
+              lineHeight: 1.3,
+            }}>
+              30 mins · No pitch, no pressure · We map your plan
+            </div>
           </div>
         </div>
+
+        {/* RIGHT — big green WhatsApp CTA */}
         <motion.a
           href={WA_HREF}
           target="_blank"
           rel="noopener noreferrer"
           data-track="landing_sticky_whatsapp"
           onClick={() => trackEvent("landing_sticky_whatsapp")}
-          whileHover={{ y: -1, scale: 1.01 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={{ y: -1, scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
           style={{
-            background: ORANGE_GRAD,
+            background: "linear-gradient(180deg, #2ee06f 0%, #1bb558 100%)",
             color: "#fff",
-            padding: "14px 22px",
+            padding: "14px 24px",
             borderRadius: 10,
-            fontWeight: 800,
+            fontWeight: 900,
             textDecoration: "none",
             fontSize: 14,
-            letterSpacing: 0.5,
-            boxShadow: "0 8px 22px rgba(247,107,58,.32)",
+            letterSpacing: 0.6,
+            boxShadow: "0 8px 24px rgba(34,197,94,.38)",
             display: "inline-flex",
             alignItems: "center",
             gap: 8,
             whiteSpace: "nowrap",
+            flexShrink: 0,
           }}
         >
           <WhatsAppIcon size={18} />
-          BOOK FREE 1:1 CALL
+          CHAT FREE NOW
         </motion.a>
       </div>
     </div>
