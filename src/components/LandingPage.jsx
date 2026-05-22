@@ -20,6 +20,41 @@ const benefits = [
   "Mobile-optimised, fast-loading, and search-friendly from day one",
 ];
 
+const whatYouGet = [
+  {
+    title: "Custom design built for your business",
+    desc: "No templates. Every page designed around what your visitors actually need to do.",
+  },
+  {
+    title: "Mobile, tablet, desktop — pixel-perfect",
+    desc: "Looks just as sharp on a phone as it does on a laptop. Most of your visitors will be on mobile.",
+  },
+  {
+    title: "Fast loading under 3 seconds",
+    desc: "Optimised images, lazy loading, Core Web Vitals checked. Faster sites convert better and rank higher.",
+  },
+  {
+    title: "Search-ready foundation",
+    desc: "Meta tags, sitemap, semantic HTML, robots.txt — everything Google needs to find and index you.",
+  },
+  {
+    title: "Conversion-focused copy & CTAs",
+    desc: "Clear next step on every page so visitors don't wander off. Words written to sell, not just describe.",
+  },
+  {
+    title: "WhatsApp + contact form built in",
+    desc: "Pre-wired so leads come straight to your phone or inbox. No setup work on your end.",
+  },
+  {
+    title: "Domain & hosting setup",
+    desc: "We sort out the boring technical bits — DNS, SSL, hosting — so you don't have to figure them out.",
+  },
+  {
+    title: "You own everything",
+    desc: "Code, content, accounts — all handed over with a short training so you can update text yourself.",
+  },
+];
+
 const faqs = [
   {
     q: "Is this really free?",
@@ -39,7 +74,7 @@ const faqs = [
   },
   {
     q: "How long does building or redesigning a website take?",
-    a: "Live in 14 days for most projects. Bigger builds (e-commerce, multi-language, custom integrations) typically run 3–4 weeks. We'll quote a real timeline on the call, not a marketing one.",
+    a: "Live in 14 days for most projects. Bigger builds (e-commerce, multi-language, custom integrations) typically run 3–4 weeks. We'll quote a real timeline on the call, not a salesy one.",
   },
   {
     q: "What does a website cost?",
@@ -459,6 +494,102 @@ export default function LandingPage() {
               ))}
             </ul>
           </motion.div>
+        </div>
+      </section>
+
+      {/* ============ WHAT'S INCLUDED IN YOUR WEBSITE — concrete deliverables ============ */}
+      <section style={{ padding: "30px 20px 50px" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5 }}
+            style={{ textAlign: "center", marginBottom: 36 }}
+          >
+            <h2 style={{
+              fontSize: "clamp(26px, 4vw, 42px)",
+              fontWeight: 900,
+              color: INK,
+              letterSpacing: -0.8,
+              margin: 0,
+              marginBottom: 10,
+            }}>
+              WHAT&apos;S INCLUDED IN YOUR WEBSITE
+            </h2>
+            <p style={{
+              fontSize: 16,
+              color: INK_SOFT,
+              margin: 0,
+              maxWidth: 580,
+              marginInline: "auto",
+              lineHeight: 1.55,
+            }}>
+              Every website we build comes with these — no upsells, no &quot;starter package&quot; tricks.
+            </p>
+          </motion.div>
+
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: 18,
+          }}>
+            {whatYouGet.map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.45, delay: i * 0.04 }}
+                style={{
+                  background: "#fff",
+                  border: "1px solid rgba(0,0,0,.06)",
+                  borderRadius: 14,
+                  padding: "22px 22px",
+                  display: "flex",
+                  gap: 14,
+                  alignItems: "flex-start",
+                  boxShadow: "0 2px 12px rgba(0,0,0,.03)",
+                }}
+              >
+                <span style={{
+                  background: ORANGE,
+                  color: "#fff",
+                  width: 26,
+                  height: 26,
+                  borderRadius: 13,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 14,
+                  fontWeight: 800,
+                  flexShrink: 0,
+                  marginTop: 2,
+                }}>✓</span>
+                <div>
+                  <h3 style={{
+                    fontSize: 16,
+                    fontWeight: 800,
+                    color: INK,
+                    margin: 0,
+                    marginBottom: 5,
+                    lineHeight: 1.3,
+                    letterSpacing: -0.2,
+                  }}>
+                    {item.title}
+                  </h3>
+                  <p style={{
+                    fontSize: 14,
+                    color: INK_SOFT,
+                    margin: 0,
+                    lineHeight: 1.55,
+                  }}>
+                    {item.desc}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
