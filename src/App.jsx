@@ -15,6 +15,7 @@ import CaseStudy from "./components/CaseStudy";
 import WhatsAppButton from "./components/WhatsAppButton";
 import ExitIntent from "./components/ExitIntent";
 import Footer from "./components/Footer";
+import LandingPage from "./components/LandingPage";
 import {
   trackPageView,
   trackEvent,
@@ -29,8 +30,17 @@ const pageTransition = {
   transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] },
 };
 
+const LANDING_WA_HREF =
+  "https://wa.me/918341928526?text=" +
+  encodeURIComponent("Hi! I saw your ad and want to get my business online.");
+
 export default function App() {
-  const [page, setPage] = useState("home");
+  const [page, setPage] = useState(() => {
+    if (typeof window !== "undefined" && window.location.pathname === "/landing") {
+      return "landing";
+    }
+    return "home";
+  });
   const [caseSlug, setCaseSlug] = useState(null);
   const [pendingScroll, setPendingScroll] = useState(null);
 
@@ -52,16 +62,43 @@ export default function App() {
     }
   };
 
+  const landingNavigate = (dest) => {
+    const wantsContact =
+      dest === "contact" ||
+      (dest && typeof dest === "object" && dest.page === "contact");
+    if (wantsContact) {
+      trackEvent("landing_cta_to_whatsapp");
+      window.open(LANDING_WA_HREF, "_blank", "noopener,noreferrer");
+      return;
+    }
+    navigate(dest);
+  };
+
   useEffect(() => {
     trackPageView();
     startEngagementTimer();
     bindAutoTracking();
+
+    const onPop = () => {
+      setPage(window.location.pathname === "/landing" ? "landing" : "home");
+      setCaseSlug(null);
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
   }, []);
+
+  useEffect(() => {
+    const desired = page === "landing" ? "/landing" : "/";
+    if (window.location.pathname !== desired) {
+      window.history.pushState({}, "", desired);
+    }
+  }, [page]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (page === "contact") trackEvent("viewed_contact_page");
     if (page === "case" && caseSlug) trackEvent("viewed_case_study", { slug: caseSlug });
+    if (page === "landing") trackEvent("viewed_landing_page");
   }, [page, caseSlug]);
 
   useEffect(() => {
@@ -96,6 +133,12 @@ export default function App() {
           </motion.main>
         )}
 
+        {page === "landing" && (
+          <motion.main key="landing" {...pageTransition}>
+            <LandingPage navigate={landingNavigate} />
+          </motion.main>
+        )}
+
         {page === "contact" && (
           <motion.div key="contact" {...pageTransition}>
             <ContactPage />
@@ -112,7 +155,7 @@ export default function App() {
       <Footer setPage={navigate} />
 
       <WhatsAppButton />
-      <ExitIntent setPage={navigate} />
+      <ExitIntent setPage={page === "landing" ? landingNavigate : navigate} />
     </div>
   );
 }
