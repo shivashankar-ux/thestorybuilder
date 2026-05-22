@@ -145,7 +145,7 @@ export default function LandingPage() {
             }}
           >
             <img
-              src="/shiva-landing.jpg"
+              src="/shiva-landing.png"
               alt="Shiva Shankar, founder of The Story Builder"
               onError={(e) => {
                 if (!e.currentTarget.dataset.fallback) {
@@ -155,15 +155,10 @@ export default function LandingPage() {
               }}
               style={{
                 width: "100%",
-                maxWidth: 440,
-                aspectRatio: "4 / 5",
-                objectFit: "cover",
-                objectPosition: "center 18%",
-                filter: "saturate(1.05) contrast(1.04)",
-                WebkitMaskImage:
-                  "linear-gradient(180deg, black 0%, black 82%, transparent 100%)",
-                maskImage:
-                  "linear-gradient(180deg, black 0%, black 82%, transparent 100%)",
+                maxWidth: 480,
+                height: "auto",
+                display: "block",
+                filter: "drop-shadow(0 16px 24px rgba(0,0,0,.12))",
               }}
             />
           </motion.div>
