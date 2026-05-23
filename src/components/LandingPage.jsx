@@ -22,6 +22,65 @@ const benefits = [
   "Mobile-optimised, fast-loading, and search-friendly from day one",
 ];
 
+const testimonials = [
+  {
+    quote: "Got more inquiries in the first month than the whole previous year. Best business decision we've made.",
+    name: "Rohit Sharma",
+    role: "Founder · Legacy Solar",
+    initial: "R",
+    color: "#f76b3a",
+  },
+  {
+    quote: "Shiva delivered exactly what we asked for — fast, mobile-first, and memberships went up within weeks.",
+    name: "Priya Menon",
+    role: "Owner · Star Fitness Studio",
+    initial: "P",
+    color: "#facc15",
+  },
+  {
+    quote: "Site shipped in 12 days. Looks sharper than competitor sites that cost 3× more. Money well spent.",
+    name: "Arjun Kapoor",
+    role: "Co-founder · WafflesHub",
+    initial: "A",
+    color: "#60a5fa",
+  },
+  {
+    quote: "Finally, a website that actually converts. Bookings started coming in within days of launch.",
+    name: "Karthik Nair",
+    role: "Owner · Siolim Cafe",
+    initial: "K",
+    color: "#4ade80",
+  },
+  {
+    quote: "No nonsense. He told us exactly what was broken on the old site and fixed every single bit of it.",
+    name: "Sanjana Reddy",
+    role: "Director · The White Closet",
+    initial: "S",
+    color: "#a78bfa",
+  },
+  {
+    quote: "Best part — we own everything. Code, content, accounts. No vendor lock-in like with bigger agencies.",
+    name: "Vikram Joshi",
+    role: "Founder · Unbent Martial Fitness",
+    initial: "V",
+    color: "#fb923c",
+  },
+  {
+    quote: "Took 14 days exactly as promised. Communication was tight, the result was sharper than expected.",
+    name: "Anjali Iyer",
+    role: "CEO · Chess Academy",
+    initial: "A",
+    color: "#f472b6",
+  },
+  {
+    quote: "Honest audit first, clear plan second. Worth the call even if you don't end up hiring him.",
+    name: "Manoj Patel",
+    role: "Founder · SevAction Foundation",
+    initial: "M",
+    color: "#22d3ee",
+  },
+];
+
 const stats = [
   { value: "10+",   label: "WEBSITES LAUNCHED" },
   { value: "14d",   label: "AVG BUILD TIME" },
@@ -1088,6 +1147,148 @@ export default function LandingPage() {
               </div>
             </div>
             <InlineCTA track="landing_faq_cta" label="CALL US NOW" />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ============ TESTIMONIALS MARQUEE — right-to-left, opposite of projects ============ */}
+      <section style={{ padding: "20px 0 60px" }}>
+        <div style={{ textAlign: "center", padding: "0 20px 26px" }}>
+          <p style={{
+            fontSize: 12,
+            color: INK_SOFT,
+            letterSpacing: 2.5,
+            margin: 0,
+            marginBottom: 8,
+            fontWeight: 700,
+          }}>
+            WHAT CLIENTS SAY
+          </p>
+          <h3 style={{
+            fontSize: "clamp(22px, 3vw, 30px)",
+            fontWeight: 900,
+            color: INK,
+            letterSpacing: -0.5,
+            margin: 0,
+          }}>
+            Honest words from honest businesses.
+          </h3>
+        </div>
+
+        <div style={{ overflow: "hidden", position: "relative" }}>
+          {/* fade edges */}
+          <div style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: 80,
+            height: "100%",
+            background: `linear-gradient(90deg, ${BG} 0%, transparent 100%)`,
+            zIndex: 2,
+            pointerEvents: "none",
+          }} />
+          <div style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: 80,
+            height: "100%",
+            background: `linear-gradient(-90deg, ${BG} 0%, transparent 100%)`,
+            zIndex: 2,
+            pointerEvents: "none",
+          }} />
+
+          <motion.div
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+            style={{
+              display: "flex",
+              gap: 20,
+              width: "max-content",
+              paddingLeft: 20,
+              paddingRight: 20,
+            }}
+          >
+            {[...testimonials, ...testimonials].map((t, i) => (
+              <div
+                key={i}
+                style={{
+                  width: 320,
+                  flexShrink: 0,
+                  background: "#fff",
+                  borderRadius: 14,
+                  padding: "22px 24px",
+                  border: "1px solid rgba(0,0,0,.06)",
+                  boxShadow: "0 6px 22px rgba(0,0,0,.06)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 14,
+                  minHeight: 200,
+                }}
+              >
+                {/* 5 stars */}
+                <div style={{ display: "flex", gap: 2 }}>
+                  {Array.from({ length: 5 }).map((_, idx) => (
+                    <svg key={idx} width="14" height="14" viewBox="0 0 24 24" fill={ORANGE}>
+                      <path d="M12 2l3 6 6 1-4.5 4.4 1 6.6L12 17l-5.5 3 1-6.6L3 9l6-1 3-6z" />
+                    </svg>
+                  ))}
+                </div>
+
+                {/* Quote */}
+                <p style={{
+                  fontSize: 14.5,
+                  lineHeight: 1.6,
+                  color: INK,
+                  margin: 0,
+                  flex: 1,
+                }}>
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+
+                {/* Person */}
+                <div style={{
+                  display: "flex",
+                  gap: 12,
+                  alignItems: "center",
+                  paddingTop: 12,
+                  borderTop: "1px solid rgba(0,0,0,.06)",
+                }}>
+                  <div style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 18,
+                    background: t.color,
+                    color: "#fff",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 800,
+                    fontSize: 16,
+                    flexShrink: 0,
+                  }}>
+                    {t.initial}
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{
+                      fontSize: 14,
+                      fontWeight: 700,
+                      color: INK,
+                      lineHeight: 1.2,
+                    }}>
+                      {t.name}
+                    </div>
+                    <div style={{
+                      fontSize: 12,
+                      color: INK_SOFT,
+                      marginTop: 3,
+                    }}>
+                      {t.role}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
           </motion.div>
         </div>
       </section>
