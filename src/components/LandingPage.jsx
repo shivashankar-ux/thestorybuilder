@@ -428,10 +428,16 @@ export default function LandingPage() {
           .lp-hero-card { padding: 50px 22px 36px !important; }
           .lp-about-h2 { font-size: 28px !important; }
         }
+        @media (max-width: 768px) {
+          .lp-photo-founder { max-width: 220px !important; }
+          .lp-photo-about   { max-width: 260px !important; }
+        }
         @media (max-width: 480px) {
           .lp-hero-pill { font-size: 14px !important; padding: 14px 22px !important; }
           .lp-section-pad { padding-left: 16px !important; padding-right: 16px !important; }
           .lp-top-bar-text { font-size: 12px !important; }
+          .lp-photo-founder { max-width: 190px !important; }
+          .lp-photo-about   { max-width: 220px !important; }
         }
       `}</style>
 
@@ -574,6 +580,7 @@ export default function LandingPage() {
           >
             {/* Photo — sized & in normal flow, negative margin pulls card up */}
             <img
+              className="lp-photo-founder"
               src="/shiva-landing.png"
               alt="Shiva Shankar, founder of The Story Builder"
               onError={(e) => {
@@ -1341,6 +1348,7 @@ export default function LandingPage() {
               }}
             >
               <img
+                className="lp-photo-about"
                 src="/shiva-about.png"
                 alt="Shiva Shankar, founder of The Story Builder"
                 onError={(e) => {
