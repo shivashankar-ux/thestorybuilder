@@ -1327,10 +1327,9 @@ export default function LandingPage() {
                 }}
                 style={{
                   width: "100%",
-                  maxWidth: 340,
+                  maxWidth: 380,
                   height: "auto",
                   display: "block",
-                  clipPath: "inset(0 0 26% 0)",
                   filter: "drop-shadow(0 18px 28px rgba(0,0,0,.12))",
                 }}
               />
