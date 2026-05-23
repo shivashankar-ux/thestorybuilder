@@ -238,10 +238,13 @@ const bonusFeatures = [
   },
 ];
 
-function InlineCTA({ track, label }) {
+function InlineCTA({ track, label, mode = "call" }) {
+  const isChat = mode === "chat";
   return (
     <motion.a
-      href={TEL_HREF}
+      href={isChat ? WA_HREF : TEL_HREF}
+      target={isChat ? "_blank" : undefined}
+      rel={isChat ? "noopener noreferrer" : undefined}
       data-track={track}
       onClick={() => trackEvent(track)}
       whileHover={{ y: -1, scale: 1.02 }}
@@ -262,7 +265,7 @@ function InlineCTA({ track, label }) {
         whiteSpace: "nowrap",
       }}
     >
-      <PhoneIcon size={18} />
+      {isChat ? <WhatsAppIcon size={18} /> : <PhoneIcon size={18} />}
       {label}
     </motion.a>
   );
@@ -520,6 +523,27 @@ export default function LandingPage() {
             }}>
               Free quote · Live in 7–10 days · No commitment
             </p>
+            <a
+              href={WA_HREF}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-track="landing_hero_whatsapp"
+              onClick={() => trackEvent("landing_hero_whatsapp")}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                marginTop: 14,
+                fontSize: 13.5,
+                color: "#1bb558",
+                fontWeight: 700,
+                textDecoration: "none",
+                letterSpacing: 0.2,
+              }}
+            >
+              <WhatsAppIcon size={14} />
+              Or chat with us on WhatsApp →
+            </a>
           </motion.div>
         </div>
       </section>
@@ -1403,7 +1427,7 @@ export default function LandingPage() {
                 color: INK,
                 lineHeight: 1.3,
               }}>
-                Ready to start?
+                Still have questions?
               </div>
               <div style={{
                 fontSize: 14,
@@ -1411,10 +1435,10 @@ export default function LandingPage() {
                 marginTop: 6,
                 lineHeight: 1.5,
               }}>
-                Call us for a free quote — your website can be live in 7–10 days.
+                Chat with us on WhatsApp — we usually reply within an hour.
               </div>
             </div>
-            <InlineCTA track="landing_faq_cta" label="START MY WEBSITE" />
+            <InlineCTA mode="chat" track="landing_faq_whatsapp" label="CHAT ON WHATSAPP" />
           </motion.div>
         </div>
       </section>
