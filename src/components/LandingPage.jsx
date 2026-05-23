@@ -137,12 +137,12 @@ const whatYouGet = [
 
 const faqs = [
   {
-    q: "Is this really free?",
-    a: "Yes — the 30-min strategy call has zero cost and zero commitment. We'll audit your current site or talk through your goals, and you'll leave with a clear plan whether you hire us or not.",
+    q: "Is the quote really free?",
+    a: "Yes — the call where we scope out your website, give you a real timeline, and lock in a final price is 100% free. You only pay once you choose to move forward with the actual build.",
   },
   {
-    q: "Do I have to hire you after the call?",
-    a: "No. About half the people we talk to walk away with the plan and execute it themselves — we're only the right fit if you actually need a partner. The call helps both of us figure that out.",
+    q: "Do I have to buy the website after our call?",
+    a: "No. You'll walk away with a clear plan and a real number whether you go with us or not. We're only the right fit if you actually need a partner — and the call helps both sides figure that out fast.",
   },
   {
     q: "I don't have a website yet — is this for me?",
@@ -409,8 +409,8 @@ export default function LandingPage() {
           lineHeight: 1.3,
         }}
       >
-        <span style={{ marginRight: 6 }}>🔥</span>
-        <span className="lp-top-bar-text">LIMITED — Free Website Strategy Call This Week · Tap to Book</span>
+        <span style={{ marginRight: 6 }}>🚀</span>
+        <span className="lp-top-bar-text">LIMITED — Get Your Website Built · Live in 10 Days · Tap to Start</span>
       </motion.a>
 
       <style>{`
@@ -459,9 +459,9 @@ export default function LandingPage() {
                 letterSpacing: 0.3,
               }}
             >
-              FREE WEBSITE STRATEGY CALL<br />
-              NEW SITES &amp; REDESIGNS<br />
-              THAT BRING REAL CUSTOMERS
+              GET A WEBSITE THAT<br />
+              BRINGS REAL CUSTOMERS<br />
+              LIVE IN 7–10 DAYS MAX
             </motion.div>
           </div>
 
@@ -506,11 +506,11 @@ export default function LandingPage() {
               marginInline: "auto",
               lineHeight: 1.55,
             }}>
-              Whether you don&apos;t have a website yet or your current one isn&apos;t bringing customers — book a free 30-min strategy call. We&apos;ll map out exactly what to build, redesign, or fix.
+              Whether you need your first website or a full redesign — we ship high-converting sites that turn visitors into paying customers. Live in 7–10 days max. Get your free quote and timeline today.
             </p>
 
             <div style={{ marginTop: 32, display: "flex", justifyContent: "center" }}>
-              <InlineCTA track="landing_hero_cta" label="BOOK YOUR FREE CALL" />
+              <InlineCTA track="landing_hero_cta" label="START MY WEBSITE" />
             </div>
             <p style={{
               fontSize: 13,
@@ -518,7 +518,7 @@ export default function LandingPage() {
               marginTop: 12,
               marginBottom: 0,
             }}>
-              30 minutes · No pitch · No commitment
+              Free quote · Live in 7–10 days · No commitment
             </p>
           </motion.div>
         </div>
@@ -621,10 +621,10 @@ export default function LandingPage() {
                 color: "#fff",
                 lineHeight: 1.3,
               }}>
-                I&apos;ll tell you whether you need a{" "}
-                <span style={{ color: ORANGE }}>new website, a redesign,</span>
+                Let&apos;s get your website{" "}
+                <span style={{ color: ORANGE }}>live &amp; bringing customers</span>
                 <br />
-                or just a fix.
+                in under 10 days.
               </div>
               <div style={{
                 display: "flex",
@@ -697,7 +697,7 @@ export default function LandingPage() {
               margin: 0,
               marginBottom: 18,
             }}>
-              What Happens On The Call
+              What You Get
             </h3>
             <ul style={{
               listStyle: "none",
@@ -893,14 +893,14 @@ export default function LandingPage() {
             transition={{ duration: 0.5 }}
             style={{ textAlign: "center", marginTop: 40 }}
           >
-            <InlineCTA track="landing_whats_included_cta" label="GET YOUR WEBSITE BUILT" />
+            <InlineCTA track="landing_whats_included_cta" label="START MY WEBSITE" />
             <p style={{
               fontSize: 13,
               color: INK_SOFT,
               marginTop: 12,
               marginBottom: 0,
             }}>
-              Free 30-min call · Real quote · No pressure
+              Free quote · Live in 7–10 days · No commitment
             </p>
           </motion.div>
         </div>
@@ -1065,7 +1065,7 @@ export default function LandingPage() {
             transition={{ duration: 0.5 }}
             style={{ textAlign: "center", marginTop: 40 }}
           >
-            <InlineCTA track="landing_bonus_cta" label="GET ALL THIS — FREE QUOTE" />
+            <InlineCTA track="landing_bonus_cta" label="START MY WEBSITE" />
             <p style={{
               fontSize: 12.5,
               color: INK_SOFT,
@@ -1404,7 +1404,7 @@ export default function LandingPage() {
                 color: INK,
                 lineHeight: 1.3,
               }}>
-                Still have questions?
+                Ready to start?
               </div>
               <div style={{
                 fontSize: 14,
@@ -1412,10 +1412,10 @@ export default function LandingPage() {
                 marginTop: 6,
                 lineHeight: 1.5,
               }}>
-                Give us a call — we answer during business hours, IST.
+                Call us for a free quote — your website can be live in 7–10 days.
               </div>
             </div>
-            <InlineCTA track="landing_faq_cta" label="CALL US NOW" />
+            <InlineCTA track="landing_faq_cta" label="START MY WEBSITE" />
           </motion.div>
         </div>
       </section>
@@ -1608,7 +1608,7 @@ export default function LandingPage() {
             }}
           >
             You Can Keep Wondering Why Your Website Isn&apos;t Bringing Customers.{" "}
-            <span style={{ color: ORANGE }}>Or You Can Find Out In 30 Minutes.</span>
+            <span style={{ color: ORANGE }}>Or You Can Have a New One Live In 10 Days.</span>
           </motion.h2>
 
           <motion.p
@@ -1624,7 +1624,7 @@ export default function LandingPage() {
               maxWidth: 640,
             }}
           >
-            No fluff. No hard sell. Just the most honest 30 minutes your website has ever had.
+            Free quote. Real timeline. Live in 7–10 days. No drawn-out projects, no hidden costs.
           </motion.p>
 
           <motion.div
@@ -1644,7 +1644,7 @@ export default function LandingPage() {
               fontWeight: 600,
             }}
           >
-            FREE — and a real, honest quote if you want one.
+            Free quote. Pay only if you choose to move forward.
           </motion.div>
 
           <motion.div
@@ -1676,7 +1676,7 @@ export default function LandingPage() {
               }}
             >
               <PhoneIcon size={20} />
-              CALL FOR FREE 1:1
+              START MY WEBSITE
             </motion.a>
           </motion.div>
 
@@ -1695,9 +1695,9 @@ export default function LandingPage() {
               fontSize: 13.5,
             }}
           >
-            <span><span style={{ color: ORANGE, marginRight: 6 }}>●</span>30 mins</span>
-            <span><span style={{ color: ORANGE, marginRight: 6 }}>●</span>Phone or video</span>
-            <span><span style={{ color: ORANGE, marginRight: 6 }}>●</span>100% no commitment</span>
+            <span><span style={{ color: ORANGE, marginRight: 6 }}>●</span>Live in 7–10 days</span>
+            <span><span style={{ color: ORANGE, marginRight: 6 }}>●</span>Free quote</span>
+            <span><span style={{ color: ORANGE, marginRight: 6 }}>●</span>No commitment</span>
           </motion.div>
         </div>
       </section>
@@ -1763,7 +1763,7 @@ export default function LandingPage() {
               fontWeight: 600,
               lineHeight: 1.3,
             }}>
-              Free website strategy call — new site or full redesign.
+              Get your website live in 7–10 days — new build or full redesign.
             </div>
             <div style={{
               color: "rgba(255,255,255,.6)",
@@ -1771,7 +1771,7 @@ export default function LandingPage() {
               marginTop: 3,
               lineHeight: 1.3,
             }}>
-              30 minutes. No pitch. No commitment.
+              Free quote · No commitment · Real timeline.
             </div>
           </div>
         </div>
@@ -1802,7 +1802,7 @@ export default function LandingPage() {
           }}
         >
           <PhoneIcon size={18} />
-          CALL FOR FREE 1:1
+          START MY WEBSITE
         </motion.a>
       </div>
     </div>
