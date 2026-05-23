@@ -17,7 +17,7 @@ const ORANGE_GRAD = "linear-gradient(180deg, #ff9558 0%, #f76b3a 100%)";
 
 const benefits = [
   "A website designed and built to convert visitors into customers — not just look pretty",
-  "Live in 14 days for most projects — no drawn-out timelines or hidden costs",
+  "Live in 7–10 days max — no drawn-out timelines or hidden costs",
   "Conversion-focused copy and design baked in — clear CTAs, sharp positioning, real outcomes",
   "Mobile-optimised, fast-loading, and search-friendly from day one",
 ];
@@ -66,7 +66,7 @@ const testimonials = [
     color: "#fb923c",
   },
   {
-    quote: "Took 14 days exactly as promised. Communication was tight, the result was sharper than we expected.",
+    quote: "Live in 9 days, exactly as promised. Communication was tight, the result was sharper than we expected.",
     brand: "Chess Academy",
     type: "Built from scratch",
     initial: "C",
@@ -83,7 +83,7 @@ const testimonials = [
 
 const stats = [
   { value: "10+",   label: "WEBSITES LAUNCHED" },
-  { value: "14d",   label: "AVG BUILD TIME" },
+  { value: "7–10d", label: "MAX BUILD TIME" },
   { value: "100%",  label: "MOBILE-RESPONSIVE" },
   { value: "5★",    label: "CLIENT RATING" },
 ];
@@ -154,7 +154,7 @@ const faqs = [
   },
   {
     q: "How long does building or redesigning a website take?",
-    a: "Live in 14 days for most projects. Bigger builds (e-commerce, multi-language, custom integrations) typically run 3–4 weeks. We'll quote a real timeline on the call, not a salesy one.",
+    a: "7–10 days max. We don't drag projects out — most clients have their site live within a week and a half. We'll confirm the exact timeline on the call before anything starts.",
   },
   {
     q: "What does a website cost?",
@@ -564,7 +564,7 @@ export default function LandingPage() {
                     lineHeight: 1,
                     letterSpacing: -0.5,
                   }}>
-                    14
+                    7–10
                   </div>
                   <div style={{
                     fontSize: 10.5,
@@ -573,7 +573,7 @@ export default function LandingPage() {
                     marginTop: 4,
                     fontWeight: 600,
                   }}>
-                    DAYS AVG BUILD
+                    DAYS MAX BUILD
                   </div>
                 </div>
               </div>
@@ -1005,7 +1005,7 @@ export default function LandingPage() {
                 that look great but never bring customers. Since then, the
                 studio has shipped <strong>10+ high-converting websites</strong> for
                 ambitious businesses across India and beyond — most live in
-                under 14 days, all built around one question: <em>does this
+                under 10 days, all built around one question: <em>does this
                 actually turn visitors into paying customers?</em>
               </p>
               <p style={{
