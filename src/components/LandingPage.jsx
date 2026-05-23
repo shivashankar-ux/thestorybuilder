@@ -25,58 +25,58 @@ const benefits = [
 const testimonials = [
   {
     quote: "Got more inquiries in the first month than the whole previous year. Best business decision we've made.",
-    name: "Rohit Sharma",
-    role: "Founder · Legacy Solar",
-    initial: "R",
+    brand: "Legacy Solar",
+    type: "Built from scratch",
+    initial: "L",
     color: "#f76b3a",
   },
   {
-    quote: "Shiva delivered exactly what we asked for — fast, mobile-first, and memberships went up within weeks.",
-    name: "Priya Menon",
-    role: "Owner · Star Fitness Studio",
-    initial: "P",
+    quote: "The old site was hurting us more than helping. New one is fast, mobile-first, and memberships went up within weeks.",
+    brand: "Star Fitness Studio",
+    type: "Full redesign",
+    initial: "S",
     color: "#facc15",
   },
   {
     quote: "Site shipped in 12 days. Looks sharper than competitor sites that cost 3× more. Money well spent.",
-    name: "Arjun Kapoor",
-    role: "Co-founder · WafflesHub",
-    initial: "A",
+    brand: "WafflesHub",
+    type: "Built from scratch",
+    initial: "W",
     color: "#60a5fa",
   },
   {
     quote: "Finally, a website that actually converts. Bookings started coming in within days of launch.",
-    name: "Karthik Nair",
-    role: "Owner · Siolim Cafe",
-    initial: "K",
+    brand: "Siolim Cafe",
+    type: "Built from scratch",
+    initial: "S",
     color: "#4ade80",
   },
   {
-    quote: "No nonsense. He told us exactly what was broken on the old site and fixed every single bit of it.",
-    name: "Sanjana Reddy",
-    role: "Director · The White Closet",
-    initial: "S",
+    quote: "No nonsense. Clear plan, clean execution. The site is exactly what the brand needed — refined, conversion-ready.",
+    brand: "The White Closet",
+    type: "Built from scratch",
+    initial: "W",
     color: "#a78bfa",
   },
   {
     quote: "Best part — we own everything. Code, content, accounts. No vendor lock-in like with bigger agencies.",
-    name: "Vikram Joshi",
-    role: "Founder · Unbent Martial Fitness",
-    initial: "V",
+    brand: "Unbent Martial Fitness",
+    type: "Built from scratch",
+    initial: "U",
     color: "#fb923c",
   },
   {
-    quote: "Took 14 days exactly as promised. Communication was tight, the result was sharper than expected.",
-    name: "Anjali Iyer",
-    role: "CEO · Chess Academy",
-    initial: "A",
+    quote: "Took 14 days exactly as promised. Communication was tight, the result was sharper than we expected.",
+    brand: "Chess Academy",
+    type: "Built from scratch",
+    initial: "C",
     color: "#f472b6",
   },
   {
-    quote: "Honest audit first, clear plan second. Worth the call even if you don't end up hiring him.",
-    name: "Manoj Patel",
-    role: "Founder · SevAction Foundation",
-    initial: "M",
+    quote: "Honest audit first, clear plan second. Worth the conversation even if you don't end up hiring them.",
+    brand: "SevAction Foundation",
+    type: "Built from scratch",
+    initial: "S",
     color: "#22d3ee",
   },
 ];
@@ -1246,7 +1246,7 @@ export default function LandingPage() {
                   &ldquo;{t.quote}&rdquo;
                 </p>
 
-                {/* Person */}
+                {/* Brand + project type */}
                 <div style={{
                   display: "flex",
                   gap: 12,
@@ -1257,33 +1257,38 @@ export default function LandingPage() {
                   <div style={{
                     width: 36,
                     height: 36,
-                    borderRadius: 18,
+                    borderRadius: 9,
                     background: t.color,
                     color: "#fff",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontWeight: 800,
+                    fontWeight: 900,
                     fontSize: 16,
                     flexShrink: 0,
+                    letterSpacing: -0.5,
                   }}>
                     {t.initial}
                   </div>
-                  <div style={{ minWidth: 0 }}>
+                  <div style={{ minWidth: 0, flex: 1 }}>
                     <div style={{
                       fontSize: 14,
-                      fontWeight: 700,
+                      fontWeight: 800,
                       color: INK,
                       lineHeight: 1.2,
+                      letterSpacing: -0.2,
                     }}>
-                      {t.name}
+                      {t.brand}
                     </div>
                     <div style={{
-                      fontSize: 12,
-                      color: INK_SOFT,
-                      marginTop: 3,
+                      fontSize: 11,
+                      color: ORANGE,
+                      marginTop: 4,
+                      fontWeight: 700,
+                      letterSpacing: 0.8,
+                      textTransform: "uppercase",
                     }}>
-                      {t.role}
+                      {t.type}
                     </div>
                   </div>
                 </div>
