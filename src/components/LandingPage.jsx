@@ -174,6 +174,70 @@ const PhoneIcon = ({ size = 18 }) => (
   </svg>
 );
 
+const SocialIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="2" y="2" width="20" height="20" rx="5" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+const MapPinIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+    <circle cx="12" cy="10" r="3" />
+  </svg>
+);
+
+const MailIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="2" y="4" width="20" height="16" rx="2" />
+    <path d="M22 6 12 13 2 6" />
+  </svg>
+);
+
+const FormsIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="4" y="3" width="16" height="18" rx="2" />
+    <line x1="8" y1="8" x2="16" y2="8" />
+    <line x1="8" y1="12" x2="16" y2="12" />
+    <line x1="8" y1="16" x2="13" y2="16" />
+  </svg>
+);
+
+const bonusFeatures = [
+  {
+    Icon: WhatsAppIcon,
+    title: "WhatsApp Lead Capture",
+    desc: "Pre-wired chat button on every page — leads land straight on your phone, not in some inbox you'll never check.",
+    color: "#25d366",
+  },
+  {
+    Icon: SocialIcon,
+    title: "Social Media Integration",
+    desc: "Instagram, Facebook, LinkedIn — all linked and share-ready. Open Graph metadata done so your links look sharp when posted.",
+    color: "#e1306c",
+  },
+  {
+    Icon: MapPinIcon,
+    title: "Google My Business Setup",
+    desc: "Pinned on Google Maps, 'near me' search ready, photos and business info filled in properly so customers find you locally.",
+    color: "#4285f4",
+  },
+  {
+    Icon: FormsIcon,
+    title: "Lead-Optimised Forms",
+    desc: "Conversion-tuned capture forms in the right spots — the site doesn't just sit there, it actively brings leads in.",
+    color: "#f76b3a",
+  },
+  {
+    Icon: MailIcon,
+    title: "Lead Alerts to Gmail",
+    desc: "Every form submission pings your inbox in real time. No missed leads, no checking dashboards — just follow up fast.",
+    color: "#ea4335",
+  },
+];
+
 function InlineCTA({ track, label }) {
   return (
     <motion.a
@@ -317,7 +381,38 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div style={{ background: BG, color: INK, minHeight: "100vh" }}>
+    <div style={{ background: BG, color: INK, minHeight: "100vh", paddingTop: 42 }}>
+      {/* ============ TOP RED URGENCY BAR (sticky, clickable -> phone dialer) ============ */}
+      <motion.a
+        href={TEL_HREF}
+        data-track="landing_top_bar_call"
+        onClick={() => trackEvent("landing_top_bar_call")}
+        initial={{ y: -42 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 200,
+          background: "linear-gradient(180deg, #ef4444 0%, #dc2626 100%)",
+          color: "#fff",
+          padding: "11px 16px",
+          textAlign: "center",
+          fontSize: 13.5,
+          fontWeight: 700,
+          letterSpacing: 0.3,
+          textDecoration: "none",
+          boxShadow: "0 2px 10px rgba(220,38,38,.35)",
+          display: "block",
+          lineHeight: 1.3,
+        }}
+      >
+        <span style={{ marginRight: 6 }}>🔥</span>
+        <span className="lp-top-bar-text">LIMITED — Free Website Strategy Call This Week · Tap to Book</span>
+      </motion.a>
+
       <style>{`
         @media (max-width: 640px) {
           .lp-sticky { justify-content: center !important; gap: 0 !important; padding: 10px 14px !important; }
@@ -333,6 +428,7 @@ export default function LandingPage() {
         @media (max-width: 480px) {
           .lp-hero-pill { font-size: 14px !important; padding: 14px 22px !important; }
           .lp-section-pad { padding-left: 16px !important; padding-right: 16px !important; }
+          .lp-top-bar-text { font-size: 12px !important; }
         }
       `}</style>
 
@@ -805,6 +901,179 @@ export default function LandingPage() {
               marginBottom: 0,
             }}>
               Free 30-min call · Real quote · No pressure
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ============ BONUS — Lead Engine integrations included with every website ============ */}
+      <section style={{
+        padding: "60px 20px 70px",
+        background: "linear-gradient(180deg, #ede8db 0%, #f5f2eb 100%)",
+        borderTop: "1px solid rgba(0,0,0,.06)",
+        borderBottom: "1px solid rgba(0,0,0,.06)",
+      }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+
+          {/* Bonus value sticker */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5 }}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              marginBottom: 22,
+            }}
+          >
+            <div style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              background: "linear-gradient(180deg, #ff9558 0%, #f76b3a 100%)",
+              color: "#fff",
+              padding: "10px 22px",
+              borderRadius: 999,
+              fontSize: 12.5,
+              fontWeight: 800,
+              letterSpacing: 1.5,
+              boxShadow: "0 8px 22px rgba(247,107,58,.32)",
+            }}>
+              <span>🎁</span>
+              <span>BONUS INCLUDED · WORTH ₹15,000</span>
+            </div>
+          </motion.div>
+
+          {/* Section heading */}
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.55, delay: 0.05 }}
+            style={{ textAlign: "center", marginBottom: 36 }}
+          >
+            <h2 style={{
+              fontSize: "clamp(26px, 3.8vw, 40px)",
+              fontWeight: 900,
+              color: INK,
+              letterSpacing: -0.7,
+              margin: 0,
+              marginBottom: 10,
+              lineHeight: 1.2,
+            }}>
+              It&apos;s not just a website.<br />
+              It&apos;s a <em style={{ color: ORANGE, fontStyle: "normal" }}>lead engine.</em>
+            </h2>
+            <p style={{
+              fontSize: 16,
+              color: INK_SOFT,
+              margin: 0,
+              maxWidth: 620,
+              marginInline: "auto",
+              lineHeight: 1.6,
+            }}>
+              Every site we build comes pre-wired with these integrations — no bolt-ons, no extras to pay for later. The website doesn&apos;t just sit there. It works.
+            </p>
+          </motion.div>
+
+          {/* Bonus feature cards (5, auto-fit grid) */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: 18,
+          }}>
+            {bonusFeatures.map((f, i) => (
+              <motion.div
+                key={f.title}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.15 }}
+                transition={{ duration: 0.5, delay: i * 0.05 }}
+                style={{
+                  background: "#fff",
+                  border: "1px solid rgba(0,0,0,.06)",
+                  borderRadius: 16,
+                  padding: "24px 22px",
+                  boxShadow: "0 6px 22px rgba(0,0,0,.06)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 14,
+                }}
+              >
+                <div style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 12,
+                  background: f.color,
+                  color: "#fff",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  boxShadow: `0 6px 18px ${f.color}33`,
+                }}>
+                  <f.Icon size={24} />
+                </div>
+                <h3 style={{
+                  fontSize: 17,
+                  fontWeight: 800,
+                  color: INK,
+                  margin: 0,
+                  letterSpacing: -0.2,
+                  lineHeight: 1.25,
+                }}>
+                  {f.title}
+                </h3>
+                <p style={{
+                  fontSize: 14,
+                  color: INK_SOFT,
+                  margin: 0,
+                  lineHeight: 1.55,
+                  flex: 1,
+                }}>
+                  {f.desc}
+                </p>
+                <div style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  fontSize: 11,
+                  fontWeight: 800,
+                  color: f.color,
+                  letterSpacing: 1.2,
+                  textTransform: "uppercase",
+                  marginTop: "auto",
+                }}>
+                  <span style={{
+                    width: 6,
+                    height: 6,
+                    borderRadius: 3,
+                    background: f.color,
+                  }} />
+                  Included Free
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Closing CTA below the bonus grid */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5 }}
+            style={{ textAlign: "center", marginTop: 40 }}
+          >
+            <InlineCTA track="landing_bonus_cta" label="GET ALL THIS — FREE QUOTE" />
+            <p style={{
+              fontSize: 12.5,
+              color: INK_SOFT,
+              marginTop: 12,
+              marginBottom: 0,
+              letterSpacing: 0.3,
+            }}>
+              Bonus integrations included with every build · Worth ~₹15,000
             </p>
           </motion.div>
         </div>
