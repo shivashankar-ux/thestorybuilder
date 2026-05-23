@@ -17,7 +17,7 @@ const ORANGE_GRAD = "linear-gradient(180deg, #ff9558 0%, #f76b3a 100%)";
 
 const benefits = [
   "A website designed and built to convert visitors into customers — not just look pretty",
-  "Live in 7–10 days max — no drawn-out timelines or hidden costs",
+  "Live in 7 days — no drawn-out timelines or hidden costs",
   "Conversion-focused copy and design baked in — clear CTAs, sharp positioning, real outcomes",
   "Mobile-optimised, fast-loading, and search-friendly from day one",
 ];
@@ -66,7 +66,7 @@ const testimonials = [
     color: "#fb923c",
   },
   {
-    quote: "Live in 9 days, exactly as promised. Communication was tight, the result was sharper than we expected.",
+    quote: "Live in 7 days, exactly as promised. Communication was tight, the result was sharper than we expected.",
     brand: "Chess Academy",
     type: "Built from scratch",
     initial: "C",
@@ -83,7 +83,7 @@ const testimonials = [
 
 const stats = [
   { value: "10+",   label: "WEBSITES LAUNCHED" },
-  { value: "7–10d", label: "MAX BUILD TIME" },
+  { value: "7d",    label: "BUILD TIME" },
   { value: "100%",  label: "MOBILE-RESPONSIVE" },
   { value: "5★",    label: "CLIENT RATING" },
 ];
@@ -154,7 +154,7 @@ const faqs = [
   },
   {
     q: "How long does building or redesigning a website take?",
-    a: "7–10 days max. We don't drag projects out — most clients have their site live within a week and a half. We'll confirm the exact timeline on the call before anything starts.",
+    a: "7 days. We don't drag projects out — kickoff to launch in a single week, with daily progress shared so you always know where it stands. We'll confirm the exact timeline on the call before anything starts.",
   },
   {
     q: "What does a website cost?",
@@ -413,7 +413,7 @@ export default function LandingPage() {
         }}
       >
         <span style={{ marginRight: 6 }}>🚀</span>
-        <span className="lp-top-bar-text">LIMITED — Get Your Website Built · Live in 10 Days · Tap to Start</span>
+        <span className="lp-top-bar-text">LIMITED — Get Your Website Built · Live in 7 Days · Tap to Start</span>
       </motion.a>
 
       <style>{`
@@ -470,7 +470,7 @@ export default function LandingPage() {
             >
               GET A WEBSITE THAT<br />
               BRINGS REAL CUSTOMERS<br />
-              LIVE IN 7–10 DAYS MAX
+              LIVE IN 7 DAYS
             </motion.div>
           </div>
 
@@ -515,7 +515,7 @@ export default function LandingPage() {
               marginInline: "auto",
               lineHeight: 1.55,
             }}>
-              Whether you need your first website or a full redesign — we ship high-converting sites that turn visitors into paying customers. Live in 7–10 days max. Get your free quote and timeline today.
+              Whether you need your first website or a full redesign — we ship high-converting sites that turn visitors into paying customers. Live in 7 days. Get your free quote and timeline today.
             </p>
 
             <div style={{ marginTop: 32, display: "flex", justifyContent: "center" }}>
@@ -527,7 +527,7 @@ export default function LandingPage() {
               marginTop: 12,
               marginBottom: 0,
             }}>
-              Free quote · Live in 7–10 days · No commitment
+              Free quote · Live in 7 days · No commitment
             </p>
             <a
               href={WA_HREF}
@@ -655,7 +655,7 @@ export default function LandingPage() {
                 Let&apos;s get your website{" "}
                 <span style={{ color: ORANGE }}>live &amp; bringing customers</span>
                 <br />
-                in under 10 days.
+                in 7 days flat.
               </div>
               <div style={{
                 display: "flex",
@@ -691,7 +691,7 @@ export default function LandingPage() {
                     lineHeight: 1,
                     letterSpacing: -0.5,
                   }}>
-                    7–10
+                    7
                   </div>
                   <div style={{
                     fontSize: 10.5,
@@ -700,7 +700,7 @@ export default function LandingPage() {
                     marginTop: 4,
                     fontWeight: 600,
                   }}>
-                    DAYS MAX BUILD
+                    DAYS TO BUILD
                   </div>
                 </div>
               </div>
@@ -931,7 +931,7 @@ export default function LandingPage() {
               marginTop: 12,
               marginBottom: 0,
             }}>
-              Free quote · Live in 7–10 days · No commitment
+              Free quote · Live in 7 days · No commitment
             </p>
           </motion.div>
         </div>
@@ -1305,7 +1305,7 @@ export default function LandingPage() {
                 that look great but never bring customers. Since then, the
                 studio has shipped <strong>10+ high-converting websites</strong> for
                 ambitious businesses across India and beyond — most live in
-                under 10 days, all built around one question: <em>does this
+                7 days flat, all built around one question: <em>does this
                 actually turn visitors into paying customers?</em>
               </p>
               <p style={{
@@ -1640,7 +1640,7 @@ export default function LandingPage() {
             }}
           >
             You Can Keep Wondering Why Your Website Isn&apos;t Bringing Customers.{" "}
-            <span style={{ color: ORANGE }}>Or You Can Have a New One Live In 10 Days.</span>
+            <span style={{ color: ORANGE }}>Or You Can Have a New One Live In 7 Days.</span>
           </motion.h2>
 
           <motion.p
@@ -1656,7 +1656,7 @@ export default function LandingPage() {
               maxWidth: 640,
             }}
           >
-            Free quote. Real timeline. Live in 7–10 days. No drawn-out projects, no hidden costs.
+            Free quote. Real timeline. Live in 7 days. No drawn-out projects, no hidden costs.
           </motion.p>
 
           <motion.div
@@ -1727,7 +1727,7 @@ export default function LandingPage() {
               fontSize: 13.5,
             }}
           >
-            <span><span style={{ color: ORANGE, marginRight: 6 }}>●</span>Live in 7–10 days</span>
+            <span><span style={{ color: ORANGE, marginRight: 6 }}>●</span>Live in 7 days</span>
             <span><span style={{ color: ORANGE, marginRight: 6 }}>●</span>Free quote</span>
             <span><span style={{ color: ORANGE, marginRight: 6 }}>●</span>No commitment</span>
           </motion.div>
@@ -1795,7 +1795,7 @@ export default function LandingPage() {
               fontWeight: 600,
               lineHeight: 1.3,
             }}>
-              Get your website live in 7–10 days — new build or full redesign.
+              Get your website live in 7 days — new build or full redesign.
             </div>
             <div style={{
               color: "rgba(255,255,255,.6)",
