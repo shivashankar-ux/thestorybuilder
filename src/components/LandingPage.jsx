@@ -1362,6 +1362,7 @@ export default function LandingPage() {
                   maxWidth: 380,
                   height: "auto",
                   display: "block",
+                  clipPath: "polygon(0 0, 100% 0, 100% 92%, 90% 92%, 90% 100%, 0 100%)",
                   filter: "drop-shadow(0 18px 28px rgba(0,0,0,.12))",
                 }}
               />
