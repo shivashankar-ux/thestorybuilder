@@ -1,6 +1,9 @@
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { trackEvent } from "../utils/tracking";
+
+const EXIT_STORAGE_KEY = "tsb_landing_exit_dismissed";
+const EXIT_COOLDOWN_DAYS = 3;
 
 const WA_HREF =
   "https://wa.me/918341928526?text=" +
@@ -339,8 +342,269 @@ function FAQItem({ q, a, isOpen, onToggle, isLast }) {
   );
 }
 
+function ExitIntentModal({ onClose }) {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [purpose, setPurpose] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  // close on ESC
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") onClose("escape"); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const submit = (e) => {
+    e.preventDefault();
+    if (!name.trim() || !phone.trim() || submitting) return;
+    setSubmitting(true);
+
+    const msg =
+      `Hi! I saw your landing page and want to get a website built.\n\n` +
+      `Name: ${name.trim()}\n` +
+      `Phone: ${phone.trim()}\n` +
+      `Website for: ${purpose.trim() || "(not specified)"}\n\n` +
+      `Please send me a quote.`;
+    const url = `https://wa.me/918341928526?text=${encodeURIComponent(msg)}`;
+
+    trackEvent("landing_exit_form_submitted", { name, phone, purpose });
+    try { localStorage.setItem(EXIT_STORAGE_KEY, String(Date.now())); } catch {}
+    window.open(url, "_blank", "noopener,noreferrer");
+    onClose("submitted");
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      onClick={() => onClose("backdrop")}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(8,8,8,.65)",
+        backdropFilter: "blur(4px)",
+        zIndex: 300,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 16,
+      }}
+    >
+      <motion.div
+        initial={{ scale: 0.92, y: 20, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        exit={{ scale: 0.92, y: 20, opacity: 0 }}
+        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="exit-title"
+        style={{
+          background: "#fff",
+          borderRadius: 20,
+          padding: "32px 28px 28px",
+          maxWidth: 460,
+          width: "100%",
+          position: "relative",
+          boxShadow: "0 24px 80px rgba(0,0,0,.45)",
+        }}
+      >
+        <button
+          type="button"
+          aria-label="Close"
+          onClick={() => onClose("close_button")}
+          style={{
+            position: "absolute",
+            top: 14,
+            right: 14,
+            width: 32,
+            height: 32,
+            background: "rgba(0,0,0,.06)",
+            border: "none",
+            borderRadius: 16,
+            cursor: "pointer",
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: 20,
+            color: "#333",
+            lineHeight: 1,
+          }}
+        >×</button>
+
+        <div style={{
+          fontSize: 11,
+          letterSpacing: 2,
+          fontWeight: 800,
+          color: "#f76b3a",
+          marginBottom: 8,
+        }}>
+          🛑 WAIT — BEFORE YOU GO
+        </div>
+
+        <h3 id="exit-title" style={{
+          fontSize: 24,
+          fontWeight: 900,
+          color: "#0e0e0e",
+          margin: 0,
+          letterSpacing: -0.5,
+          lineHeight: 1.2,
+        }}>
+          Get a free website quote.<br />
+          <span style={{ color: "#f76b3a" }}>WhatsApped to you within an hour.</span>
+        </h3>
+
+        <p style={{
+          fontSize: 14,
+          color: "#555",
+          margin: "12px 0 20px",
+          lineHeight: 1.55,
+        }}>
+          Just your name, number, and what the site is for. We&apos;ll send a real quote
+          on WhatsApp — no pitch, no commitment.
+        </p>
+
+        <form onSubmit={submit} style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <input
+            type="text"
+            placeholder="Your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+            autoComplete="name"
+            style={{
+              padding: "13px 14px",
+              fontSize: 15,
+              border: "1.5px solid rgba(0,0,0,.12)",
+              borderRadius: 10,
+              outline: "none",
+              fontFamily: "inherit",
+              color: "#0e0e0e",
+              background: "#fafafa",
+            }}
+          />
+          <input
+            type="tel"
+            placeholder="Phone number (+91…)"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+            autoComplete="tel"
+            inputMode="tel"
+            style={{
+              padding: "13px 14px",
+              fontSize: 15,
+              border: "1.5px solid rgba(0,0,0,.12)",
+              borderRadius: 10,
+              outline: "none",
+              fontFamily: "inherit",
+              color: "#0e0e0e",
+              background: "#fafafa",
+            }}
+          />
+          <input
+            type="text"
+            placeholder="What's the website for? (e.g. café, gym, store)"
+            value={purpose}
+            onChange={(e) => setPurpose(e.target.value)}
+            style={{
+              padding: "13px 14px",
+              fontSize: 15,
+              border: "1.5px solid rgba(0,0,0,.12)",
+              borderRadius: 10,
+              outline: "none",
+              fontFamily: "inherit",
+              color: "#0e0e0e",
+              background: "#fafafa",
+            }}
+          />
+          <button
+            type="submit"
+            disabled={submitting || !name.trim() || !phone.trim()}
+            style={{
+              marginTop: 6,
+              background: "linear-gradient(180deg, #2ee06f 0%, #1bb558 100%)",
+              color: "#fff",
+              padding: "15px 24px",
+              borderRadius: 10,
+              border: "none",
+              fontWeight: 900,
+              fontSize: 15,
+              letterSpacing: 0.5,
+              cursor: submitting || !name.trim() || !phone.trim() ? "not-allowed" : "pointer",
+              opacity: submitting || !name.trim() || !phone.trim() ? 0.6 : 1,
+              boxShadow: "0 10px 26px rgba(34,197,94,.32)",
+              transition: "transform 0.15s ease, opacity 0.15s ease",
+            }}
+          >
+            {submitting ? "SENDING…" : "SEND MY QUOTE REQUEST"}
+          </button>
+        </form>
+
+        <p style={{
+          fontSize: 12.5,
+          color: "#888",
+          margin: "16px 0 0",
+          textAlign: "center",
+        }}>
+          Or call us directly · <a href="tel:+918341928526" style={{ color: "#1bb558", fontWeight: 700, textDecoration: "none" }}>+91 83419 28526</a>
+        </p>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState(-1);
+  const [exitOpen, setExitOpen] = useState(false);
+  const [exitShown, setExitShown] = useState(false);
+
+  // Exit-intent trigger: desktop=mouseleave to top, mobile=45s timer
+  useEffect(() => {
+    try {
+      const v = localStorage.getItem(EXIT_STORAGE_KEY);
+      if (v && Date.now() - parseInt(v, 10) < EXIT_COOLDOWN_DAYS * 24 * 60 * 60 * 1000) {
+        return;
+      }
+    } catch {}
+
+    const isMobile =
+      typeof window !== "undefined" &&
+      (window.matchMedia("(pointer:coarse)").matches || window.innerWidth < 760);
+
+    let timer = null;
+
+    const trigger = (reason) => {
+      if (exitShown) return;
+      setExitShown(true);
+      setExitOpen(true);
+      trackEvent("landing_exit_intent_shown", { reason });
+    };
+
+    const onMouseLeave = (e) => {
+      if (e.clientY <= 0) trigger("mouse_top");
+    };
+
+    if (isMobile) {
+      timer = setTimeout(() => trigger("mobile_45s"), 45000);
+    } else {
+      document.addEventListener("mouseleave", onMouseLeave);
+    }
+
+    return () => {
+      document.removeEventListener("mouseleave", onMouseLeave);
+      if (timer) clearTimeout(timer);
+    };
+  }, [exitShown]);
+
+  const closeExit = (reason) => {
+    try { localStorage.setItem(EXIT_STORAGE_KEY, String(Date.now())); } catch {}
+    setExitOpen(false);
+    trackEvent("landing_exit_intent_dismissed", { reason });
+  };
 
   useLayoutEffect(() => {
     const prevBodyBg = document.body.style.background;
@@ -1837,6 +2101,11 @@ export default function LandingPage() {
           START MY WEBSITE
         </motion.a>
       </div>
+
+      {/* ============ EXIT-INTENT LEAD-CAPTURE MODAL ============ */}
+      <AnimatePresence>
+        {exitOpen && <ExitIntentModal onClose={closeExit} />}
+      </AnimatePresence>
     </div>
   );
 }
