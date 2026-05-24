@@ -614,7 +614,7 @@ export default function LandingPage() {
 
     // SEO meta tags scoped to /landing — restored when the user leaves
     const prevTitle = document.title;
-    const TITLE = "Website Designer & Web Design Agency — Live in 7 Days | The Story Builder";
+    const TITLE = "Website Design Hyderabad — Live in 7 Days | The Story Builder";
     document.title = TITLE;
 
     const setMeta = (selector, value) => {
@@ -626,7 +626,7 @@ export default function LandingPage() {
     };
 
     const DESC =
-      "Get a high-converting website built in 7 days. Custom website design, web development, ecommerce sites & redesigns for businesses across India. Free quote, no commitment.";
+      "Website designer in Hyderabad — get a custom website built in 7 days. Website design, web development, redesigns and ecommerce sites for businesses across Hyderabad, Telangana and India. Free quote.";
 
     const desc      = setMeta('meta[name="description"]', DESC);
     const ogTitle   = setMeta('meta[property="og:title"]',       TITLE);
@@ -634,7 +634,7 @@ export default function LandingPage() {
     const twTitle   = setMeta('meta[name="twitter:title"]',      TITLE);
     const twDesc    = setMeta('meta[name="twitter:description"]', DESC);
     const keywords  = setMeta('meta[name="keywords"]',
-      "website design, website builder, website maker, web design, web design agency, web design company, web design services, business website, website designer near me, website development, website development company, web development company, ecommerce website, portfolio website, web developer, new website, custom website design, redesign website, redo my website, web design India, website design India, web design and development, responsive web design, one page website, best website design, best website builder, web page design, website creator, web design services India, ecommerce website development, landing page design"
+      "website design hyderabad, web design company hyderabad, website development hyderabad, website designers in hyderabad, website developers in hyderabad, web design hyderabad, web design services hyderabad, web development hyderabad, web designers near me, website designer near me, website design near me, web design near me, website design company, web design company, website development company, web development company, web design and development company, website redesign service, website redesign company, business website design, business websites, restaurant website design, restaurant web design, ecommerce website, custom website design, responsive web design, new website, website maker, best website designers in hyderabad, top website designers in hyderabad, web design and development companies, website creator company, web design design company"
     );
 
     return () => {
@@ -903,6 +903,14 @@ export default function LandingPage() {
                 marginTop: 6,
               }}>
                 Founder · The Story Builder
+              </div>
+              <div style={{
+                fontSize: 11,
+                color: "rgba(255,255,255,.45)",
+                marginTop: 4,
+                letterSpacing: 0.8,
+              }}>
+                Hyderabad · India
               </div>
               <div style={{
                 height: 1,
@@ -1564,13 +1572,14 @@ export default function LandingPage() {
                 margin: 0,
                 maxWidth: 540,
               }}>
-                Shiva founded <strong>The Story Builder</strong> after watching
-                the same pattern repeat — businesses spending lakhs on websites
-                that look great but never bring customers. Since then, the
-                studio has shipped <strong>10+ high-converting websites</strong> for
-                ambitious businesses across India and beyond — most live in
-                7 days flat, all built around one question: <em>does this
-                actually turn visitors into paying customers?</em>
+                Shiva founded <strong>The Story Builder</strong> in
+                <strong>Hyderabad</strong> after watching the same pattern repeat
+                — businesses spending lakhs on websites that look great but never
+                bring customers. Since then, the studio has shipped <strong>10+
+                high-converting websites</strong> for ambitious businesses in
+                Hyderabad, across India and beyond — most live in 7 days flat,
+                all built around one question: <em>does this actually turn visitors
+                into paying customers?</em>
               </p>
               <p style={{
                 fontSize: 16,
