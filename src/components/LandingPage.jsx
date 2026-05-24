@@ -614,8 +614,8 @@ export default function LandingPage() {
 
     // SEO meta tags scoped to /landing — restored when the user leaves
     const prevTitle = document.title;
-    document.title =
-      "Website Design & Redesign for Small Businesses in India | The Story Builder";
+    const TITLE = "Website Designer & Web Design Agency — Live in 7 Days | The Story Builder";
+    document.title = TITLE;
 
     const setMeta = (selector, value) => {
       const el = document.querySelector(selector);
@@ -626,15 +626,15 @@ export default function LandingPage() {
     };
 
     const DESC =
-      "Get a high-converting website built for your business — new build or full redesign. A website studio that designs sites built to turn visitors into customers. Free 30-min strategy call, no pitch, no commitment.";
+      "Get a high-converting website built in 7 days. Custom website design, web development, ecommerce sites & redesigns for businesses across India. Free quote, no commitment.";
 
     const desc      = setMeta('meta[name="description"]', DESC);
-    const ogTitle   = setMeta('meta[property="og:title"]',       "Website Design & Redesign for Small Businesses in India | The Story Builder");
+    const ogTitle   = setMeta('meta[property="og:title"]',       TITLE);
     const ogDesc    = setMeta('meta[property="og:description"]', DESC);
-    const twTitle   = setMeta('meta[name="twitter:title"]',      "Website Design & Redesign for Small Businesses in India | The Story Builder");
+    const twTitle   = setMeta('meta[name="twitter:title"]',      TITLE);
     const twDesc    = setMeta('meta[name="twitter:description"]', DESC);
     const keywords  = setMeta('meta[name="keywords"]',
-      "website design, website redesign, small business website, high-converting website, website for business, redo my website, website that brings customers, website design India, website design studio, business website, affordable website design, custom website design, web design India, website rebuild, landing page design"
+      "website design, website builder, website maker, web design, web design agency, web design company, web design services, business website, website designer near me, website development, website development company, web development company, ecommerce website, portfolio website, web developer, new website, custom website design, redesign website, redo my website, web design India, website design India, web design and development, responsive web design, one page website, best website design, best website builder, web page design, website creator, web design services India, ecommerce website development, landing page design"
     );
 
     return () => {
