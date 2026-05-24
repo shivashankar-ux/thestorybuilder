@@ -634,7 +634,7 @@ export default function LandingPage() {
     const twTitle   = setMeta('meta[name="twitter:title"]',      TITLE);
     const twDesc    = setMeta('meta[name="twitter:description"]', DESC);
     const keywords  = setMeta('meta[name="keywords"]',
-      "website design hyderabad, web design company hyderabad, website development hyderabad, website designers in hyderabad, website developers in hyderabad, web design hyderabad, web design services hyderabad, web development hyderabad, web designers near me, website designer near me, website design near me, web design near me, website design company, web design company, website development company, web development company, web design and development company, website redesign service, website redesign company, business website design, business websites, restaurant website design, restaurant web design, ecommerce website, custom website design, responsive web design, new website, website maker, best website designers in hyderabad, top website designers in hyderabad, web design and development companies, website creator company, web design design company"
+      "website design hyderabad, web design hyderabad, web design company hyderabad, website development hyderabad, website designers in hyderabad, website developers in hyderabad, web designers in hyderabad, web developers in hyderabad, web design and development company in hyderabad, website design and development company in hyderabad, website designing company in hyderabad, website designing company in hyderabad india, website creators in hyderabad, website makers in hyderabad, best website designers in hyderabad, top website designers in hyderabad, best web design company in hyderabad, best website design company in hyderabad, top web design companies in hyderabad, top website design companies in hyderabad, top 10 web design companies in hyderabad, web design services hyderabad, web design agency in hyderabad, ecommerce website development hyderabad, ecommerce website design hyderabad, ecommerce website development company in hyderabad, web development services in hyderabad, website designing services in hyderabad, website designers hyderabad telangana, branding agency hyderabad, website designer near me, web designers near me, website design near me, web design near me, website design company near me, web design companies near me, website development company near me, web design company, website design company, website development company, web development company, web design and development company, website design and development company, website redesign service, website redesign company, website redesign agency, best website redesign services, web redesign service, site redesign, business website design, business website development, business website company, modern business website design, restaurant website design, restaurant web design, restaurant website designer, restaurant website design company, restaurant homepage design, corporate website design, corporate website development, ecommerce website, custom website design, custom website for business, website design for small business, website for small business, website maker for small business, small business website design, web design for small businesses, best website design for small business, responsive web design, web design and development, new website, website maker, landing page design"
     );
 
     return () => {
@@ -779,7 +779,7 @@ export default function LandingPage() {
               marginInline: "auto",
               lineHeight: 1.55,
             }}>
-              Whether you need your first website or a full redesign — we ship high-converting sites that turn visitors into paying customers. Live in 7 days. Get your free quote and timeline today.
+              Hyderabad-based website designers — whether you need your first website or a full redesign, we ship high-converting sites that turn visitors into paying customers. Live in 7 days. Get your free quote and timeline today.
             </p>
 
             <div style={{ marginTop: 32, display: "flex", justifyContent: "center" }}>
@@ -1494,6 +1494,102 @@ export default function LandingPage() {
               </div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* ============ SERVICES — keyword-rich chips for SEO + Google Ads Quality Score ============ */}
+      <section style={{ padding: "40px 20px 50px" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", textAlign: "center" }}>
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.5 }}
+          >
+            <p style={{
+              fontSize: 12,
+              color: INK_SOFT,
+              letterSpacing: 2.5,
+              margin: 0,
+              marginBottom: 8,
+              fontWeight: 700,
+            }}>
+              WHAT WE BUILD
+            </p>
+            <h3 style={{
+              fontSize: "clamp(22px, 3vw, 30px)",
+              fontWeight: 900,
+              color: INK,
+              letterSpacing: -0.5,
+              margin: 0,
+              marginBottom: 22,
+            }}>
+              Website design &amp; development services in Hyderabad.
+            </h3>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.55, delay: 0.1 }}
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 10,
+              justifyContent: "center",
+            }}
+          >
+            {[
+              "Website Design Hyderabad",
+              "Web Design & Development Company",
+              "Business Website Design",
+              "Restaurant Website Design",
+              "Ecommerce Website Development",
+              "Website Redesign Service",
+              "Small Business Website Design",
+              "Corporate Website Design",
+              "Custom Website Design",
+              "Landing Page Design",
+              "Responsive Web Design",
+              "Website Designer Near Me",
+            ].map((s) => (
+              <span
+                key={s}
+                style={{
+                  background: "#fff",
+                  border: "1px solid rgba(0,0,0,.08)",
+                  borderRadius: 999,
+                  padding: "10px 18px",
+                  fontSize: 13.5,
+                  fontWeight: 600,
+                  color: INK,
+                  letterSpacing: 0.2,
+                  boxShadow: "0 2px 8px rgba(0,0,0,.03)",
+                }}
+              >
+                {s}
+              </span>
+            ))}
+          </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.55, delay: 0.2 }}
+            style={{
+              fontSize: 13.5,
+              color: INK_SOFT,
+              marginTop: 22,
+              maxWidth: 720,
+              marginInline: "auto",
+              lineHeight: 1.55,
+            }}
+          >
+            Serving businesses across <strong>Hyderabad, Telangana</strong> and India —
+            from new business websites to full redesigns, restaurant sites to ecommerce builds.
+          </motion.p>
         </div>
       </section>
 
