@@ -92,15 +92,15 @@ const stats = [
 ];
 
 const projectShowcase = [
-  { img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=600&q=80", title: "Legacy Solar",          tag: "Solar · Lead Gen" },
-  { img: "https://images.unsplash.com/photo-1550345332-09e3ac987658?w=600&q=80", title: "Star Fitness Studio",   tag: "Fitness · Local" },
-  { img: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=600&q=80", title: "WafflesHub",            tag: "F&B · D2C" },
-  { img: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=600&q=80", title: "Chess Academy",        tag: "EdTech · AI" },
-  { img: "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=600&q=80", title: "Unbent Martial Fitness", tag: "Fitness · Brand" },
-  { img: "https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=600&q=80", title: "DigitalWithChirag",    tag: "Personal Brand" },
-  { img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80", title: "Siolim Cafe",            tag: "Hospitality · Local SEO" },
-  { img: "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&q=80", title: "SevAction Foundation", tag: "Non-Profit · Donations" },
-  { img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80", title: "The White Closet",     tag: "Interior Design" },
+  { img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=600&q=80", title: "Legacy Solar",          tag: "Solar · Lead Gen",         url: "https://legacysolar.in" },
+  { img: "https://images.unsplash.com/photo-1550345332-09e3ac987658?w=600&q=80", title: "Star Fitness Studio",   tag: "Fitness · Local",         url: "https://starfitnessstudio.in" },
+  { img: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=600&q=80", title: "WafflesHub",            tag: "F&B · D2C",                url: "https://waffleshub.com/" },
+  { img: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=600&q=80", title: "Chess Academy",        tag: "EdTech · AI",              url: "https://chessacademy-next-js-chirag-client.vercel.app/" },
+  { img: "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=600&q=80", title: "Unbent Martial Fitness", tag: "Fitness · Brand",          url: "https://unbentmartialfitness.com" },
+  { img: "https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=600&q=80", title: "DigitalWithChirag",    tag: "Personal Brand",           url: "https://www.digitalwithchirag.com/" },
+  { img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80", title: "Siolim Cafe",            tag: "Hospitality · Local SEO",  url: "https://siolimcafe.vercel.app/" },
+  { img: "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&q=80", title: "SevAction Foundation", tag: "Non-Profit · Donations",   url: "https://sevactionfoundation.in/" },
+  { img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80", title: "The White Closet",     tag: "Interior Design",          url: "https://the-white-closet.vercel.app/" },
 ];
 
 const whatYouGet = [
@@ -208,6 +208,14 @@ const FormsIcon = ({ size = 24 }) => (
   </svg>
 );
 
+const AnalyticsIcon = ({ size = 24 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <line x1="18" y1="20" x2="18" y2="10" />
+    <line x1="12" y1="20" x2="12" y2="4" />
+    <line x1="6" y1="20" x2="6" y2="14" />
+  </svg>
+);
+
 const bonusFeatures = [
   {
     Icon: WhatsAppIcon,
@@ -239,7 +247,153 @@ const bonusFeatures = [
     desc: "Every form submission pings your inbox in real time. No missed leads, no checking dashboards — just follow up fast.",
     color: "#ea4335",
   },
+  {
+    Icon: AnalyticsIcon,
+    title: "Analytics & Visitor Tracking",
+    desc: "Google Analytics + behaviour tracking pre-installed. See where every visitor comes from and what they actually do.",
+    color: "#7c3aed",
+  },
 ];
+
+function ProjectPreviewModal({ project, onClose }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  if (!project) return null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.22 }}
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(8,8,8,.72)",
+        backdropFilter: "blur(5px)",
+        zIndex: 310,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 16,
+      }}
+    >
+      <motion.div
+        initial={{ scale: 0.92, y: 18, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        exit={{ scale: 0.92, y: 18, opacity: 0 }}
+        transition={{ duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        style={{
+          background: "#fff",
+          borderRadius: 20,
+          maxWidth: 580,
+          width: "100%",
+          overflow: "hidden",
+          boxShadow: "0 28px 88px rgba(0,0,0,.5)",
+          position: "relative",
+        }}
+      >
+        <button
+          type="button"
+          aria-label="Close"
+          onClick={onClose}
+          style={{
+            position: "absolute",
+            top: 12,
+            right: 12,
+            width: 36,
+            height: 36,
+            borderRadius: 18,
+            background: "rgba(255,255,255,.92)",
+            border: "none",
+            cursor: "pointer",
+            fontSize: 22,
+            color: "#333",
+            zIndex: 2,
+            lineHeight: 1,
+            boxShadow: "0 2px 8px rgba(0,0,0,.15)",
+          }}
+        >×</button>
+
+        <div style={{
+          aspectRatio: "16 / 10",
+          overflow: "hidden",
+          background: "#eee",
+        }}>
+          <img
+            src={project.img}
+            alt={project.title}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+            }}
+          />
+        </div>
+
+        <div style={{ padding: "24px 28px 28px" }}>
+          <div style={{
+            fontSize: 11,
+            color: "#f76b3a",
+            letterSpacing: 1.5,
+            fontWeight: 800,
+            marginBottom: 6,
+            textTransform: "uppercase",
+          }}>
+            {project.tag}
+          </div>
+
+          <h3 style={{
+            fontSize: 24,
+            fontWeight: 900,
+            color: "#0e0e0e",
+            margin: 0,
+            marginBottom: 16,
+            letterSpacing: -0.5,
+          }}>
+            {project.title}
+          </h3>
+
+          <a
+            href={project.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-track="landing_project_visit"
+            onClick={() => trackEvent("landing_project_visit", { title: project.title })}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+              background: "linear-gradient(180deg, #ff9558 0%, #f76b3a 100%)",
+              color: "#fff",
+              padding: "14px 28px",
+              borderRadius: 10,
+              fontWeight: 800,
+              fontSize: 14,
+              letterSpacing: 0.4,
+              textDecoration: "none",
+              boxShadow: "0 8px 22px rgba(247,107,58,.32)",
+            }}
+          >
+            Visit Live Site
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 15L15 5M15 5H8M15 5v7" />
+            </svg>
+          </a>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
 
 function InlineCTA({ track, label, mode = "call" }) {
   const isChat = mode === "chat";
@@ -253,7 +407,9 @@ function InlineCTA({ track, label, mode = "call" }) {
       whileHover={{ y: -1, scale: 1.02 }}
       whileTap={{ scale: 0.97 }}
       style={{
-        background: "linear-gradient(180deg, #2ee06f 0%, #1bb558 100%)",
+        background: isChat
+          ? "linear-gradient(180deg, #2ee06f 0%, #1bb558 100%)"
+          : "linear-gradient(180deg, #ff9558 0%, #f76b3a 100%)",
         color: "#fff",
         padding: "16px 32px",
         borderRadius: 12,
@@ -261,7 +417,9 @@ function InlineCTA({ track, label, mode = "call" }) {
         fontSize: 15,
         letterSpacing: 0.5,
         textDecoration: "none",
-        boxShadow: "0 10px 26px rgba(34,197,94,.32)",
+        boxShadow: isChat
+          ? "0 10px 26px rgba(34,197,94,.32)"
+          : "0 10px 26px rgba(247,107,58,.32)",
         display: "inline-flex",
         alignItems: "center",
         gap: 10,
@@ -561,6 +719,7 @@ export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState(-1);
   const [exitOpen, setExitOpen] = useState(false);
   const [exitShown, setExitShown] = useState(false);
+  const [previewProject, setPreviewProject] = useState(null);
 
   // Exit-intent trigger: desktop=mouseleave to top, mobile=45s timer
   useEffect(() => {
@@ -1443,7 +1602,12 @@ export default function LandingPage() {
             {[...projectShowcase, ...projectShowcase].map((p, i) => (
               <div
                 key={i}
+                onClick={() => {
+                  setPreviewProject(p);
+                  trackEvent("landing_project_card_click", { title: p.title });
+                }}
                 style={{
+                  cursor: "pointer",
                   width: 280,
                   flexShrink: 0,
                   background: "#fff",
@@ -1966,7 +2130,7 @@ export default function LandingPage() {
               whileHover={{ y: -2, scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
               style={{
-                background: "linear-gradient(180deg, #2ee06f 0%, #1bb558 100%)",
+                background: "linear-gradient(180deg, #ff9558 0%, #f76b3a 100%)",
                 color: "#fff",
                 padding: "20px 48px",
                 borderRadius: 12,
@@ -1974,7 +2138,7 @@ export default function LandingPage() {
                 fontSize: 17,
                 letterSpacing: 0.6,
                 textDecoration: "none",
-                boxShadow: "0 12px 32px rgba(34,197,94,.4)",
+                boxShadow: "0 12px 32px rgba(247,107,58,.4)",
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 12,
@@ -2090,7 +2254,7 @@ export default function LandingPage() {
           whileHover={{ y: -1, scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
           style={{
-            background: "linear-gradient(180deg, #2ee06f 0%, #1bb558 100%)",
+            background: "linear-gradient(180deg, #ff9558 0%, #f76b3a 100%)",
             color: "#fff",
             padding: "17px 32px",
             borderRadius: 10,
@@ -2098,7 +2262,7 @@ export default function LandingPage() {
             textDecoration: "none",
             fontSize: 15,
             letterSpacing: 0.6,
-            boxShadow: "0 8px 24px rgba(34,197,94,.38)",
+            boxShadow: "0 8px 24px rgba(247,107,58,.38)",
             display: "inline-flex",
             alignItems: "center",
             gap: 10,
@@ -2114,6 +2278,16 @@ export default function LandingPage() {
       {/* ============ EXIT-INTENT LEAD-CAPTURE MODAL ============ */}
       <AnimatePresence>
         {exitOpen && <ExitIntentModal onClose={closeExit} />}
+      </AnimatePresence>
+
+      {/* ============ PROJECT PREVIEW MODAL ============ */}
+      <AnimatePresence>
+        {previewProject && (
+          <ProjectPreviewModal
+            project={previewProject}
+            onClose={() => setPreviewProject(null)}
+          />
+        )}
       </AnimatePresence>
     </div>
   );
