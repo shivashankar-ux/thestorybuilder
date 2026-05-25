@@ -93,7 +93,6 @@ const stats = [
 
 const projectShowcase = [
   { img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=600&q=80", title: "Legacy Solar",          tag: "Solar · Lead Gen",         url: "https://legacysolar.in" },
-  { img: "https://images.unsplash.com/photo-1550345332-09e3ac987658?w=600&q=80", title: "Star Fitness Studio",   tag: "Fitness · Local",         url: "https://starfitnessstudio.in" },
   { img: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=600&q=80", title: "WafflesHub",            tag: "F&B · D2C",                url: "https://waffleshub.com/" },
   { img: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=600&q=80", title: "Chess Academy",        tag: "EdTech · AI",              url: "https://chessacademy-next-js-chirag-client.vercel.app/" },
   { img: "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=600&q=80", title: "Unbent Martial Fitness", tag: "Fitness · Brand",          url: "https://unbentmartialfitness.com" },
@@ -1576,7 +1575,7 @@ export default function LandingPage() {
 
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
             gap: 14,
           }}>
             {projectShowcase.map((p) => (
