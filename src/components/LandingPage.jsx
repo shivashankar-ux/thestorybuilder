@@ -1541,84 +1541,65 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ============ PROJECT MARQUEE — left-to-right infinite scroll ============ */}
-      <section style={{ padding: "30px 0 50px" }}>
-        <div style={{ textAlign: "center", padding: "0 20px 26px" }}>
-          <p style={{
-            fontSize: 12,
-            color: INK_SOFT,
-            letterSpacing: 2.5,
-            margin: 0,
-            marginBottom: 8,
-            fontWeight: 700,
-          }}>
-            WEBSITES WE&apos;VE BUILT
-          </p>
-          <h3 style={{
-            fontSize: "clamp(22px, 3vw, 30px)",
-            fontWeight: 900,
-            color: INK,
-            letterSpacing: -0.5,
-            margin: 0,
-          }}>
-            Real businesses. Real websites. Real customers.
-          </h3>
-        </div>
+      {/* ============ PROJECT SHOWCASE — static 2-row grid, click to preview ============ */}
+      <section style={{ padding: "40px 20px 50px" }}>
+        <div style={{ maxWidth: 1080, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 28 }}>
+            <p style={{
+              fontSize: 12,
+              color: INK_SOFT,
+              letterSpacing: 2.5,
+              margin: 0,
+              marginBottom: 8,
+              fontWeight: 700,
+            }}>
+              WEBSITES WE&apos;VE BUILT
+            </p>
+            <h3 style={{
+              fontSize: "clamp(22px, 3vw, 30px)",
+              fontWeight: 900,
+              color: INK,
+              letterSpacing: -0.5,
+              margin: 0,
+            }}>
+              Real businesses. Real websites. Real customers.
+            </h3>
+            <p style={{
+              fontSize: 13,
+              color: INK_SOFT,
+              marginTop: 8,
+              marginBottom: 0,
+            }}>
+              Tap any card to preview the live site.
+            </p>
+          </div>
 
-        <div style={{ overflow: "hidden", position: "relative" }}>
-          {/* fade edges */}
           <div style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: 80,
-            height: "100%",
-            background: `linear-gradient(90deg, ${BG} 0%, transparent 100%)`,
-            zIndex: 2,
-            pointerEvents: "none",
-          }} />
-          <div style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            width: 80,
-            height: "100%",
-            background: `linear-gradient(-90deg, ${BG} 0%, transparent 100%)`,
-            zIndex: 2,
-            pointerEvents: "none",
-          }} />
-
-          <motion.div
-            animate={{ x: ["-50%", "0%"] }}
-            transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-            style={{
-              display: "flex",
-              gap: 20,
-              width: "max-content",
-              paddingLeft: 20,
-              paddingRight: 20,
-            }}
-          >
-            {[...projectShowcase, ...projectShowcase].map((p, i) => (
-              <div
-                key={i}
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))",
+            gap: 14,
+          }}>
+            {projectShowcase.map((p) => (
+              <motion.div
+                key={p.title}
                 onClick={() => {
                   setPreviewProject(p);
                   trackEvent("landing_project_card_click", { title: p.title });
                 }}
+                whileHover={{ y: -3 }}
+                whileTap={{ scale: 0.98 }}
                 style={{
                   cursor: "pointer",
-                  width: 280,
-                  flexShrink: 0,
                   background: "#fff",
-                  borderRadius: 14,
+                  borderRadius: 12,
                   overflow: "hidden",
                   border: "1px solid rgba(0,0,0,.06)",
-                  boxShadow: "0 6px 22px rgba(0,0,0,.06)",
+                  boxShadow: "0 4px 14px rgba(0,0,0,.05)",
+                  transition: "box-shadow 0.2s",
                 }}
               >
                 <div style={{
-                  aspectRatio: "16 / 10",
+                  aspectRatio: "4 / 3",
                   overflow: "hidden",
                   background: "#eee",
                 }}>
@@ -1634,19 +1615,19 @@ export default function LandingPage() {
                     }}
                   />
                 </div>
-                <div style={{ padding: "14px 18px 16px" }}>
+                <div style={{ padding: "10px 12px 12px" }}>
                   <div style={{
-                    fontSize: 11,
+                    fontSize: 9.5,
                     color: ORANGE,
-                    letterSpacing: 1.2,
-                    marginBottom: 5,
+                    letterSpacing: 1,
+                    marginBottom: 3,
                     fontWeight: 700,
                     textTransform: "uppercase",
                   }}>
                     {p.tag}
                   </div>
                   <div style={{
-                    fontSize: 16,
+                    fontSize: 13.5,
                     fontWeight: 800,
                     color: INK,
                     lineHeight: 1.25,
@@ -1655,9 +1636,9 @@ export default function LandingPage() {
                     {p.title}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 
