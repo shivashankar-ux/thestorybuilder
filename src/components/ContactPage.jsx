@@ -6,7 +6,7 @@ const BOT_TOKEN = "8712967453:AAGMQV1SneKzT2FGFkdNTrh2GvZD_Q_vgcY";
 const CHAT_ID   = "1340316382";
 
 export default function ContactPage() {
-  const [form, setForm]     = useState({ name: "", email: "", phone: "", project: "", message: "" });
+  const [form, setForm]     = useState({ name: "", email: "", phone: "", area: "", project: "", message: "" });
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
 
   const handle = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,6 +21,7 @@ export default function ContactPage() {
       "👤 Name: " + form.name,
       "📧 Email: " + form.email,
       "📱 Phone: " + (form.phone || "Not provided"),
+      "📍 Area: " + (form.area || "Not specified"),
       "💼 Project: " + (form.project || "Not specified"),
       "💬 Message: " + form.message,
       "",
@@ -30,6 +31,7 @@ export default function ContactPage() {
     try {
       trackEvent("contact_form_submitted", {
         project: form.project || "unspecified",
+        area: form.area || "unspecified",
       });
       const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
       const res = await fetch(url, {
@@ -40,19 +42,19 @@ export default function ContactPage() {
       const data = await res.json();
       if (data.ok) {
         setStatus("success");
-        setForm({ name: "", email: "", phone: "", project: "", message: "" });
+        setForm({ name: "", email: "", phone: "", area: "", project: "", message: "" });
       } else {
         // Fallback: try image ping method which works on all mobile browsers
         new Image().src = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${encodeURIComponent(CHAT_ID)}&text=${encodeURIComponent(text)}`;
         setStatus("success");
-        setForm({ name: "", email: "", phone: "", project: "", message: "" });
+        setForm({ name: "", email: "", phone: "", area: "", project: "", message: "" });
       }
     } catch (err) {
       // Fallback for mobile: use image ping (bypasses CORS completely)
       try {
         new Image().src = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${encodeURIComponent(CHAT_ID)}&text=${encodeURIComponent(text)}`;
         setStatus("success");
-        setForm({ name: "", email: "", phone: "", project: "", message: "" });
+        setForm({ name: "", email: "", phone: "", area: "", project: "", message: "" });
       } catch {
         setStatus("error");
       }
@@ -160,6 +162,52 @@ export default function ContactPage() {
                     value={form.phone}
                     onChange={handle}
                   />
+                </div>
+
+                <div className="cf-group">
+                  <label className="cf-label">Your Area</label>
+                  <select
+                    className="cf-input cf-select"
+                    name="area"
+                    value={form.area}
+                    onChange={handle}
+                  >
+                    <option value="">Select your area...</option>
+                    <optgroup label="West Hyderabad">
+                      <option value="Banjara Hills">Banjara Hills</option>
+                      <option value="Jubilee Hills">Jubilee Hills</option>
+                      <option value="Madhapur">Madhapur</option>
+                      <option value="Hi-Tech City">Hi-Tech City</option>
+                      <option value="Gachibowli">Gachibowli</option>
+                      <option value="Kondapur">Kondapur</option>
+                      <option value="Financial District / Nanakramguda">Financial District / Nanakramguda</option>
+                      <option value="Manikonda">Manikonda</option>
+                      <option value="Tolichowki">Tolichowki</option>
+                      <option value="Mehdipatnam">Mehdipatnam</option>
+                    </optgroup>
+                    <optgroup label="North & Central Hyderabad">
+                      <option value="Kukatpally / KPHB">Kukatpally / KPHB</option>
+                      <option value="Miyapur">Miyapur</option>
+                      <option value="Ameerpet">Ameerpet</option>
+                      <option value="SR Nagar">SR Nagar</option>
+                      <option value="Begumpet">Begumpet</option>
+                      <option value="Somajiguda / Punjagutta">Somajiguda / Punjagutta</option>
+                      <option value="Himayatnagar">Himayatnagar</option>
+                      <option value="Secunderabad">Secunderabad</option>
+                      <option value="Tarnaka">Tarnaka</option>
+                      <option value="Habsiguda">Habsiguda</option>
+                    </optgroup>
+                    <optgroup label="East & South Hyderabad">
+                      <option value="Uppal">Uppal</option>
+                      <option value="LB Nagar">LB Nagar</option>
+                      <option value="Dilsukhnagar">Dilsukhnagar</option>
+                      <option value="Malakpet">Malakpet</option>
+                      <option value="Abids">Abids</option>
+                      <option value="Old City / Charminar">Old City / Charminar</option>
+                    </optgroup>
+                    <option value="Other (Hyderabad)">Other (Hyderabad)</option>
+                    <option value="Outside Hyderabad">Outside Hyderabad</option>
+                  </select>
                 </div>
 
                 <div className="cf-group">
