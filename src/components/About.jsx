@@ -15,15 +15,12 @@ const services = [
   },
   {
     id: 2,
-    title: "Social Media Marketing",
-    desc: "Organic content, community building, and social campaigns that keep your brand top-of-mind",
+    title: "SEO & Content",
+    desc: "Inbound traffic that compounds — built on real search intent",
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-        <circle cx="18" cy="5" r="3" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <circle cx="6" cy="12" r="3" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <circle cx="18" cy="19" r="3" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="11" cy="11" r="7" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M21 21l-4.3-4.3" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   },
@@ -72,7 +69,7 @@ export default function About({ setPage }) {
               We build brands<br /><em>that grow</em><br />in a measurable way.
             </h2>
             <p className="muted">
-              <strong className="lead">Full-service digital marketing</strong> for founders and growing brands across India and beyond. We pair strategy with execution — websites, paid media, social media, and brand systems that move real numbers, not just impressions.
+              <strong className="lead">Full-service digital marketing</strong> for founders and growing brands across India and beyond. We pair strategy with execution — websites, paid media, SEO and brand systems that move real numbers, not just impressions.
             </p>
             <p className="muted">
               <strong className="lead">Revenue first, vanity metrics never.</strong> Every engagement starts with the same question: what does success look like in revenue? From there we reverse-engineer the funnel, ship fast, and report honestly.

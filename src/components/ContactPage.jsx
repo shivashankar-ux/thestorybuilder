@@ -220,7 +220,7 @@ export default function ContactPage() {
                   >
                     <option value="">Select a service...</option>
                     <option value="Performance Marketing (Meta + Google)">Performance Marketing (Meta + Google)</option>
-                    <option value="Social Media Marketing">Social Media Marketing</option>
+                    <option value="SEO + Content">SEO + Content</option>
                     <option value="Website / Landing Page">Website / Landing Page</option>
                     <option value="Brand Strategy">Brand Strategy</option>
                     <option value="Full-Funnel Growth Partner">Full-Funnel Growth Partner</option>
