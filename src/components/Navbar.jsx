@@ -16,7 +16,7 @@ export default function Navbar({ page, setPage }) {
   useEffect(() => {
     if (page !== "home") {
       setScrolled(true);
-      setActiveNav(page === "contact" ? "contact" : "");
+      setActiveNav(page === "contact" ? "contact" : (page === "services" ? "services" : ""));
       return;
     }
     setActiveNav("home");
@@ -46,16 +46,23 @@ export default function Navbar({ page, setPage }) {
     if (dest === "contact") {
       setPage("contact");
       setMenuOpen(false);
+    } else if (dest === "services") {
+      setPage("services");
+      setMenuOpen(false);
+    } else if (dest === "home") {
+      setPage("home");
+      setMenuOpen(false);
     } else if (page === "home") {
       scrollTo(dest);
     } else {
-      setPage("home");
+      setPage({ page: "home", scrollTo: dest });
+      setMenuOpen(false);
     }
   };
 
   const navItems = [
     { id: "home",     label: "Home" },
-    { id: "about",    label: "Services" },
+    { id: "services", label: "Services" },
     { id: "process",  label: "Process" },
     { id: "projects", label: "Work" },
     { id: "contact",  label: "Contact" },
