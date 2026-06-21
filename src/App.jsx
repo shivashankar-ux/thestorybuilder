@@ -16,6 +16,8 @@ import WhatsAppButton from "./components/WhatsAppButton";
 import ExitIntent from "./components/ExitIntent";
 import Footer from "./components/Footer";
 import LandingPage from "./components/LandingPage";
+import ServicesPage from "./components/ServicesPage";
+import PricingPage from "./components/PricingPage";
 import {
   trackPageView,
   trackEvent,
@@ -32,8 +34,10 @@ const pageTransition = {
 
 export default function App() {
   const [page, setPage] = useState(() => {
-    if (typeof window !== "undefined" && window.location.pathname === "/landing") {
-      return "landing";
+    if (typeof window !== "undefined") {
+      if (window.location.pathname === "/landing") return "landing";
+      if (window.location.pathname === "/services") return "services";
+      if (window.location.pathname === "/pricing") return "pricing";
     }
     return "home";
   });
@@ -64,7 +68,16 @@ export default function App() {
     bindAutoTracking();
 
     const onPop = () => {
-      setPage(window.location.pathname === "/landing" ? "landing" : "home");
+      const path = window.location.pathname;
+      if (path === "/landing") {
+        setPage("landing");
+      } else if (path === "/services") {
+        setPage("services");
+      } else if (path === "/pricing") {
+        setPage("pricing");
+      } else {
+        setPage("home");
+      }
       setCaseSlug(null);
     };
     window.addEventListener("popstate", onPop);
@@ -72,7 +85,11 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const desired = page === "landing" ? "/landing" : "/";
+    let desired = "/";
+    if (page === "landing") desired = "/landing";
+    else if (page === "services") desired = "/services";
+    else if (page === "pricing") desired = "/pricing";
+    
     if (window.location.pathname !== desired) {
       window.history.pushState({}, "", desired);
     }
@@ -83,6 +100,7 @@ export default function App() {
     if (page === "contact") trackEvent("viewed_contact_page");
     if (page === "case" && caseSlug) trackEvent("viewed_case_study", { slug: caseSlug });
     if (page === "landing") trackEvent("viewed_landing_page");
+    if (page === "pricing") trackEvent("viewed_pricing_page");
   }, [page, caseSlug]);
 
   useEffect(() => {
@@ -126,6 +144,18 @@ export default function App() {
         {page === "contact" && (
           <motion.div key="contact" {...pageTransition}>
             <ContactPage />
+          </motion.div>
+        )}
+
+        {page === "services" && (
+          <motion.div key="services" {...pageTransition}>
+            <ServicesPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "pricing" && (
+          <motion.div key="pricing" {...pageTransition}>
+            <PricingPage setPage={navigate} />
           </motion.div>
         )}
 
