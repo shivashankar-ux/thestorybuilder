@@ -16,11 +16,11 @@
   "rewrites": [
     {
       "source": "/tsb",
-      "destination": "https://thestorybuilderdashboard.vercel.app/tsb/auth/login"
+      "destination": "https://thestorybuilderdashboard.vercel.app/tsb"
     },
     {
       "source": "/tsb/",
-      "destination": "https://thestorybuilderdashboard.vercel.app/tsb/auth/login"
+      "destination": "https://thestorybuilderdashboard.vercel.app/tsb/"
     },
     {
       "source": "/tsb/:path*",
