@@ -9,10 +9,10 @@ export default function Hammer() {
   useFrame((state, delta) => {
     if (!groupRef.current) return;
     
-    // The container is 300vh. 
-    // Scroll progress is mapped from 0 to 2*window.innerHeight.
+    // The container is 400vh. 
+    // Scroll progress is mapped from 0 to 3*window.innerHeight.
     const scrollY = window.scrollY;
-    const maxScroll = window.innerHeight * 2;
+    const maxScroll = window.innerHeight * 3;
     const offset = Math.min(Math.max(scrollY / maxScroll, 0), 1);
     
     // Smooth the transform for premium feel
@@ -23,10 +23,11 @@ export default function Hammer() {
     const targetRotX = THREE.MathUtils.lerp(Math.PI / 4, Math.PI / 2, offset);
     const targetRotY = THREE.MathUtils.lerp(0, Math.PI * 2, offset);
 
-    groupRef.current.position.z = THREE.MathUtils.damp(groupRef.current.position.z, targetZ, 5, delta);
-    groupRef.current.position.y = THREE.MathUtils.damp(groupRef.current.position.y, targetY, 5, delta);
+    // Reduced damping factor from 5 to 2.5 to make it feel "heavier" and smoother
+    groupRef.current.position.z = THREE.MathUtils.damp(groupRef.current.position.z, targetZ, 2.5, delta);
+    groupRef.current.position.y = THREE.MathUtils.damp(groupRef.current.position.y, targetY, 2.5, delta);
     
-    groupRef.current.rotation.x = THREE.MathUtils.damp(groupRef.current.rotation.x, targetRotX, 5, delta);
+    groupRef.current.rotation.x = THREE.MathUtils.damp(groupRef.current.rotation.x, targetRotX, 2.5, delta);
     
     // Base continuous rotation + scroll rotation
     const time = state.clock.getElapsedTime();
