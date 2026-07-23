@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "./components/Navbar";
+import CinematicHero from "./components/CinematicHero";
 import Hero from "./components/Hero";
 import Stats from "./components/Stats";
 import TrustedBy from "./components/TrustedBy";
@@ -123,6 +124,7 @@ export default function App() {
       <AnimatePresence mode="wait">
         {page === "home" && (
           <motion.main key="home" {...pageTransition}>
+            <CinematicHero />
             <Hero setPage={navigate} />
             <Stats />
             <TrustedBy />

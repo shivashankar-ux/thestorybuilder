@@ -3,14 +3,23 @@ import { useEffect } from "react";
 const servicesDetails = [
   {
     id: 1,
-    title: "Performance Marketing",
-    subtitle: "Paid Acquisition & ROI-Driven Media Buy",
-    desc: "Meta & Google ads engineered for ROAS, not vanity metrics. We focus on scaling your revenue, reducing acquisition costs, and building customer pathways that convert.",
+    title: "Starter",
+    price: "₹6,999 onwards",
+    subtitle: "Static website for new Hyderabad businesses",
+    desc: "Delivered in 24 hours.",
     features: [
-      "Search & Shopping Campaigns",
-      "Social Media Ads (Meta, Instagram)",
-      "Audience Architecture & Retargeting",
-      "Funnel & Analytics Tracking"
+      "5-page static website (Home, About, Services, Gallery, Contact)",
+      "Custom mobile-first design — phone, tablet & desktop",
+      "1 year web hosting with free SSL (HTTPS)",
+      "5 professional email accounts on your domain",
+      "On-page SEO setup — meta titles, descriptions & H1 structure",
+      "LocalBusiness + FAQ schema for Google rich results",
+      "Google Maps embed + click-to-call phone buttons",
+      "Lead enquiry form with instant email notifications",
+      "WhatsApp chat button + social profile links",
+      "Google Analytics 4 setup & Search Console ready",
+      "2 content revision rounds + 30-day post-launch support",
+      "Delivered in 24 hours"
     ],
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
@@ -22,14 +31,21 @@ const servicesDetails = [
   },
   {
     id: 2,
-    title: "Social Media Marketing",
-    subtitle: "Organic Growth & Brand Authority",
-    desc: "Organic content, community building, and social campaigns that keep your brand top-of-mind. We design narratives that captivate, build active audiences, and generate trust.",
+    title: "Business",
+    price: "₹12,999 onwards",
+    subtitle: "Dynamic CMS website for growing brands",
+    desc: "Delivered in 48 hours. Most Popular.",
     features: [
-      "Content Strategy & Creation",
-      "Community Management & Engagement",
-      "Influencer Partnerships",
-      "Brand Authority Campaigns"
+      "Dynamic CMS website — up to 8 editable pages",
+      "Custom UI/UX with admin dashboard (no coding needed)",
+      "5 professional email accounts on your domain",
+      "Advanced on-page SEO + XML sitemap for Google indexing",
+      "Conversion layouts — CTAs, trust badges & enquiry forms",
+      "Google Maps, WhatsApp & social media integrations",
+      "Core Web Vitals speed optimization (mobile-first)",
+      "Auto-responder emails on form submissions",
+      "3 revision rounds + hands-on CMS training for your team",
+      "Delivered in 48 hours - priority WhatsApp support"
     ],
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
@@ -43,36 +59,27 @@ const servicesDetails = [
   },
   {
     id: 3,
-    title: "Web Development",
-    subtitle: "High-Performance Digital Products",
-    desc: "Mobile-first, lightning-fast websites engineered to convert visitors into clients. We build custom React and Next.js applications that score 100% on PageSpeed audits.",
+    title: "Ecommerce",
+    price: "₹24,999 onwards",
+    subtitle: "Full online store for Hyderabad retailers",
+    desc: "Delivered in 3 days.",
     features: [
-      "Vite & Next.js Websites",
-      "Conversion Rate Optimization (CRO)",
-      "Interactive Product Design",
-      "Search Engine Optimization (SEO)"
+      "WooCommerce store setup with custom storefront design",
+      "Up to 50 products — categories, filters & search",
+      "10 professional email accounts on your domain",
+      "Razorpay gateway — UPI, cards, net banking & wallets",
+      "Mobile-optimized cart, checkout & order confirmation",
+      "Product SEO — titles, schema markup & image alt tags",
+      "Order alerts via email + WhatsApp notifications",
+      "Inventory, coupons, shipping zones & tax setup",
+      "Google Analytics ecommerce + conversion tracking",
+      "Admin training, documentation & full handover",
+      "Delivered in 3 days - ongoing maintenance available"
     ],
     icon: (
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
         <polyline points="16 18 22 12 16 6" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         <polyline points="8 6 2 12 8 18" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
-  {
-    id: 4,
-    title: "Brand Strategy",
-    subtitle: "Positioning & Category Design",
-    desc: "Strategic positioning and visual identity systems that make you the obvious choice. We define your competitive edge, brand voice, and craft stories that separate you from competitors.",
-    features: [
-      "Competitor Audits & Positioning",
-      "Brand Voice & Message Design",
-      "Visual Identity & Styling Guides",
-      "Go-to-Market Execution Plans"
-    ],
-    icon: (
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2l3 6 6 1-4.5 4.4 1 6.6L12 17l-5.5 3 1-6.6L3 9l6-1 3-6z" stroke="#facc15" strokeWidth="1.5" strokeLinejoin="round"/>
       </svg>
     ),
   },
@@ -101,14 +108,13 @@ export default function ServicesPage({ setPage }) {
       <div className="wrap">
         {/* PAGE HEADER */}
         <header className="services-pg-header fi" style={{ "--i": 0 }}>
-          <span className="tag">What We Do</span>
+          <span className="tag">Pricing Plans</span>
           <h1 className="sec-h">
-            Specialized growth solutions<br />
-            <em>engineered to scale.</em>
+            Website packages tailored<br />
+            <em>for your business.</em>
           </h1>
           <p className="muted services-pg-intro">
-            We build and run systems that move real numbers, not just vanity impressions. 
-            Here is how we work with founders and growing brands across India to drive revenue.
+            Transparent pricing, fast delivery, and high-performance websites.
           </p>
         </header>
 
@@ -124,6 +130,7 @@ export default function ServicesPage({ setPage }) {
                 <div className="service-details-icon">{service.icon}</div>
                 <span className="service-details-subtitle">{service.subtitle}</span>
                 <h2>{service.title}</h2>
+                <div style={{color: "#facc15", fontSize: "1.2rem", fontWeight: "bold", marginBottom: "0.5rem"}}>{service.price}</div>
                 <p className="muted">{service.desc}</p>
               </div>
 
