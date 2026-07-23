@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "./components/Navbar";
 import CinematicHero from "./components/CinematicHero";
@@ -8,6 +8,7 @@ import TrustedBy from "./components/TrustedBy";
 import About from "./components/About";
 import Process from "./components/Process";
 import Projects from "./components/Projects";
+import InstagramPortfolio from "./components/InstagramPortfolio";
 import FAQ from "./components/FAQ";
 import WhyWebsite from "./components/WhyWebsite";
 import CTABanner from "./components/CTABanner";
@@ -32,6 +33,22 @@ const pageTransition = {
   exit: { opacity: 0, y: -8 },
   transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] },
 };
+
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+  render() {
+    if (this.state.hasError) {
+      return null; // silently fail and show the rest of the site if 3D crashes
+    }
+    return this.props.children;
+  }
+}
 
 export default function App() {
   const [page, setPage] = useState(() => {
@@ -124,13 +141,16 @@ export default function App() {
       <AnimatePresence mode="wait">
         {page === "home" && (
           <motion.main key="home" {...pageTransition}>
-            <CinematicHero />
+            <ErrorBoundary>
+              <CinematicHero />
+            </ErrorBoundary>
             <Hero setPage={navigate} />
             <Stats />
             <TrustedBy />
             <About setPage={navigate} />
             <Process />
             <Projects setPage={navigate} navigate={navigate} />
+            <InstagramPortfolio />
             <WhyWebsite setPage={navigate} />
             <FAQ setPage={navigate} />
             <CTABanner setPage={navigate} />
