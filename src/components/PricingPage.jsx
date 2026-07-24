@@ -253,7 +253,7 @@ const pricingCategories = [
       {
         badge: "STARTER",
         name: "Starter",
-        price: "Rs. 6,999",
+        price: "Rs.14,999",
         cadence: "month",
         desc: "Get your first leads flowing with Meta Ads.",
         features: [
@@ -261,7 +261,7 @@ const pricingCategories = [
           "1 active campaign",
           "Audience research & targeting",
           "2 ad creatives per month",
-          "Lead form / landing page setup",
+          "Lead form",
           "Pixel installation & tracking",
           "Recommended ad spend: Rs. 5k-10k",
           "Monthly performance report"
@@ -272,7 +272,7 @@ const pricingCategories = [
       {
         badge: "MOST POPULAR",
         name: "Growth",
-        price: "Rs. 10,000",
+        price: "Rs.24,000",
         cadence: "month",
         desc: "Multi-platform campaigns built to consistently generate leads.",
         features: [
@@ -293,11 +293,11 @@ const pricingCategories = [
       {
         badge: "PREMIUM",
         name: "Premium",
-        price: "Rs. 15,000",
+        price: "Rs.35,000",
         cadence: "month",
         desc: "Full-funnel lead generation with automation and scaling.",
         features: [
-          "Meta Ads + Google Ads",
+          "Meta Ads / Google Ads",
           "Up to 5 active campaigns",
           "Advanced audience segmentation",
           "8 ad creatives per month",
