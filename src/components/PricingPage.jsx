@@ -20,7 +20,7 @@ const pricingCategories = [
       {
         badge: "STARTER",
         name: "Starter",
-        price: "Rs. 13000",
+        price: "Rs.13,000",
         cadence: "project",
         desc: "Perfect for businesses starting their online journey.",
         features: [
@@ -59,7 +59,7 @@ const pricingCategories = [
       {
         badge: "PREMIUM",
         name: "Premium",
-        price: "Rs. 30,000",
+        price: "Rs.30,000",
         cadence: "project",
         desc: "For businesses ready to dominate online and scale.",
         features: [
