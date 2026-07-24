@@ -20,7 +20,7 @@ const pricingCategories = [
       {
         badge: "STARTER",
         name: "Starter",
-        price: "Rs. 4,999",
+        price: "Rs. 13000",
         cadence: "project",
         desc: "Perfect for businesses starting their online journey.",
         features: [
@@ -39,7 +39,7 @@ const pricingCategories = [
       {
         badge: "MOST POPULAR",
         name: "Growth",
-        price: "Rs. 6,999",
+        price: "Rs. 18,000",
         cadence: "project",
         desc: "Built for businesses that want consistent leads.",
         features: [
@@ -59,7 +59,7 @@ const pricingCategories = [
       {
         badge: "PREMIUM",
         name: "Premium",
-        price: "Rs. 9,999",
+        price: "Rs. 30,000",
         cadence: "project",
         desc: "For businesses ready to dominate online and scale.",
         features: [
@@ -497,14 +497,14 @@ export default function PricingPage({ setPage }) {
         <section className="pricing-bottom-cta sr">
           <h2>Need a custom package?</h2>
           <p className="muted">
-            Looking for something tailored to your exact business size, scope, or custom development requirements? 
+            Looking for something tailored to your exact business size, scope, or custom development requirements?
             Let's build a customized solution for you.
           </p>
           <div className="pricing-cta-actions">
             <button className="btn btn-gold" onClick={() => setPage("contact")}>
               Talk to Us
               <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
             <button className="btn btn-ghost" onClick={() => setPage("home")}>
