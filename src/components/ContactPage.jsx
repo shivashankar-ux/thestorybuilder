@@ -3,10 +3,10 @@ import CalendlyEmbed from "./CalendlyEmbed";
 import { trackEvent } from "../utils/tracking";
 
 const BOT_TOKEN = "8712967453:AAGMQV1SneKzT2FGFkdNTrh2GvZD_Q_vgcY";
-const CHAT_ID   = "1340316382";
+const CHAT_ID = "1340316382";
 
 export default function ContactPage() {
-  const [form, setForm]     = useState({ name: "", email: "", phone: "", area: "", project: "", message: "" });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", area: "", project: "", message: "" });
   const [status, setStatus] = useState("idle"); // idle | sending | success | error
 
   const handle = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -78,18 +78,18 @@ export default function ContactPage() {
             <div className="contact-intro">
               <h1>Talk to <span className="gold">The Story Builder</span></h1>
               <p>
-                A full-service digital marketing agency working with founders and growing brands across India and abroad. Tell us where you are and where you want to be — we'll map the path.
+                A full-service digital marketing agency working with founders and growing brands across India. Tell us where you are and where you want to be — we'll map the path.
               </p>
               <div className="contact-detail">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 <span>+91 83419 28526</span>
               </div>
               <div className="contact-detail">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                  <rect x="2" y="4" width="20" height="16" rx="2" stroke="#facc15" strokeWidth="1.5"/>
-                  <path d="M2 7l10 7 10-7" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round"/>
+                  <rect x="2" y="4" width="20" height="16" rx="2" stroke="#facc15" strokeWidth="1.5" />
+                  <path d="M2 7l10 7 10-7" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
                 <span>shivashankar.7991@gmail.com</span>
               </div>
@@ -257,7 +257,7 @@ export default function ContactPage() {
                     <>
                       Send Message
                       <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </>
                   )}
@@ -268,8 +268,8 @@ export default function ContactPage() {
 
             <div className="response-note" style={{ marginTop: 20 }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="var(--muted)" strokeWidth="1.5"/>
-                <polyline points="12 6 12 12 16 14" stroke="var(--muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <circle cx="12" cy="12" r="10" stroke="var(--muted)" strokeWidth="1.5" />
+                <polyline points="12 6 12 12 16 14" stroke="var(--muted)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               We typically respond within <strong>24 hours.</strong>
             </div>

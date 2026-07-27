@@ -106,7 +106,7 @@ export default function Hero({ setPage }) {
           >
             Book a Strategy Call
             <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </motion.button>
         </motion.div>
@@ -125,7 +125,7 @@ export default function Hero({ setPage }) {
           </span>
           <span className="proof-meta">
             <StarRow />
-            <strong>10+ happy clients</strong> across India &amp; abroad
+            <strong>10+ happy clients</strong> across India &amp;
           </span>
         </motion.div>
       </motion.div>
