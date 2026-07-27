@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { motion } from "framer-motion";
 
 const allServices = [
   {
@@ -128,27 +129,24 @@ export default function ServicesPage({ setPage }) {
         </header>
 
         {/* SERVICES GRID */}
-        <section className="services-grid sr">
+        <section className="services-flex sr">
           {allServices.map((service, index) => (
-            <div 
-              className="sk" 
+            <motion.div 
+              className="service-card-animated" 
               key={service.id}
-              style={{ 
-                "--i": `${index * 0.1}s`, 
-                display: "flex", 
-                flexDirection: "column",
-                padding: "32px 28px",
-                height: "100%"
-              }}
+              initial={{ y: 0 }}
+              whileHover={{ y: -8 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              style={{ "--i": `${index * 0.1}s` }}
             >
-              <div className="sk-ico" style={{ marginBottom: "20px" }}>{service.icon}</div>
-              <h2 style={{ fontSize: "18px", fontFamily: "var(--fd)", fontWeight: 700, marginBottom: "12px", letterSpacing: "-0.2px" }}>
+              <div className="service-card-icon">{service.icon}</div>
+              <h2 style={{ fontSize: "20px", fontFamily: "var(--fd)", fontWeight: 800, marginBottom: "12px", letterSpacing: "-0.2px" }}>
                 {service.title}
               </h2>
-              <p className="muted" style={{ fontSize: "14px", lineHeight: 1.6, flex: 1, margin: 0 }}>
+              <p className="muted" style={{ fontSize: "15px", lineHeight: 1.6, flex: 1, margin: 0 }}>
                 {service.desc}
               </p>
-            </div>
+            </motion.div>
           ))}
         </section>
 

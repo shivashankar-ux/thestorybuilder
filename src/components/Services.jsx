@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { motion } from "framer-motion";
 
 const servicesList = [
   {
@@ -107,13 +108,20 @@ export default function Services() {
           </p>
         </div>
 
-        <div className="services-grid sr">
+        <div className="services-flex sr">
           {servicesList.map((service, i) => (
-            <div className="sk" key={service.id} style={{ transitionDelay: `${i * 0.1}s` }}>
-              <div className="sk-ico">{service.icon}</div>
-              <h3 style={{ fontSize: "16px" }}>{service.title}</h3>
-              <p>{service.desc}</p>
-            </div>
+            <motion.div 
+              className="service-card-animated" 
+              key={service.id}
+              initial={{ y: 0 }}
+              whileHover={{ y: -8 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              style={{ "--i": `${i * 0.1}s` }}
+            >
+              <div className="service-card-icon">{service.icon}</div>
+              <h3 style={{ fontSize: "20px", fontFamily: "var(--fd)", fontWeight: 800, marginBottom: "12px", letterSpacing: "-0.2px" }}>{service.title}</h3>
+              <p className="muted" style={{ fontSize: "15px", lineHeight: 1.6, flex: 1, margin: 0 }}>{service.desc}</p>
+            </motion.div>
           ))}
         </div>
       </div>
