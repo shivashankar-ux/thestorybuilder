@@ -97,7 +97,7 @@ const pricingCategories = [
       {
         badge: "BASIC",
         name: "Basic",
-        price: "Rs.9999",
+        price: "Rs.9,999",
         cadence: "month",
         desc: "Build your presence with consistent, quality content.",
         features: [
