@@ -97,7 +97,7 @@ const pricingCategories = [
       {
         badge: "BASIC",
         name: "Basic",
-        price: "Rs. 5,999",
+        price: "Rs.9999",
         cadence: "month",
         desc: "Build your presence with consistent, quality content.",
         features: [
@@ -116,7 +116,7 @@ const pricingCategories = [
       {
         badge: "MOST POPULAR",
         name: "Standard",
-        price: "Rs. 8,000",
+        price: "Rs. 14,000",
         cadence: "month",
         desc: "Grow your audience with Reels, strategy, and engagement.",
         features: [
@@ -136,7 +136,7 @@ const pricingCategories = [
       {
         badge: "PREMIUM",
         name: "Premium",
-        price: "Rs. 10,000",
+        price: "Rs. 21,000",
         cadence: "month",
         desc: "Full-service Instagram management built to generate leads.",
         features: [
