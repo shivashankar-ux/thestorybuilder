@@ -53,8 +53,10 @@
   --border: rgba(255,255,255,.07);
   --text:   #eef2ff;
   --muted:  #8b97b5;
-  --font-primary: 'Thesead', 'Plus Jakarta Sans', sans-serif;
-  --font-secondary: 'LemonMilk', 'Inter', sans-serif;
+  --font-display: 'Thesead', 'Plus Jakarta Sans', sans-serif;
+  --font-primary: 'Plus Jakarta Sans', sans-serif;
+  --font-secondary: 'Inter', sans-serif;
+  --font-accent: 'LemonMilk', sans-serif;
   --fd:     var(--font-primary);
   --fb:     var(--font-secondary);
   --ease:   cubic-bezier(.4,0,.2,1);
@@ -3574,11 +3576,12 @@ a:focus-visible,
   position: absolute;
   top: 0;
   left: 0;
-  width: min(320px, 22vw);
+  width: calc(20% - 20px);
+  min-width: 240px;
   z-index: 1000;
   transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
   opacity: 0;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
   cursor: pointer;
 }
@@ -3688,46 +3691,46 @@ a:focus-visible,
   box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
 }
 
-/* 5-Card 3D Position Classes */
+/* 5-Card Full-Width 3D Arc Spacing */
 .services-slide.slide-1 {
   transform-origin: right center;
-  transform: scale(0.9) rotateY(-22deg);
-  left: calc(50% - 460px) !important;
+  transform: scale(0.92) rotateY(-20deg);
+  left: 1.5% !important;
   z-index: 1;
-  opacity: 0.75;
+  opacity: 0.85;
 }
 
 .services-slide.slide-2 {
   transform-origin: right center;
-  transform: scale(0.96) rotateY(-11deg);
-  left: calc(50% - 240px) !important;
+  transform: scale(0.97) rotateY(-10deg);
+  left: 20% !important;
   z-index: 2;
-  opacity: 0.92;
+  opacity: 0.95;
 }
 
 .services-slide.slide-3 {
   transform: scale(1.08) rotateY(0deg);
-  left: calc(50% - 160px) !important;
+  left: 40% !important;
   z-index: 10;
   opacity: 1;
-  border-color: rgba(250, 204, 21, 0.5);
-  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.65), 0 0 25px rgba(250, 204, 21, 0.2);
+  border-color: rgba(250, 204, 21, 0.6);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.7), 0 0 30px rgba(250, 204, 21, 0.25);
 }
 
 .services-slide.slide-4 {
   transform-origin: left center;
-  transform: scale(0.96) rotateY(11deg);
-  left: calc(50% + 80px) !important;
+  transform: scale(0.97) rotateY(10deg);
+  left: 60% !important;
   z-index: 2;
-  opacity: 0.92;
+  opacity: 0.95;
 }
 
 .services-slide.slide-5 {
   transform-origin: left center;
-  transform: scale(0.9) rotateY(22deg);
-  left: calc(50% + 300px) !important;
+  transform: scale(0.92) rotateY(20deg);
+  left: 78.5% !important;
   z-index: 1;
-  opacity: 0.75;
+  opacity: 0.85;
 }
 
 .services-slide.slide-hidden {
