@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Services3DDeck from "./Services3DDeck";
 
 const allServices = [
   {
@@ -91,6 +92,8 @@ const allServices = [
 ];
 
 export default function ServicesPage({ setPage }) {
+  const [viewMode, setViewMode] = useState("deck");
+
   useEffect(() => {
     const els = document.querySelectorAll(".sr");
     if (!els.length) return;
@@ -105,7 +108,7 @@ export default function ServicesPage({ setPage }) {
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, [viewMode]);
 
   return (
     <main className="services-page" style={{ paddingBottom: "100px" }}>
@@ -117,8 +120,46 @@ export default function ServicesPage({ setPage }) {
 
       <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
         {/* PAGE HEADER */}
-        <header className="services-pg-header fi" style={{ "--i": 0, paddingTop: "140px", marginBottom: "60px", textAlign: "center" }}>
-          <span className="tag sr" style={{ margin: "0 auto 20px" }}>Our Capabilities</span>
+        <header className="services-pg-header fi" style={{ "--i": 0, paddingTop: "140px", marginBottom: "40px", textAlign: "center" }}>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "16px", marginBottom: "20px" }}>
+            <span className="tag sr" style={{ margin: 0 }}>Our Capabilities</span>
+            <div style={{ display: "inline-flex", background: "rgba(255,255,255,0.06)", padding: "4px", borderRadius: "100px", border: "1px solid var(--border)" }}>
+              <button
+                type="button"
+                onClick={() => setViewMode("deck")}
+                style={{
+                  background: viewMode === "deck" ? "var(--gold)" : "transparent",
+                  color: viewMode === "deck" ? "#000" : "var(--muted)",
+                  border: 0,
+                  borderRadius: "100px",
+                  padding: "6px 16px",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  transition: "all 0.25s",
+                }}
+              >
+                🎴 3D Deck View
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("grid")}
+                style={{
+                  background: viewMode === "grid" ? "var(--gold)" : "transparent",
+                  color: viewMode === "grid" ? "#000" : "var(--muted)",
+                  border: 0,
+                  borderRadius: "100px",
+                  padding: "6px 16px",
+                  fontSize: "12px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  transition: "all 0.25s",
+                }}
+              >
+                📋 Grid View
+              </button>
+            </div>
+          </div>
           <h1 className="sec-h sr" style={{ maxWidth: "800px", margin: "0 auto 20px" }}>
             Everything you need to <br />
             <em>scale your brand.</em>
@@ -127,31 +168,38 @@ export default function ServicesPage({ setPage }) {
             From compelling content to high-converting websites, we offer an end-to-end suite of creative and technical services.
           </p>
         </header>
+      </div>
 
-        {/* SERVICES GRID */}
-        <section className="services-flex sr">
-          {allServices.map((service, index) => (
-            <motion.div 
-              className="service-card-animated" 
-              key={service.id}
-              initial={{ y: 0 }}
-              whileHover={{ y: -8 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
-              style={{ "--i": `${index * 0.1}s` }}
-            >
-              <div className="service-card-icon">{service.icon}</div>
-              <h2 style={{ fontSize: "20px", fontFamily: "var(--fd)", fontWeight: 800, marginBottom: "12px", letterSpacing: "-0.2px" }}>
-                {service.title}
-              </h2>
-              <p className="muted" style={{ fontSize: "15px", lineHeight: 1.6, flex: 1, margin: 0 }}>
-                {service.desc}
-              </p>
-            </motion.div>
-          ))}
-        </section>
+      {viewMode === "deck" ? (
+        <Services3DDeck setPage={setPage} />
+      ) : (
+        <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
+          <section className="services-flex sr">
+            {allServices.map((service, index) => (
+              <motion.div 
+                className="service-card-animated" 
+                key={service.id}
+                initial={{ y: 0 }}
+                whileHover={{ y: -8 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                style={{ "--i": `${index * 0.1}s` }}
+              >
+                <div className="service-card-icon">{service.icon}</div>
+                <h2 style={{ fontSize: "20px", fontFamily: "var(--fd)", fontWeight: 800, marginBottom: "12px", letterSpacing: "-0.2px" }}>
+                  {service.title}
+                </h2>
+                <p className="muted" style={{ fontSize: "15px", lineHeight: 1.6, flex: 1, margin: 0 }}>
+                  {service.desc}
+                </p>
+              </motion.div>
+            ))}
+          </section>
+        </div>
+      )}
 
+      <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
         {/* EXTRA CALL TO ACTION SECTION */}
-        <section className="services-bottom-cta sr" style={{ marginTop: "100px", textAlign: "center", padding: "60px 20px", background: "var(--card)", borderRadius: "var(--r)", border: "1px solid var(--border)" }}>
+        <section className="services-bottom-cta sr" style={{ marginTop: "60px", textAlign: "center", padding: "60px 20px", background: "var(--card)", borderRadius: "var(--r)", border: "1px solid var(--border)" }}>
           <h2 style={{ fontFamily: "var(--fd)", fontSize: "32px", fontWeight: 800, marginBottom: "16px", letterSpacing: "-0.5px" }}>Ready to bring your vision to life?</h2>
           <p className="muted" style={{ maxWidth: "560px", margin: "0 auto 32px" }}>
             Whether you need a full brand overhaul or a targeted campaign, we are here to help you dominate your market.
@@ -172,3 +220,4 @@ export default function ServicesPage({ setPage }) {
     </main>
   );
 }
+

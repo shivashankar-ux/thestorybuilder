@@ -3494,4 +3494,309 @@ a:focus-visible,
   :root {
     --mzaC-slideW: min(96vw, 520px);
   }
+}
+
+/* =========================================
+   SERVICES 3D DECK SLIDER
+========================================= */
+.services-3d-wrapper {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  position: relative;
+  padding: 20px 0 40px;
+  overflow: hidden;
+}
+
+.services-slider-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 520px;
+  width: 100%;
+  perspective: 1000px;
+  position: relative;
+  transform-style: preserve-3d;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+.services-slide {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 20px;
+  height: 420px;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: min(320px, 22vw);
+  z-index: 1000;
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  opacity: 0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.services-slide-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(5, 7, 15, 0.25) 0%,
+    rgba(5, 7, 15, 0.7) 45%,
+    rgba(5, 7, 15, 0.95) 100%
+  );
+  z-index: 1;
+}
+
+.services-slide-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: flex-end;
+}
+
+.services-avatar-badge {
+  position: relative;
+  margin-bottom: auto;
+  margin-top: 10px;
+}
+
+.services-avatar-badge img.circle {
+  object-fit: cover;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--gold, #facc15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.icon-subbadge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(5, 7, 15, 0.9);
+  border: 1px solid var(--gold, #facc15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.services-kicker-tag {
+  font-family: var(--fd);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold, #facc15);
+  margin-bottom: 6px;
+}
+
+.services-slide-title {
+  font-family: var(--fd);
+  font-size: clamp(18px, 2.2vw, 22px);
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  line-height: 1.25;
+}
+
+.services-slide-desc {
+  font-size: 13.5px;
+  color: #cbd5e1;
+  line-height: 1.55;
+  margin: 0 0 16px 0;
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.services-action-btn {
+  font-family: var(--fd);
+  font-size: 12.5px;
+  font-weight: 700;
+  background: var(--gold, #facc15);
+  color: #000000;
+  border: 0;
+  padding: 9px 18px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: transform 0.25s, background 0.25s, box-shadow 0.25s;
+  box-shadow: 0 4px 16px rgba(250, 204, 21, 0.3);
+}
+
+.services-action-btn:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+}
+
+/* 5-Card 3D Position Classes */
+.services-slide.slide-1 {
+  transform-origin: right center;
+  transform: scale(0.9) rotateY(-22deg);
+  left: calc(50% - 460px) !important;
+  z-index: 1;
+  opacity: 0.75;
+}
+
+.services-slide.slide-2 {
+  transform-origin: right center;
+  transform: scale(0.96) rotateY(-11deg);
+  left: calc(50% - 240px) !important;
+  z-index: 2;
+  opacity: 0.92;
+}
+
+.services-slide.slide-3 {
+  transform: scale(1.08) rotateY(0deg);
+  left: calc(50% - 160px) !important;
+  z-index: 10;
+  opacity: 1;
+  border-color: rgba(250, 204, 21, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.65), 0 0 25px rgba(250, 204, 21, 0.2);
+}
+
+.services-slide.slide-4 {
+  transform-origin: left center;
+  transform: scale(0.96) rotateY(11deg);
+  left: calc(50% + 80px) !important;
+  z-index: 2;
+  opacity: 0.92;
+}
+
+.services-slide.slide-5 {
+  transform-origin: left center;
+  transform: scale(0.9) rotateY(22deg);
+  left: calc(50% + 300px) !important;
+  z-index: 1;
+  opacity: 0.75;
+}
+
+.services-slide.slide-hidden {
+  opacity: 0;
+  transform: scale(0.7);
+  pointer-events: none;
+}
+
+/* Controls */
+.services-deck-controls {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  z-index: 20;
+}
+
+.services-deck-arrow {
+  background: rgba(5, 7, 15, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  color: #ffffff;
+  width: 44px;
+  height: 44px;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+}
+
+.services-deck-arrow:hover {
+  background: var(--gold, #facc15);
+  border-color: var(--gold, #facc15);
+  color: #000000;
+  transform: scale(1.1);
+  box-shadow: 0 0 16px rgba(250, 204, 21, 0.4);
+}
+
+.services-deck-dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.services-deck-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  border: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.services-deck-dot.active {
+  background: var(--gold, #facc15);
+  transform: scale(1.35);
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+}
+
+@media (max-width: 1100px) {
+  .services-slide {
+    width: min(280px, 45vw);
+  }
+  .services-slide.slide-1 {
+    left: calc(50% - 360px) !important;
+  }
+  .services-slide.slide-2 {
+    left: calc(50% - 190px) !important;
+  }
+  .services-slide.slide-3 {
+    left: calc(50% - 140px) !important;
+  }
+  .services-slide.slide-4 {
+    left: calc(50% + 50px) !important;
+  }
+  .services-slide.slide-5 {
+    left: calc(50% + 220px) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .services-slider-container {
+    height: 480px;
+  }
+  .services-slide {
+    width: 270px;
+  }
+  .services-slide.slide-1 {
+    left: calc(50% - 240px) !important;
+    opacity: 0.4;
+  }
+  .services-slide.slide-2 {
+    left: calc(50% - 160px) !important;
+    opacity: 0.7;
+  }
+  .services-slide.slide-3 {
+    left: calc(50% - 135px) !important;
+    opacity: 1;
+  }
+  .services-slide.slide-4 {
+    left: calc(50% + 25px) !important;
+    opacity: 0.7;
+  }
+  .services-slide.slide-5 {
+    left: calc(50% + 105px) !important;
+    opacity: 0.4;
+  }
 }
