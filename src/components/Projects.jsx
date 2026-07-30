@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import MzaCarousel from "./MzaCarousel";
 
 const projects = [
   {
@@ -7,6 +8,8 @@ const projects = [
     alt: "Legacy Solar website",
     tag: "Solar Energy · Lead Generation",
     title: "Legacy Solar",
+    kicker: "Solar Energy · Lead Generation",
+    text: "Conversion-focused website backed by paid search and SEO — built to capture high-intent solar leads and turn page visits into qualified consultations.",
     desc: "Conversion-focused website backed by paid search and SEO — built to capture high-intent solar leads and turn page visits into qualified consultations.",
     services: ["Web Development", "SEO", "Performance Marketing"],
     metric: "Lead-gen funnel",
@@ -19,6 +22,8 @@ const projects = [
     alt: "Star Fitness Studio website",
     tag: "Fitness · Local Growth",
     title: "Star Fitness Studio",
+    kicker: "Fitness · Local Growth",
+    text: "Mobile-first studio site engineered with local SEO and Meta ads to drive consistent membership sign-ups across the city.",
     desc: "Mobile-first studio site engineered with local SEO and Meta ads to drive consistent membership sign-ups across the city.",
     services: ["Web Development", "Local SEO", "Meta Ads"],
     metric: "Membership growth",
@@ -30,6 +35,8 @@ const projects = [
     alt: "WafflesHub website",
     tag: "Food & Beverage · D2C",
     title: "WafflesHub",
+    kicker: "Food & Beverage · D2C",
+    text: "Appetising D2C brand experience with an order-driven layout and Meta retargeting in place to keep customers coming back.",
     desc: "Appetising D2C brand experience with an order-driven layout and Meta retargeting in place to keep customers coming back.",
     services: ["Brand Strategy", "Web Development", "Meta Ads"],
     metric: "Online orders",
@@ -41,6 +48,8 @@ const projects = [
     alt: "Chess Academy website",
     tag: "Education · AI",
     title: "Chess Academy",
+    kicker: "Education · AI Platform",
+    text: "AI-powered education platform built on Next.js with a student-first funnel — clean acquisition flow, automated nurture, and conversion-led design.",
     desc: "AI-powered education platform built on Next.js with a student-first funnel — clean acquisition flow, automated nurture, and conversion-led design.",
     services: ["Next.js Development", "Funnel Design", "AI Integration"],
     metric: "Student acquisition",
@@ -53,6 +62,8 @@ const projects = [
     alt: "Unbent Martial Fitness website",
     tag: "Martial Arts · Performance Ads",
     title: "Unbent Martial Fitness",
+    kicker: "Martial Arts · Performance Ads",
+    text: "Bold, high-energy brand site paired with performance ad campaigns engineered to drive trial sign-ups and walk-ins.",
     desc: "Bold, high-energy brand site paired with performance ad campaigns engineered to drive trial sign-ups and walk-ins.",
     services: ["Brand Strategy", "Web Development", "Paid Ads"],
     metric: "Trial sign-ups",
@@ -64,6 +75,8 @@ const projects = [
     alt: "DigitalWithChirag website",
     tag: "Personal Brand · Authority",
     title: "DigitalWithChirag",
+    kicker: "Personal Brand · Authority",
+    text: "Personal brand experience built to position the founder as a category authority — credibility-led design plus content-led SEO for inbound clients.",
     desc: "Personal brand experience built to position the founder as a category authority — credibility-led design plus content-led SEO for inbound clients.",
     services: ["Personal Branding", "Web Development", "Content SEO"],
     metric: "Inbound enquiries",
@@ -75,6 +88,8 @@ const projects = [
     alt: "Siolim Cafe website",
     tag: "Hospitality · Local SEO",
     title: "Siolim Cafe",
+    kicker: "Hospitality · Local SEO",
+    text: "Warm, mobile-first hospitality site optimised for Google Maps and 'near-me' search — designed to convert browsers into walk-in customers.",
     desc: "Warm, mobile-first hospitality site optimised for Google Maps and 'near-me' search — designed to convert browsers into walk-in customers.",
     services: ["Web Development", "Local SEO", "Google Business"],
     metric: "Footfall growth",
@@ -86,6 +101,8 @@ const projects = [
     alt: "SevAction Foundation website",
     tag: "Non-Profit · Donations",
     title: "SevAction Foundation",
+    kicker: "Non-Profit · Donations",
+    text: "Mission-driven non-profit website engineered to communicate impact and convert empathy into donations — clear story, clear ask, frictionless giving.",
     desc: "Mission-driven non-profit website engineered to communicate impact and convert empathy into donations — clear story, clear ask, frictionless giving.",
     services: ["Web Development", "Donation Funnel", "Storytelling"],
     metric: "Donation conversions",
@@ -97,6 +114,8 @@ const projects = [
     alt: "The White Closet — interior design studio website",
     tag: "Interior Design · Studio Brand",
     title: "The White Closet",
+    kicker: "Interior Design · Studio Brand",
+    text: "A refined web presence for a boutique interior design studio — portfolio-led storytelling, project galleries, and a soft conversion path from browsing to consultation enquiry.",
     desc: "A refined web presence for a boutique interior design studio — portfolio-led storytelling, project galleries, and a soft conversion path from browsing to consultation enquiry.",
     services: ["Web Development", "Brand Storytelling", "Portfolio UX"],
     metric: "Consultation enquiries",
@@ -176,6 +195,8 @@ function ShowcaseRow({ project, index, navigate }) {
 }
 
 export default function Projects({ setPage, navigate }) {
+  const [viewMode, setViewMode] = useState("carousel");
+
   useEffect(() => {
     const els = document.querySelectorAll(".projects .sr");
     if (!els.length) return;
@@ -191,26 +212,71 @@ export default function Projects({ setPage, navigate }) {
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
-  }, []);
+  }, [viewMode]);
 
   return (
     <section className="projects" id="projects">
       <div className="wrap">
-        <span className="tag sr">Selected Work</span>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px", marginBottom: "20px" }}>
+          <span className="tag sr" style={{ margin: 0 }}>Selected Work</span>
+          <div style={{ display: "inline-flex", background: "rgba(255,255,255,0.06)", padding: "4px", borderRadius: "100px", border: "1px solid var(--border)" }}>
+            <button
+              type="button"
+              onClick={() => setViewMode("carousel")}
+              style={{
+                background: viewMode === "carousel" ? "var(--gold)" : "transparent",
+                color: viewMode === "carousel" ? "#000" : "var(--muted)",
+                border: 0,
+                borderRadius: "100px",
+                padding: "6px 16px",
+                fontSize: "12px",
+                fontWeight: 700,
+                cursor: "pointer",
+                transition: "all 0.25s",
+              }}
+            >
+              ✨ 3D Coverflow
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("grid")}
+              style={{
+                background: viewMode === "grid" ? "var(--gold)" : "transparent",
+                color: viewMode === "grid" ? "#000" : "var(--muted)",
+                border: 0,
+                borderRadius: "100px",
+                padding: "6px 16px",
+                fontSize: "12px",
+                fontWeight: 700,
+                cursor: "pointer",
+                transition: "all 0.25s",
+              }}
+            >
+              📋 All Projects List
+            </button>
+          </div>
+        </div>
+
         <div className="proj-header sr">
           <h2 className="sec-h">
             Brands we've helped <em>grow</em>
           </h2>
           <p className="muted">
-            Performance marketing, SEO, and high-converting websites — built for measurable outcomes.
+            Performance marketing, SEO, and high-converting websites — built for measurable outcomes. Swipe or drag to explore our featured work.
           </p>
         </div>
 
-        <div className="showcase-list">
-          {projects.map((project, i) => (
-            <ShowcaseRow key={project.id} project={project} index={i} navigate={navigate} />
-          ))}
-        </div>
+        {viewMode === "carousel" ? (
+          <div style={{ margin: "20px 0 50px 0" }}>
+            <MzaCarousel projects={projects} navigate={navigate} />
+          </div>
+        ) : (
+          <div className="showcase-list">
+            {projects.map((project, i) => (
+              <ShowcaseRow key={project.id} project={project} index={i} navigate={navigate} />
+            ))}
+          </div>
+        )}
 
         <article className="card card-cta sr showcase-cta" style={{ "--i": "0.4s" }}>
           <div className="cta-icon">
@@ -231,3 +297,4 @@ export default function Projects({ setPage, navigate }) {
     </section>
   );
 }
+
