@@ -1,4 +1,45 @@
 /* =========================================
+   CUSTOM FONTS (Thesead & LEMON MILK)
+========================================= */
+@font-face {
+  font-family: 'Thesead';
+  src: url('/fonts/thesead/Thesead.otf') format('opentype'),
+       url('/fonts/thesead/Thesead.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LemonMilk';
+  src: url('/fonts/lemon_milk/LEMONMILK-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'LemonMilk';
+  src: url('/fonts/lemon_milk/LEMONMILK-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'LemonMilk';
+  src: url('/fonts/lemon_milk/LEMONMILK-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'LemonMilk';
+  src: url('/fonts/lemon_milk/LEMONMILK-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* =========================================
    RESET
 ========================================= */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
@@ -12,8 +53,10 @@
   --border: rgba(255,255,255,.07);
   --text:   #eef2ff;
   --muted:  #8b97b5;
-  --fd:     'Plus Jakarta Sans', sans-serif;
-  --fb:     'Inter', sans-serif;
+  --font-primary: 'Thesead', 'Plus Jakarta Sans', sans-serif;
+  --font-secondary: 'LemonMilk', 'Inter', sans-serif;
+  --fd:     var(--font-primary);
+  --fb:     var(--font-secondary);
   --ease:   cubic-bezier(.4,0,.2,1);
   --nav:    68px;
   --r:      14px;
@@ -23,7 +66,7 @@
   --ref-text-dark: oklch(0.269 0 0); /* Deep charcoal #242424 */
   --ref-badge-bg: oklab(0.922 0 0 / 0.5); /* Neutral 200 light badge 50% opacity */
   --ref-badge-border: rgba(212, 212, 212, 0.4); /* neutral-300/40 */
-  --ref-font-heading: "Haaffer VF", Arial, sans-serif;
+  --ref-font-heading: 'Thesead', "Haaffer VF", Arial, sans-serif;
 }
 
 /* =========================================
