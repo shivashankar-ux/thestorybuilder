@@ -310,7 +310,7 @@ class MzaCarouselEngine {
     this.state.width = viewRect.width;
     this.state.height = viewRect.height;
     this.state.gap = this.opts.gap;
-    this.slideW = Math.min(880, this.state.width * (1 - this.opts.peek * 2));
+    this.slideW = Math.min(980, this.state.width * (1 - this.opts.peek * 2));
     this.root.style.setProperty("--mzaPagH", `${pagSpace}px`);
     this.root.style.setProperty("--mzaCardH", `${cardH}px`);
   }

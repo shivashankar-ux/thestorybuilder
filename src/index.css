@@ -3158,23 +3158,22 @@ a:focus-visible,
   --mzaC-accent2: #82a0ff;
   --mzaC-glass: rgba(255, 255, 255, 0.06);
   --mzaC-glow: rgba(250, 204, 21, 0.45);
-  --mzaC-slideW: min(880px, 90vw);
+  --mzaC-slideW: min(980px, 86vw);
   --mzaC-peek: 0.15;
   --mzaPagH: 64px;
-  --mzaCardH: clamp(360px, 60vh, 560px);
+  --mzaCardH: clamp(420px, 68vh, 620px);
 }
 
 .mzaCarousel {
   position: relative;
-  height: clamp(480px, 75vh, 640px);
-  width: 100%;
-  max-width: 100vw;
-  margin: 0 auto;
+  height: clamp(520px, 78vh, 720px);
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
   padding: 0;
   overflow: hidden;
   contain: layout paint;
   touch-action: none;
-  border-radius: 24px;
 }
 .mzaCarousel-viewport {
   position: relative;
