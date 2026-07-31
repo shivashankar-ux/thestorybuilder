@@ -69,77 +69,87 @@ export default function Hero({ setPage }) {
   return (
     <section className="hero" id="home">
       <div className="hero-bg" aria-hidden="true">
-        <MorphingShapes />
         <div className="orb o1" /><div className="orb o2" /><div className="orb o3" />
         <div className="dots" />
       </div>
 
-      <motion.div
-        className="hero-body"
-        initial="hidden"
-        animate="show"
-        variants={stagger}
-      >
-        <motion.div className="avail" variants={rise}>
-          <span className="pulse-dot" /> Now onboarding clients for 2026
+      <div className="hero-container">
+        <motion.div
+          className="hero-body"
+          initial="hidden"
+          animate="show"
+          variants={stagger}
+        >
+          <motion.div className="avail" variants={rise}>
+            <span className="pulse-dot" /> Now onboarding clients for 2026
+          </motion.div>
+
+          <motion.h1 className="hero-title" variants={rise}>
+            Built to <StarIcon /> outperform.
+            <br />
+            <span className="gold-name">The Story Builder</span>
+          </motion.h1>
+
+          <motion.p className="hero-role" variants={rise}>
+            We're your <span ref={typedRef} />
+          </motion.p>
+
+          <motion.p className="hero-sub" variants={rise}>
+            A full-service agency building <span className="hero-pill">high-converting websites</span>, scaling <span className="hero-pill">paid ads</span> that actually pay back, and shipping <span className="hero-pill">AI systems</span> built to outperform.
+          </motion.p>
+
+          <motion.div className="hero-ctas" variants={rise}>
+            <motion.button
+              className="btn btn-gold btn-lg"
+              data-track="hero_get_in_touch"
+              onClick={() => window.open("https://intake-form-thestorybuilder.vercel.app/", "_blank")}
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              Book a Strategy Call
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </motion.button>
+            <motion.button
+              className="btn btn-ghost btn-lg"
+              data-track="hero_view_work"
+              onClick={() => scrollTo("projects")}
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              See Our Work ↓
+            </motion.button>
+          </motion.div>
+
+          <motion.div className="hero-proof" variants={rise}>
+            <span className="proof-avatars" aria-hidden="true">
+              {proofClients.map((c, i) => (
+                <span
+                  key={i}
+                  className="proof-avatar"
+                  style={{ background: c.color, zIndex: proofClients.length - i }}
+                >
+                  {c.l}
+                </span>
+              ))}
+            </span>
+            <span className="proof-meta">
+              <StarRow />
+              <strong>10+ happy clients</strong> across India &amp; Global
+            </span>
+          </motion.div>
         </motion.div>
 
-        <motion.h1 className="hero-title" variants={rise}>
-          Built to <StarIcon /> outperform.
-          <br />
-          <span className="gold-name">The Story Builder</span>
-        </motion.h1>
-
-        <motion.p className="hero-role" variants={rise}>
-          We're your <span ref={typedRef} />
-        </motion.p>
-
-        <motion.p className="hero-sub" variants={rise}>
-          A full-service agency building <span className="hero-pill">high-converting websites</span>, scaling <span className="hero-pill">paid ads</span> that actually pay back, and shipping <span className="hero-pill">AI systems</span> built to outperform.
-        </motion.p>
-
-        <motion.div className="hero-ctas" variants={rise}>
-          <motion.button
-            className="btn btn-gold btn-lg"
-            data-track="hero_get_in_touch"
-            onClick={() => window.open("https://intake-form-thestorybuilder.vercel.app/", "_blank")}
-            whileHover={{ y: -2 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            Book a Strategy Call
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </motion.button>
-          <motion.button
-            className="btn btn-ghost btn-lg"
-            data-track="hero_view_work"
-            onClick={() => scrollTo("projects")}
-            whileHover={{ y: -2 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            See Our Work ↓
-          </motion.button>
+        <motion.div
+          className="hero-visual"
+          initial={{ opacity: 0, scale: 0.92, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        >
+          <MorphingShapes />
         </motion.div>
-
-        <motion.div className="hero-proof" variants={rise}>
-          <span className="proof-avatars" aria-hidden="true">
-            {proofClients.map((c, i) => (
-              <span
-                key={i}
-                className="proof-avatar"
-                style={{ background: c.color, zIndex: proofClients.length - i }}
-              >
-                {c.l}
-              </span>
-            ))}
-          </span>
-          <span className="proof-meta">
-            <StarRow />
-            <strong>10+ happy clients</strong> across India &amp; Global
-          </span>
-        </motion.div>
-      </motion.div>
+      </div>
 
       <div className="scroll-hint" aria-hidden="true">
         <div className="sh-track"><div className="sh-bar" /></div>

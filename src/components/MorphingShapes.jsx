@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 const combinations = [
   { configuration: 1, roundness: 1 },
@@ -10,35 +10,43 @@ const combinations = [
 ];
 
 export default function MorphingShapes() {
-  const [combo, setCombo] = useState(combinations[0]);
+  const [comboIndex, setComboIndex] = useState(0);
 
-  useEffect(() => {
-    let prevIndex = 0;
-    const interval = setInterval(() => {
-      let nextIndex = prevIndex;
-      while (nextIndex === prevIndex) {
-        nextIndex = Math.floor(Math.random() * combinations.length);
+  const nextCombo = useCallback(() => {
+    setComboIndex((prev) => {
+      let next = prev;
+      while (next === prev) {
+        next = Math.floor(Math.random() * combinations.length);
       }
-      prevIndex = nextIndex;
-      setCombo(combinations[nextIndex]);
-    }, 3000);
-    return () => clearInterval(interval);
+      return next;
+    });
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(nextCombo, 3000);
+    return () => clearInterval(interval);
+  }, [nextCombo]);
+
+  const combo = combinations[comboIndex];
+
   return (
-    <div
-      id="morph-wrapper"
-      data-configuration={combo.configuration}
-      data-roundness={combo.roundness}
-      aria-hidden="true"
-    >
-      <div className="shape" />
-      <div className="shape" />
-      <div className="shape" />
-      <div className="shape" />
-      <div className="shape" />
-      <div className="shape" />
-      <div className="shape" />
+    <div className="morph-shapes-box">
+      <div
+        id="morph-wrapper"
+        data-configuration={combo.configuration}
+        data-roundness={combo.roundness}
+        onClick={nextCombo}
+        title="Click to morph shapes!"
+      >
+        <div className="shape" />
+        <div className="shape" />
+        <div className="shape" />
+        <div className="shape" />
+        <div className="shape" />
+        <div className="shape" />
+        <div className="shape" />
+      </div>
+      <div className="morph-hint">✨ Click shapes to morph</div>
     </div>
   );
 }
