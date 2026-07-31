@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import GlowCard from "./common/GlowCard";
+import MagneticButton from "./common/MagneticButton";
 
 const growthPillars = [
   {
@@ -53,7 +55,7 @@ export default function GrowthClockSection({ setPage }) {
   }, []);
 
   return (
-    <section className="growth-clock-section" id="growth">
+    <section className="growth-clock-section" id="growth" style={{ padding: "100px 0" }}>
       <div className="scramble-bg" aria-hidden="true">
         <div className="scramble-orb o-left" />
         <div className="scramble-orb o-right" />
@@ -61,7 +63,13 @@ export default function GrowthClockSection({ setPage }) {
       </div>
 
       <div className="wrap">
-        <div className="growth-header text-center">
+        <motion.div
+          className="growth-header text-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
           <span className="tag">TIMELY EXECUTION & RESULTS</span>
           <h2 className="sec-h">
             Every second counts.
@@ -71,87 +79,111 @@ export default function GrowthClockSection({ setPage }) {
           <p className="muted max-w-2xl mx-auto">
             While your competitors wait months for strategy, we ship, scale, and optimize in real time.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="growth-grid">
+        <div className="growth-grid" style={{ marginTop: "40px" }}>
           {/* Left Column - Live Brand Clock */}
           <motion.div
-            className="growth-clock-card"
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="clock-badge">
-              <span className="pulse-dot" /> LIVE TIME · {timeString || "12:00:00 AM"}
-            </div>
-
-            <div className="brand-clock">
-              <div className="outer-clock-face">
-                <div className="marking marking-one" />
-                <div className="marking marking-two" />
-                <div className="marking marking-three" />
-                <div className="marking marking-four" />
+            <GlowCard className="growth-clock-card" style={{ padding: "32px", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+              <div className="clock-badge">
+                <span className="pulse-dot" /> LIVE TIME · {timeString || "12:00:00 AM"}
               </div>
 
-              <div className="inner-clock-face">
-                <div
-                  className="hand hour-hand"
-                  style={{ transform: `rotate(${hourDeg}deg)` }}
-                />
-                <div
-                  className="hand min-hand"
-                  style={{ transform: `rotate(${minDeg}deg)` }}
-                />
-                <div
-                  className="hand second-hand"
-                  style={{ transform: `rotate(${secDeg}deg)` }}
-                />
-              </div>
-            </div>
+              <div className="brand-clock" style={{ margin: "24px 0" }}>
+                <div className="outer-clock-face">
+                  <div className="marking marking-one" />
+                  <div className="marking marking-two" />
+                  <div className="marking marking-three" />
+                  <div className="marking marking-four" />
+                </div>
 
-            <div className="clock-footer">
-              <strong>Time is Revenue.</strong> Let&apos;s put yours to work.
-            </div>
+                <div className="inner-clock-face">
+                  <div
+                    className="hand hour-hand"
+                    style={{ transform: `rotate(${hourDeg}deg)` }}
+                  />
+                  <div
+                    className="hand min-hand"
+                    style={{ transform: `rotate(${minDeg}deg)` }}
+                  />
+                  <div
+                    className="hand second-hand"
+                    style={{ transform: `rotate(${secDeg}deg)` }}
+                  />
+                </div>
+              </div>
+
+              <div className="clock-footer">
+                <strong>Time is Revenue.</strong> Let&apos;s put yours to work.
+              </div>
+            </GlowCard>
           </motion.div>
 
           {/* Right Column - 4 Growth Pillars */}
-          <div className="growth-pillars-grid">
+          <motion.div
+            className="growth-pillars-grid"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-40px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: { staggerChildren: 0.1 },
+              },
+            }}
+          >
             {growthPillars.map((p, idx) => (
               <motion.div
                 key={idx}
-                className="pillar-card"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+                }}
               >
-                <div className="pillar-icon">{p.icon}</div>
-                <h3>{p.title}</h3>
-                <p>{p.desc}</p>
+                <GlowCard className="pillar-card" style={{ height: "100%", padding: "24px" }}>
+                  <div className="pillar-icon">{p.icon}</div>
+                  <h3>{p.title}</h3>
+                  <p>{p.desc}</p>
+                </GlowCard>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
-        <div className="growth-cta text-center">
-          <button
-            className="btn btn-gold btn-lg"
-            onClick={() => setPage("contact")}
-            data-track="growth_clock_cta"
-          >
-            Start Growing Your Business Today
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-              <path
-                d="M3 8h10M9 4l4 4-4 4"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </button>
-        </div>
+        <motion.div
+          className="growth-cta text-center"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          style={{ marginTop: "48px" }}
+        >
+          <MagneticButton distance={0.3}>
+            <button
+              className="btn btn-gold btn-lg"
+              onClick={() => setPage("contact")}
+              data-track="growth_clock_cta"
+              style={{ cursor: "pointer" }}
+            >
+              Start Growing Your Business Today
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                <path
+                  d="M3 8h10M9 4l4 4-4 4"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </MagneticButton>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import GlowCard from "./common/GlowCard";
+import MagneticButton from "./common/MagneticButton";
 
 const pricingCategories = [
   {
@@ -328,12 +330,6 @@ const CheckIcon = () => (
   </svg>
 );
 
-const DotIcon = () => (
-  <svg className="dot-svg" width="10" height="10" viewBox="0 0 24 24" fill="none">
-    <circle cx="12" cy="12" r="8" fill="currentColor" />
-  </svg>
-);
-
 export default function PricingPage({ setPage }) {
   const [activeCategory, setActiveCategory] = useState("websites");
 
@@ -347,23 +343,6 @@ export default function PricingPage({ setPage }) {
     };
   }, []);
 
-  useEffect(() => {
-    const els = document.querySelectorAll(".sr");
-    if (!els.length) return;
-    const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("visible");
-            io.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.05, rootMargin: "0px 0px -25px 0px" }
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, [activeCategory]);
-
   const activeData = pricingCategories.find((c) => c.id === activeCategory);
 
   return (
@@ -376,25 +355,43 @@ export default function PricingPage({ setPage }) {
 
       <div className="wrap">
         {/* HEADER */}
-        <header className="pricing-pg-header fi" style={{ "--i": 0 }}>
-          <span className="tag">Pricing Plans</span>
-          <h1 className="sec-h">
+        <header className="pricing-pg-header" style={{ paddingTop: "140px", textAlign: "center" }}>
+          <motion.span
+            className="tag"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            Pricing Plans
+          </motion.span>
+          <motion.h1
+            className="sec-h"
+            initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
             Pricing built around<br />
             <em>real business growth.</em>
-          </h1>
-          <p className="muted pricing-pg-intro">
+          </motion.h1>
+          <motion.p
+            className="muted pricing-pg-intro"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+          >
             Choose the right services to start scaling. Flexible packages, transparent terms, and zero hidden costs.
-          </p>
+          </motion.p>
         </header>
 
         {/* INTERACTIVE CATEGORY TABS */}
-        <div className="pricing-tabs-container">
+        <div className="pricing-tabs-container" style={{ margin: "40px 0" }}>
           <div className="pricing-tabs-list">
             {pricingCategories.map((cat) => (
               <button
                 key={cat.id}
                 className={`pricing-tab-btn ${activeCategory === cat.id ? "active" : ""}`}
                 onClick={() => setActiveCategory(cat.id)}
+                style={{ cursor: "pointer", position: "relative", zIndex: 1 }}
               >
                 {activeCategory === cat.id && (
                   <motion.div
@@ -411,107 +408,140 @@ export default function PricingPage({ setPage }) {
         </div>
 
         {/* PACKAGE INTRO */}
-        <div className="pricing-category-intro sr">
+        <motion.div
+          key={activeCategory + "-intro"}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="pricing-category-intro"
+          style={{ textAlign: "center", marginBottom: "40px" }}
+        >
           <h2>{activeData.name} Packages</h2>
           <p className="tagline">{activeData.tagline}</p>
-          {activeData.note && <p className="sub-note">{activeData.note}</p>}
-        </div>
+          {activeData.note && <p className="sub-note" style={{ color: "var(--gold)", fontSize: "13px", marginTop: "8px" }}>{activeData.note}</p>}
+        </motion.div>
 
         {/* PRICING GRID */}
         <div className="pricing-grid-container">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeCategory}
-              initial={{ opacity: 0, y: 15 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.28, ease: "easeInOut" }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
               className="pricing-grid"
             >
               {activeData.tiers.map((tier, idx) => (
-                <article
+                <GlowCard
                   key={tier.name}
                   className={`pricing-card-tier ${tier.highlight ? "highlighted-tier" : ""}`}
+                  borderColor={tier.highlight ? "rgba(245, 158, 11, 0.5)" : "rgba(255, 255, 255, 0.15)"}
+                  style={{
+                    padding: "32px 24px",
+                    display: "flex",
+                    flexDirection: "column",
+                    position: "relative",
+                    background: tier.highlight ? "rgba(245, 158, 11, 0.08)" : "rgba(19, 22, 34, 0.65)",
+                    border: tier.highlight ? "1px solid rgba(245, 158, 11, 0.4)" : "1px solid rgba(255, 255, 255, 0.08)",
+                  }}
                 >
-                  {/* TOP BADGE */}
                   <div className="tier-badge-container">
-                    <span className="tier-badge-label">{tier.badge}</span>
+                    <span className="tier-badge-label" style={{ background: tier.highlight ? "var(--gold)" : "rgba(255,255,255,0.1)", color: tier.highlight ? "#000" : "var(--text)" }}>{tier.badge}</span>
                   </div>
 
-                  {/* PRICE HEADER */}
-                  <div className="tier-price-header">
-                    <h3 className="tier-title">{tier.name}</h3>
-                    <div className="price-value-row">
-                      <span className="price-amount">{tier.price}</span>
-                      <span className="price-cadence">/ {tier.cadence}</span>
+                  <div className="tier-price-header" style={{ margin: "20px 0" }}>
+                    <h3 className="tier-title" style={{ fontSize: "22px", fontFamily: "var(--fd)", fontWeight: 800 }}>{tier.name}</h3>
+                    <div className="price-value-row" style={{ display: "flex", alignItems: "baseline", gap: "6px", margin: "8px 0" }}>
+                      <span className="price-amount" style={{ fontSize: "32px", fontWeight: 800, color: "var(--gold)" }}>{tier.price}</span>
+                      <span className="price-cadence" style={{ fontSize: "14px", color: "var(--muted)" }}>/ {tier.cadence}</span>
                     </div>
-                    <p className="tier-description-text">{tier.desc}</p>
+                    <p className="tier-description-text" style={{ fontSize: "14px", color: "var(--muted)" }}>{tier.desc}</p>
                   </div>
 
-                  {/* DELIVERABLES LIST */}
-                  <ul className="tier-features-list">
+                  <ul className="tier-features-list" style={{ flex: 1, margin: "20px 0" }}>
                     {tier.features.map((feat, fidx) => (
-                      <li key={fidx}>
+                      <li key={fidx} style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px", fontSize: "13.5px" }}>
                         <CheckIcon />
                         <span>{feat}</span>
                       </li>
                     ))}
                   </ul>
 
-                  {/* ACTION BUTTON */}
-                  <button
-                    className={`btn tier-action-button ${tier.highlight ? "btn-gold" : "btn-ghost"}`}
-                    onClick={() => setPage("contact")}
-                  >
-                    {tier.cta}
-                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                      <path
-                        d="M3 8h10M9 4l4 4-4 4"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
-                </article>
+                  <MagneticButton distance={0.3}>
+                    <button
+                      className={`btn tier-action-button ${tier.highlight ? "btn-gold" : "btn-ghost"}`}
+                      onClick={() => setPage("contact")}
+                      style={{ cursor: "pointer", width: "100%", justifyContent: "center" }}
+                    >
+                      {tier.cta}
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                        <path
+                          d="M3 8h10M9 4l4 4-4 4"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </MagneticButton>
+                </GlowCard>
               ))}
             </motion.div>
           </AnimatePresence>
         </div>
 
         {/* BOTTOM PILLARS */}
-        <section className="pricing-bottom-pillars sr">
-          <div className="pillars-grid">
+        <motion.section
+          className="pricing-bottom-pillars"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          style={{ marginTop: "60px" }}
+        >
+          <div className="pillars-grid" style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "24px" }}>
             {activeData.pillars.map((pillar, pidx) => (
-              <div key={pidx} className="pillar-item">
+              <div key={pidx} className="pillar-item" style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "14px", color: "var(--muted)" }}>
                 <CheckIcon />
                 <span>{pillar}</span>
               </div>
             ))}
           </div>
-          <p className="pricing-bottom-branding">thestorybuilder.in</p>
-        </section>
+          <p className="pricing-bottom-branding" style={{ textAlign: "center", marginTop: "20px", fontSize: "12px", letterSpacing: "0.1em", color: "var(--muted)" }}>thestorybuilder.in</p>
+        </motion.section>
 
         {/* CONTACT BANNER */}
-        <section className="pricing-bottom-cta sr">
-          <h2>Need a custom package?</h2>
-          <p className="muted">
+        <motion.section
+          className="pricing-bottom-cta"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          style={{ marginTop: "60px", textAlign: "center", padding: "60px 20px", background: "var(--card)", borderRadius: "var(--r)", border: "1px solid var(--border)" }}
+        >
+          <h2 style={{ fontFamily: "var(--fd)", fontSize: "32px", fontWeight: 800, marginBottom: "16px" }}>Need a custom package?</h2>
+          <p className="muted" style={{ maxWidth: "560px", margin: "0 auto 32px" }}>
             Looking for something tailored to your exact business size, scope, or custom development requirements?
             Let's build a customized solution for you.
           </p>
-          <div className="pricing-cta-actions">
-            <button className="btn btn-gold" onClick={() => setPage("contact")}>
-              Talk to Us
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-            <button className="btn btn-ghost" onClick={() => setPage("home")}>
-              Back to Home
-            </button>
+          <div className="pricing-cta-actions" style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
+            <MagneticButton distance={0.3}>
+              <button className="btn btn-gold" onClick={() => setPage("contact")} style={{ cursor: "pointer" }}>
+                Talk to Us
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </MagneticButton>
+            <MagneticButton distance={0.3}>
+              <button className="btn btn-ghost" onClick={() => setPage("home")} style={{ cursor: "pointer" }}>
+                Back to Home
+              </button>
+            </MagneticButton>
           </div>
-        </section>
+        </motion.section>
       </div>
     </main>
   );

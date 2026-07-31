@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { motion } from "framer-motion";
+import GlowCard from "./common/GlowCard";
 
 const steps = [
   {
@@ -29,47 +30,69 @@ const steps = [
 ];
 
 export default function Process() {
-  useEffect(() => {
-    const els = document.querySelectorAll(".process .sr");
-    if (!els.length) return;
-    const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("visible");
-            io.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
   return (
-    <section className="process" id="process">
+    <section className="process" id="process" style={{ padding: "100px 0" }}>
       <div className="wrap">
-        <span className="tag sr">How We Work</span>
-        <h2 className="sec-h sr">
-          A repeatable system,<br />not <em>guesswork.</em>
-        </h2>
-        <p className="muted sr" style={{ maxWidth: 620, marginBottom: 56 }}>
-          Five steps from kickoff to compounding growth. Same process for a ₹50k ad budget or a ₹50L one — only the lever sizes change.
-        </p>
+        <motion.span
+          className="tag"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          How We Work
+        </motion.span>
 
-        <div className="process-grid">
-          {steps.map((s, i) => (
-            <div
+        <motion.h2
+          className="sec-h"
+          initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        >
+          A repeatable system,<br />not <em>guesswork.</em>
+        </motion.h2>
+
+        <motion.p
+          className="muted"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          style={{ maxWidth: 620, marginBottom: 56 }}
+        >
+          Five steps from kickoff to compounding growth. Same process for a ₹50k ad budget or a ₹50L one — only the lever sizes change.
+        </motion.p>
+
+        <motion.div
+          className="process-grid"
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-40px" }}
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: { staggerChildren: 0.12 },
+            },
+          }}
+        >
+          {steps.map((s) => (
+            <motion.div
               key={s.num}
-              className="process-step sr"
-              style={{ "--i": `${i * 0.08}s` }}
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+              }}
             >
-              <span className="process-num">{s.num}</span>
-              <h3 className="process-title">{s.title}</h3>
-              <p className="process-desc">{s.desc}</p>
-            </div>
+              <GlowCard className="process-step" style={{ height: "100%", padding: "28px 24px" }}>
+                <span className="process-num" style={{ color: "var(--gold)", fontFamily: "var(--font-accent)", fontSize: "28px", fontWeight: 800 }}>{s.num}</span>
+                <h3 className="process-title" style={{ margin: "12px 0 8px" }}>{s.title}</h3>
+                <p className="process-desc">{s.desc}</p>
+              </GlowCard>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

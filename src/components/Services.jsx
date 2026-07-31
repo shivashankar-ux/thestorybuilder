@@ -1,35 +1,42 @@
-import { useEffect } from "react";
+import { motion } from "framer-motion";
 import Services3DDeck from "./Services3DDeck";
 
 export default function Services({ setPage }) {
-  useEffect(() => {
-    const els = document.querySelectorAll(".sr");
-    if (!els.length) return;
-    const io = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add("visible");
-            io.unobserve(e.target);
-          }
-        }),
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
   return (
     <section className="about" id="what-we-do" style={{ borderTop: "none" }}>
       <div className="wrap">
         <div style={{ textAlign: "center", marginBottom: "20px" }}>
-          <span className="tag sr">What We Do</span>
-          <h2 className="sec-h sr" style={{ marginBottom: "16px" }}>
+          <motion.span
+            className="tag"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            What We Do
+          </motion.span>
+
+          <motion.h2
+            className="sec-h"
+            initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            style={{ marginBottom: "16px" }}
+          >
             Services engineered for <em>growth.</em>
-          </h2>
-          <p className="muted sr" style={{ maxWidth: "600px", margin: "0 auto" }}>
+          </motion.h2>
+
+          <motion.p
+            className="muted"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            style={{ maxWidth: "600px", margin: "0 auto" }}
+          >
             We provide a complete suite of digital services designed to elevate your brand and drive measurable results.
-          </p>
+          </motion.p>
         </div>
       </div>
 
@@ -37,4 +44,3 @@ export default function Services({ setPage }) {
     </section>
   );
 }
-

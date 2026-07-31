@@ -1,4 +1,6 @@
-import { useEffect } from "react";
+import { motion } from "framer-motion";
+import GlowCard from "./common/GlowCard";
+import MagneticButton from "./common/MagneticButton";
 
 const services = [
   {
@@ -51,23 +53,27 @@ const services = [
 ];
 
 export default function About({ setPage }) {
-  useEffect(() => {
-    const els = document.querySelectorAll(".sr");
-    if (!els.length) return;
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); } }),
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
   return (
     <section className="about" id="about">
       <div className="wrap">
-        <span className="tag sr">About the Agency</span>
+        <motion.span
+          className="tag"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          About the Agency
+        </motion.span>
+
         <div className="about-grid">
-          <div className="about-left sr sl">
+          <motion.div
+            className="about-left"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
             <h2 className="sec-h">
               We build brands<br /><em>that grow</em><br />in a measurable way.
             </h2>
@@ -77,23 +83,45 @@ export default function About({ setPage }) {
             <p className="muted">
               <strong className="lead">Revenue first, vanity metrics never.</strong> Every engagement starts with the same question: what does success look like in revenue? From there we reverse-engineer the funnel, ship fast, and report honestly.
             </p>
-            <button className="btn btn-gold" onClick={() => setPage("contact")} style={{ marginTop: 24 }}>
-              Work With Us
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-          </div>
+            <MagneticButton distance={0.3}>
+              <button className="btn btn-gold" onClick={() => setPage("contact")} style={{ marginTop: 24, cursor: "pointer" }}>
+                Work With Us
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </MagneticButton>
+          </motion.div>
 
-          <div className="skill-grid sr">
+          <motion.div
+            className="skill-grid"
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-40px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: { staggerChildren: 0.12 },
+              },
+            }}
+          >
             {services.map((skill) => (
-              <div className="sk" key={skill.id}>
-                <div className="sk-ico">{skill.icon}</div>
-                <h3>{skill.title}</h3>
-                <p>{skill.desc}</p>
-              </div>
+              <motion.div
+                key={skill.id}
+                variants={{
+                  hidden: { opacity: 0, y: 24 },
+                  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+                }}
+              >
+                <GlowCard className="sk" style={{ height: "100%", padding: "24px 20px" }}>
+                  <div className="sk-ico">{skill.icon}</div>
+                  <h3>{skill.title}</h3>
+                  <p>{skill.desc}</p>
+                </GlowCard>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
