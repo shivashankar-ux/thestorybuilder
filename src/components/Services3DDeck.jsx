@@ -1,90 +1,53 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 
 const servicesData = [
   {
     id: "website",
-    title: "Website Design & Dev",
-    kicker: "Core Capability",
+    title: "Studio Habitare",
+    category: "ARCHITECTURE & WEB",
+    url: "s-hab.com",
     desc: "Lightning-fast, mobile-responsive websites engineered to turn visitors into leads and customers.",
-    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <rect x="2" y="3" width="20" height="14" rx="2" ry="2" stroke="#facc15" strokeWidth="1.8" />
-        <line x1="8" y1="21" x2="16" y2="21" stroke="#facc15" strokeWidth="1.8" />
-        <line x1="12" y1="17" x2="12" y2="21" stroke="#facc15" strokeWidth="1.8" />
-      </svg>
-    ),
+    img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80",
   },
   {
     id: "social",
-    title: "Social Media Growth",
-    kicker: "Organic Reach",
-    desc: "End-to-end organic social growth. We handle strategy, posting, and community building so you stay top-of-mind.",
-    img: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=1200&q=80",
-    avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=200&q=80",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="#facc15" strokeWidth="1.8" />
-        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" stroke="#facc15" strokeWidth="1.8" />
-        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="#facc15" strokeWidth="1.8" />
-      </svg>
-    ),
+    title: "SocialScale",
+    category: "ORGANIC GROWTH",
+    url: "socialscale.co",
+    desc: "End-to-end organic social growth. Strategy, viral reels, and community building.",
+    img: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?auto=format&fit=crop&w=1600&q=80",
   },
   {
     id: "seo",
-    title: "Search Engine SEO",
-    kicker: "High Intent",
-    desc: "Data-driven SEO strategies that improve organic rankings and drive high-intent search traffic to your brand.",
-    img: "https://images.unsplash.com/photo-1571721795195-a2ca2d3370a9?w=1200&q=80",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <circle cx="11" cy="11" r="8" stroke="#facc15" strokeWidth="1.8" />
-        <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="#facc15" strokeWidth="1.8" />
-      </svg>
-    ),
+    title: "Ryvo Search Engine",
+    category: "HIGH INTENT SEO",
+    url: "ryvosolutions.com",
+    desc: "Data-driven SEO strategies that improve organic rankings and drive search traffic.",
+    img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80",
   },
   {
     id: "ads",
-    title: "Performance Marketing",
-    kicker: "Paid Acquisition",
-    desc: "ROI-focused ad campaigns on Meta and Google. Media buying engineered to generate qualified business leads.",
-    img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <path d="M3 3v18h18" stroke="#facc15" strokeWidth="1.8" />
-        <path d="M18 9l-5-5-4 4-4-4" stroke="#facc15" strokeWidth="1.8" />
-      </svg>
-    ),
+    title: "Capable Growth Engine",
+    category: "PERFORMANCE ADS",
+    url: "capablegroup.com",
+    desc: "ROI-focused ad campaigns on Meta and Google to generate qualified business leads.",
+    img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&q=80",
   },
   {
     id: "reels",
-    title: "Reels & Video Production",
-    kicker: "Short Form",
-    desc: "Viral-ready short-form content. Scripted, shot, and optimized for algorithms across Instagram and YouTube.",
-    img: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1200&q=80",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <polygon points="23 7 16 12 23 17 23 7" stroke="#facc15" strokeWidth="1.8" />
-        <rect x="1" y="5" width="15" height="14" rx="2" ry="2" stroke="#facc15" strokeWidth="1.8" />
-      </svg>
-    ),
+    title: "Reels & Video Suite",
+    category: "VIRAL PRODUCTION",
+    url: "thestorybuilder.in/video",
+    desc: "Scripted, shot, and edited short-form content for Instagram and YouTube algorithms.",
+    img: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1600&q=80",
   },
   {
     id: "branding",
-    title: "Branding & Identity",
-    kicker: "Visual System",
-    desc: "Complete visual systems. Logos, typography, and guidelines that make your business stand out from day one.",
-    img: "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?w=1200&q=80",
-    avatar: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&q=80",
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2l3 6 6 1-4.5 4.4 1 6.6L12 17l-5.5 3 1-6.6L3 9l6-1 3-6z" stroke="#facc15" strokeWidth="1.8" />
-      </svg>
-    ),
+    title: "Brand Systems",
+    category: "IDENTITY & DESIGN",
+    url: "thestorybuilder.in/branding",
+    desc: "Complete visual identity, typography, and brand design guidelines.",
+    img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=80",
   },
 ];
 
@@ -137,39 +100,51 @@ export default function Services3DDeck({ setPage }) {
             <div
               key={service.id}
               className={`services-slide ${slotClass}`}
-              style={{ backgroundImage: `url('${service.img}')` }}
               onClick={() => setActiveIndex(index)}
             >
-              <div className="services-slide-overlay" />
-              <div className="services-slide-content">
-                <div className="services-avatar-badge">
-                  <img
-                    className="circle"
-                    src={service.avatar}
-                    alt={service.title}
-                  />
-                  <div className="icon-subbadge">{service.icon}</div>
+              {/* Top Browser Bar */}
+              <div className="browser-header-bar">
+                <div className="browser-dots">
+                  <span className="browser-dot red" />
+                  <span className="browser-dot yellow" />
+                  <span className="browser-dot green" />
                 </div>
-                <span className="services-kicker-tag">{service.kicker}</span>
-                <h3 className="services-slide-title">{service.title}</h3>
-                <p className="services-slide-desc">{service.desc}</p>
+                <span className="browser-url-pill">{service.url}</span>
+              </div>
 
-                {setPage && (
-                  <button
-                    className="services-action-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setPage("contact");
-                    }}
-                  >
-                    Get Started
-                  </button>
-                )}
+              {/* Viewport Frame */}
+              <div className="browser-viewport">
+                <img
+                  className="browser-img"
+                  src={service.img}
+                  alt={service.title}
+                  loading="lazy"
+                />
+              </div>
+
+              {/* Bottom Golden Panel */}
+              <div className="browser-golden-panel">
+                <div className="bgp-content">
+                  <h3 className="bgp-title">{service.title}</h3>
+                  <span className="bgp-kicker">{service.category}</span>
+                </div>
+                <button
+                  className="bgp-action-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (setPage) setPage("contact");
+                  }}
+                  aria-label={`Explore ${service.title}`}
+                  type="button"
+                >
+                  ↗
+                </button>
               </div>
             </div>
           );
         })}
 
+        {/* Controls */}
         <div className="services-deck-controls">
           <button
             className="services-deck-arrow left"
