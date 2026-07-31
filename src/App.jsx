@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "./components/Navbar";
 import CinematicHero from "./components/CinematicHero";
 import Hero from "./components/Hero";
+import ScrollUnscramble from "./components/ScrollUnscramble";
 import Stats from "./components/Stats";
 import TrustedBy from "./components/TrustedBy";
 import About from "./components/About";
@@ -146,6 +147,7 @@ export default function App() {
               <CinematicHero />
             </ErrorBoundary>
             <Hero setPage={navigate} />
+            <ScrollUnscramble />
             <Stats />
             <TrustedBy />
             <About setPage={navigate} />
