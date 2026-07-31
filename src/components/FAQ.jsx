@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { trackEvent } from "../utils/tracking";
 import GlowCard from "./common/GlowCard";
 import MagneticButton from "./common/MagneticButton";
+import SplitText from "./common/SplitText";
 
 const faqs = [
   {
@@ -38,14 +39,19 @@ const cardVariants = {
 
 function FAQItem({ q, a, index, openIndex, setOpenIndex }) {
   const isOpen = openIndex === index;
+  const panelId = `faq-panel-${index}`;
+  const buttonId = `faq-btn-${index}`;
+
   return (
     <motion.div
       className={`faq-item${isOpen ? " open" : ""}`}
       variants={cardVariants}
     >
       <button
+        id={buttonId}
         className="faq-q"
         aria-expanded={isOpen}
+        aria-controls={panelId}
         onClick={() => {
           const next = isOpen ? -1 : index;
           setOpenIndex(next);
@@ -69,6 +75,9 @@ function FAQItem({ q, a, index, openIndex, setOpenIndex }) {
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
+            id={panelId}
+            role="region"
+            aria-labelledby={buttonId}
             key="content"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -93,7 +102,7 @@ export default function FAQ({ setPage }) {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="faq" id="faq" style={{ padding: "100px 0" }}>
+    <section className="faq" id="faq" aria-label="Frequently asked questions">
       <div className="wrap">
         <div className="faq-layout">
           <div className="faq-left">
@@ -105,7 +114,7 @@ export default function FAQ({ setPage }) {
             >
               <span className="tag">FAQ</span>
               <h2 className="sec-h">
-                Your questions,<br /><em>answered.</em>
+                <SplitText text="Your questions, answered." splitBy="words" />
               </h2>
             </motion.div>
 
@@ -150,8 +159,9 @@ export default function FAQ({ setPage }) {
                   data-track="faq_discovery_click"
                   onClick={() => setPage("contact")}
                   style={{ cursor: "pointer", width: "100%", justifyContent: "center" }}
+                  aria-label="Schedule a free discovery call with The Story Builder"
                 >
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
                     <path d="M2 6h12M5 1.5v3M11 1.5v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>

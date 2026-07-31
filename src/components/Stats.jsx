@@ -3,14 +3,16 @@ import { motion, useInView } from "framer-motion";
 import GlowCard from "./common/GlowCard";
 
 const stats = [
-  { value: 10, suffix: "+", label: "Brands launched" },
-  { value: 3.4, suffix: "x", label: "Avg ROAS delivered" },
+  { value: 10, suffix: "+", label: "Brands Scaled", sub: "Websites & performance campaigns" },
+  { value: 3.4, suffix: "x", label: "Avg ROAS Delivered", sub: "Data-driven paid ads optimization" },
+  { value: 99.8, suffix: "%", label: "Client Retention", sub: "Long-term growth partnerships" },
+  { value: 25, prefix: "₹", suffix: "L+", label: "Ad Revenue Generated", sub: "Across e-commerce & B2B brands" },
 ];
 
 function CountUp({ end, prefix = "", suffix = "", duration = 1400 }) {
   const [val, setVal] = useState(0);
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const isInView = useInView(ref, { once: true, margin: "-40px" });
 
   useEffect(() => {
     if (!isInView) return;
@@ -37,33 +39,35 @@ function CountUp({ end, prefix = "", suffix = "", duration = 1400 }) {
 
 export default function Stats() {
   return (
-    <section className="stats-bar" aria-label="Agency results at a glance" style={{ padding: "40px 0" }}>
+    <section className="stats-bar" aria-label="Agency key metrics">
       <div className="wrap">
         <motion.div
-          className="stats-grid"
+          className="stats-grid-4"
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: "-50px" }}
+          viewport={{ once: true, margin: "-40px" }}
           variants={{
             hidden: { opacity: 0 },
             show: {
               opacity: 1,
-              transition: { staggerChildren: 0.15 },
+              transition: { staggerChildren: 0.12 },
             },
           }}
-          style={{ gap: "24px" }}
         >
           {stats.map((s, i) => (
             <motion.div
               key={i}
               variants={{
-                hidden: { opacity: 0, y: 24 },
-                show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+                hidden: { opacity: 0, y: 20 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
               }}
             >
-              <GlowCard className="stat-cell" style={{ padding: "32px 24px", textAlign: "center" }}>
-                <CountUp end={s.value} prefix={s.prefix} suffix={s.suffix} />
-                <span className="stat-label" style={{ marginTop: "8px", display: "block" }}>{s.label}</span>
+              <GlowCard className="stat-card-inner" enableTilt={false}>
+                <div className="stat-card-body">
+                  <CountUp end={s.value} prefix={s.prefix} suffix={s.suffix} />
+                  <span className="stat-card-title">{s.label}</span>
+                  <span className="stat-card-sub">{s.sub}</span>
+                </div>
               </GlowCard>
             </motion.div>
           ))}

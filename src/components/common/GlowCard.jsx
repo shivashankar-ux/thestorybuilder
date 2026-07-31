@@ -1,14 +1,31 @@
 import { useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 
+/**
+ * GlowCard — Interactive card with mouse-tracking spotlight glow,
+ * subtle 3D tilt, and animated border gradient.
+ *
+ * Props:
+ *   children        – card content
+ *   className       – forwarded to wrapper
+ *   style           – forwarded to wrapper
+ *   onClick         – click handler
+ *   enableTilt      – enable 3D tilt on hover (default: true)
+ *   glowColor       – spotlight fill color
+ *   borderColor     – border highlight color
+ *   glowSize        – radial-gradient size in px (default: 500)
+ *   tiltAmount      – max degrees of tilt (default: 6)
+ */
 export default function GlowCard({
   children,
   className = "",
   style = {},
   onClick,
   enableTilt = true,
-  glowColor = "rgba(245, 158, 11, 0.15)",
-  borderColor = "rgba(245, 158, 11, 0.3)",
+  glowColor = "rgba(245, 158, 11, 0.13)",
+  borderColor = "rgba(245, 158, 11, 0.28)",
+  glowSize = 500,
+  tiltAmount = 5,
   ...props
 }) {
   const cardRef = useRef(null);
@@ -18,10 +35,10 @@ export default function GlowCard({
   const mouseX = useMotionValue(0.5);
   const mouseY = useMotionValue(0.5);
 
-  const rotateXRaw = useTransform(mouseY, [0, 1], [6, -6]);
-  const rotateYRaw = useTransform(mouseX, [0, 1], [-6, 6]);
+  const rotateXRaw = useTransform(mouseY, [0, 1], [tiltAmount, -tiltAmount]);
+  const rotateYRaw = useTransform(mouseX, [0, 1], [-tiltAmount, tiltAmount]);
 
-  const springConfig = { damping: 20, stiffness: 250, mass: 0.5 };
+  const springConfig = { damping: 22, stiffness: 260, mass: 0.4 };
   const rotateX = useSpring(rotateXRaw, springConfig);
   const rotateY = useSpring(rotateYRaw, springConfig);
 
@@ -32,8 +49,9 @@ export default function GlowCard({
     const y = (e.clientY - rect.top) / rect.height;
     mouseX.set(x);
     mouseY.set(y);
-    cardRef.current.style.setProperty("--mouse-x", `${(e.clientX - rect.left)}px`);
-    cardRef.current.style.setProperty("--mouse-y", `${(e.clientY - rect.top)}px`);
+    // CSS custom props for the spotlight radial-gradient
+    cardRef.current.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
+    cardRef.current.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
   };
 
   const handleMouseEnter = () => setIsHovered(true);
@@ -42,6 +60,8 @@ export default function GlowCard({
     mouseX.set(0.5);
     mouseY.set(0.5);
   };
+
+  const shouldTilt = enableTilt && !shouldReduceMotion;
 
   return (
     <motion.div
@@ -52,28 +72,30 @@ export default function GlowCard({
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
       style={{
-        rotateX: enableTilt && !shouldReduceMotion ? rotateX : 0,
-        rotateY: enableTilt && !shouldReduceMotion ? rotateY : 0,
+        rotateX: shouldTilt ? rotateX : 0,
+        rotateY: shouldTilt ? rotateY : 0,
         transformStyle: "preserve-3d",
         ...style,
       }}
-      whileHover={shouldReduceMotion ? {} : { y: -6, scale: 1.01 }}
-      transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+      whileHover={shouldReduceMotion ? {} : { y: -5 }}
+      transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       {...props}
     >
+      {/* Spotlight fill */}
       <div
         className="glow-spotlight"
         style={{
-          opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), ${glowColor}, transparent 40%)`,
+          opacity: isHovered && !shouldReduceMotion ? 1 : 0,
+          background: `radial-gradient(${glowSize}px circle at var(--glow-x, 50%) var(--glow-y, 50%), ${glowColor}, transparent 40%)`,
         }}
         aria-hidden="true"
       />
+      {/* Border highlight ring */}
       <div
-        className="glow-border"
+        className="glow-border-ring"
         style={{
-          opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), ${borderColor}, transparent 60%)`,
+          opacity: isHovered && !shouldReduceMotion ? 1 : 0,
+          background: `radial-gradient(350px circle at var(--glow-x, 50%) var(--glow-y, 50%), ${borderColor}, transparent 60%)`,
         }}
         aria-hidden="true"
       />

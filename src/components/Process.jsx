@@ -1,68 +1,53 @@
 import { motion } from "framer-motion";
 import GlowCard from "./common/GlowCard";
+import SplitText from "./common/SplitText";
+import ScrollReveal from "./common/ScrollReveal";
 
 const steps = [
   {
     num: "01",
     title: "Discovery",
-    desc: "We dive into your business, market, and numbers. What's the real bottleneck — traffic, conversion, retention, or pricing? No assumptions.",
+    desc: "We analyze your audience, analytics, and funnel bottlenecks. We identify exactly where revenue is leaking before touching creative.",
   },
   {
     num: "02",
     title: "Strategy",
-    desc: "A 90-day growth plan tied to revenue. Channels picked deliberately, KPIs defined upfront, budget mapped to each lever.",
+    desc: "A custom growth roadmap with clear channel allocation, positioning angles, ad budgets, and target ROAS milestones.",
   },
   {
     num: "03",
     title: "Build",
-    desc: "We ship — websites, funnels, ad creatives, content, automation. Built fast but never sloppy. Launch beats perfection.",
+    desc: "We construct high-converting web assets, performance ad campaigns, and automated follow-up flows ready for launch.",
   },
   {
     num: "04",
-    title: "Launch & Optimise",
-    desc: "Live campaigns, real spend, real data. Daily monitoring, weekly tweaks, monthly retros. Compounding wins, not vanity sprints.",
+    title: "Scale",
+    desc: "Live deployment with constant split-testing of hooks, landing pages, and audiences to maximize return on ad spend.",
   },
   {
     num: "05",
-    title: "Report Honestly",
-    desc: "Transparent dashboards. What worked, what didn't, what's next. We tell you the same numbers we'd tell ourselves.",
+    title: "Transparent Reporting",
+    desc: "Real-time dashboard access with honest weekly breakdowns of ROAS, net profit, and immediate strategic next steps.",
   },
 ];
 
 export default function Process() {
   return (
-    <section className="process" id="process" style={{ padding: "100px 0" }}>
+    <section className="process" id="process" aria-label="Our 5-step agency methodology">
       <div className="wrap">
-        <motion.span
-          className="tag"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          How We Work
-        </motion.span>
+        <ScrollReveal direction="up" distance={20}>
+          <span className="tag">How We Work</span>
+        </ScrollReveal>
 
-        <motion.h2
-          className="sec-h"
-          initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
-          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        >
-          A repeatable system,<br />not <em>guesswork.</em>
-        </motion.h2>
+        <h2 className="sec-h">
+          <SplitText text="A repeatable system, not guesswork." splitBy="words" />
+        </h2>
 
-        <motion.p
-          className="muted"
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          style={{ maxWidth: 620, marginBottom: 56 }}
-        >
-          Five steps from kickoff to compounding growth. Same process for a ₹50k ad budget or a ₹50L one — only the lever sizes change.
-        </motion.p>
+        <ScrollReveal direction="up" distance={20} delay={0.15}>
+          <p className="muted" style={{ maxWidth: 620, marginBottom: 56 }}>
+            Five steps from kickoff to compounding growth. A proven, engineering-grade execution framework built for speed and ROI.
+          </p>
+        </ScrollReveal>
 
         <motion.div
           className="process-grid"

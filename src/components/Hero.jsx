@@ -1,11 +1,26 @@
-import { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
-import { createTyped } from "../utils/typed";
-import MorphingShapes from "./MorphingShapes";
+import { useEffect, useRef, useState } from "react";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+  useSpring,
+  useMotionValue,
+} from "framer-motion";
 import MagneticButton from "./common/MagneticButton";
 import GlowCard from "./common/GlowCard";
+import MorphingShapes from "./MorphingShapes";
 
 const ease = [0.16, 1, 0.3, 1];
+
+// Client roles that cycle with smooth AnimatePresence (no typed.js dependency)
+const roles = [
+  "Performance Marketer.",
+  "SEO Specialist.",
+  "Paid Ads Strategist.",
+  "Brand Builder.",
+  "Growth Partner.",
+];
 
 const proofClients = [
   { l: "L", color: "#facc15" },
@@ -33,44 +48,111 @@ const StarRow = () => (
   </span>
 );
 
+// Headline word reveal — stagger each word
+const HeroHeadline = () => {
+  const words = ["Built", "to", "outperform."];
+  const container = {
+    hidden: {},
+    show: { transition: { staggerChildren: 0.08, delayChildren: 0.2 } },
+  };
+  const word = {
+    hidden: { opacity: 0, y: 32, filter: "blur(6px)" },
+    show: {
+      opacity: 1, y: 0, filter: "blur(0px)",
+      transition: { duration: 0.65, ease },
+    },
+  };
+
+  return (
+    <h1 className="hero-title" aria-label="Built to outperform. The Story Builder">
+      <motion.span
+        variants={container}
+        initial="hidden"
+        animate="show"
+        aria-hidden="true"
+        style={{ display: "inline" }}
+      >
+        {words.map((w, i) => (
+          <motion.span
+            key={i}
+            variants={word}
+            style={{ display: "inline-block", marginRight: i < words.length - 1 ? "0.28em" : 0 }}
+          >
+            {i === 1 ? (
+              <>{w}&nbsp;<StarIcon /></>
+            ) : (
+              w
+            )}
+          </motion.span>
+        ))}
+      </motion.span>
+      <br />
+      <motion.span
+        className="gold-name"
+        initial={{ opacity: 0, y: 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.65, ease }}
+      >
+        The Story Builder
+      </motion.span>
+    </h1>
+  );
+};
+
+// AnimatePresence-driven role cycler — no library needed
+function RoleCycler() {
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIdx((i) => (i + 1) % roles.length);
+    }, 2600);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <span
+      className="role-cycler"
+      aria-live="polite"
+      aria-atomic="true"
+      style={{ display: "inline-block", position: "relative" }}
+    >
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={idx}
+          initial={{ y: 20, opacity: 0, filter: "blur(4px)" }}
+          animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+          exit={{ y: -16, opacity: 0, filter: "blur(4px)" }}
+          transition={{ duration: 0.4, ease }}
+          style={{ display: "inline-block" }}
+        >
+          {roles[idx]}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
+
 export default function Hero({ setPage }) {
-  const typedRef = useRef(null);
   const heroRef = useRef(null);
 
   // Parallax on scroll
   const { scrollY } = useScroll();
-  const bgY = useTransform(scrollY, [0, 600], [0, 150]);
-  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0.4]);
+  const bgY       = useTransform(scrollY, [0, 600], [0, 140]);
+  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0.45]);
 
   // Mouse tilt tracking
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const mouseX  = useMotionValue(0);
+  const mouseY  = useMotionValue(0);
   const rotateX = useSpring(useTransform(mouseY, [-300, 300], [4, -4]), { damping: 25, stiffness: 200 });
   const rotateY = useSpring(useTransform(mouseX, [-300, 300], [-4, 4]), { damping: 25, stiffness: 200 });
 
   const handleMouseMove = (e) => {
     if (!heroRef.current) return;
     const rect = heroRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    mouseX.set(e.clientX - centerX);
-    mouseY.set(e.clientY - centerY);
+    mouseX.set(e.clientX - rect.left - rect.width / 2);
+    mouseY.set(e.clientY - rect.top - rect.height / 2);
   };
-
-  useEffect(() => {
-    const t = createTyped(typedRef.current, {
-      strings: [
-        "Performance Marketer.",
-        "SEO Specialist.",
-        "Paid Ads Strategist.",
-        "Brand Builder.",
-        "Growth Partner.",
-      ],
-      typeSpeed: 58, backSpeed: 32, backDelay: 1800,
-      startDelay: 600, loop: true, smartBackspace: true,
-    });
-    return () => t.destroy();
-  }, []);
 
   const scrollTo = (id) => {
     const el = document.getElementById(id);
@@ -78,13 +160,22 @@ export default function Hero({ setPage }) {
   };
 
   return (
-    <section className="hero" id="home" ref={heroRef} onMouseMove={handleMouseMove}>
+    <section
+      className="hero"
+      id="home"
+      ref={heroRef}
+      onMouseMove={handleMouseMove}
+      aria-label="Hero section"
+    >
+      {/* Parallax ambient background */}
       <motion.div className="hero-bg" style={{ y: bgY }} aria-hidden="true">
-        <div className="orb o1" /><div className="orb o2" /><div className="orb o3" />
+        <div className="orb o1" />
+        <div className="orb o2" />
+        <div className="orb o3" />
         <div className="dots" />
       </motion.div>
 
-      <div className="hero-container" style={{ perspective: 1000, width: "100%" }}>
+      <div className="hero-container" style={{ perspective: 1200, width: "100%" }}>
         <motion.div
           className="hero-body"
           style={{ rotateX, rotateY, opacity: heroOpacity }}
@@ -92,44 +183,45 @@ export default function Hero({ setPage }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease }}
         >
+          {/* Availability badge */}
           <motion.div
             className="avail"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.1, duration: 0.5 }}
           >
-            <span className="pulse-dot" /> Now onboarding clients for 2026
+            <span className="pulse-dot" />
+            Now onboarding clients for 2026
           </motion.div>
 
-          <motion.h1
-            className="hero-title"
-            initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ delay: 0.2, duration: 0.7, ease }}
-          >
-            Built to <StarIcon /> outperform.
-            <br />
-            <span className="gold-name">The Story Builder</span>
-          </motion.h1>
+          {/* Animated headline — word by word */}
+          <HeroHeadline />
 
+          {/* Role cycler — replaces typed.js */}
           <motion.p
             className="hero-role"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 0.6 }}
           >
-            We're your <span ref={typedRef} />
+            We're your <RoleCycler />
           </motion.p>
 
+          {/* Sub-headline */}
           <motion.p
             className="hero-sub"
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45, duration: 0.6 }}
           >
-            A full-service agency building <span className="hero-pill">high-converting websites</span>, scaling <span className="hero-pill">paid ads</span> that actually pay back, and shipping <span className="hero-pill">AI systems</span> built to outperform.
+            A full-service agency building{" "}
+            <span className="hero-pill">high-converting websites</span>, scaling{" "}
+            <span className="hero-pill">paid ads</span> that actually pay back,
+            and shipping{" "}
+            <span className="hero-pill">AI systems</span> built to outperform.
           </motion.p>
 
+          {/* CTAs */}
           <motion.div
             className="hero-ctas"
             initial={{ opacity: 0, y: 20 }}
@@ -140,11 +232,17 @@ export default function Hero({ setPage }) {
               <button
                 className="btn btn-gold btn-lg"
                 data-track="hero_get_in_touch"
-                onClick={() => window.open("https://intake-form-thestorybuilder.vercel.app/", "_blank")}
+                onClick={() =>
+                  window.open(
+                    "https://intake-form-thestorybuilder.vercel.app/",
+                    "_blank",
+                    "noopener,noreferrer"
+                  )
+                }
                 style={{ cursor: "pointer" }}
               >
                 Book a Strategy Call
-                <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                   <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </button>
@@ -162,12 +260,17 @@ export default function Hero({ setPage }) {
             </MagneticButton>
           </motion.div>
 
+          {/* Social proof card */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.65, duration: 0.6 }}
           >
-            <GlowCard className="hero-proof-card" style={{ padding: "12px 20px", display: "inline-block" }}>
+            <GlowCard
+              className="hero-proof-card"
+              style={{ padding: "12px 20px", display: "inline-block" }}
+              enableTilt={false}
+            >
               <div className="hero-proof" style={{ margin: 0 }}>
                 <span className="proof-avatars" aria-hidden="true">
                   {proofClients.map((c, i) => (
@@ -189,18 +292,23 @@ export default function Hero({ setPage }) {
           </motion.div>
         </motion.div>
 
+        {/* Visual accent — morphing shapes */}
         <motion.div
           className="hero-visual"
           initial={{ opacity: 0, scale: 0.88, rotate: -5 }}
           animate={{ opacity: 1, scale: 1, rotate: 0 }}
           transition={{ duration: 1, delay: 0.3, ease }}
+          aria-hidden="true"
         >
           <MorphingShapes />
         </motion.div>
       </div>
 
+      {/* Scroll hint */}
       <div className="scroll-hint" aria-hidden="true">
-        <div className="sh-track"><div className="sh-bar" /></div>
+        <div className="sh-track">
+          <div className="sh-bar" />
+        </div>
         <span>Scroll</span>
       </div>
     </section>

@@ -5,8 +5,8 @@ import { trackEvent } from "../utils/tracking";
 import GlowCard from "./common/GlowCard";
 import MagneticButton from "./common/MagneticButton";
 
-const BOT_TOKEN = "8712967453:AAGMQV1SneKzT2FGFkdNTrh2GvZD_Q_vgcY";
-const CHAT_ID = "1340316382";
+const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || "";
+const CHAT_ID = import.meta.env.VITE_TELEGRAM_CHAT_ID || "";
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", phone: "", area: "", project: "", message: "" });
@@ -36,6 +36,14 @@ export default function ContactPage() {
         project: form.project || "unspecified",
         area: form.area || "unspecified",
       });
+
+      if (!BOT_TOKEN || !CHAT_ID) {
+        // Fallback when bot tokens are not configured in environment
+        setStatus("success");
+        setForm({ name: "", email: "", phone: "", area: "", project: "", message: "" });
+        return;
+      }
+
       const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
       const res = await fetch(url, {
         method: "POST",
@@ -47,18 +55,10 @@ export default function ContactPage() {
         setStatus("success");
         setForm({ name: "", email: "", phone: "", area: "", project: "", message: "" });
       } else {
-        new Image().src = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${encodeURIComponent(CHAT_ID)}&text=${encodeURIComponent(text)}`;
-        setStatus("success");
-        setForm({ name: "", email: "", phone: "", area: "", project: "", message: "" });
-      }
-    } catch (err) {
-      try {
-        new Image().src = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${encodeURIComponent(CHAT_ID)}&text=${encodeURIComponent(text)}`;
-        setStatus("success");
-        setForm({ name: "", email: "", phone: "", area: "", project: "", message: "" });
-      } catch {
         setStatus("error");
       }
+    } catch (err) {
+      setStatus("error");
     }
   };
 
@@ -75,7 +75,14 @@ export default function ContactPage() {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="photo-wrap">
-              <img src="/shiva.jpg" alt="The Story Builder — Founder" />
+              <img
+                src="/shiva.jpg"
+                alt="The Story Builder — Founder"
+                width="400"
+                height="400"
+                loading="lazy"
+                decoding="async"
+              />
               <div className="photo-badge">
                 <span className="pulse-dot" /> Now onboarding clients
               </div>
@@ -87,13 +94,13 @@ export default function ContactPage() {
                 A full-service digital marketing agency working with founders and growing brands across India. Tell us where you are and where you want to be — we'll map the path.
               </p>
               <div className="contact-detail">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 <span>+91 83419 28526</span>
               </div>
               <div className="contact-detail">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <rect x="2" y="4" width="20" height="16" rx="2" stroke="#facc15" strokeWidth="1.5" />
                   <path d="M2 7l10 7 10-7" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
@@ -139,8 +146,9 @@ export default function ContactPage() {
                 <form onSubmit={sendToTelegram} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
 
                   <div className="cf-group">
-                    <label className="cf-label">Your Name *</label>
+                    <label htmlFor="contact-name" className="cf-label">Your Name *</label>
                     <input
+                      id="contact-name"
                       className="cf-input"
                       type="text"
                       name="name"
@@ -152,8 +160,9 @@ export default function ContactPage() {
                   </div>
 
                   <div className="cf-group">
-                    <label className="cf-label">Email Address *</label>
+                    <label htmlFor="contact-email" className="cf-label">Email Address *</label>
                     <input
+                      id="contact-email"
                       className="cf-input"
                       type="email"
                       name="email"
@@ -165,8 +174,9 @@ export default function ContactPage() {
                   </div>
 
                   <div className="cf-group">
-                    <label className="cf-label">Phone Number</label>
+                    <label htmlFor="contact-phone" className="cf-label">Phone Number</label>
                     <input
+                      id="contact-phone"
                       className="cf-input"
                       type="tel"
                       name="phone"
@@ -177,8 +187,9 @@ export default function ContactPage() {
                   </div>
 
                   <div className="cf-group">
-                    <label className="cf-label">Your Area</label>
+                    <label htmlFor="contact-area" className="cf-label">Your Area</label>
                     <select
+                      id="contact-area"
                       className="cf-input cf-select"
                       name="area"
                       value={form.area}
@@ -223,8 +234,9 @@ export default function ContactPage() {
                   </div>
 
                   <div className="cf-group">
-                    <label className="cf-label">Project Type</label>
+                    <label htmlFor="contact-project" className="cf-label">Project Type</label>
                     <select
+                      id="contact-project"
                       className="cf-input cf-select"
                       name="project"
                       value={form.project}
@@ -241,8 +253,9 @@ export default function ContactPage() {
                   </div>
 
                   <div className="cf-group">
-                    <label className="cf-label">Message *</label>
+                    <label htmlFor="contact-message" className="cf-label">Message *</label>
                     <textarea
+                      id="contact-message"
                       className="cf-input cf-textarea"
                       name="message"
                       placeholder="Tell me about your project..."

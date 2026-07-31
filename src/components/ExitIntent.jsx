@@ -59,6 +59,15 @@ export default function ExitIntent({ setPage }) {
     };
   }, [hasShown]);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") close("escape");
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
+
   const close = (reason) => {
     markDismissed();
     setOpen(false);
