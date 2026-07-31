@@ -5,7 +5,7 @@ export default function Navbar({ page, setPage }) {
   const [menuOpen,  setMenuOpen]  = useState(false);
   const [activeNav, setActiveNav] = useState("home");
   const [dark,      setDark]      = useState(() => {
-    return localStorage.getItem("theme") !== "light";
+    return localStorage.getItem("theme") === "dark";
   });
 
   useEffect(() => {
