@@ -72,31 +72,6 @@
   --ref-font-heading: 'Thesead', "Haaffer VF", Arial, sans-serif;
 }
 
-/* Optional Dark Theme Mode */
-[data-theme="dark"] {
-  --gold:   #facc15;
-  --gold-accent: #facc15;
-  --gold-a: rgba(250,204,21,.12);
-  --bg:     #05070f;
-  --surf:   #0b1120;
-  --card:   #0f1827;
-  --border: rgba(255,255,255,.07);
-  --text:   #eef2ff;
-  --muted:  #8b97b5;
-}
-[data-theme="dark"] body { background: var(--bg); color: var(--text); }
-[data-theme="dark"] .about { background: #0b1120; }
-[data-theme="dark"] .ww-section { background: #0b1120; }
-[data-theme="dark"] .ww-card-inner { background: #0f1827; }
-[data-theme="dark"] .cf-input { background: #0f1827; color: #eef2ff; border-color: rgba(255,255,255,.1); }
-[data-theme="dark"] .card { background: #0f1827; }
-[data-theme="dark"] .reach-card { background: #0f1827; }
-[data-theme="dark"] .logo { color: #eef2ff; }
-[data-theme="dark"] .tag { color: var(--gold); background: var(--gold-a); border-color: rgba(250,204,21,.2); }
-[data-theme="dark"] em { color: var(--gold); }
-[data-theme="dark"] .gold { color: var(--gold); }
-[data-theme="dark"] .gold-name { color: var(--gold); }
-
 html { scroll-behavior:smooth; }
 body {
   background:var(--bg); color:var(--text);
