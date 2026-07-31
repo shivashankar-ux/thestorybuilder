@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { createTyped } from "../utils/typed";
+import MorphingShapes from "./MorphingShapes";
 
 const ease = [0.4, 0, 0.2, 1];
 
@@ -68,6 +69,7 @@ export default function Hero({ setPage }) {
   return (
     <section className="hero" id="home">
       <div className="hero-bg" aria-hidden="true">
+        <MorphingShapes />
         <div className="orb o1" /><div className="orb o2" /><div className="orb o3" />
         <div className="dots" />
       </div>
