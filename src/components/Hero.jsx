@@ -289,18 +289,6 @@ export default function Hero({ setPage }) {
                 </span>
               </div>
             </GlowCard>
-          </motion.div>
-        </motion.div>
-
-        {/* Visual accent — morphing shapes */}
-        <motion.div
-          className="hero-visual"
-          initial={{ opacity: 0, scale: 0.88, rotate: -5 }}
-          animate={{ opacity: 1, scale: 1, rotate: 0 }}
-          transition={{ duration: 1, delay: 0.3, ease }}
-          aria-hidden="true"
-        >
-          <MorphingShapes />
         </motion.div>
       </div>
 
