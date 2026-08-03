@@ -1,7 +1,4 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import GlowCard from "./common/GlowCard";
-import MagneticButton from "./common/MagneticButton";
+import { useEffect } from "react";
 
 const studies = {
   "legacy-solar": {
@@ -92,62 +89,44 @@ const studies = {
 
 export default function CaseStudy({ slug, navigate }) {
   const study = studies[slug] || studies["legacy-solar"];
-  const heroRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start end", "end start"] });
-  const heroScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.92, 1, 0.96]);
+
+  useEffect(() => {
+    const els = document.querySelectorAll(".case-study .sr");
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            io.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [slug]);
 
   return (
-    <main className="case-study" style={{ paddingTop: "120px", paddingBottom: "100px" }}>
+    <main className="case-study">
       <div className="wrap">
-        <motion.button
+        <button
           className="case-back"
           onClick={() => navigate({ page: "home", scrollTo: "projects" })}
-          initial={{ opacity: 0, x: -12 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.4 }}
-          style={{ cursor: "pointer" }}
         >
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
             <path d="M13 8H3M7 4l-4 4 4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
           All Projects
-        </motion.button>
+        </button>
 
-        <motion.span
-          className="tag"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.5 }}
-        >
-          {study.industry}
-        </motion.span>
-
-        <motion.h1
-          className="case-title"
-          initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ delay: 0.2, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          style={{ fontSize: "clamp(36px, 6vw, 64px)", fontFamily: "var(--fd)", fontWeight: 800 }}
-        >
+        <span className="tag sr">{study.industry}</span>
+        <h1 className="case-title sr">
           {study.client}
-        </motion.h1>
+        </h1>
+        <p className="case-summary muted sr">{study.summary}</p>
 
-        <motion.p
-          className="case-summary muted"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-        >
-          {study.summary}
-        </motion.p>
-
-        <motion.div
-          className="case-meta"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          style={{ margin: "32px 0 48px" }}
-        >
+        <div className="case-meta sr">
           <div className="case-meta-cell">
             <span className="case-meta-label">Services</span>
             <span className="case-meta-val">{study.services.join(" · ")}</span>
@@ -171,99 +150,59 @@ export default function CaseStudy({ slug, navigate }) {
               Visit ↗
             </a>
           </div>
-        </motion.div>
-
-        <motion.div
-          ref={heroRef}
-          className="case-hero"
-          style={{ scale: heroScale, borderRadius: "20px", overflow: "hidden", margin: "40px 0" }}
-        >
-          <img src={study.hero} alt={`${study.client} project hero`} loading="lazy" style={{ width: "100%", height: "auto", display: "block" }} />
-        </motion.div>
-
-        <div className="case-results" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "20px", margin: "48px 0" }}>
-          {study.results.map((r, i) => (
-            <motion.div
-              key={r.label}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-            >
-              <GlowCard className="case-result" style={{ padding: "24px", textAlign: "center" }}>
-                <span className="case-result-val" style={{ fontSize: "36px", fontWeight: 800, color: "var(--gold)", fontFamily: "var(--fd)" }}>{r.value}</span>
-                <span className="case-result-label" style={{ display: "block", marginTop: "8px", fontSize: "13px", color: "var(--muted)" }}>{r.label}</span>
-              </GlowCard>
-            </motion.div>
-          ))}
         </div>
 
-        <div className="case-sections" style={{ margin: "60px 0" }}>
-          {study.sections.map((s) => (
-            <motion.section
-              className="case-section"
-              key={s.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              style={{ marginBottom: "40px" }}
-            >
-              <h2 className="case-section-h" style={{ fontSize: "24px", fontFamily: "var(--fd)", fontWeight: 800, marginBottom: "12px" }}>{s.title}</h2>
-              <p className="case-section-body" style={{ fontSize: "16px", lineHeight: 1.75, color: "var(--muted)" }}>{s.body}</p>
-            </motion.section>
-          ))}
+        <div className="case-hero sr">
+          <img src={study.hero} alt={`${study.client} project hero`} loading="lazy" />
         </div>
 
-        <motion.blockquote
-          className="case-quote"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          style={{ padding: "32px", background: "rgba(245, 158, 11, 0.06)", borderLeft: "4px solid var(--gold)", borderRadius: "8px", margin: "48px 0" }}
-        >
-          <p style={{ fontSize: "18px", fontStyle: "italic", marginBottom: "12px" }}>"{study.quote.text}"</p>
-          <cite style={{ fontSize: "14px", color: "var(--gold)", fontStyle: "normal", fontWeight: 700 }}>— {study.quote.attr}</cite>
-        </motion.blockquote>
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-        >
-          <GlowCard className="case-cta" style={{ textAlign: "center", padding: "48px 32px" }}>
-            <h3 style={{ fontSize: "28px", fontFamily: "var(--fd)", fontWeight: 800, marginBottom: "12px" }}>Want results like these?</h3>
-            <p className="muted" style={{ maxWidth: "480px", margin: "0 auto 28px" }}>
-              Tell us about your business and we'll send a 90-day growth plan in 48 hours.
-            </p>
-            <div className="case-cta-btns" style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-              <MagneticButton distance={0.3}>
-                <button
-                  className="btn btn-gold"
-                  data-track="case_study_start"
-                  onClick={() => navigate({ page: "contact" })}
-                  style={{ cursor: "pointer" }}
-                >
-                  Start a Project
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-              </MagneticButton>
-              <MagneticButton distance={0.3}>
-                <button
-                  className="btn btn-ghost"
-                  onClick={() => navigate({ page: "case", caseSlug: study.related })}
-                  style={{ cursor: "pointer" }}
-                >
-                  {study.relatedLabel}
-                </button>
-              </MagneticButton>
+        <div className="case-results sr">
+          {study.results.map((r) => (
+            <div className="case-result" key={r.label}>
+              <span className="case-result-val">{r.value}</span>
+              <span className="case-result-label">{r.label}</span>
             </div>
-          </GlowCard>
-        </motion.div>
+          ))}
+        </div>
+
+        <div className="case-sections">
+          {study.sections.map((s) => (
+            <section className="case-section sr" key={s.title}>
+              <h2 className="case-section-h">{s.title}</h2>
+              <p className="case-section-body">{s.body}</p>
+            </section>
+          ))}
+        </div>
+
+        <blockquote className="case-quote sr">
+          <p>"{study.quote.text}"</p>
+          <cite>— {study.quote.attr}</cite>
+        </blockquote>
+
+        <div className="case-cta sr">
+          <h3>Want results like these?</h3>
+          <p className="muted">
+            Tell us about your business and we'll send a 90-day growth plan in 48 hours.
+          </p>
+          <div className="case-cta-btns">
+            <button
+              className="btn btn-gold"
+              data-track="case_study_start"
+              onClick={() => navigate({ page: "contact" })}
+            >
+              Start a Project
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            <button
+              className="btn btn-ghost"
+              onClick={() => navigate({ page: "case", caseSlug: study.related })}
+            >
+              {study.relatedLabel}
+            </button>
+          </div>
+        </div>
       </div>
     </main>
   );

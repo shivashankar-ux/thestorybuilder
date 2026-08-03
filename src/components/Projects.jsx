@@ -1,8 +1,5 @@
-import { useState, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import MzaCarousel from "./MzaCarousel";
-import GlowCard from "./common/GlowCard";
-import MagneticButton from "./common/MagneticButton";
 
 const projects = [
   {
@@ -134,26 +131,17 @@ const ArrowIcon = () => (
 
 function ShowcaseRow({ project, index, navigate }) {
   const reversed = index % 2 === 1;
-  const rowRef = useRef(null);
-  const { scrollYProgress } = useScroll({ target: rowRef, offset: ["start end", "end start"] });
-  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.94, 1, 0.98]);
-
   return (
-    <motion.article
-      ref={rowRef}
-      className={`showcase-row ${reversed ? "reversed" : ""}`}
-      initial={{ opacity: 0, y: 36 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+    <article
+      className={`showcase-row sr ${reversed ? "reversed" : ""}`}
+      style={{ "--i": `${index * 0.08}s` }}
     >
-      <motion.a
+      <a
         href={project.url}
         target="_blank"
         rel="noopener noreferrer"
         className="showcase-media"
         aria-label={`Visit ${project.title}`}
-        style={{ scale: imageScale }}
       >
         <img src={project.img} alt={project.alt} loading="lazy" />
         <span className="showcase-num">{String(index + 1).padStart(2, "0")}</span>
@@ -162,7 +150,7 @@ function ShowcaseRow({ project, index, navigate }) {
             <ArrowIcon /> Visit Live Site
           </span>
         </div>
-      </motion.a>
+      </a>
 
       <div className="showcase-body">
         <span className="card-tag">{project.tag}</span>
@@ -187,7 +175,6 @@ function ShowcaseRow({ project, index, navigate }) {
                 className="showcase-link showcase-case"
                 data-track={`case_${project.caseSlug}`}
                 onClick={() => navigate({ page: "case", caseSlug: project.caseSlug })}
-                style={{ cursor: "pointer" }}
               >
                 Read Case Study <ArrowIcon />
               </button>
@@ -203,34 +190,41 @@ function ShowcaseRow({ project, index, navigate }) {
           </div>
         </div>
       </div>
-    </motion.article>
+    </article>
   );
 }
 
 export default function Projects({ setPage, navigate }) {
   const [viewMode, setViewMode] = useState("carousel");
 
+  useEffect(() => {
+    const els = document.querySelectorAll(".projects .sr");
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add("visible");
+            io.unobserve(e.target);
+          }
+        }),
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [viewMode]);
+
   return (
-    <section className="projects" id="projects" style={{ padding: "100px 0" }}>
+    <section className="projects" id="projects">
       <div className="wrap">
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px", marginBottom: "20px" }}>
-          <motion.span
-            className="tag"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            style={{ margin: 0 }}
-          >
-            Selected Work
-          </motion.span>
-
-          <div style={{ display: "inline-flex", background: "rgba(255,255,255,0.06)", padding: "4px", borderRadius: "100px", border: "1px solid var(--border)", position: "relative" }}>
+          <span className="tag sr" style={{ margin: 0 }}>Selected Work</span>
+          <div style={{ display: "inline-flex", background: "rgba(255,255,255,0.06)", padding: "4px", borderRadius: "100px", border: "1px solid var(--border)" }}>
             <button
               type="button"
               onClick={() => setViewMode("carousel")}
               style={{
-                background: "none",
+                background: viewMode === "carousel" ? "var(--gold)" : "transparent",
                 color: viewMode === "carousel" ? "#000" : "var(--muted)",
                 border: 0,
                 borderRadius: "100px",
@@ -238,24 +232,16 @@ export default function Projects({ setPage, navigate }) {
                 fontSize: "12px",
                 fontWeight: 700,
                 cursor: "pointer",
-                position: "relative",
-                zIndex: 1,
+                transition: "all 0.25s",
               }}
             >
-              {viewMode === "carousel" && (
-                <motion.div
-                  layoutId="activeProjectMode"
-                  style={{ position: "absolute", inset: 0, background: "var(--gold)", borderRadius: "100px", zIndex: -1 }}
-                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                />
-              )}
               ✨ 3D Coverflow
             </button>
             <button
               type="button"
               onClick={() => setViewMode("grid")}
               style={{
-                background: "none",
+                background: viewMode === "grid" ? "var(--gold)" : "transparent",
                 color: viewMode === "grid" ? "#000" : "var(--muted)",
                 border: 0,
                 borderRadius: "100px",
@@ -263,76 +249,52 @@ export default function Projects({ setPage, navigate }) {
                 fontSize: "12px",
                 fontWeight: 700,
                 cursor: "pointer",
-                position: "relative",
-                zIndex: 1,
+                transition: "all 0.25s",
               }}
             >
-              {viewMode === "grid" && (
-                <motion.div
-                  layoutId="activeProjectMode"
-                  style={{ position: "absolute", inset: 0, background: "var(--gold)", borderRadius: "100px", zIndex: -1 }}
-                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                />
-              )}
               📋 All Projects List
             </button>
           </div>
         </div>
 
-        <motion.div
-          className="proj-header"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+        <div className="proj-header sr">
           <h2 className="sec-h">
             Brands we've helped <em>grow</em>
           </h2>
           <p className="muted">
             Performance marketing, SEO, and high-converting websites — built for measurable outcomes. Swipe or drag to explore our featured work.
           </p>
-        </motion.div>
+        </div>
 
-        <AnimatePresence mode="wait">
-          {viewMode === "carousel" ? (
-            <motion.div key="carousel" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} style={{ margin: "20px 0 50px 0" }}>
-              <MzaCarousel projects={projects} navigate={navigate} />
-            </motion.div>
-          ) : (
-            <motion.div key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="showcase-list">
-              {projects.map((project, i) => (
-                <ShowcaseRow key={project.id} project={project} index={i} navigate={navigate} />
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {viewMode === "carousel" ? (
+          <div style={{ margin: "20px 0 50px 0" }}>
+            <MzaCarousel projects={projects} navigate={navigate} />
+          </div>
+        ) : (
+          <div className="showcase-list">
+            {projects.map((project, i) => (
+              <ShowcaseRow key={project.id} project={project} index={i} navigate={navigate} />
+            ))}
+          </div>
+        )}
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-        >
-          <GlowCard className="card card-cta showcase-cta" style={{ textAlign: "center", padding: "48px 32px" }}>
-            <div className="cta-icon" style={{ margin: "0 auto 16px" }}>
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <path d="M14 4v20M4 14h20" stroke="#facc15" strokeWidth="2.2" strokeLinecap="round" />
-              </svg>
-            </div>
-            <h3>Ready to be the next case study?</h3>
-            <p style={{ margin: "8px auto 24px", maxWidth: "440px" }}>Tell us about your business — we'll map a growth plan in 48 hours.</p>
-            <MagneticButton distance={0.3}>
-              <button className="btn btn-gold" data-track="projects_start_project" onClick={() => setPage("contact")} style={{ cursor: "pointer" }}>
-                Start a Project
-                <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            </MagneticButton>
-          </GlowCard>
-        </motion.div>
+        <article className="card card-cta sr showcase-cta" style={{ "--i": "0.4s" }}>
+          <div className="cta-icon">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+              <path d="M14 4v20M4 14h20" stroke="#facc15" strokeWidth="2.2" strokeLinecap="round" />
+            </svg>
+          </div>
+          <h3>Ready to be the next case study?</h3>
+          <p>Tell us about your business — we'll map a growth plan in 48 hours.</p>
+          <button className="btn btn-gold" data-track="projects_start_project" onClick={() => setPage("contact")}>
+            Start a Project
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </article>
       </div>
     </section>
   );
 }
+

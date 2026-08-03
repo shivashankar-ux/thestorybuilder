@@ -1,8 +1,6 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import Services3DDeck from "./Services3DDeck";
-import GlowCard from "./common/GlowCard";
-import MagneticButton from "./common/MagneticButton";
 
 const allServices = [
   {
@@ -87,7 +85,7 @@ const allServices = [
     desc: "Complete visual systems. Logos, typography, color palettes, and brand guidelines that make you unforgettable.",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2l3 6 6 1-4.5 4.4 1 6.6L12 17l-5.5 3 1-6.6L3 9l6-1 3-6z" stroke="#facc15" strokeWidth="1.5" strokeLinejoin="round"/>
+        <path d="M12 2l3 6 6 1-4.5 4.4 1 6.6L12 17l-5.5 3 1-6.6L3 9l6-1 3-6z" stroke="#facc15" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
   }
@@ -95,6 +93,22 @@ const allServices = [
 
 export default function ServicesPage({ setPage }) {
   const [viewMode, setViewMode] = useState("deck");
+
+  useEffect(() => {
+    const els = document.querySelectorAll(".sr");
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { 
+        if (e.isIntersecting) { 
+          e.target.classList.add("visible"); 
+          io.unobserve(e.target); 
+        } 
+      }),
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [viewMode]);
 
   return (
     <main className="services-page" style={{ paddingBottom: "100px" }}>
@@ -106,15 +120,15 @@ export default function ServicesPage({ setPage }) {
 
       <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
         {/* PAGE HEADER */}
-        <header className="services-pg-header" style={{ paddingTop: "140px", marginBottom: "40px", textAlign: "center" }}>
+        <header className="services-pg-header fi" style={{ "--i": 0, paddingTop: "140px", marginBottom: "40px", textAlign: "center" }}>
           <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "16px", marginBottom: "20px" }}>
-            <span className="tag" style={{ margin: 0 }}>Our Capabilities</span>
-            <div style={{ display: "inline-flex", background: "rgba(255,255,255,0.06)", padding: "4px", borderRadius: "100px", border: "1px solid var(--border)", position: "relative" }}>
+            <span className="tag sr" style={{ margin: 0 }}>Our Capabilities</span>
+            <div style={{ display: "inline-flex", background: "rgba(255,255,255,0.06)", padding: "4px", borderRadius: "100px", border: "1px solid var(--border)" }}>
               <button
                 type="button"
                 onClick={() => setViewMode("deck")}
                 style={{
-                  background: "none",
+                  background: viewMode === "deck" ? "var(--gold)" : "transparent",
                   color: viewMode === "deck" ? "#000" : "var(--muted)",
                   border: 0,
                   borderRadius: "100px",
@@ -122,24 +136,16 @@ export default function ServicesPage({ setPage }) {
                   fontSize: "12px",
                   fontWeight: 700,
                   cursor: "pointer",
-                  position: "relative",
-                  zIndex: 1,
+                  transition: "all 0.25s",
                 }}
               >
-                {viewMode === "deck" && (
-                  <motion.div
-                    layoutId="activeViewMode"
-                    style={{ position: "absolute", inset: 0, background: "var(--gold)", borderRadius: "100px", zIndex: -1 }}
-                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                  />
-                )}
                 🎴 3D Deck View
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode("grid")}
                 style={{
-                  background: "none",
+                  background: viewMode === "grid" ? "var(--gold)" : "transparent",
                   color: viewMode === "grid" ? "#000" : "var(--muted)",
                   border: 0,
                   borderRadius: "100px",
@@ -147,107 +153,71 @@ export default function ServicesPage({ setPage }) {
                   fontSize: "12px",
                   fontWeight: 700,
                   cursor: "pointer",
-                  position: "relative",
-                  zIndex: 1,
+                  transition: "all 0.25s",
                 }}
               >
-                {viewMode === "grid" && (
-                  <motion.div
-                    layoutId="activeViewMode"
-                    style={{ position: "absolute", inset: 0, background: "var(--gold)", borderRadius: "100px", zIndex: -1 }}
-                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
-                  />
-                )}
                 📋 Grid View
               </button>
             </div>
           </div>
-
-          <motion.h1
-            className="sec-h"
-            initial={{ opacity: 0, y: 20, filter: "blur(6px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-            style={{ maxWidth: "800px", margin: "0 auto 20px" }}
-          >
+          <h1 className="sec-h sr" style={{ maxWidth: "800px", margin: "0 auto 20px" }}>
             Everything you need to <br />
             <em>scale your brand.</em>
-          </motion.h1>
-
-          <motion.p
-            className="muted services-pg-intro"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            style={{ maxWidth: "600px", margin: "0 auto" }}
-          >
+          </h1>
+          <p className="muted services-pg-intro sr" style={{ maxWidth: "600px", margin: "0 auto" }}>
             From compelling content to high-converting websites, we offer an end-to-end suite of creative and technical services.
-          </motion.p>
+          </p>
         </header>
       </div>
 
-      <AnimatePresence mode="wait">
-        {viewMode === "deck" ? (
-          <motion.div key="deck" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <Services3DDeck setPage={setPage} />
-          </motion.div>
-        ) : (
-          <motion.div key="grid" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="wrap" style={{ position: "relative", zIndex: 1 }}>
-            <section className="services-flex">
-              {allServices.map((service, index) => (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.08, duration: 0.5 }}
-                >
-                  <GlowCard className="service-card-animated" style={{ height: "100%", padding: "24px" }}>
-                    <div className="service-card-icon">{service.icon}</div>
-                    <h2 style={{ fontSize: "20px", fontFamily: "var(--fd)", fontWeight: 800, marginBottom: "12px", letterSpacing: "-0.2px" }}>
-                      {service.title}
-                    </h2>
-                    <p className="muted" style={{ fontSize: "15px", lineHeight: 1.6, flex: 1, margin: 0 }}>
-                      {service.desc}
-                    </p>
-                  </GlowCard>
-                </motion.div>
-              ))}
-            </section>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {viewMode === "deck" ? (
+        <Services3DDeck setPage={setPage} />
+      ) : (
+        <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
+          <section className="services-flex sr">
+            {allServices.map((service, index) => (
+              <motion.div 
+                className="service-card-animated" 
+                key={service.id}
+                initial={{ y: 0 }}
+                whileHover={{ y: -8 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                style={{ "--i": `${index * 0.1}s` }}
+              >
+                <div className="service-card-icon">{service.icon}</div>
+                <h2 style={{ fontSize: "20px", fontFamily: "var(--fd)", fontWeight: 800, marginBottom: "12px", letterSpacing: "-0.2px" }}>
+                  {service.title}
+                </h2>
+                <p className="muted" style={{ fontSize: "15px", lineHeight: 1.6, flex: 1, margin: 0 }}>
+                  {service.desc}
+                </p>
+              </motion.div>
+            ))}
+          </section>
+        </div>
+      )}
 
       <div className="wrap" style={{ position: "relative", zIndex: 1 }}>
-        <motion.section
-          className="services-bottom-cta"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          style={{ marginTop: "60px", textAlign: "center", padding: "60px 20px", background: "var(--card)", borderRadius: "var(--r)", border: "1px solid var(--border)" }}
-        >
+        {/* EXTRA CALL TO ACTION SECTION */}
+        <section className="services-bottom-cta sr" style={{ marginTop: "60px", textAlign: "center", padding: "60px 20px", background: "var(--card)", borderRadius: "var(--r)", border: "1px solid var(--border)" }}>
           <h2 style={{ fontFamily: "var(--fd)", fontSize: "32px", fontWeight: 800, marginBottom: "16px", letterSpacing: "-0.5px" }}>Ready to bring your vision to life?</h2>
           <p className="muted" style={{ maxWidth: "560px", margin: "0 auto 32px" }}>
             Whether you need a full brand overhaul or a targeted campaign, we are here to help you dominate your market.
           </p>
           <div className="services-cta-actions" style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-            <MagneticButton distance={0.3}>
-              <button className="btn btn-gold" onClick={() => setPage("contact")} style={{ cursor: "pointer" }}>
-                Let's Discuss
-                <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            </MagneticButton>
-            <MagneticButton distance={0.3}>
-              <button className="btn btn-ghost" onClick={() => setPage("home")} style={{ cursor: "pointer" }}>
-                Back to Home
-              </button>
-            </MagneticButton>
+            <button className="btn btn-gold" onClick={() => setPage("contact")}>
+              Let's Discuss
+              <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            <button className="btn btn-ghost" onClick={() => setPage("home")}>
+              Back to Home
+            </button>
           </div>
-        </motion.section>
+        </section>
       </div>
     </main>
   );
 }
+

@@ -1,38 +1,32 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "./components/Navbar";
+import CinematicHero from "./components/CinematicHero";
 import Hero from "./components/Hero";
-import ScrollUnscramble from "./components/ScrollUnscramble";
 import Stats from "./components/Stats";
 import TrustedBy from "./components/TrustedBy";
 import About from "./components/About";
 import Services from "./components/Services";
 import Process from "./components/Process";
 import Projects from "./components/Projects";
+
 import FAQ from "./components/FAQ";
-import GrowthClockSection from "./components/GrowthClockSection";
+import WhyWebsite from "./components/WhyWebsite";
 import CTABanner from "./components/CTABanner";
+import ContactPage from "./components/ContactPage";
+import CaseStudy from "./components/CaseStudy";
 import WhatsAppButton from "./components/WhatsAppButton";
 import ExitIntent from "./components/ExitIntent";
 import Footer from "./components/Footer";
-// Non-lazy: CinematicFallback is tiny (pure CSS divs)
-import CinematicFallback from "./components/CinematicFallback";
-
+import LandingPage from "./components/LandingPage";
+import ServicesPage from "./components/ServicesPage";
+import PricingPage from "./components/PricingPage";
 import {
   trackPageView,
   trackEvent,
   startEngagementTimer,
   bindAutoTracking,
 } from "./utils/tracking";
-
-// Code-split heavy subpages and 3D components for performance optimization
-const CinematicHeroLazy = lazy(() => import("./components/CinematicHero"));
-const ContactPage = lazy(() => import("./components/ContactPage"));
-const CaseStudy   = lazy(() => import("./components/CaseStudy"));
-const LandingPage = lazy(() => import("./components/LandingPage"));
-const ServicesPage = lazy(() => import("./components/ServicesPage"));
-const PricingPage  = lazy(() => import("./components/PricingPage"));
-
 
 const pageTransition = {
   initial: { opacity: 0, y: 12 },
@@ -46,13 +40,12 @@ class ErrorBoundary extends React.Component {
     super(props);
     this.state = { hasError: false };
   }
-  static getDerivedStateFromError() {
+  static getDerivedStateFromError(error) {
     return { hasError: true };
   }
   render() {
     if (this.state.hasError) {
-      // Show a beautiful gradient fallback instead of a black void
-      return this.props.fallback ?? null;
+      return null; // silently fail and show the rest of the site if 3D crashes
     }
     return this.props.children;
   }
@@ -146,56 +139,56 @@ export default function App() {
       <div className="grain" aria-hidden="true" />
       {page !== "landing" && <Navbar page={page} setPage={navigate} />}
 
-      <Suspense fallback={<div style={{ minHeight: "100vh", background: "var(--bg)" }} />}>
-        <AnimatePresence mode="wait">
-          {page === "home" && (
-            <motion.main key="home" {...pageTransition}>
-              <Hero setPage={navigate} />
-              <ScrollUnscramble />
-              <Stats />
-              <TrustedBy />
-              <About setPage={navigate} />
-              <Services />
-              <Process />
-              <Projects setPage={navigate} navigate={navigate} />
+      <AnimatePresence mode="wait">
+        {page === "home" && (
+          <motion.main key="home" {...pageTransition}>
+            <ErrorBoundary>
+              <CinematicHero />
+            </ErrorBoundary>
+            <Hero setPage={navigate} />
+            <Stats />
+            <TrustedBy />
+            <About setPage={navigate} />
+            <Services />
+            <Process />
+            <Projects setPage={navigate} navigate={navigate} />
 
-              <GrowthClockSection setPage={navigate} />
-              <FAQ setPage={navigate} />
-              <CTABanner setPage={navigate} />
-            </motion.main>
-          )}
+            <WhyWebsite setPage={navigate} />
+            <FAQ setPage={navigate} />
+            <CTABanner setPage={navigate} />
+          </motion.main>
+        )}
 
-          {page === "landing" && (
-            <motion.main key="landing" {...pageTransition}>
-              <LandingPage />
-            </motion.main>
-          )}
+        {page === "landing" && (
+          <motion.main key="landing" {...pageTransition}>
+            <LandingPage />
+          </motion.main>
+        )}
 
-          {page === "contact" && (
-            <motion.div key="contact" {...pageTransition}>
-              <ContactPage />
-            </motion.div>
-          )}
+        {page === "contact" && (
+          <motion.div key="contact" {...pageTransition}>
+            <ContactPage />
+          </motion.div>
+        )}
 
-          {page === "services" && (
-            <motion.div key="services" {...pageTransition}>
-              <ServicesPage setPage={navigate} />
-            </motion.div>
-          )}
+        {page === "services" && (
+          <motion.div key="services" {...pageTransition}>
+            <ServicesPage setPage={navigate} />
+          </motion.div>
+        )}
 
-          {page === "pricing" && (
-            <motion.div key="pricing" {...pageTransition}>
-              <PricingPage setPage={navigate} />
-            </motion.div>
-          )}
+        {page === "pricing" && (
+          <motion.div key="pricing" {...pageTransition}>
+            <PricingPage setPage={navigate} />
+          </motion.div>
+        )}
 
-          {page === "case" && (
-            <motion.div key={pageKey} {...pageTransition}>
-              <CaseStudy slug={caseSlug} navigate={navigate} />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </Suspense>
+        {page === "case" && (
+          <motion.div key={pageKey} {...pageTransition}>
+            <CaseStudy slug={caseSlug} navigate={navigate} />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {page !== "landing" && <Footer setPage={navigate} />}
 

@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { trackEvent } from "../utils/tracking";
-import GlowCard from "./common/GlowCard";
-import MagneticButton from "./common/MagneticButton";
-import SplitText from "./common/SplitText";
 
 const faqs = [
   {
@@ -34,55 +31,41 @@ const faqs = [
 
 const cardVariants = {
   hidden: { opacity: 0, y: 18 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.4, 0, 0.2, 1] } },
 };
 
 function FAQItem({ q, a, index, openIndex, setOpenIndex }) {
   const isOpen = openIndex === index;
-  const panelId = `faq-panel-${index}`;
-  const buttonId = `faq-btn-${index}`;
-
   return (
     <motion.div
       className={`faq-item${isOpen ? " open" : ""}`}
       variants={cardVariants}
     >
       <button
-        id={buttonId}
         className="faq-q"
         aria-expanded={isOpen}
-        aria-controls={panelId}
         onClick={() => {
           const next = isOpen ? -1 : index;
           setOpenIndex(next);
           if (next !== -1) trackEvent("faq_opened", { q });
         }}
-        style={{ cursor: "pointer" }}
       >
         <span className="faq-num">{String(index + 1).padStart(2, "0")}</span>
         <span className="faq-q-text">{q}</span>
-        <motion.span
-          className="faq-icon"
-          aria-hidden="true"
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.3 }}
-        >
+        <span className="faq-icon" aria-hidden="true">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M3 6l5 5 5-5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-        </motion.span>
+        </span>
       </button>
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
-            id={panelId}
-            role="region"
-            aria-labelledby={buttonId}
             key="content"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.32, ease: [0.4, 0, 0.2, 1] }}
             style={{ overflow: "hidden" }}
           >
             <p className="faq-a">{a}</p>
@@ -95,26 +78,26 @@ function FAQItem({ q, a, index, openIndex, setOpenIndex }) {
 
 const list = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
 };
 
 export default function FAQ({ setPage }) {
   const [openIndex, setOpenIndex] = useState(0);
 
   return (
-    <section className="faq" id="faq" aria-label="Frequently asked questions">
+    <section className="faq" id="faq">
       <div className="wrap">
         <div className="faq-layout">
           <div className="faq-left">
             <motion.div
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.55 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
             >
               <span className="tag">FAQ</span>
               <h2 className="sec-h">
-                <SplitText text="Your questions, answered." splitBy="words" />
+                Your questions,<br /><em>answered.</em>
               </h2>
             </motion.div>
 
@@ -122,7 +105,7 @@ export default function FAQ({ setPage }) {
               className="faq-list"
               initial="hidden"
               whileInView="show"
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.1 }}
               variants={list}
             >
               {faqs.map((f, i) => (
@@ -139,37 +122,32 @@ export default function FAQ({ setPage }) {
           </div>
 
           <motion.aside
+            className="faq-discover"
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1], delay: 0.15 }}
           >
-            <GlowCard className="faq-discover" style={{ padding: "32px", textAlign: "center" }}>
-              <div className="faq-discover-avatar" aria-hidden="true" style={{ margin: "0 auto 16px" }}>
-                <span>TSB</span>
-              </div>
-              <p className="faq-discover-eyebrow">Still not sure?</p>
-              <h3 className="faq-discover-title">Book a free discovery call.</h3>
-              <p className="faq-discover-sub">
-                No pitch, no pressure. Just a straight conversation about your business and whether we're the right fit.
-              </p>
-              <MagneticButton distance={0.3}>
-                <button
-                  className="btn btn-gold faq-discover-cta"
-                  data-track="faq_discovery_click"
-                  onClick={() => setPage("contact")}
-                  style={{ cursor: "pointer", width: "100%", justifyContent: "center" }}
-                  aria-label="Schedule a free discovery call with The Story Builder"
-                >
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
-                    <path d="M2 6h12M5 1.5v3M11 1.5v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                  </svg>
-                  Schedule Now
-                </button>
-              </MagneticButton>
-              <span className="faq-discover-pill" style={{ marginTop: "12px", display: "inline-block" }}>cal · 30 min</span>
-            </GlowCard>
+            <div className="faq-discover-avatar" aria-hidden="true">
+              <span>TSB</span>
+            </div>
+            <p className="faq-discover-eyebrow">Still not sure?</p>
+            <h3 className="faq-discover-title">Book a free discovery call.</h3>
+            <p className="faq-discover-sub">
+              No pitch, no pressure. Just a straight conversation about your business and whether we're the right fit.
+            </p>
+            <button
+              className="btn btn-gold faq-discover-cta"
+              data-track="faq_discovery_click"
+              onClick={() => setPage("contact")}
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <rect x="2" y="3" width="12" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.5"/>
+                <path d="M2 6h12M5 1.5v3M11 1.5v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+              Schedule Now
+            </button>
+            <span className="faq-discover-pill">cal · 30 min</span>
           </motion.aside>
         </div>
       </div>
