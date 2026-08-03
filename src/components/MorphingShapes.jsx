@@ -47,7 +47,6 @@ export default function MorphingShapes() {
         <div className="shape" />
         <div className="shape" />
       </div>
-      <div className="morph-hint">✨ Click shapes to morph dynamically</div>
     </div>
   );
 }
