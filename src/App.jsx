@@ -150,9 +150,6 @@ export default function App() {
         <AnimatePresence mode="wait">
           {page === "home" && (
             <motion.main key="home" {...pageTransition}>
-              <ErrorBoundary fallback={<CinematicFallback />}>
-                <CinematicHeroLazy />
-              </ErrorBoundary>
               <Hero setPage={navigate} />
               <ScrollUnscramble />
               <Stats />

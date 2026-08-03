@@ -30,7 +30,17 @@ export default function MorphingShapes() {
   const combo = combinations[comboIndex];
 
   return (
-    <div className="morph-shapes-box">
+    <div className="morph-shapes-card">
+      <div className="visual-floating-badge badge-top-left">
+        <span className="badge-dot" /> High-Converting UX
+      </div>
+      <div className="visual-floating-badge badge-top-right">
+        ⚡ AI Systems
+      </div>
+      <div className="visual-floating-badge badge-bottom-right">
+        📈 Paid Ads Scaling
+      </div>
+
       <div
         id="morph-wrapper"
         data-configuration={combo.configuration}
@@ -46,7 +56,7 @@ export default function MorphingShapes() {
         <div className="shape" />
         <div className="shape" />
       </div>
-      <div className="morph-hint">✨ Click shapes to morph</div>
+      <div className="morph-hint">✨ Click shapes to morph dynamically</div>
     </div>
   );
 }

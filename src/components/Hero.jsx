@@ -139,7 +139,7 @@ export default function Hero({ setPage }) {
   // Parallax on scroll
   const { scrollY } = useScroll();
   const bgY       = useTransform(scrollY, [0, 600], [0, 140]);
-  const heroOpacity = useTransform(scrollY, [0, 400], [1, 0.45]);
+  const heroOpacity = useTransform(scrollY, [0, 800], [1, 0.95]);
 
   // Mouse tilt tracking
   const mouseX  = useMotionValue(0);
