@@ -31,15 +31,6 @@ export default function MorphingShapes() {
 
   return (
     <div className="morph-shapes-card">
-      <div className="visual-floating-badge badge-top-left">
-        <span className="badge-dot" /> High-Converting UX
-      </div>
-      <div className="visual-floating-badge badge-top-right">
-        ⚡ AI Systems
-      </div>
-      <div className="visual-floating-badge badge-bottom-right">
-        📈 Paid Ads Scaling
-      </div>
 
       <div
         id="morph-wrapper"
