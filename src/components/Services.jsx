@@ -20,9 +20,18 @@ export default function Services({ setPage }) {
   }, []);
 
   return (
-    <section className="about" id="what-we-do" style={{ borderTop: "none" }}>
+    <section
+      className="services-section"
+      id="what-we-do"
+      style={{
+        borderTop: "none",
+        paddingTop: "clamp(90px, 12vw, 130px)",
+        paddingBottom: "40px",
+        scrollMarginTop: "80px",
+      }}
+    >
       <div className="wrap">
-        <div style={{ textAlign: "center", marginBottom: "20px" }}>
+        <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <span className="tag sr">What We Do</span>
           <h2 className="sec-h sr" style={{ marginBottom: "16px" }}>
             Services engineered for <em>growth.</em>
@@ -37,4 +46,5 @@ export default function Services({ setPage }) {
     </section>
   );
 }
+
 

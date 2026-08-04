@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 
 const servicesData = [
   {
@@ -53,25 +53,52 @@ const servicesData = [
 
 export default function Services3DDeck({ setPage }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const touchStartX = useRef(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const pointerStartX = useRef(0);
+  const isDragging = useRef(false);
   const total = servicesData.length;
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % total);
-  };
+  }, [total]);
 
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setActiveIndex((prev) => (prev - 1 + total) % total);
+  }, [total]);
+
+  // Auto-play carousel timer with hover pause
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      nextSlide();
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [isPaused, nextSlide]);
+
+  // Pointer / Drag gesture handlers
+  const handlePointerDown = (e) => {
+    isDragging.current = true;
+    pointerStartX.current = e.clientX;
+    setIsPaused(true);
   };
 
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
+  const handlePointerUp = (e) => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    const diffX = e.clientX - pointerStartX.current;
+    if (diffX > 35) {
+      prevSlide();
+    } else if (diffX < -35) {
+      nextSlide();
+    }
   };
 
-  const handleTouchEnd = (e) => {
-    const diffX = e.changedTouches[0].clientX - touchStartX.current;
-    if (diffX > 40) prevSlide();
-    if (diffX < -40) nextSlide();
+  const handleKeyDown = (e) => {
+    if (e.key === "ArrowLeft") {
+      prevSlide();
+    } else if (e.key === "ArrowRight") {
+      nextSlide();
+    }
   };
 
   const getOffsetClass = (index) => {
@@ -88,21 +115,36 @@ export default function Services3DDeck({ setPage }) {
   };
 
   return (
-    <div className="services-3d-wrapper">
+    <div
+      className="services-3d-wrapper"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      aria-label="Interactive 3D Services Showcase"
+    >
       <div
         className="services-slider-container"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
       >
         {servicesData.map((service, index) => {
           const slotClass = getOffsetClass(index);
+          const isActive = index === activeIndex;
+
           return (
             <div
               key={service.id}
               className={`services-slide ${slotClass}`}
-              onClick={() => setActiveIndex(index)}
+              onClick={() => {
+                if (!isActive) {
+                  setActiveIndex(index);
+                }
+              }}
+              role="button"
+              aria-label={`View ${service.title}`}
             >
-              {/* Top Browser Bar */}
+              {/* Top Browser Header Bar */}
               <div className="browser-header-bar">
                 <div className="browser-dots">
                   <span className="browser-dot red" />
@@ -119,6 +161,7 @@ export default function Services3DDeck({ setPage }) {
                   src={service.img}
                   alt={service.title}
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
 
@@ -134,7 +177,7 @@ export default function Services3DDeck({ setPage }) {
                     e.stopPropagation();
                     if (setPage) setPage("contact");
                   }}
-                  aria-label={`Explore ${service.title}`}
+                  aria-label={`Inquire about ${service.title}`}
                   type="button"
                 >
                   ↗
@@ -144,7 +187,7 @@ export default function Services3DDeck({ setPage }) {
           );
         })}
 
-        {/* Controls */}
+        {/* Floating Controls Bar */}
         <div className="services-deck-controls">
           <button
             className="services-deck-arrow left"
