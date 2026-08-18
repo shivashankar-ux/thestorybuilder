@@ -118,6 +118,32 @@ export async function trackPageView(page) {
 }
 
 export async function trackEvent(name, extra = {}) {
+  // Fire Meta Pixel Events to Meta Ads / Event Manager
+  if (typeof window !== "undefined" && typeof window.fbq === "function") {
+    try {
+      if (name === "contact_form_submitted") {
+        window.fbq("track", "Lead", {
+          content_name: extra.project || "Contact Form",
+          content_category: extra.area || "General",
+        });
+      } else if (name.includes("whatsapp") || name.includes("wa_")) {
+        window.fbq("track", "Contact", { channel: "WhatsApp", ...extra });
+      } else if (name.includes("phone_click") || name.includes("email_click")) {
+        window.fbq("track", "Contact", { method: name, ...extra });
+      } else if (name.includes("book") || name.includes("schedule") || name.includes("calendly")) {
+        window.fbq("track", "Schedule", extra);
+      } else if (name.includes("pricing") || name.includes("services")) {
+        window.fbq("track", "ViewContent", { content_type: "page", name, ...extra });
+      } else if (name === "exit_intent_claimed") {
+        window.fbq("track", "Lead", { content_name: "Free Audit Claim" });
+      } else {
+        window.fbq("trackCustom", name, extra);
+      }
+    } catch (err) {
+      console.warn("Meta Pixel event tracking error:", err);
+    }
+  }
+
   if (!isEnabled()) return;
   // dedupe per session: don't email about the same event repeatedly
   const seen = (() => {
@@ -152,12 +178,22 @@ export function startEngagementTimer() {
   }, 30_000);
 }
 
-/* Auto-bind clicks on elements with data-track attribute */
+/* Auto-bind clicks on elements with data-track attribute and contact links */
 export function bindAutoTracking() {
-  if (!isEnabled()) return;
   document.addEventListener(
     "click",
     (e) => {
+      const link = e.target.closest("a");
+      if (link && link.href) {
+        if (link.href.includes("wa.me")) {
+          trackEvent("whatsapp_click", { href: link.href });
+        } else if (link.href.startsWith("tel:")) {
+          trackEvent("phone_click", { href: link.href });
+        } else if (link.href.startsWith("mailto:")) {
+          trackEvent("email_click", { href: link.href });
+        }
+      }
+
       const t = e.target.closest("[data-track]");
       if (!t) return;
       trackEvent(t.getAttribute("data-track") || "click", {
@@ -167,3 +203,4 @@ export function bindAutoTracking() {
     { passive: true, capture: true }
   );
 }
+
