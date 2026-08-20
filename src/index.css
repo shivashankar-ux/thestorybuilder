@@ -2632,25 +2632,31 @@ a:focus-visible,
 }
 
 .pricing-tab-btn.active {
-  color: #000;
+  color: #FFFDF9 !important;
+}
+
+.pricing-tab-btn.active .pricing-tab-icon {
+  color: var(--gold-accent, #FACC15);
 }
 
 [data-theme="light"] .pricing-tab-btn.active {
-  color: #fff;
+  color: #FFFDF9 !important;
 }
 
 .pricing-tab-active-bg {
   position: absolute;
   inset: 0;
-  background: var(--text);
+  background: #1A1208;
   border-radius: 100px;
   z-index: -1;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
 .pricing-tab-icon {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: color 0.3s var(--ease);
 }
 
 .pricing-tab-icon svg {
@@ -2952,10 +2958,10 @@ a:focus-visible,
   background: rgba(0, 0, 0, 0.02);
 }
 [data-theme="light"] .pricing-tab-btn.active {
-  color: #fff;
+  color: #FFFDF9 !important;
 }
 [data-theme="light"] .pricing-tab-active-bg {
-  background: var(--text);
+  background: #1A1208;
 }
 [data-theme="light"] .pricing-card-tier {
   background: #fffdf9;
