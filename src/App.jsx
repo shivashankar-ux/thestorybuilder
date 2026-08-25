@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "./components/Navbar";
-import CinematicHero from "./components/CinematicHero";
 import Hero from "./components/Hero";
 import ScrollUnscramble from "./components/ScrollUnscramble";
 import Stats from "./components/Stats";
@@ -22,12 +21,29 @@ import Footer from "./components/Footer";
 import LandingPage from "./components/LandingPage";
 import ServicesPage from "./components/ServicesPage";
 import PricingPage from "./components/PricingPage";
+
+// New Route Components
+import PrivacyPage from "./components/legal/PrivacyPage";
+import TermsPage from "./components/legal/TermsPage";
+import CookiesPage from "./components/legal/CookiesPage";
+import DisclaimerPage from "./components/legal/DisclaimerPage";
+import RefundPage from "./components/legal/RefundPage";
+import WebDevPage from "./components/services/WebDevPage";
+import PerformanceMarketingPage from "./components/services/PerformanceMarketingPage";
+import SocialMediaPage from "./components/services/SocialMediaPage";
+import BrandingPage from "./components/services/BrandingPage";
+import FAQPage from "./components/FAQPage";
+import BlogPage from "./components/BlogPage";
+import NotFoundPage from "./components/NotFoundPage";
+import CookieConsent from "./components/CookieConsent";
+
 import {
   trackPageView,
   trackEvent,
   startEngagementTimer,
   bindAutoTracking,
 } from "./utils/tracking";
+import { captureUTMParams } from "./utils/utm";
 
 const pageTransition = {
   initial: { opacity: 0, y: 12 },
@@ -36,91 +52,188 @@ const pageTransition = {
   transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] },
 };
 
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { hasError: false };
+function getRouteFromPath(path) {
+  const p = path.toLowerCase().replace(/\/$/, "") || "/";
+  if (p === "" || p === "/") return { page: "home", slug: null };
+  if (p === "/landing") return { page: "landing", slug: null };
+  if (p === "/services") return { page: "services", slug: null };
+  if (p === "/services/web-development") return { page: "service-web-dev", slug: null };
+  if (p === "/services/performance-marketing") return { page: "service-perf-mktg", slug: null };
+  if (p === "/services/social-media-marketing") return { page: "service-smm", slug: null };
+  if (p === "/services/branding") return { page: "service-branding", slug: null };
+  if (p === "/pricing") return { page: "pricing", slug: null };
+  if (p === "/contact") return { page: "contact", slug: null };
+  if (p === "/faq") return { page: "faq", slug: null };
+  if (p === "/privacy") return { page: "privacy", slug: null };
+  if (p === "/terms") return { page: "terms", slug: null };
+  if (p === "/cookies") return { page: "cookies", slug: null };
+  if (p === "/disclaimer") return { page: "disclaimer", slug: null };
+  if (p === "/refund-cancellation" || p === "/refund") return { page: "refund", slug: null };
+  if (p === "/blog" || p === "/resources") return { page: "blog", slug: null };
+
+  if (p.startsWith("/case-studies/")) {
+    const slug = p.replace("/case-studies/", "");
+    return { page: "case", slug };
   }
-  static getDerivedStateFromError(error) {
-    return { hasError: true };
-  }
-  render() {
-    if (this.state.hasError) {
-      return null; // silently fail and show the rest of the site if 3D crashes
-    }
-    return this.props.children;
-  }
+
+  return { page: "not-found", slug: null };
 }
 
+function getPathFromRoute(page, slug) {
+  if (page === "landing") return "/landing";
+  if (page === "services") return "/services";
+  if (page === "service-web-dev") return "/services/web-development";
+  if (page === "service-perf-mktg") return "/services/performance-marketing";
+  if (page === "service-smm") return "/services/social-media-marketing";
+  if (page === "service-branding") return "/services/branding";
+  if (page === "pricing") return "/pricing";
+  if (page === "contact") return "/contact";
+  if (page === "faq") return "/faq";
+  if (page === "privacy") return "/privacy";
+  if (page === "terms") return "/terms";
+  if (page === "cookies") return "/cookies";
+  if (page === "disclaimer") return "/disclaimer";
+  if (page === "refund") return "/refund-cancellation";
+  if (page === "blog") return "/blog";
+  if (page === "case" && slug) return `/case-studies/${slug}`;
+  if (page === "not-found") return "/404";
+  return "/";
+}
+
+const pageMetadata = {
+  home: {
+    title: "Website Design Hyderabad — Web Design & Development Agency | The Story Builder",
+    desc: "Website design & web development agency in Hyderabad. Custom websites, performance marketing, and brand strategy shipped in 7 days for businesses across India.",
+  },
+  landing: {
+    title: "Website Design Hyderabad — Live in 7 Days | The Story Builder",
+    desc: "Get a custom, high-converting website built in 7 days. Web design, lead generation, and performance marketing in Hyderabad. Free quote.",
+  },
+  services: {
+    title: "Digital Marketing & Web Design Services Hyderabad | The Story Builder",
+    desc: "Full-service digital marketing solutions: Website Development, Meta & Google Ads, Social Media Marketing, and Brand Strategy for growing businesses.",
+  },
+  "service-web-dev": {
+    title: "Custom Web Development & Website Design Services | The Story Builder",
+    desc: "Mobile-first, lightning-fast custom web development live in 7 days. Lead-capture integration, performance optimization, and custom UI/UX.",
+  },
+  "service-perf-mktg": {
+    title: "Performance Marketing & Meta Ads Agency Hyderabad | The Story Builder",
+    desc: "ROI-driven Meta & Google Ads campaigns engineered for qualified lead volume and positive ROAS. Conversion tracking & funnel optimization.",
+  },
+  "service-smm": {
+    title: "Social Media Marketing & Instagram Management | The Story Builder",
+    desc: "Done-for-you Instagram growth, short-form Reels scripts, custom visual content, and brand authority campaigns for business founders.",
+  },
+  "service-branding": {
+    title: "Brand Strategy & Identity Design Studio | The Story Builder",
+    desc: "Command authority with logo suites, typography systems, color palettes, and comprehensive brand guidelines built for modern growth.",
+  },
+  pricing: {
+    title: "Transparent Pricing Plans — Websites, Marketing & Branding | The Story Builder",
+    desc: "Clear, predictable packages for web development, Instagram management, branding, and performance lead generation. Zero hidden fees.",
+  },
+  contact: {
+    title: "Contact Us — Talk to The Story Builder Digital Agency Hyderabad",
+    desc: "Get in touch with The Story Builder. Book a free 30-minute strategy call or request a project quote within 24 hours.",
+  },
+  faq: {
+    title: "Frequently Asked Questions — Web Development & Marketing | The Story Builder",
+    desc: "Got questions about project timelines, pricing, ad spend, or website ownership? Read our transparent FAQ breakdown.",
+  },
+  privacy: {
+    title: "Privacy Policy | The Story Builder",
+    desc: "Our commitment to data protection, tracking transparency, and user privacy rights at The Story Builder.",
+  },
+  terms: {
+    title: "Terms & Conditions | The Story Builder",
+    desc: "Official terms and conditions governing project scope, client rights, and services provided by The Story Builder.",
+  },
+  cookies: {
+    title: "Cookie Policy | The Story Builder",
+    desc: "Learn how we use cookies, analytics, and tracking technologies to enhance user experience.",
+  },
+  disclaimer: {
+    title: "Disclaimer | The Story Builder",
+    desc: "General disclaimer regarding marketing case study metrics, third-party services, and website information.",
+  },
+  refund: {
+    title: "Refund & Cancellation Policy | The Story Builder",
+    desc: "Transparent policies governing project deposits, retainers, and refund processing terms.",
+  },
+  blog: {
+    title: "Growth Guides & Marketing Resources | The Story Builder",
+    desc: "Actionable growth insights, case breakdowns, and performance marketing strategies for founders.",
+  },
+  "not-found": {
+    title: "404 Page Not Found | The Story Builder",
+    desc: "The requested page could not be found.",
+  },
+};
+
 export default function App() {
-  const [page, setPage] = useState(() => {
+  const [route, setRoute] = useState(() => {
     if (typeof window !== "undefined") {
-      if (window.location.pathname === "/landing") return "landing";
-      if (window.location.pathname === "/services") return "services";
-      if (window.location.pathname === "/pricing") return "pricing";
+      return getRouteFromPath(window.location.pathname);
     }
-    return "home";
+    return { page: "home", slug: null };
   });
-  const [caseSlug, setCaseSlug] = useState(null);
+
   const [pendingScroll, setPendingScroll] = useState(null);
+
+  const page = route.page;
+  const caseSlug = route.slug;
 
   const navigate = (dest) => {
     if (typeof dest === "string") {
-      setPage(dest);
-      setCaseSlug(null);
+      const parsed = getRouteFromPath(dest.startsWith("/") ? dest : `/${dest}`);
+      setRoute(parsed);
       return;
     }
     if (dest && typeof dest === "object") {
       if (dest.page === "case" && dest.caseSlug) {
-        setCaseSlug(dest.caseSlug);
-        setPage("case");
+        setRoute({ page: "case", slug: dest.caseSlug });
       } else if (dest.page) {
-        setPage(dest.page);
-        setCaseSlug(null);
+        setRoute({ page: dest.page, slug: dest.slug || null });
         if (dest.scrollTo) setPendingScroll(dest.scrollTo);
       }
     }
   };
 
   useEffect(() => {
+    captureUTMParams();
     trackPageView();
     startEngagementTimer();
     bindAutoTracking();
 
-    const onPop = () => {
-      const path = window.location.pathname;
-      if (path === "/landing") {
-        setPage("landing");
-      } else if (path === "/services") {
-        setPage("services");
-      } else if (path === "/pricing") {
-        setPage("pricing");
-      } else {
-        setPage("home");
-      }
-      setCaseSlug(null);
+    const onPopState = () => {
+      setRoute(getRouteFromPath(window.location.pathname));
     };
-    window.addEventListener("popstate", onPop);
-    return () => window.removeEventListener("popstate", onPop);
+
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
   }, []);
 
   useEffect(() => {
-    let desired = "/";
-    if (page === "landing") desired = "/landing";
-    else if (page === "services") desired = "/services";
-    else if (page === "pricing") desired = "/pricing";
-    
-    if (window.location.pathname !== desired) {
+    const desired = getPathFromRoute(page, caseSlug);
+    if (window.location.pathname !== desired && desired !== "/404") {
       window.history.pushState({}, "", desired);
     }
-  }, [page]);
 
-  useEffect(() => {
+    // Dynamic metadata update
+    const meta = pageMetadata[page] || pageMetadata.home;
+    const title = page === "case" && caseSlug ? `${caseSlug.replace("-", " ").toUpperCase()} Case Study | The Story Builder` : meta.title;
+    document.title = title;
+
+    const descEl = document.querySelector('meta[name="description"]');
+    if (descEl) descEl.setAttribute("content", meta.desc);
+
+    const canonicalEl = document.querySelector('link[rel="canonical"]');
+    if (canonicalEl) canonicalEl.setAttribute("href", `https://thestorybuilder.in${desired}`);
+
     window.scrollTo({ top: 0, behavior: "smooth" });
-    if (page === "contact") trackEvent("viewed_contact_page");
-    if (page === "case" && caseSlug) trackEvent("viewed_case_study", { slug: caseSlug });
-    if (page === "landing") trackEvent("viewed_landing_page");
-    if (page === "pricing") trackEvent("viewed_pricing_page");
+
+    trackEvent("viewed_page", { page, path: desired });
   }, [page, caseSlug]);
 
   useEffect(() => {
@@ -166,7 +279,7 @@ export default function App() {
 
         {page === "contact" && (
           <motion.div key="contact" {...pageTransition}>
-            <ContactPage />
+            <ContactPage setPage={navigate} />
           </motion.div>
         )}
 
@@ -176,9 +289,75 @@ export default function App() {
           </motion.div>
         )}
 
+        {page === "service-web-dev" && (
+          <motion.div key="service-web-dev" {...pageTransition}>
+            <WebDevPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "service-perf-mktg" && (
+          <motion.div key="service-perf-mktg" {...pageTransition}>
+            <PerformanceMarketingPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "service-smm" && (
+          <motion.div key="service-smm" {...pageTransition}>
+            <SocialMediaPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "service-branding" && (
+          <motion.div key="service-branding" {...pageTransition}>
+            <BrandingPage setPage={navigate} />
+          </motion.div>
+        )}
+
         {page === "pricing" && (
           <motion.div key="pricing" {...pageTransition}>
             <PricingPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "faq" && (
+          <motion.div key="faq" {...pageTransition}>
+            <FAQPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "privacy" && (
+          <motion.div key="privacy" {...pageTransition}>
+            <PrivacyPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "terms" && (
+          <motion.div key="terms" {...pageTransition}>
+            <TermsPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "cookies" && (
+          <motion.div key="cookies" {...pageTransition}>
+            <CookiesPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "disclaimer" && (
+          <motion.div key="disclaimer" {...pageTransition}>
+            <DisclaimerPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "refund" && (
+          <motion.div key="refund" {...pageTransition}>
+            <RefundPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "blog" && (
+          <motion.div key="blog" {...pageTransition}>
+            <BlogPage setPage={navigate} />
           </motion.div>
         )}
 
@@ -187,12 +366,19 @@ export default function App() {
             <CaseStudy slug={caseSlug} navigate={navigate} />
           </motion.div>
         )}
+
+        {page === "not-found" && (
+          <motion.div key="not-found" {...pageTransition}>
+            <NotFoundPage setPage={navigate} />
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {page !== "landing" && <Footer setPage={navigate} />}
 
       {page !== "landing" && <WhatsAppButton />}
       {page !== "landing" && <ExitIntent setPage={navigate} />}
+      <CookieConsent setPage={navigate} />
     </div>
   );
 }

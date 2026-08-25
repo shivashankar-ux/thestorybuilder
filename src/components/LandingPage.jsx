@@ -1003,12 +1003,13 @@ export default function LandingPage() {
             {/* Photo — sized & in normal flow, negative margin pulls card up */}
             <img
               className="lp-photo-founder"
-              src="/shiva-landing.png"
+              src="/shiva-landing.webp"
               alt="Shiva Shankar, founder of The Story Builder"
+              loading="lazy"
               onError={(e) => {
                 if (!e.currentTarget.dataset.fallback) {
                   e.currentTarget.dataset.fallback = "1";
-                  e.currentTarget.src = "/shiva.jpg";
+                  e.currentTarget.src = "/shiva.webp";
                 }
               }}
               style={{
@@ -1766,12 +1767,13 @@ export default function LandingPage() {
             >
               <img
                 className="lp-photo-about"
-                src="/shiva-about.png"
+                src="/shiva-about.webp"
                 alt="Shiva Shankar, founder of The Story Builder"
+                loading="lazy"
                 onError={(e) => {
                   if (!e.currentTarget.dataset.fallback) {
                     e.currentTarget.dataset.fallback = "1";
-                    e.currentTarget.src = "/shiva-landing.png";
+                    e.currentTarget.src = "/shiva-landing.webp";
                   }
                 }}
                 style={{

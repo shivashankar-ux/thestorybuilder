@@ -340,15 +340,7 @@ const DotIcon = () => (
 export default function PricingPage({ setPage }) {
   const [activeCategory, setActiveCategory] = useState("websites");
 
-  useEffect(() => {
-    const meta = document.createElement("meta");
-    meta.name = "robots";
-    meta.content = "noindex, nofollow";
-    document.head.appendChild(meta);
-    return () => {
-      document.head.removeChild(meta);
-    };
-  }, []);
+
 
   useEffect(() => {
     const els = document.querySelectorAll(".sr");

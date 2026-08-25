@@ -49,6 +49,9 @@ export default function Navbar({ page, setPage }) {
     } else if (dest === "pricing") {
       setPage("pricing");
       setMenuOpen(false);
+    } else if (dest === "faq") {
+      setPage("faq");
+      setMenuOpen(false);
     } else if (dest === "home") {
       setPage("home");
       setMenuOpen(false);
@@ -63,8 +66,9 @@ export default function Navbar({ page, setPage }) {
   const navItems = [
     { id: "home",     label: "Home" },
     { id: "services", label: "Services" },
-    { id: "process",  label: "Process" },
+    { id: "pricing",  label: "Pricing" },
     { id: "projects", label: "Work" },
+    { id: "faq",      label: "FAQ" },
     { id: "contact",  label: "Contact" },
   ];
 

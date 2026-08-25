@@ -82,6 +82,48 @@ const studies = {
       attr: "Director, Chess Academy",
     },
     liveUrl: "https://chessacademy-next-js-chirag-client.vercel.app/",
+    related: "subbaiah-hospital",
+    relatedLabel: "Next: Subbaiah Hospital",
+  },
+  "subbaiah-hospital": {
+    client: "Subbaiah Hospital",
+    industry: "Healthcare · Local Growth",
+    summary:
+      "A respected multi-specialty healthcare provider needed to modernize their web presence, capture local search intent, and streamline patient appointment bookings.",
+    hero:
+      "https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=1600&q=80",
+    services: ["Web Development", "Local SEO", "Appointment Booking", "Meta Ads"],
+    duration: "8 weeks",
+    market: "Hyderabad, India",
+    results: [
+      { value: "2.8×", label: "Online appointment bookings" },
+      { value: "+145%", label: "Google Maps direction requests" },
+      { value: "4.8★", label: "Patient review rating" },
+      { value: "<1.8s", label: "Mobile Page Load" },
+    ],
+    sections: [
+      {
+        title: "The Problem",
+        body: "Patients struggled to find department information, doctor schedules, or book consultations on mobile devices. The legacy site lacked local SEO optimization and conversion paths.",
+      },
+      {
+        title: "The Strategy",
+        body: "Design a clean, patient-first web application with instant emergency contact buttons, department breakdown, doctor profiles, and direct WhatsApp / online appointment booking.",
+      },
+      {
+        title: "What We Built",
+        body: "A responsive medical portal with core department pages, emergency call bar, Google Business Profile integration, and local search optimization across Hyderabad keywords.",
+      },
+      {
+        title: "The Outcome",
+        body: "Online consultation bookings expanded nearly 3x within 60 days, with significant increases in walk-in appointments derived from local map searches.",
+      },
+    ],
+    quote: {
+      text: "The new website dramatically improved our patient onboarding and appointment scheduling efficiency.",
+      attr: "Management, Subbaiah Hospital",
+    },
+    liveUrl: "https://thestorybuilder.in/contact",
     related: "legacy-solar",
     relatedLabel: "Next: Legacy Solar",
   },

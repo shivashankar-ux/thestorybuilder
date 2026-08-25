@@ -1,6 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /pricing
 
 Sitemap: https://thestorybuilder.in/sitemap.xml

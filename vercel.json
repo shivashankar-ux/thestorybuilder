@@ -28,8 +28,9 @@
       "source": "/tsb/:path*",
       "destination": "https://thestorybuilderdashboard.vercel.app/tsb/:path*"
     },
-    { "source": "/landing", "destination": "/index.html" },
-    { "source": "/services", "destination": "/index.html" },
-    { "source": "/pricing", "destination": "/index.html" }
+    {
+      "source": "/((?!api/|.*\\..*).*)",
+      "destination": "/index.html"
+    }
   ]
 }
