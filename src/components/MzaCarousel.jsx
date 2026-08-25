@@ -1,16 +1,5 @@
-import React, { useEffect, useRef } from "react";
-
-const ArrowIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
-    <path
-      d="M5 15L15 5M15 5H8M15 5v7"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const defaultProjects = [
   {
@@ -21,7 +10,8 @@ const defaultProjects = [
     img: "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=1200&q=80",
     url: "https://legacysolar.in",
     caseSlug: "legacy-solar",
-    ctaText: "View Live Site",
+    services: ["Web Development", "SEO", "Google Ads"],
+    metric: "Lead-Gen Funnel",
   },
   {
     id: 2,
@@ -30,7 +20,8 @@ const defaultProjects = [
     text: "Mobile-first studio site engineered with local SEO and Meta ads to drive consistent membership sign-ups across the city.",
     img: "https://images.unsplash.com/photo-1550345332-09e3ac987658?w=1200&q=80",
     url: "https://starfitnessstudio.in",
-    ctaText: "View Live Site",
+    services: ["Web Development", "Local SEO", "Meta Ads"],
+    metric: "Membership Growth",
   },
   {
     id: 3,
@@ -39,7 +30,8 @@ const defaultProjects = [
     text: "Appetising D2C brand experience with an order-driven layout and Meta retargeting in place to keep customers coming back.",
     img: "https://images.unsplash.com/photo-1562376552-0d160a2f238d?w=1200&q=80",
     url: "https://waffleshub.com/",
-    ctaText: "View Live Site",
+    services: ["Brand Strategy", "Web Development", "Meta Ads"],
+    metric: "Online Orders",
   },
   {
     id: 4,
@@ -49,7 +41,8 @@ const defaultProjects = [
     img: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=1200&q=80",
     url: "https://chessacademy-next-js-chirag-client.vercel.app/",
     caseSlug: "chess-academy",
-    ctaText: "View Live Site",
+    services: ["Next.js", "Funnel Design", "AI Platform"],
+    metric: "Student Acquisition",
   },
   {
     id: 5,
@@ -58,7 +51,8 @@ const defaultProjects = [
     text: "Bold, high-energy brand site paired with performance ad campaigns engineered to drive trial sign-ups and walk-ins.",
     img: "https://images.unsplash.com/photo-1555597673-b21d5c935865?w=1200&q=80",
     url: "https://unbentmartialfitness.com",
-    ctaText: "View Live Site",
+    services: ["Brand Strategy", "Web Development", "Paid Ads"],
+    metric: "Trial Sign-ups",
   },
   {
     id: 6,
@@ -67,7 +61,8 @@ const defaultProjects = [
     text: "A refined web presence for a boutique interior design studio — portfolio-led storytelling, project galleries, and a soft conversion path.",
     img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&q=80",
     url: "https://the-white-closet.vercel.app/",
-    ctaText: "View Live Site",
+    services: ["Web Development", "Brand Storytelling", "Portfolio UX"],
+    metric: "Consultation Enquiries",
   },
   {
     id: 7,
@@ -76,525 +71,376 @@ const defaultProjects = [
     text: "Personal brand experience built to position the founder as a category authority — credibility-led design plus content-led SEO for inbound clients.",
     img: "https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=1200&q=80",
     url: "https://www.digitalwithchirag.com/",
-    ctaText: "View Live Site",
-  },
-  {
-    id: 8,
-    title: "Siolim Cafe",
-    kicker: "Hospitality · Local SEO",
-    text: "Warm, mobile-first hospitality site optimised for Google Maps and 'near-me' search — designed to convert browsers into walk-in customers.",
-    img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=1200&q=80",
-    url: "https://siolimcafe.vercel.app/",
-    ctaText: "View Live Site",
-  },
-  {
-    id: 9,
-    title: "SevAction Foundation",
-    kicker: "Non-Profit · Donations",
-    text: "Mission-driven non-profit website engineered to communicate impact and convert empathy into donations — clear story, clear ask.",
-    img: "https://images.unsplash.com/photo-1593113598332-cd288d649433?w=1200&q=80",
-    url: "https://sevactionfoundation.in/",
-    ctaText: "View Live Site",
+    services: ["Personal Branding", "Web Development", "Content SEO"],
+    metric: "Inbound Enquiries",
   },
 ];
 
-class MzaCarouselEngine {
-  constructor(root, opts = {}) {
-    this.root = root;
-    this.viewport = root.querySelector(".mzaCarousel-viewport");
-    this.track = root.querySelector(".mzaCarousel-track");
-    this.slides = Array.from(root.querySelectorAll(".mzaCarousel-slide"));
-    this.prevBtn = root.querySelector(".mzaCarousel-prev");
-    this.nextBtn = root.querySelector(".mzaCarousel-next");
-    this.pagination = root.querySelector(".mzaCarousel-pagination");
-    this.progressBar = root.querySelector(".mzaCarousel-progressBar");
-    this.isFF = typeof window !== "undefined" && typeof window.InstallTrigger !== "undefined";
-    this.n = this.slides.length;
-    this.cleanupFns = [];
-    this.state = {
-      index: 0,
-      pos: 0,
-      width: 0,
-      height: 0,
-      gap: 28,
-      dragging: false,
-      pointerId: null,
-      x0: 0,
-      v: 0,
-      t0: 0,
-      animating: false,
-      hovering: false,
-      startTime: 0,
-      pausedAt: 0,
-      rafId: 0,
-    };
-    this.opts = Object.assign(
-      {
-        gap: 28,
-        peek: 0.15,
-        rotateY: 34,
-        zDepth: 150,
-        scaleDrop: 0.09,
-        blurMax: 2.0,
-        activeLeftBias: 0.12,
-        interval: 4500,
-        transitionMs: 900,
-        keyboard: true,
-        breakpoints: [
-          {
-            mq: "(max-width: 1200px)",
-            gap: 24,
-            peek: 0.12,
-            rotateY: 28,
-            zDepth: 120,
-            scaleDrop: 0.08,
-            activeLeftBias: 0.1,
-          },
-          {
-            mq: "(max-width: 1000px)",
-            gap: 18,
-            peek: 0.09,
-            rotateY: 22,
-            zDepth: 90,
-            scaleDrop: 0.07,
-            activeLeftBias: 0.09,
-          },
-          {
-            mq: "(max-width: 768px)",
-            gap: 14,
-            peek: 0.06,
-            rotateY: 16,
-            zDepth: 70,
-            scaleDrop: 0.06,
-            activeLeftBias: 0.08,
-          },
-          {
-            mq: "(max-width: 560px)",
-            gap: 12,
-            peek: 0.05,
-            rotateY: 12,
-            zDepth: 60,
-            scaleDrop: 0.05,
-            activeLeftBias: 0.07,
-          },
-        ],
-      },
-      opts
-    );
-    if (this.isFF) {
-      this.opts.rotateY = 10;
-      this.opts.zDepth = 0;
-      this.opts.blurMax = 0;
-    }
-    this._init();
-  }
-
-  _init() {
-    this._setupDots();
-    this._bind();
-    this._preloadImages();
-    this._measure();
-    this.goTo(0, false);
-    this._startCycle();
-    this._loop();
-  }
-
-  _preloadImages() {
-    this.slides.forEach((sl) => {
-      const card = sl.querySelector(".mzaCard");
-      if (!card) return;
-      const bg = getComputedStyle(card).getPropertyValue("--mzaCard-bg");
-      const m = /url\((?:'|")?([^'")]+)(?:'|")?\)/.exec(bg);
-      if (m && m[1]) {
-        const img = new Image();
-        img.src = m[1];
-      }
-    });
-  }
-
-  _setupDots() {
-    if (!this.pagination) return;
-    this.pagination.innerHTML = "";
-    this.dots = this.slides.map((_, i) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "mzaCarousel-dot";
-      b.setAttribute("role", "tab");
-      b.setAttribute("aria-label", `Go to slide ${i + 1}`);
-      const handler = () => this.goTo(i);
-      b.addEventListener("click", handler);
-      this.pagination.appendChild(b);
-      return b;
-    });
-  }
-
-  _bind() {
-    const addEv = (target, type, handler) => {
-      if (!target) return;
-      target.addEventListener(type, handler);
-      this.cleanupFns.push(() => target.removeEventListener(type, handler));
-    };
-
-    if (this.prevBtn) addEv(this.prevBtn, "click", () => this.prev());
-    if (this.nextBtn) addEv(this.nextBtn, "click", () => this.next());
-
-    if (this.opts.keyboard) {
-      addEv(this.root, "keydown", (e) => {
-        if (e.key === "ArrowLeft") this.prev();
-        if (e.key === "ArrowRight") this.next();
-      });
-    }
-
-    const pe = this.viewport;
-    if (pe) {
-      addEv(pe, "pointerdown", (e) => this._onDragStart(e));
-      addEv(pe, "pointermove", (e) => this._onDragMove(e));
-      addEv(pe, "pointerup", (e) => this._onDragEnd(e));
-      addEv(pe, "pointercancel", (e) => this._onDragEnd(e));
-      addEv(pe, "pointermove", (e) => this._onTilt(e));
-    }
-
-    addEv(this.root, "mouseenter", () => {
-      this.state.hovering = true;
-      this.state.pausedAt = performance.now();
-    });
-
-    addEv(this.root, "mouseleave", () => {
-      if (this.state.pausedAt) {
-        this.state.startTime += performance.now() - this.state.pausedAt;
-        this.state.pausedAt = 0;
-      }
-      this.state.hovering = false;
-    });
-
-    if (typeof ResizeObserver !== "undefined" && this.viewport) {
-      this.ro = new ResizeObserver(() => this._measure());
-      this.ro.observe(this.viewport);
-    }
-
-    this.opts.breakpoints.forEach((bp) => {
-      if (typeof window === "undefined" || !window.matchMedia) return;
-      const m = window.matchMedia(bp.mq);
-      const apply = () => {
-        Object.keys(bp).forEach((k) => {
-          if (k !== "mq") this.opts[k] = bp[k];
-        });
-        this._measure();
-        this._render();
-      };
-      if (m.addEventListener) {
-        m.addEventListener("change", apply);
-        this.cleanupFns.push(() => m.removeEventListener("change", apply));
-      } else if (m.addListener) {
-        m.addListener(apply);
-        this.cleanupFns.push(() => m.removeListener(apply));
-      }
-      if (m.matches) apply();
-    });
-
-    const onOrient = () => setTimeout(() => this._measure(), 250);
-    addEv(window, "orientationchange", onOrient);
-  }
-
-  _measure() {
-    if (!this.viewport || !this.root) return;
-    const viewRect = this.viewport.getBoundingClientRect();
-    const rootRect = this.root.getBoundingClientRect();
-    const pagRect = this.pagination
-      ? this.pagination.getBoundingClientRect()
-      : { height: 0, bottom: rootRect.bottom };
-    const bottomGap = Math.max(12, Math.round(rootRect.bottom - pagRect.bottom));
-    const pagSpace = (pagRect.height || 40) + bottomGap;
-    const availH = viewRect.height - pagSpace;
-    const cardH = Math.max(320, Math.min(640, Math.round(availH)));
-    this.state.width = viewRect.width;
-    this.state.height = viewRect.height;
-    this.state.gap = this.opts.gap;
-    this.slideW = Math.min(980, this.state.width * (1 - this.opts.peek * 2));
-    this.root.style.setProperty("--mzaPagH", `${pagSpace}px`);
-    this.root.style.setProperty("--mzaCardH", `${cardH}px`);
-  }
-
-  _onTilt(e) {
-    if (!this.viewport) return;
-    const r = this.viewport.getBoundingClientRect();
-    const mx = (e.clientX - r.left) / r.width - 0.5;
-    const my = (e.clientY - r.top) / r.height - 0.5;
-    this.root.style.setProperty("--mzaTiltX", (my * -6).toFixed(3));
-    this.root.style.setProperty("--mzaTiltY", (mx * 6).toFixed(3));
-  }
-
-  _onDragStart(e) {
-    if (e.pointerType === "mouse" && e.button !== 0) return;
-    this.state.dragging = true;
-    this.state.pointerId = e.pointerId;
-    if (this.viewport && typeof this.viewport.setPointerCapture === "function") {
-      try {
-        this.viewport.setPointerCapture(e.pointerId);
-      } catch (err) {}
-    }
-    this.state.x0 = e.clientX;
-    this.state.t0 = performance.now();
-    this.state.v = 0;
-    this.state.pausedAt = performance.now();
-  }
-
-  _onDragMove(e) {
-    if (!this.state.dragging || e.pointerId !== this.state.pointerId) return;
-    const dx = e.clientX - this.state.x0;
-    const dt = Math.max(16, performance.now() - this.state.t0);
-    this.state.v = dx / dt;
-    const slideSpan = this.slideW + this.state.gap;
-    this.state.pos = this._mod(this.state.index - dx / slideSpan, this.n);
-    this._render();
-  }
-
-  _onDragEnd(e) {
-    if (!this.state.dragging || (e && e.pointerId !== this.state.pointerId)) return;
-    this.state.dragging = false;
-    if (
-      this.viewport &&
-      this.state.pointerId != null &&
-      typeof this.viewport.releasePointerCapture === "function"
-    ) {
-      try {
-        this.viewport.releasePointerCapture(this.state.pointerId);
-      } catch (err) {}
-    }
-    this.state.pointerId = null;
-    if (this.state.pausedAt) {
-      this.state.startTime += performance.now() - this.state.pausedAt;
-      this.state.pausedAt = 0;
-    }
-    const v = this.state.v;
-    const threshold = 0.18;
-    let target = Math.round(
-      this.state.pos - Math.sign(v) * (Math.abs(v) > threshold ? 0.5 : 0)
-    );
-    this.goTo(this._mod(target, this.n));
-  }
-
-  _startCycle() {
-    this.state.startTime = performance.now();
-    this._renderProgress(0);
-  }
-
-  _loop() {
-    const step = (t) => {
-      if (!this.destroyed && !this.state.dragging && !this.state.hovering && !this.state.animating) {
-        const elapsed = t - this.state.startTime;
-        const p = Math.min(1, elapsed / this.opts.interval);
-        this._renderProgress(p);
-        if (elapsed >= this.opts.interval) this.next();
-      }
-      if (!this.destroyed) {
-        this.state.rafId = requestAnimationFrame(step);
-      }
-    };
-    this.state.rafId = requestAnimationFrame(step);
-  }
-
-  _renderProgress(p) {
-    if (this.progressBar) {
-      this.progressBar.style.transform = `scaleX(${p})`;
-    }
-  }
-
-  prev() {
-    this.goTo(this._mod(this.state.index - 1, this.n));
-  }
-
-  next() {
-    this.goTo(this._mod(this.state.index + 1, this.n));
-  }
-
-  goTo(i, animate = true) {
-    const start = this.state.pos || this.state.index;
-    const end = this._nearest(start, i);
-    const dur = animate ? this.opts.transitionMs : 0;
-    const t0 = performance.now();
-    const ease = (x) => 1 - Math.pow(1 - x, 4);
-    this.state.animating = true;
-    const step = (now) => {
-      if (this.destroyed) return;
-      const t = Math.min(1, (now - t0) / dur);
-      const p = dur ? ease(t) : 1;
-      this.state.pos = start + (end - start) * p;
-      this._render();
-      if (t < 1) requestAnimationFrame(step);
-      else this._afterSnap(i);
-    };
-    requestAnimationFrame(step);
-  }
-
-  _afterSnap(i) {
-    this.state.index = this._mod(Math.round(this.state.pos), this.n);
-    this.state.pos = this.state.index;
-    this.state.animating = false;
-    this._render(true);
-    this._startCycle();
-  }
-
-  _nearest(from, target) {
-    let d = target - Math.round(from);
-    if (d > this.n / 2) d -= this.n;
-    if (d < -this.n / 2) d += this.n;
-    return Math.round(from) + d;
-  }
-
-  _mod(i, n) {
-    return ((i % n) + n) % n;
-  }
-
-  _render(markActive = false) {
-    const span = this.slideW + this.state.gap;
-    const tiltX = parseFloat(this.root.style.getPropertyValue("--mzaTiltX") || 0);
-    const tiltY = parseFloat(this.root.style.getPropertyValue("--mzaTiltY") || 0);
-
-    for (let i = 0; i < this.n; i++) {
-      let d = i - this.state.pos;
-      if (d > this.n / 2) d -= this.n;
-      if (d < -this.n / 2) d += this.n;
-      const weight = Math.max(0, 1 - Math.abs(d) * 2);
-      const biasActive = -this.slideW * this.opts.activeLeftBias * weight;
-      const tx = d * span + biasActive;
-      const depth = -Math.abs(d) * this.opts.zDepth;
-      const rot = -d * this.opts.rotateY;
-      const scale = 1 - Math.min(Math.abs(d) * this.opts.scaleDrop, 0.42);
-      const blur = Math.min(Math.abs(d) * this.opts.blurMax, this.opts.blurMax);
-      const z = Math.round(1000 - Math.abs(d) * 10);
-      const s = this.slides[i];
-      if (!s) continue;
-
-      if (this.isFF) {
-        s.style.transform = `translate(${tx}px,-50%) scale(${scale})`;
-        s.style.filter = "none";
-      } else {
-        s.style.transform = `translate3d(${tx}px,-50%,${depth}px) rotateY(${rot}deg) scale(${scale})`;
-        s.style.filter = `blur(${blur}px)`;
-      }
-      s.style.zIndex = z;
-      if (markActive) {
-        s.dataset.state = Math.round(this.state.index) === i ? "active" : "rest";
-      }
-      const card = s.querySelector(".mzaCard");
-      if (card) {
-        const parBase = Math.max(-1, Math.min(1, -d));
-        const parX = parBase * 48 + tiltY * 2.0;
-        const parY = tiltX * -1.5;
-        const bgX = parBase * -64 + tiltY * -2.4;
-        card.style.setProperty("--mzaParX", `${parX.toFixed(2)}px`);
-        card.style.setProperty("--mzaParY", `${parY.toFixed(2)}px`);
-        card.style.setProperty("--mzaParBgX", `${bgX.toFixed(2)}px`);
-        card.style.setProperty("--mzaParBgY", `${(parY * 0.35).toFixed(2)}px`);
-      }
-    }
-
-    const active = this._mod(Math.round(this.state.pos), this.n);
-    if (this.dots) {
-      this.dots.forEach((dot, idx) =>
-        dot.setAttribute("aria-selected", idx === active ? "true" : "false")
-      );
-    }
-  }
-
-  destroy() {
-    this.destroyed = true;
-    if (this.state.rafId) cancelAnimationFrame(this.state.rafId);
-    if (this.ro) this.ro.disconnect();
-    this.cleanupFns.forEach((fn) => fn());
-  }
-}
+const ExternalIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+    <path d="M5 15L15 5M15 5H8M15 5v7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
 
 export default function MzaCarousel({ projects = defaultProjects, navigate }) {
-  const rootRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const pointerStartX = useRef(0);
+  const isDragging = useRef(false);
+  const total = projects.length;
+
+  const nextSlide = useCallback(() => {
+    setActiveIndex((prev) => (prev + 1) % total);
+  }, [total]);
+
+  const prevSlide = useCallback(() => {
+    setActiveIndex((prev) => (prev - 1 + total) % total);
+  }, [total]);
 
   useEffect(() => {
-    if (!rootRef.current) return;
-    const engine = new MzaCarouselEngine(rootRef.current, {
-      transitionMs: 900,
-    });
-    return () => {
-      engine.destroy();
-    };
-  }, [projects]);
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      nextSlide();
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [isPaused, nextSlide]);
+
+  const handlePointerDown = (e) => {
+    isDragging.current = true;
+    pointerStartX.current = e.clientX;
+    setIsPaused(true);
+  };
+
+  const handlePointerUp = (e) => {
+    if (!isDragging.current) return;
+    isDragging.current = false;
+    const diffX = e.clientX - pointerStartX.current;
+    if (diffX > 40) prevSlide();
+    else if (diffX < -40) nextSlide();
+  };
+
+  const current = projects[activeIndex] || projects[0];
 
   return (
     <div
-      className="mzaCarousel"
-      ref={rootRef}
-      id="mzaCarousel"
-      aria-roledescription="carousel"
-      aria-label="Featured cards"
+      style={{
+        maxWidth: 1100,
+        margin: "0 auto",
+        fontFamily: "var(--font-sans, system-ui, sans-serif)",
+      }}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
     >
-      <div className="mzaCarousel-viewport" tabIndex={0}>
-        <div className="mzaCarousel-track">
-          {projects.map((item, idx) => (
-            <article
-              key={item.id || idx}
-              className="mzaCarousel-slide"
-              role="group"
-              aria-roledescription="slide"
-              aria-label={`${idx + 1} of ${projects.length}`}
+      {/* Project Selector Tabs */}
+      <div
+        style={{
+          display: "flex",
+          gap: 8,
+          overflowX: "auto",
+          paddingBottom: 14,
+          marginBottom: 20,
+          scrollbarWidth: "none",
+          justifyContent: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        {projects.map((proj, idx) => {
+          const isActive = idx === activeIndex;
+          return (
+            <button
+              key={proj.id || idx}
+              onClick={() => setActiveIndex(idx)}
+              style={{
+                background: isActive
+                  ? "linear-gradient(135deg, #FACC15 0%, #D97706 100%)"
+                  : "rgba(255, 255, 255, 0.04)",
+                color: isActive ? "#0F172A" : "var(--muted, #665843)",
+                border: isActive
+                  ? "1px solid #FACC15"
+                  : "1px solid var(--border, rgba(120, 90, 40, 0.15))",
+                padding: "8px 16px",
+                borderRadius: 100,
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: "pointer",
+                transition: "all 0.25s",
+                boxShadow: isActive ? "0 4px 14px rgba(250, 204, 21, 0.2)" : "none",
+                whiteSpace: "nowrap",
+              }}
             >
+              {proj.title}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Main Glassmorphic Showcase Card */}
+      <div
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        style={{
+          background: "linear-gradient(145deg, #121216 0%, #0a0a0c 100%)",
+          borderRadius: 24,
+          border: "1px solid rgba(250, 204, 21, 0.2)",
+          boxShadow: "0 25px 60px rgba(0, 0, 0, 0.35), 0 0 30px rgba(250, 204, 21, 0.06)",
+          overflow: "hidden",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          minHeight: 460,
+          position: "relative",
+        }}
+      >
+        {/* Left Side: Mockup Frame Preview */}
+        <div style={{ position: "relative", minHeight: 300, display: "flex", flexDirection: "column", overflow: "hidden" }}>
+          {/* Window Header */}
+          <div
+            style={{
+              background: "rgba(255, 255, 255, 0.05)",
+              padding: "12px 18px",
+              display: "flex",
+              alignItems: "center",
+              gap: 8,
+              borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+              zIndex: 2,
+            }}
+          >
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#ef4444", display: "inline-block" }} />
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#eab308", display: "inline-block" }} />
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#22c55e", display: "inline-block" }} />
+            <span
+              style={{
+                marginLeft: 12,
+                fontSize: 11,
+                color: "#94a3b8",
+                background: "rgba(0, 0, 0, 0.4)",
+                padding: "2px 12px",
+                borderRadius: 100,
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                fontFamily: "monospace",
+              }}
+            >
+              {current.url ? current.url.replace(/^https?:\/\//, "").replace(/\/$/, "") : "thestorybuilder.in"}
+            </span>
+          </div>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.id || activeIndex}
+              initial={{ opacity: 0, scale: 1.04 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.4 }}
+              style={{ flex: 1, position: "relative", minHeight: 320 }}
+            >
+              <img
+                src={current.img}
+                alt={current.title}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  position: "absolute",
+                  inset: 0,
+                }}
+              />
               <div
-                className="mzaCard"
-                style={{ "--mzaCard-bg": `url('${item.img}')` }}
-              >
-                <header className="mzaCard-head mzaPar-1">
-                  <h2 className="mzaCard-title">{item.title}</h2>
-                  <p className="mzaCard-kicker">{item.kicker}</p>
-                </header>
-                <p className="mzaCard-text mzaPar-2">{item.text}</p>
-                <footer className="mzaCard-actions mzaPar-3">
-                  {item.caseSlug && navigate && (
-                    <button
-                      type="button"
-                      className="mzaBtn mzaBtn-secondary"
-                      onClick={() => navigate({ page: "case", caseSlug: item.caseSlug })}
-                    >
-                      Read Case Study
-                    </button>
-                  )}
-                  <a
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mzaBtn"
-                  >
-                    {item.ctaText || "View Live Site"} <ArrowIcon />
-                  </a>
-                </footer>
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "linear-gradient(to right, rgba(10,10,12,0.05) 0%, rgba(10,10,12,0.85) 100%)",
+                }}
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Right Side: Details & Actions */}
+        <div style={{ padding: "40px 36px", display: "flex", flexDirection: "column", justifyContent: "center", color: "#FFFDF9", zIndex: 2 }}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={current.id || activeIndex}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.35 }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14, flexWrap: "wrap" }}>
+                <span
+                  style={{
+                    padding: "4px 12px",
+                    borderRadius: 100,
+                    fontSize: 11,
+                    fontWeight: 800,
+                    background: "rgba(250, 204, 21, 0.12)",
+                    color: "#FACC15",
+                    border: "1px solid rgba(250, 204, 21, 0.3)",
+                    letterSpacing: "0.05em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {current.kicker || current.tag || "Featured Project"}
+                </span>
+
+                {current.metric && (
+                  <span style={{ fontSize: 12, color: "#94a3b8", display: "inline-flex", alignItems: "center", gap: 6 }}>
+                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#22c55e" }} />
+                    {current.metric}
+                  </span>
+                )}
               </div>
-            </article>
-          ))}
+
+              <h3
+                style={{
+                  fontSize: "clamp(1.8rem, 3.5vw, 2.4rem)",
+                  fontFamily: "var(--fd)",
+                  fontWeight: 800,
+                  lineHeight: 1.15,
+                  marginBottom: 14,
+                  color: "#FFFFFF",
+                }}
+              >
+                {current.title}
+              </h3>
+
+              <p style={{ color: "#cbd5e1", fontSize: 15, lineHeight: 1.65, marginBottom: 24 }}>
+                {current.text || current.desc}
+              </p>
+
+              {/* Service Badges */}
+              {current.services && current.services.length > 0 && (
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 28 }}>
+                  {current.services.map((srv, idx) => (
+                    <span
+                      key={idx}
+                      style={{
+                        background: "rgba(255, 255, 255, 0.06)",
+                        border: "1px solid rgba(255, 255, 255, 0.12)",
+                        borderRadius: 6,
+                        padding: "4px 10px",
+                        fontSize: 12,
+                        color: "#e2e8f0",
+                      }}
+                    >
+                      {srv}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "center" }}>
+                <a
+                  href={current.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    background: "linear-gradient(135deg, #FACC15 0%, #D97706 100%)",
+                    color: "#0F172A",
+                    padding: "12px 24px",
+                    borderRadius: 12,
+                    fontWeight: 800,
+                    fontSize: 14,
+                    textDecoration: "none",
+                    boxShadow: "0 6px 20px rgba(250, 204, 21, 0.3)",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                >
+                  View Live Site <ExternalIcon />
+                </a>
+
+                {current.caseSlug && navigate && (
+                  <button
+                    onClick={() => navigate({ page: "case", caseSlug: current.caseSlug })}
+                    style={{
+                      background: "rgba(255, 255, 255, 0.08)",
+                      color: "#FFFDF9",
+                      border: "1px solid rgba(255, 255, 255, 0.2)",
+                      padding: "12px 22px",
+                      borderRadius: 12,
+                      fontWeight: 700,
+                      fontSize: 14,
+                      cursor: "pointer",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 8,
+                    }}
+                  >
+                    Read Case Study →
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
 
-      <div className="mzaCarousel-controls" aria-label="Controls">
-        <button
-          className="mzaCarousel-prev"
-          aria-label="Previous slide"
-          type="button"
-        >
-          ‹
-        </button>
-        <button
-          className="mzaCarousel-next"
-          aria-label="Next slide"
-          type="button"
-        >
-          ›
-        </button>
-      </div>
+      {/* Navigation Controls & Indicators */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 24, padding: "0 4px" }}>
+        <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+          <button
+            onClick={prevSlide}
+            aria-label="Previous project"
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: "50%",
+              background: "var(--card, #FFFDF9)",
+              border: "1px solid var(--border)",
+              color: "var(--text, #1A1208)",
+              fontSize: 18,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: 700,
+              boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+            }}
+          >
+            ←
+          </button>
+          <button
+            onClick={nextSlide}
+            aria-label="Next project"
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: "50%",
+              background: "var(--card, #FFFDF9)",
+              border: "1px solid var(--border)",
+              color: "var(--text, #1A1208)",
+              fontSize: 18,
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontWeight: 700,
+              boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+            }}
+          >
+            →
+          </button>
+        </div>
 
-      <div
-        className="mzaCarousel-pagination"
-        role="tablist"
-        aria-label="Slide navigation"
-      />
-      <div className="mzaCarousel-progress" aria-hidden="true">
-        <span className="mzaCarousel-progressBar" />
+        <div style={{ display: "flex", gap: 8, marginLeft: "auto" }}>
+          {projects.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActiveIndex(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+              style={{
+                width: idx === activeIndex ? 28 : 10,
+                height: 10,
+                borderRadius: 100,
+                background: idx === activeIndex ? "var(--gold, #D97706)" : "var(--border, rgba(120,90,40,0.2))",
+                border: "none",
+                cursor: "pointer",
+                transition: "all 0.3s",
+              }}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

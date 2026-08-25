@@ -46,7 +46,7 @@ const projects = [
     id: 4,
     img: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?w=1200&q=80",
     alt: "Chess Academy website",
-    tag: "Education · AI",
+    tag: "Education · AI Platform",
     title: "Chess Academy",
     kicker: "Education · AI Platform",
     text: "AI-powered education platform built on Next.js with a student-first funnel — clean acquisition flow, automated nurture, and conversion-led design.",
@@ -134,7 +134,7 @@ function ShowcaseRow({ project, index, navigate }) {
   return (
     <article
       className={`showcase-row sr ${reversed ? "reversed" : ""}`}
-      style={{ "--i": `${index * 0.08}s` }}
+      style={{ "--i": `${index * 0.08}s`, background: "var(--card, #FFFDF9)", borderRadius: 20, border: "1px solid var(--border)", padding: 24, marginBottom: 24 }}
     >
       <a
         href={project.url}
@@ -142,8 +142,9 @@ function ShowcaseRow({ project, index, navigate }) {
         rel="noopener noreferrer"
         className="showcase-media"
         aria-label={`Visit ${project.title}`}
+        style={{ borderRadius: 16, overflow: "hidden" }}
       >
-        <img src={project.img} alt={project.alt} loading="lazy" />
+        <img src={project.img} alt={project.alt} loading="lazy" style={{ borderRadius: 16 }} />
         <span className="showcase-num">{String(index + 1).padStart(2, "0")}</span>
         <div className="showcase-hover">
           <span className="showcase-hover-btn">
@@ -152,29 +153,32 @@ function ShowcaseRow({ project, index, navigate }) {
         </div>
       </a>
 
-      <div className="showcase-body">
-        <span className="card-tag">{project.tag}</span>
-        <h3 className="showcase-title">{project.title}</h3>
-        <p className="showcase-desc">{project.desc}</p>
+      <div className="showcase-body" style={{ color: "var(--text, #1A1208)" }}>
+        <span className="card-tag" style={{ color: "var(--gold, #D97706)", fontWeight: 700 }}>{project.tag}</span>
+        <h3 className="showcase-title" style={{ color: "var(--text, #1A1208)", fontFamily: "var(--fd)" }}>{project.title}</h3>
+        <p className="showcase-desc" style={{ color: "var(--muted, #665843)", lineHeight: 1.65 }}>{project.desc}</p>
 
-        <div className="showcase-services">
+        <div className="showcase-services" style={{ display: "flex", gap: 8, flexWrap: "wrap", margin: "16px 0" }}>
           {project.services.map((s) => (
-            <span key={s}>{s}</span>
+            <span key={s} style={{ background: "rgba(217, 119, 6, 0.08)", color: "var(--text, #1A1208)", border: "1px solid rgba(217, 119, 6, 0.2)", borderRadius: 6, padding: "3px 10px", fontSize: 12 }}>
+              {s}
+            </span>
           ))}
         </div>
 
-        <div className="showcase-foot">
-          <div className="showcase-metric">
-            <span className="metric-dot" />
+        <div className="showcase-foot" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 12, borderTop: "1px solid var(--border)" }}>
+          <div className="showcase-metric" style={{ color: "var(--muted, #665843)", fontSize: 13 }}>
+            <span className="metric-dot" style={{ background: "#22c55e" }} />
             <span>{project.metric}</span>
           </div>
-          <div className="showcase-actions">
+          <div className="showcase-actions" style={{ display: "flex", gap: 12 }}>
             {project.caseSlug && navigate && (
               <button
                 type="button"
                 className="showcase-link showcase-case"
                 data-track={`case_${project.caseSlug}`}
                 onClick={() => navigate({ page: "case", caseSlug: project.caseSlug })}
+                style={{ color: "var(--gold, #D97706)", fontWeight: 700 }}
               >
                 Read Case Study <ArrowIcon />
               </button>
@@ -184,6 +188,7 @@ function ShowcaseRow({ project, index, navigate }) {
               target="_blank"
               rel="noopener noreferrer"
               className="showcase-link"
+              style={{ color: "var(--text, #1A1208)", fontWeight: 700 }}
             >
               View Live <ArrowIcon />
             </a>
@@ -215,38 +220,40 @@ export default function Projects({ setPage, navigate }) {
   }, [viewMode]);
 
   return (
-    <section className="projects" id="projects">
-      <div className="wrap">
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px", marginBottom: "20px" }}>
+    <section className="projects" id="projects" style={{ paddingTop: "70px", paddingBottom: "80px", color: "var(--text, #1A1208)" }}>
+      <div className="wrap" style={{ maxWidth: 1100, margin: "0 auto", padding: "0 20px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px", marginBottom: "24px" }}>
           <span className="tag sr" style={{ margin: 0 }}>Selected Work</span>
-          <div style={{ display: "inline-flex", background: "rgba(255,255,255,0.06)", padding: "4px", borderRadius: "100px", border: "1px solid var(--border)" }}>
+
+          {/* Toggle Button */}
+          <div style={{ display: "inline-flex", background: "var(--card, #FFFDF9)", padding: "4px", borderRadius: "100px", border: "1px solid var(--border)" }}>
             <button
               type="button"
               onClick={() => setViewMode("carousel")}
               style={{
-                background: viewMode === "carousel" ? "var(--gold)" : "transparent",
-                color: viewMode === "carousel" ? "#000" : "var(--muted)",
+                background: viewMode === "carousel" ? "var(--gold, #D97706)" : "transparent",
+                color: viewMode === "carousel" ? "#FFFDF9" : "var(--muted, #665843)",
                 border: 0,
                 borderRadius: "100px",
-                padding: "6px 16px",
-                fontSize: "12px",
+                padding: "6px 18px",
+                fontSize: "13px",
                 fontWeight: 700,
                 cursor: "pointer",
                 transition: "all 0.25s",
               }}
             >
-              ✨ 3D Coverflow
+              ✨ Interactive Showcase
             </button>
             <button
               type="button"
               onClick={() => setViewMode("grid")}
               style={{
-                background: viewMode === "grid" ? "var(--gold)" : "transparent",
-                color: viewMode === "grid" ? "#000" : "var(--muted)",
+                background: viewMode === "grid" ? "var(--gold, #D97706)" : "transparent",
+                color: viewMode === "grid" ? "#FFFDF9" : "var(--muted, #665843)",
                 border: 0,
                 borderRadius: "100px",
-                padding: "6px 16px",
-                fontSize: "12px",
+                padding: "6px 18px",
+                fontSize: "13px",
                 fontWeight: 700,
                 cursor: "pointer",
                 transition: "all 0.25s",
@@ -257,12 +264,12 @@ export default function Projects({ setPage, navigate }) {
           </div>
         </div>
 
-        <div className="proj-header sr">
-          <h2 className="sec-h">
-            Brands we've helped <em>grow</em>
+        <div className="proj-header sr" style={{ marginBottom: "36px" }}>
+          <h2 className="sec-h" style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.4rem)", fontFamily: "var(--fd)", fontWeight: 800, color: "var(--text, #1A1208)", marginBottom: 12 }}>
+            Brands we've helped <span style={{ color: "var(--gold, #D97706)" }}>grow</span>
           </h2>
-          <p className="muted">
-            Performance marketing, SEO, and high-converting websites — built for measurable outcomes. Swipe or drag to explore our featured work.
+          <p className="muted" style={{ fontSize: 16, color: "var(--muted, #665843)", maxWidth: 640, lineHeight: 1.6 }}>
+            Performance marketing, SEO, and high-converting websites — built for measurable business outcomes.
           </p>
         </div>
 
@@ -271,30 +278,46 @@ export default function Projects({ setPage, navigate }) {
             <MzaCarousel projects={projects} navigate={navigate} />
           </div>
         ) : (
-          <div className="showcase-list">
+          <div className="showcase-list" style={{ marginBottom: "50px" }}>
             {projects.map((project, i) => (
               <ShowcaseRow key={project.id} project={project} index={i} navigate={navigate} />
             ))}
           </div>
         )}
 
-        <article className="card card-cta sr showcase-cta" style={{ "--i": "0.4s" }}>
-          <div className="cta-icon">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-              <path d="M14 4v20M4 14h20" stroke="#facc15" strokeWidth="2.2" strokeLinecap="round" />
+        <article
+          className="card card-cta sr showcase-cta"
+          style={{
+            "--i": "0.4s",
+            background: "var(--card, #FFFDF9)",
+            border: "1px solid rgba(217,119,6,0.3)",
+            borderRadius: 24,
+            padding: "48px 32px",
+            textAlign: "center",
+            boxShadow: "0 15px 40px rgba(0,0,0,0.05)",
+          }}
+        >
+          <div className="cta-icon" style={{ marginBottom: 16 }}>
+            <svg width="32" height="32" viewBox="0 0 28 28" fill="none">
+              <path d="M14 4v20M4 14h20" stroke="#D97706" strokeWidth="2.5" strokeLinecap="round" />
             </svg>
           </div>
-          <h3>Ready to be the next case study?</h3>
-          <p>Tell us about your business — we'll map a growth plan in 48 hours.</p>
-          <button className="btn btn-gold" data-track="projects_start_project" onClick={() => setPage("contact")}>
-            Start a Project
-            <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+          <h3 style={{ fontSize: 28, fontFamily: "var(--fd)", fontWeight: 800, color: "var(--text, #1A1208)", marginBottom: 12 }}>
+            Ready to be our next growth case study?
+          </h3>
+          <p style={{ fontSize: 16, color: "var(--muted, #665843)", maxWidth: 540, margin: "0 auto 24px", lineHeight: 1.6 }}>
+            Tell us about your business — we'll map out a custom digital strategy & project quote within 24 hours.
+          </p>
+          <button
+            className="btn btn-gold"
+            data-track="projects_start_project"
+            onClick={() => setPage && setPage("contact")}
+            style={{ padding: "14px 28px", fontSize: 15 }}
+          >
+            Start a Project →
           </button>
         </article>
       </div>
     </section>
   );
 }
-
