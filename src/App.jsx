@@ -52,15 +52,22 @@ const pageTransition = {
   transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] },
 };
 
-function getRouteFromPath(path) {
-  const p = path.toLowerCase().replace(/\/$/, "") || "/";
-  if (p === "" || p === "/") return { page: "home", slug: null };
+function getRouteFromPath(pathStr) {
+  if (!pathStr || typeof pathStr !== "string") return { page: "home", slug: null };
+
+  // Strip query string and hash parameters so URLs with ?utm_... or ?gclid=... or #hash match correctly
+  const cleanPath = pathStr.split("?")[0].split("#")[0].trim();
+  const p = (cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`)
+    .toLowerCase()
+    .replace(/\/$/, "") || "/";
+
+  if (p === "" || p === "/" || p === "/home") return { page: "home", slug: null };
   if (p === "/landing") return { page: "landing", slug: null };
   if (p === "/services") return { page: "services", slug: null };
-  if (p === "/services/web-development") return { page: "service-web-dev", slug: null };
-  if (p === "/services/performance-marketing") return { page: "service-perf-mktg", slug: null };
-  if (p === "/services/social-media-marketing") return { page: "service-smm", slug: null };
-  if (p === "/services/branding") return { page: "service-branding", slug: null };
+  if (p === "/services/web-development" || p === "/service-web-dev") return { page: "service-web-dev", slug: null };
+  if (p === "/services/performance-marketing" || p === "/service-perf-mktg") return { page: "service-perf-mktg", slug: null };
+  if (p === "/services/social-media-marketing" || p === "/service-smm") return { page: "service-smm", slug: null };
+  if (p === "/services/branding" || p === "/service-branding") return { page: "service-branding", slug: null };
   if (p === "/pricing") return { page: "pricing", slug: null };
   if (p === "/contact") return { page: "contact", slug: null };
   if (p === "/faq") return { page: "faq", slug: null };
@@ -186,7 +193,7 @@ export default function App() {
 
   const navigate = (dest) => {
     if (typeof dest === "string") {
-      const parsed = getRouteFromPath(dest.startsWith("/") ? dest : `/${dest}`);
+      const parsed = getRouteFromPath(dest);
       setRoute(parsed);
       return;
     }
@@ -194,7 +201,7 @@ export default function App() {
       if (dest.page === "case" && dest.caseSlug) {
         setRoute({ page: "case", slug: dest.caseSlug });
       } else if (dest.page) {
-        setRoute({ page: dest.page, slug: dest.slug || null });
+        setRoute(getRouteFromPath(dest.page));
         if (dest.scrollTo) setPendingScroll(dest.scrollTo);
       }
     }
