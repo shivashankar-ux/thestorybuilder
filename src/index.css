@@ -46,14 +46,14 @@
 
 :root {
   --gold:   #D97706;
-  --gold-accent: #F59E0B;
-  --gold-a: rgba(245,158,11,.08);
-  --bg:     #F8FAFC;
-  --surf:   #F1F5F9;
-  --card:   #FFFFFF;
-  --border: #E2E8F0;
-  --text:   #0F172A;
-  --muted:  #475569;
+  --gold-accent: #EAB308;
+  --gold-a: rgba(217,119,6,.12);
+  --bg:     #F4F4F4;
+  --surf:   #EFECE6;
+  --card:   #FFFDF9;
+  --border: rgba(120,90,40,.14);
+  --text:   #1A1208;
+  --muted:  #665843;
   --font-display: 'Thesead', 'Plus Jakarta Sans', sans-serif;
   --font-primary: 'Plus Jakarta Sans', sans-serif;
   --font-secondary: 'Inter', sans-serif;
@@ -65,10 +65,10 @@
   --r:      14px;
 
   /* Reference Inspected Palette */
-  --ref-bg-light: #F8FAFC;
-  --ref-text-dark: #0F172A;
-  --ref-badge-bg: rgba(226, 232, 240, 0.6);
-  --ref-badge-border: rgba(203, 213, 225, 0.6);
+  --ref-bg-light: #F4F4F4;
+  --ref-text-dark: #1A1208;
+  --ref-badge-bg: rgba(212, 212, 212, 0.45);
+  --ref-badge-border: rgba(180, 180, 180, 0.5);
   --ref-font-heading: 'Thesead', "Haaffer VF", Arial, sans-serif;
 }
 
