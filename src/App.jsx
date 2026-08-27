@@ -12,7 +12,6 @@ import Process from "./components/Process";
 import Projects from "./components/Projects";
 
 import FAQ from "./components/FAQ";
-import WhyWebsite from "./components/WhyWebsite";
 import CTABanner from "./components/CTABanner";
 import ContactPage from "./components/ContactPage";
 import CaseStudy from "./components/CaseStudy";
@@ -274,7 +273,6 @@ export default function App() {
             <Process />
             <Projects setPage={navigate} navigate={navigate} />
 
-            <WhyWebsite setPage={navigate} />
             <FAQ setPage={navigate} />
             <CTABanner setPage={navigate} />
           </motion.main>

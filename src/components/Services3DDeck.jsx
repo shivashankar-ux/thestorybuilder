@@ -152,10 +152,10 @@ export default function Services3DDeck({ setPage }) {
                 background: isActive
                   ? "linear-gradient(135deg, #FACC15 0%, #D97706 100%)"
                   : "rgba(255, 255, 255, 0.04)",
-                color: isActive ? "#0F172A" : "var(--muted, #665843)",
+                color: isActive ? "#0F172A" : "var(--muted, #475569)",
                 border: isActive
                   ? "1px solid #FACC15"
-                  : "1px solid var(--border, rgba(120, 90, 40, 0.15))",
+                  : "1px solid var(--border)",
                 padding: "8px 18px",
                 borderRadius: 100,
                 fontSize: 13,
@@ -253,7 +253,7 @@ export default function Services3DDeck({ setPage }) {
         </div>
 
         {/* Right Side: Details & Action */}
-        <div style={{ padding: "40px 36px", display: "flex", flexDirection: "column", justifyContent: "center", color: "#FFFDF9", zIndex: 2 }}>
+        <div style={{ padding: "40px 36px", display: "flex", flexDirection: "column", justifyContent: "center", color: "#FFFFFF", zIndex: 2 }}>
           <AnimatePresence mode="wait">
             <motion.div
               key={current.id}
@@ -333,7 +333,7 @@ export default function Services3DDeck({ setPage }) {
                   onClick={() => setPage && setPage("contact")}
                   style={{
                     background: "rgba(255, 255, 255, 0.08)",
-                    color: "#FFFDF9",
+                    color: "#FFFFFF",
                     border: "1px solid rgba(255, 255, 255, 0.2)",
                     padding: "12px 22px",
                     borderRadius: 12,
@@ -360,9 +360,9 @@ export default function Services3DDeck({ setPage }) {
               width: 42,
               height: 42,
               borderRadius: "50%",
-              background: "var(--card, #FFFDF9)",
+              background: "var(--card, #FFFFFF)",
               border: "1px solid var(--border)",
-              color: "var(--text, #1A1208)",
+              color: "var(--text, #0F172A)",
               fontSize: 18,
               cursor: "pointer",
               display: "flex",
@@ -381,9 +381,9 @@ export default function Services3DDeck({ setPage }) {
               width: 42,
               height: 42,
               borderRadius: "50%",
-              background: "var(--card, #FFFDF9)",
+              background: "var(--card, #FFFFFF)",
               border: "1px solid var(--border)",
-              color: "var(--text, #1A1208)",
+              color: "var(--text, #0F172A)",
               fontSize: 18,
               cursor: "pointer",
               display: "flex",
@@ -407,7 +407,7 @@ export default function Services3DDeck({ setPage }) {
                 width: idx === activeIndex ? 28 : 10,
                 height: 10,
                 borderRadius: 100,
-                background: idx === activeIndex ? "var(--gold, #D97706)" : "var(--border, rgba(120,90,40,0.2))",
+                background: idx === activeIndex ? "var(--gold, #D97706)" : "var(--border)",
                 border: "none",
                 cursor: "pointer",
                 transition: "all 0.3s",

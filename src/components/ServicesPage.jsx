@@ -90,7 +90,7 @@ export default function ServicesPage({ setPage }) {
   }, []);
 
   return (
-    <main className="services-page" style={{ paddingBottom: "100px", color: "var(--text, #1A1208)" }}>
+    <main className="services-page" style={{ paddingBottom: "100px", color: "var(--text, #0F172A)" }}>
       <div className="wrap" style={{ position: "relative", zIndex: 1, maxWidth: 1100, margin: "0 auto", padding: "0 20px" }}>
         {/* PAGE HEADER */}
         <header style={{ paddingTop: "120px", marginBottom: "40px", textAlign: "center" }}>
@@ -98,13 +98,13 @@ export default function ServicesPage({ setPage }) {
             <span className="tag" style={{ margin: 0 }}>Our Capabilities</span>
             
             {/* View Mode Toggle */}
-            <div style={{ display: "inline-flex", background: "var(--card, #FFFDF9)", padding: 4, borderRadius: 100, border: "1px solid var(--border)" }}>
+            <div style={{ display: "inline-flex", background: "var(--card, #FFFFFF)", padding: 4, borderRadius: 100, border: "1px solid var(--border)" }}>
               <button
                 type="button"
                 onClick={() => setViewMode("deck")}
                 style={{
                   background: viewMode === "deck" ? "var(--gold, #D97706)" : "transparent",
-                  color: viewMode === "deck" ? "#FFFDF9" : "var(--muted, #665843)",
+                  color: viewMode === "deck" ? "#FFFFFF" : "var(--muted, #475569)",
                   border: 0,
                   borderRadius: 100,
                   padding: "6px 18px",
@@ -121,7 +121,7 @@ export default function ServicesPage({ setPage }) {
                 onClick={() => setViewMode("grid")}
                 style={{
                   background: viewMode === "grid" ? "var(--gold, #D97706)" : "transparent",
-                  color: viewMode === "grid" ? "#FFFDF9" : "var(--muted, #665843)",
+                  color: viewMode === "grid" ? "#FFFFFF" : "var(--muted, #475569)",
                   border: 0,
                   borderRadius: 100,
                   padding: "6px 18px",
@@ -136,11 +136,11 @@ export default function ServicesPage({ setPage }) {
             </div>
           </div>
 
-          <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.6rem)", fontFamily: "var(--fd)", fontWeight: 800, maxWidth: 850, margin: "0 auto 20px", color: "var(--text, #1A1208)", lineHeight: 1.15 }}>
+          <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.6rem)", fontFamily: "var(--fd)", fontWeight: 800, maxWidth: 850, margin: "0 auto 20px", color: "var(--text, #0F172A)", lineHeight: 1.15 }}>
             Everything you need to <br />
             <span style={{ color: "var(--gold, #D97706)" }}>scale your brand online.</span>
           </h1>
-          <p style={{ fontSize: 17, color: "var(--muted, #665843)", maxWidth: 640, margin: "0 auto", lineHeight: 1.6 }}>
+          <p style={{ fontSize: 17, color: "var(--muted, #475569)", maxWidth: 640, margin: "0 auto", lineHeight: 1.6 }}>
             From high-converting websites to ROI-focused Meta Ads and Instagram growth strategies for businesses in Hyderabad & across India.
           </p>
         </header>
@@ -157,7 +157,7 @@ export default function ServicesPage({ setPage }) {
                 whileHover={{ y: -6 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 style={{
-                  background: "var(--card, #FFFDF9)",
+                  background: "var(--card, #FFFFFF)",
                   border: "1px solid var(--border)",
                   borderRadius: 20,
                   padding: 32,
@@ -188,10 +188,10 @@ export default function ServicesPage({ setPage }) {
                     </span>
                   </div>
 
-                  <h3 style={{ fontSize: 22, fontFamily: "var(--fd)", fontWeight: 800, marginBottom: 12, color: "var(--text, #1A1208)" }}>
+                  <h3 style={{ fontSize: 22, fontFamily: "var(--fd)", fontWeight: 800, marginBottom: 12, color: "var(--text, #0F172A)" }}>
                     {service.title}
                   </h3>
-                  <p style={{ fontSize: 15, color: "var(--muted, #665843)", lineHeight: 1.65, marginBottom: 28 }}>
+                  <p style={{ fontSize: 15, color: "var(--muted, #475569)", lineHeight: 1.65, marginBottom: 28 }}>
                     {service.desc}
                   </p>
                 </div>
@@ -205,7 +205,7 @@ export default function ServicesPage({ setPage }) {
                     fontSize: 14,
                     fontWeight: 700,
                     borderColor: "var(--border)",
-                    color: "var(--text, #1A1208)",
+                    color: "var(--text, #0F172A)",
                   }}
                 >
                   Explore Details →
@@ -222,16 +222,16 @@ export default function ServicesPage({ setPage }) {
           style={{
             textAlign: "center",
             padding: "50px 32px",
-            background: "var(--card, #FFFDF9)",
+            background: "var(--card, #FFFFFF)",
             borderRadius: 24,
             border: "1px solid rgba(217,119,6,0.3)",
             boxShadow: "0 15px 40px rgba(0,0,0,0.05)",
           }}
         >
-          <h2 style={{ fontFamily: "var(--fd)", fontSize: 32, fontWeight: 800, marginBottom: 16, color: "var(--text, #1A1208)" }}>
+          <h2 style={{ fontFamily: "var(--fd)", fontSize: 32, fontWeight: 800, marginBottom: 16, color: "var(--text, #0F172A)" }}>
             Ready to bring your vision to life?
           </h2>
-          <p style={{ fontSize: 16, color: "var(--muted, #665843)", maxWidth: 560, margin: "0 auto 32px", lineHeight: 1.6 }}>
+          <p style={{ fontSize: 16, color: "var(--muted, #475569)", maxWidth: 560, margin: "0 auto 32px", lineHeight: 1.6 }}>
             Whether you need a high-converting website built in 7 days or an ROI-focused Meta Ads campaign, we're ready to help you grow.
           </p>
           <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>

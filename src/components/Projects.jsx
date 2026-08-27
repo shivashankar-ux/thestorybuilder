@@ -134,7 +134,7 @@ function ShowcaseRow({ project, index, navigate }) {
   return (
     <article
       className={`showcase-row sr ${reversed ? "reversed" : ""}`}
-      style={{ "--i": `${index * 0.08}s`, background: "var(--card, #FFFDF9)", borderRadius: 20, border: "1px solid var(--border)", padding: 24, marginBottom: 24 }}
+      style={{ "--i": `${index * 0.08}s`, background: "var(--card, #FFFFFF)", borderRadius: 20, border: "1px solid var(--border)", padding: 24, marginBottom: 24 }}
     >
       <a
         href={project.url}
@@ -153,21 +153,21 @@ function ShowcaseRow({ project, index, navigate }) {
         </div>
       </a>
 
-      <div className="showcase-body" style={{ color: "var(--text, #1A1208)" }}>
+      <div className="showcase-body" style={{ color: "var(--text, #0F172A)" }}>
         <span className="card-tag" style={{ color: "var(--gold, #D97706)", fontWeight: 700 }}>{project.tag}</span>
-        <h3 className="showcase-title" style={{ color: "var(--text, #1A1208)", fontFamily: "var(--fd)" }}>{project.title}</h3>
-        <p className="showcase-desc" style={{ color: "var(--muted, #665843)", lineHeight: 1.65 }}>{project.desc}</p>
+        <h3 className="showcase-title" style={{ color: "var(--text, #0F172A)", fontFamily: "var(--fd)" }}>{project.title}</h3>
+        <p className="showcase-desc" style={{ color: "var(--muted, #475569)", lineHeight: 1.65 }}>{project.desc}</p>
 
         <div className="showcase-services" style={{ display: "flex", gap: 8, flexWrap: "wrap", margin: "16px 0" }}>
           {project.services.map((s) => (
-            <span key={s} style={{ background: "rgba(217, 119, 6, 0.08)", color: "var(--text, #1A1208)", border: "1px solid rgba(217, 119, 6, 0.2)", borderRadius: 6, padding: "3px 10px", fontSize: 12 }}>
+            <span key={s} style={{ background: "rgba(217, 119, 6, 0.08)", color: "var(--text, #0F172A)", border: "1px solid rgba(217, 119, 6, 0.2)", borderRadius: 6, padding: "3px 10px", fontSize: 12 }}>
               {s}
             </span>
           ))}
         </div>
 
         <div className="showcase-foot" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: 12, borderTop: "1px solid var(--border)" }}>
-          <div className="showcase-metric" style={{ color: "var(--muted, #665843)", fontSize: 13 }}>
+          <div className="showcase-metric" style={{ color: "var(--muted, #475569)", fontSize: 13 }}>
             <span className="metric-dot" style={{ background: "#22c55e" }} />
             <span>{project.metric}</span>
           </div>
@@ -188,7 +188,7 @@ function ShowcaseRow({ project, index, navigate }) {
               target="_blank"
               rel="noopener noreferrer"
               className="showcase-link"
-              style={{ color: "var(--text, #1A1208)", fontWeight: 700 }}
+              style={{ color: "var(--text, #0F172A)", fontWeight: 700 }}
             >
               View Live <ArrowIcon />
             </a>
@@ -220,19 +220,19 @@ export default function Projects({ setPage, navigate }) {
   }, [viewMode]);
 
   return (
-    <section className="projects" id="projects" style={{ paddingTop: "70px", paddingBottom: "80px", color: "var(--text, #1A1208)" }}>
+    <section className="projects" id="projects" style={{ paddingTop: "70px", paddingBottom: "80px", color: "var(--text, #0F172A)" }}>
       <div className="wrap" style={{ maxWidth: 1100, margin: "0 auto", padding: "0 20px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px", marginBottom: "24px" }}>
           <span className="tag sr" style={{ margin: 0 }}>Selected Work</span>
 
           {/* Toggle Button */}
-          <div style={{ display: "inline-flex", background: "var(--card, #FFFDF9)", padding: "4px", borderRadius: "100px", border: "1px solid var(--border)" }}>
+          <div style={{ display: "inline-flex", background: "var(--card, #FFFFFF)", padding: "4px", borderRadius: "100px", border: "1px solid var(--border)" }}>
             <button
               type="button"
               onClick={() => setViewMode("carousel")}
               style={{
                 background: viewMode === "carousel" ? "var(--gold, #D97706)" : "transparent",
-                color: viewMode === "carousel" ? "#FFFDF9" : "var(--muted, #665843)",
+                color: viewMode === "carousel" ? "#FFFFFF" : "var(--muted, #475569)",
                 border: 0,
                 borderRadius: "100px",
                 padding: "6px 18px",
@@ -249,7 +249,7 @@ export default function Projects({ setPage, navigate }) {
               onClick={() => setViewMode("grid")}
               style={{
                 background: viewMode === "grid" ? "var(--gold, #D97706)" : "transparent",
-                color: viewMode === "grid" ? "#FFFDF9" : "var(--muted, #665843)",
+                color: viewMode === "grid" ? "#FFFFFF" : "var(--muted, #475569)",
                 border: 0,
                 borderRadius: "100px",
                 padding: "6px 18px",
@@ -265,10 +265,10 @@ export default function Projects({ setPage, navigate }) {
         </div>
 
         <div className="proj-header sr" style={{ marginBottom: "36px" }}>
-          <h2 className="sec-h" style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.4rem)", fontFamily: "var(--fd)", fontWeight: 800, color: "var(--text, #1A1208)", marginBottom: 12 }}>
+          <h2 className="sec-h" style={{ fontSize: "clamp(2.2rem, 4.5vw, 3.4rem)", fontFamily: "var(--fd)", fontWeight: 800, color: "var(--text, #0F172A)", marginBottom: 12 }}>
             Brands we've helped <span style={{ color: "var(--gold, #D97706)" }}>grow</span>
           </h2>
-          <p className="muted" style={{ fontSize: 16, color: "var(--muted, #665843)", maxWidth: 640, lineHeight: 1.6 }}>
+          <p className="muted" style={{ fontSize: 16, color: "var(--muted, #475569)", maxWidth: 640, lineHeight: 1.6 }}>
             Performance marketing, SEO, and high-converting websites — built for measurable business outcomes.
           </p>
         </div>
@@ -289,7 +289,7 @@ export default function Projects({ setPage, navigate }) {
           className="card card-cta sr showcase-cta"
           style={{
             "--i": "0.4s",
-            background: "var(--card, #FFFDF9)",
+            background: "var(--card, #FFFFFF)",
             border: "1px solid rgba(217,119,6,0.3)",
             borderRadius: 24,
             padding: "48px 32px",
@@ -302,10 +302,10 @@ export default function Projects({ setPage, navigate }) {
               <path d="M14 4v20M4 14h20" stroke="#D97706" strokeWidth="2.5" strokeLinecap="round" />
             </svg>
           </div>
-          <h3 style={{ fontSize: 28, fontFamily: "var(--fd)", fontWeight: 800, color: "var(--text, #1A1208)", marginBottom: 12 }}>
+          <h3 style={{ fontSize: 28, fontFamily: "var(--fd)", fontWeight: 800, color: "var(--text, #0F172A)", marginBottom: 12 }}>
             Ready to be our next growth case study?
           </h3>
-          <p style={{ fontSize: 16, color: "var(--muted, #665843)", maxWidth: 540, margin: "0 auto 24px", lineHeight: 1.6 }}>
+          <p style={{ fontSize: 16, color: "var(--muted, #475569)", maxWidth: 540, margin: "0 auto 24px", lineHeight: 1.6 }}>
             Tell us about your business — we'll map out a custom digital strategy & project quote within 24 hours.
           </p>
           <button
