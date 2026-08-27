@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
+import CoreServicesGrid from "./components/CoreServicesGrid";
 import ScrollUnscramble from "./components/ScrollUnscramble";
 import Stats from "./components/Stats";
 import TrustedBy from "./components/TrustedBy";
@@ -264,6 +265,7 @@ export default function App() {
         {page === "home" && (
           <motion.main key="home" {...pageTransition}>
             <Hero setPage={navigate} />
+            <CoreServicesGrid setPage={navigate} />
             <ScrollUnscramble />
             <Stats />
             <TrustedBy />
@@ -277,6 +279,7 @@ export default function App() {
             <CTABanner setPage={navigate} />
           </motion.main>
         )}
+
 
         {page === "landing" && (
           <motion.main key="landing" {...pageTransition}>
