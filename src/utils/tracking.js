@@ -9,6 +9,19 @@ const WEBHOOK_URL = ""; // <-- paste Apps Script /exec URL here
 
 const SESSION_KEY = "tsb_session";
 const SEEN_EVENT_KEY = "tsb_seen_events";
+const CONSENT_KEY = "tsb_cookie_consent_v1";
+
+export function hasAnalyticsConsent() {
+  try {
+    if (typeof localStorage === "undefined") return false;
+    const raw = localStorage.getItem(CONSENT_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    return Boolean(parsed.analytics);
+  } catch {
+    return false;
+  }
+}
 
 function isEnabled() {
   return typeof WEBHOOK_URL === "string" && WEBHOOK_URL.startsWith("https://");
@@ -52,13 +65,16 @@ function getReferrer() {
 
 let cachedGeo = null;
 async function fetchGeo() {
+  if (!hasAnalyticsConsent()) {
+    return { ip: "[anonymized]", city: "", region: "", country: "", org: "" };
+  }
   if (cachedGeo) return cachedGeo;
   try {
     const res = await fetch("https://ipapi.co/json/", { method: "GET" });
     if (!res.ok) throw new Error("geo fetch failed");
     const data = await res.json();
     cachedGeo = {
-      ip: data.ip || "",
+      ip: "[anonymized]", // Minimize raw IP storage to protect visitor privacy
       city: data.city || "",
       region: data.region || "",
       country: data.country_name || "",
@@ -71,7 +87,7 @@ async function fetchGeo() {
 }
 
 async function send(payload) {
-  if (!isEnabled()) return;
+  if (!isEnabled() || !hasAnalyticsConsent()) return;
   try {
     // text/plain content-type avoids CORS preflight; Apps Script reads e.postData.contents
     await fetch(WEBHOOK_URL, {
@@ -93,7 +109,6 @@ function basePayload() {
     page: window.location.pathname + window.location.hash,
     referrer: getReferrer(),
     device: getDeviceType(),
-    userAgent: navigator.userAgent,
     language: navigator.language || "",
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "",
     screen: `${window.screen.width}x${window.screen.height}`,
@@ -105,7 +120,7 @@ function basePayload() {
 let pageviewSent = false;
 
 export async function trackPageView(page) {
-  if (!isEnabled()) return;
+  if (!isEnabled() || !hasAnalyticsConsent()) return;
   const geo = await fetchGeo();
   await send({
     type: "pageview",
@@ -118,8 +133,8 @@ export async function trackPageView(page) {
 }
 
 export async function trackEvent(name, extra = {}) {
-  // Fire Meta Pixel Events to Meta Ads / Event Manager
-  if (typeof window !== "undefined" && typeof window.fbq === "function") {
+  // Fire Meta Pixel Events only if user has granted analytics/marketing consent
+  if (typeof window !== "undefined" && typeof window.fbq === "function" && hasAnalyticsConsent()) {
     try {
       if (name === "contact_form_submitted") {
         window.fbq("track", "Lead", {
@@ -144,7 +159,7 @@ export async function trackEvent(name, extra = {}) {
     }
   }
 
-  if (!isEnabled()) return;
+  if (!isEnabled() || !hasAnalyticsConsent()) return;
   // dedupe per session: don't email about the same event repeatedly
   const seen = (() => {
     try { return JSON.parse(sessionStorage.getItem(SEEN_EVENT_KEY) || "[]"); }
@@ -174,7 +189,9 @@ export function startEngagementTimer() {
   setTimeout(() => {
     if (engagedFired) return;
     engagedFired = true;
-    trackEvent("engaged_30s");
+    if (hasAnalyticsConsent()) {
+      trackEvent("engaged_30s");
+    }
   }, 30_000);
 }
 
@@ -183,6 +200,7 @@ export function bindAutoTracking() {
   document.addEventListener(
     "click",
     (e) => {
+      if (!hasAnalyticsConsent()) return;
       const link = e.target.closest("a");
       if (link && link.href) {
         if (link.href.includes("wa.me")) {
@@ -203,4 +221,5 @@ export function bindAutoTracking() {
     { passive: true, capture: true }
   );
 }
+
 

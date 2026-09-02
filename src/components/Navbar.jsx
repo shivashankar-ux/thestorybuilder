@@ -64,39 +64,40 @@ export default function Navbar({ page, setPage }) {
   };
 
   const navItems = [
-    { id: "home",     label: "Home" },
-    { id: "services", label: "Services" },
-    { id: "pricing",  label: "Pricing" },
-    { id: "projects", label: "Work" },
-    { id: "faq",      label: "FAQ" },
-    { id: "contact",  label: "Contact" },
+    { id: "home",     label: "Home",     href: "/" },
+    { id: "services", label: "Services", href: "/services" },
+    { id: "pricing",  label: "Pricing",  href: "/pricing" },
+    { id: "projects", label: "Work",     href: "/#projects" },
+    { id: "faq",      label: "FAQ",      href: "/faq" },
+    { id: "contact",  label: "Contact",  href: "/contact" },
   ];
 
   return (
     <header className={`header${scrolled ? " scrolled" : ""}`} id="header">
       <div className="nav-inner">
 
-        <button className="logo" onClick={() => handleNav("home")}
-          style={{ background:"none", border:"none", color:"#FFFDF9", whiteSpace: "nowrap" }}>
+        <a className="logo" href="/" onClick={(e) => { e.preventDefault(); handleNav("home"); }}
+          style={{ background:"none", border:"none", color:"#FFFDF9", whiteSpace: "nowrap", textDecoration: "none" }}>
           <span>The </span>Story Builder
-        </button>
+        </a>
 
         <nav className="nav-links">
           {navItems.map((item) => (
-            <button
+            <a
               key={item.id}
+              href={item.href}
               className={`nl${activeNav === item.id ? " active" : ""}`}
-              onClick={() => handleNav(item.id)}
-              style={{ background:"none", border:"none" }}
+              onClick={(e) => { e.preventDefault(); handleNav(item.id); }}
+              style={{ background:"none", border:"none", textDecoration: "none" }}
             >
               {item.label}
-            </button>
+            </a>
           ))}
         </nav>
 
-        <button className="nav-cta" onClick={() => handleNav("contact")}>
+        <a className="nav-cta" href="/contact" onClick={(e) => { e.preventDefault(); handleNav("contact"); }} style={{ textDecoration: "none" }}>
           Let's Talk
-        </button>
+        </a>
 
         <button
           className={`burger${menuOpen ? " open" : ""}`}
@@ -111,14 +112,14 @@ export default function Navbar({ page, setPage }) {
       {menuOpen && (
         <div className="mob-menu open">
           {navItems.map((item) => (
-            <button key={item.id} className="mob-link" onClick={() => handleNav(item.id)}
-              style={{ background:"none", border:"none", textAlign:"left", width:"100%" }}>
+            <a key={item.id} href={item.href} className="mob-link" onClick={(e) => { e.preventDefault(); handleNav(item.id); }}
+              style={{ background:"none", border:"none", textAlign:"left", width:"100%", textDecoration: "none", display: "block" }}>
               {item.label}
-            </button>
+            </a>
           ))}
-          <button className="btn btn-gold mob-cta" onClick={() => handleNav("contact")}>
+          <a className="btn btn-gold mob-cta" href="/contact" onClick={(e) => { e.preventDefault(); handleNav("contact"); }} style={{ textDecoration: "none" }}>
             Let's Talk
-          </button>
+          </a>
         </div>
       )}
     </header>

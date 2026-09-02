@@ -15,13 +15,14 @@ export default function Footer({ setPage }) {
           
           {/* COL 1: Brand & Contact Info */}
           <div>
-            <button
+            <a
               className="logo"
-              onClick={() => navTo("home")}
-              style={{ background: "none", border: "none", fontFamily: "var(--fd)", fontSize: 24, fontWeight: 800, color: "#fff", cursor: "pointer", padding: 0, marginBottom: 16, display: "block" }}
+              href="/"
+              onClick={(e) => { e.preventDefault(); navTo("home"); }}
+              style={{ background: "none", border: "none", fontFamily: "var(--fd)", fontSize: 24, fontWeight: 800, color: "#fff", cursor: "pointer", padding: 0, marginBottom: 16, display: "block", textDecoration: "none" }}
             >
               <span style={{ color: "var(--gold, #facc15)" }}>The </span>Story Builder
-            </button>
+            </a>
             <p style={{ color: "var(--muted, #94a3b8)", fontSize: 14, lineHeight: 1.6, marginBottom: 16 }}>
               Full-service digital marketing agency engineered for measurable business growth across India.
             </p>
@@ -47,12 +48,12 @@ export default function Footer({ setPage }) {
               Navigation
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14 }}>
-              <li><button onClick={() => navTo("home")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Home</button></li>
-              <li><button onClick={() => navTo("services")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Services</button></li>
-              <li><button onClick={() => navTo("pricing")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Pricing Plans</button></li>
-              <li><button onClick={() => scrollTo("projects")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Case Studies</button></li>
-              <li><button onClick={() => navTo("faq")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>FAQ</button></li>
-              <li><button onClick={() => navTo("contact")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Contact Us</button></li>
+              <li><a href="/" onClick={(e) => { e.preventDefault(); navTo("home"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Home</a></li>
+              <li><a href="/services" onClick={(e) => { e.preventDefault(); navTo("services"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Services</a></li>
+              <li><a href="/pricing" onClick={(e) => { e.preventDefault(); navTo("pricing"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Pricing Plans</a></li>
+              <li><a href="/#projects" onClick={(e) => { e.preventDefault(); scrollTo("projects"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Case Studies</a></li>
+              <li><a href="/faq" onClick={(e) => { e.preventDefault(); navTo("faq"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>FAQ</a></li>
+              <li><a href="/contact" onClick={(e) => { e.preventDefault(); navTo("contact"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Contact Us</a></li>
             </ul>
           </div>
 
@@ -62,10 +63,12 @@ export default function Footer({ setPage }) {
               Core Services
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14 }}>
-              <li><button onClick={() => navTo("service-web-dev")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Web Development</button></li>
-              <li><button onClick={() => navTo("service-perf-mktg")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Performance Marketing</button></li>
-              <li><button onClick={() => navTo("service-smm")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Social Media Marketing</button></li>
-              <li><button onClick={() => navTo("service-branding")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Brand Strategy</button></li>
+              <li><a href="/services/web-development" onClick={(e) => { e.preventDefault(); navTo("service-web-dev"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Web Development</a></li>
+              <li><a href="/services/performance-marketing" onClick={(e) => { e.preventDefault(); navTo("service-perf-mktg"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Performance Marketing</a></li>
+              <li><a href="/services/seo-services-hyderabad" onClick={(e) => { e.preventDefault(); navTo("service-seo"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>SEO Services Hyderabad</a></li>
+              <li><a href="/services/google-ads-hyderabad" onClick={(e) => { e.preventDefault(); navTo("service-google-ads"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Google Ads Hyderabad</a></li>
+              <li><a href="/services/social-media-marketing" onClick={(e) => { e.preventDefault(); navTo("service-smm"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Social Media Marketing</a></li>
+              <li><a href="/services/branding" onClick={(e) => { e.preventDefault(); navTo("service-branding"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Brand Strategy</a></li>
             </ul>
           </div>
 
@@ -75,11 +78,11 @@ export default function Footer({ setPage }) {
               Legal & Privacy
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14, marginBottom: 20 }}>
-              <li><button onClick={() => navTo("privacy")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Privacy Policy</button></li>
-              <li><button onClick={() => navTo("terms")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Terms & Conditions</button></li>
-              <li><button onClick={() => navTo("cookies")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Cookie Policy</button></li>
-              <li><button onClick={() => navTo("disclaimer")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Disclaimer</button></li>
-              <li><button onClick={() => navTo("refund")} style={{ background: "none", border: "none", color: "#94a3b8", cursor: "pointer", padding: 0 }}>Refund & Cancellation</button></li>
+              <li><a href="/privacy" onClick={(e) => { e.preventDefault(); navTo("privacy"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Privacy Policy</a></li>
+              <li><a href="/terms" onClick={(e) => { e.preventDefault(); navTo("terms"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Terms & Conditions</a></li>
+              <li><a href="/cookies" onClick={(e) => { e.preventDefault(); navTo("cookies"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Cookie Policy</a></li>
+              <li><a href="/disclaimer" onClick={(e) => { e.preventDefault(); navTo("disclaimer"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Disclaimer</a></li>
+              <li><a href="/refund-cancellation" onClick={(e) => { e.preventDefault(); navTo("refund"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Refund & Cancellation</a></li>
             </ul>
 
             <div style={{ display: "flex", gap: 12 }}>

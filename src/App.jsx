@@ -32,6 +32,8 @@ import WebDevPage from "./components/services/WebDevPage";
 import PerformanceMarketingPage from "./components/services/PerformanceMarketingPage";
 import SocialMediaPage from "./components/services/SocialMediaPage";
 import BrandingPage from "./components/services/BrandingPage";
+import SeoServicesPage from "./components/services/SeoServicesPage";
+import GoogleAdsPage from "./components/services/GoogleAdsPage";
 import FAQPage from "./components/FAQPage";
 import BlogPage from "./components/BlogPage";
 import NotFoundPage from "./components/NotFoundPage";
@@ -66,6 +68,8 @@ function getRouteFromPath(pathStr) {
   if (p === "/services") return { page: "services", slug: null };
   if (p === "/services/web-development" || p === "/service-web-dev") return { page: "service-web-dev", slug: null };
   if (p === "/services/performance-marketing" || p === "/service-perf-mktg") return { page: "service-perf-mktg", slug: null };
+  if (p === "/services/seo-services-hyderabad" || p === "/service-seo") return { page: "service-seo", slug: null };
+  if (p === "/services/google-ads-hyderabad" || p === "/service-google-ads") return { page: "service-google-ads", slug: null };
   if (p === "/services/social-media-marketing" || p === "/service-smm") return { page: "service-smm", slug: null };
   if (p === "/services/branding" || p === "/service-branding") return { page: "service-branding", slug: null };
   if (p === "/pricing") return { page: "pricing", slug: null };
@@ -91,6 +95,8 @@ function getPathFromRoute(page, slug) {
   if (page === "services") return "/services";
   if (page === "service-web-dev") return "/services/web-development";
   if (page === "service-perf-mktg") return "/services/performance-marketing";
+  if (page === "service-seo") return "/services/seo-services-hyderabad";
+  if (page === "service-google-ads") return "/services/google-ads-hyderabad";
   if (page === "service-smm") return "/services/social-media-marketing";
   if (page === "service-branding") return "/services/branding";
   if (page === "pricing") return "/pricing";
@@ -127,6 +133,14 @@ const pageMetadata = {
   "service-perf-mktg": {
     title: "Performance Marketing & Meta Ads Agency Hyderabad | The Story Builder",
     desc: "ROI-driven Meta & Google Ads campaigns engineered for qualified lead volume and positive ROAS. Conversion tracking & funnel optimization.",
+  },
+  "service-seo": {
+    title: "SEO Agency Hyderabad — Organic Search Growth & Visibility | The Story Builder",
+    desc: "Data-driven Technical & Local SEO services in Hyderabad. Get your business ranking #1 on Google Search & Maps. Claim free SEO audit.",
+  },
+  "service-google-ads": {
+    title: "Google Ads Agency Hyderabad — High-ROAS PPC Campaigns | The Story Builder",
+    desc: "Precision Google Search Ads, Display & Performance Max management in Hyderabad. Engineered for qualified B2B & local buyer lead generation.",
   },
   "service-smm": {
     title: "Social Media Marketing & Instagram Management | The Story Builder",
@@ -306,6 +320,18 @@ export default function App() {
         {page === "service-perf-mktg" && (
           <motion.div key="service-perf-mktg" {...pageTransition}>
             <PerformanceMarketingPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "service-seo" && (
+          <motion.div key="service-seo" {...pageTransition}>
+            <SeoServicesPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "service-google-ads" && (
+          <motion.div key="service-google-ads" {...pageTransition}>
+            <GoogleAdsPage setPage={navigate} />
           </motion.div>
         )}
 

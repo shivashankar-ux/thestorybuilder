@@ -4,15 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9NQBHF1BQD"></script>
+  <!-- Google Consent Mode v2 & Analytics -->
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
 
+    // Google Consent Mode v2 Default Configuration (Denied prior to explicit consent)
+    gtag('consent', 'default', {
+      'analytics_storage': 'denied',
+      'ad_storage': 'denied',
+      'ad_user_data': 'denied',
+      'ad_personalization': 'denied',
+      'wait_for_update': 500
+    });
+
+    gtag('js', new Date());
     gtag('config', 'G-9NQBHF1BQD');
   </script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9NQBHF1BQD"></script>
 
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -32,15 +41,18 @@
   t.src=v;s=b.getElementsByTagName(e)[0];
   s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
+  
+  // Default to revoked consent until user accepts cookie preferences
+  fbq('consent', 'revoke');
   fbq('init', '1069792155491301');
-  fbq('track', 'PageView');
   </script>
   <!-- End Meta Pixel Code -->
   <meta name="description" content="Website design & web development company in Hyderabad. Custom websites, redesigns and ecommerce sites for businesses in Hyderabad, Telangana & across India — live in 7 days. Free quote." />
-  <meta name="keywords" content="website design hyderabad, web design hyderabad, web design company hyderabad, website development hyderabad, website designers in hyderabad, website developers in hyderabad, web developers in hyderabad, web designers in hyderabad, web design and development company in hyderabad, website design and development company in hyderabad, website designing company in hyderabad, website designing company in hyderabad india, website creators in hyderabad, website makers in hyderabad, best website designers in hyderabad, best website developers in hyderabad, top website designers in hyderabad, top web designers in hyderabad, best web design company in hyderabad, best website design company in hyderabad, top web design companies in hyderabad, top web development companies in hyderabad, top website design companies in hyderabad, top website development companies in hyderabad, top 10 web design companies in hyderabad, web design services hyderabad, web design services in hyderabad, web design agency in hyderabad, best web design agency in hyderabad, ecommerce website development hyderabad, ecommerce website design hyderabad, ecommerce website development company in hyderabad, best ecommerce development company in hyderabad, web development services in hyderabad, website designing services in hyderabad, best website design in hyderabad, best website design and development company in hyderabad, website design hyderabad india, website designers hyderabad telangana, branding agency hyderabad, branding companies in hyderabad, creative agency hyderabad, ui ux companies in hyderabad, website designer near me, web designers near me, website design near me, web design near me, website design company near me, web design companies near me, website development company near me, web development companies near me, best website designers near me, best web designer near me, web design company, website design company, website development company, web development company, web design and development company, website design and development company, website redesign service, website redesign company, website redesign agency, best website redesign services, web redesign company, web redesign service, site redesign, business website design, business website development, business websites, business website company, business website designers, modern business website design, restaurant website design, restaurant web design, restaurant website designer, restaurant website development, restaurant website design company, restaurant web design agency, best restaurant website design, corporate website design, corporate website development, corporate website ui design, modern corporate website design, ecommerce website, ecommerce website development, custom website design, custom website for business, website design for small business, website for small business, website maker for small business, website creator for small business, small business website design, small company website design, small business web design and development, web design for small businesses, best website design for small business, responsive web design, web design and development, new website, website builder, website maker, landing page design" />
   <meta name="author" content="The Story Builder" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://thestorybuilder.in/" />
+  <!-- Google Search Console Verification -->
+  <!-- <meta name="google-site-verification" content="YOUR_VERIFICATION_CODE" /> -->
   <meta name="geo.region" content="IN-TG" />
   <meta name="geo.placename" content="Hyderabad" />
   <meta name="geo.position" content="17.385044;78.486671" />
@@ -60,47 +72,66 @@
   <meta name="twitter:description" content="Website design & web development company in Hyderabad. Custom websites, redesigns and ecommerce sites — live in 7 days." />
   <meta name="twitter:image" content="https://thestorybuilder.in/og-cover.svg" />
 
-  <!-- Schema.org JSON-LD — LocalBusiness for stronger Hyderabad SEO -->
+  <!-- Schema.org JSON-LD Graph for Google Rich Results & Local Authority -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "The Story Builder",
-    "description": "Website design and web development company in Hyderabad. Custom websites, redesigns and ecommerce sites shipped in 7 days for businesses across Hyderabad, Telangana and India.",
-    "url": "https://thestorybuilder.in/",
-    "telephone": "+918341928526",
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Hyderabad",
-      "addressRegion": "Telangana",
-      "addressCountry": "IN"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": 17.385044,
-      "longitude": 78.486671
-    },
-    "areaServed": [
-      { "@type": "City", "name": "Hyderabad" },
-      { "@type": "State", "name": "Telangana" },
-      { "@type": "Country", "name": "India" }
-    ],
-    "serviceType": [
-      "Website Design",
-      "Web Development",
-      "Website Redesign Service",
-      "Web Design and Development",
-      "Ecommerce Website Development",
-      "Custom Website Design",
-      "Responsive Web Design",
-      "Landing Page Design",
-      "Business Website Design",
-      "Restaurant Website Design",
-      "Portfolio Website Design"
-    ],
-    "priceRange": "₹₹",
-    "sameAs": [
-      "https://wa.me/918341928526"
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://thestorybuilder.in/#organization",
+        "name": "The Story Builder",
+        "description": "Website design and web development company in Hyderabad. Custom websites, performance marketing, SEO, and brand identity shipped in 7 days for businesses across Hyderabad, Telangana and India.",
+        "url": "https://thestorybuilder.in/",
+        "logo": "https://thestorybuilder.in/og-cover.svg",
+        "image": "https://thestorybuilder.in/og-cover.svg",
+        "telephone": "+918341928526",
+        "email": "contact@thestorybuilder.in",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Hyderabad",
+          "addressRegion": "Telangana",
+          "postalCode": "500081",
+          "addressCountry": "IN"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 17.385044,
+          "longitude": 78.486671
+        },
+        "areaServed": [
+          { "@type": "City", "name": "Hyderabad" },
+          { "@type": "State", "name": "Telangana" },
+          { "@type": "Country", "name": "India" }
+        ],
+        "serviceType": [
+          "Website Design",
+          "Web Development",
+          "SEO Services Hyderabad",
+          "Performance Marketing Agency",
+          "Google Ads Management",
+          "Website Redesign Service",
+          "Ecommerce Website Development",
+          "Custom Website Design",
+          "Responsive Web Design",
+          "Landing Page Design",
+          "Brand Identity Design"
+        ],
+        "priceRange": "₹₹",
+        "sameAs": [
+          "https://wa.me/918341928526"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://thestorybuilder.in/#website",
+        "url": "https://thestorybuilder.in/",
+        "name": "The Story Builder",
+        "description": "Website Design & Web Development Company in Hyderabad",
+        "publisher": {
+          "@id": "https://thestorybuilder.in/#organization"
+        }
+      }
     ]
   }
   </script>
@@ -134,13 +165,23 @@
   src="https://www.facebook.com/tr?id=1069792155491301&ev=PageView&noscript=1"
   /></noscript>
 
-  <!--
-    🔑 KEY DIFFERENCE FROM YOUR OLD HTML:
-    Your old site had ALL the content written in HTML.
-    In React, this file is nearly EMPTY.
-    React will inject all your components into this <div id="root">.
-    The actual HTML is generated by JavaScript (your components).
-  -->
+  <!-- Static Crawler Summary Fallback -->
+  <noscript>
+    <div style="padding: 20px; font-family: sans-serif; max-width: 800px; margin: 0 auto;">
+      <h1>Website Design & Web Development Company in Hyderabad — The Story Builder</h1>
+      <p>The Story Builder is a premier web design, web development, SEO, and performance marketing agency based in Hyderabad, Telangana, India. We deliver high-converting custom websites, e-commerce stores, Meta & Google ad campaigns, and brand identities shipped live in 7 days.</p>
+      <h2>Core Services in Hyderabad</h2>
+      <ul>
+        <li><a href="/services/web-development">Custom Website Design & Web Development</a></li>
+        <li><a href="/services/performance-marketing">Performance Marketing & Google/Meta Ads</a></li>
+        <li><a href="/services/seo-services-hyderabad">SEO Services Hyderabad</a></li>
+        <li><a href="/services/social-media-marketing">Social Media Marketing & Reels Strategy</a></li>
+        <li><a href="/services/branding">Brand Strategy & Visual Identity Design</a></li>
+      </ul>
+      <p>Contact: +91 83419 28526 | Email: contact@thestorybuilder.in | Location: Hyderabad, Telangana, India</p>
+    </div>
+  </noscript>
+
   <div id="root"></div>
 
   <!-- Vite injects your React app here automatically -->

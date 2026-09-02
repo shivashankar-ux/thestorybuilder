@@ -21,11 +21,21 @@ export default function CookieConsent({ setPage }) {
   const handleAccept = () => {
     try {
       localStorage.setItem(CONSENT_KEY, JSON.stringify({ analytics: true, marketing: true, date: new Date().toISOString() }));
-      if (window.gtag) {
+      
+      // Update Google Consent Mode v2 state
+      if (typeof window !== "undefined" && window.gtag) {
         window.gtag("consent", "update", {
           analytics_storage: "granted",
           ad_storage: "granted",
+          ad_user_data: "granted",
+          ad_personalization: "granted",
         });
+      }
+
+      // Grant Meta Pixel consent
+      if (typeof window !== "undefined" && typeof window.fbq === "function") {
+        window.fbq("consent", "grant");
+        window.fbq("track", "PageView");
       }
     } catch {}
     setVisible(false);
@@ -34,11 +44,20 @@ export default function CookieConsent({ setPage }) {
   const handleDecline = () => {
     try {
       localStorage.setItem(CONSENT_KEY, JSON.stringify({ analytics: false, marketing: false, date: new Date().toISOString() }));
-      if (window.gtag) {
+      
+      // Update Google Consent Mode v2 state to denied
+      if (typeof window !== "undefined" && window.gtag) {
         window.gtag("consent", "update", {
           analytics_storage: "denied",
           ad_storage: "denied",
+          ad_user_data: "denied",
+          ad_personalization: "denied",
         });
+      }
+
+      // Revoke Meta Pixel consent
+      if (typeof window !== "undefined" && typeof window.fbq === "function") {
+        window.fbq("consent", "revoke");
       }
     } catch {}
     setVisible(false);
