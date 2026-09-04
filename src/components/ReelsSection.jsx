@@ -2,43 +2,46 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const reelsData = [
-  { id: "QAL6E6fy1f0", title: "Portfolio Reel 1" },
-  { id: "1EwM31QxnKk", title: "Portfolio Reel 2" },
-  { id: "_aVoaZbyXJQ", title: "Portfolio Reel 3" },
-  { id: "rVUkWK8lRmw", title: "Portfolio Reel 4" },
-  { id: "VdsrsWmmhiw", title: "Portfolio Reel 5" },
-  { id: "k-bJd1yYk1A", title: "Portfolio Reel 6" },
-  { id: "wDfOBIsFCUE", title: "Portfolio Reel 7" },
+  {
+    id: "QAL6E6fy1f0",
+    title: "Brand Identity & Strategy Reel",
+    desc: "High-impact visual story and brand positioning reel.",
+  },
+  {
+    id: "1EwM31QxnKk",
+    title: "Growth Strategy Case Study",
+    desc: "High-converting growth funnels and performance marketing.",
+  },
+  {
+    id: "_aVoaZbyXJQ",
+    title: "Meta & Performance Ad Breakdown",
+    desc: "High-converting ad script & video creative framework.",
+  },
+  {
+    id: "rVUkWK8lRmw",
+    title: "Web Development & UI Showcase",
+    desc: "High-performance, mobile-first website design.",
+  },
+  {
+    id: "VdsrsWmmhiw",
+    title: "Brand Identity Behind The Scenes",
+    desc: "Distinct visual identities and typography systems.",
+  },
+  {
+    id: "k-bJd1yYk1A",
+    title: "Social Media Campaign Results",
+    desc: "Data-driven Meta ad creative strategy.",
+  },
+  {
+    id: "wDfOBIsFCUE",
+    title: "Creative SEO & Organic Growth",
+    desc: "Organic search strategies and viral short-form video.",
+  },
 ];
 
 export default function ReelsSection() {
-  const [globalMuted, setGlobalMuted] = useState(true);
-  const [unmutedVideoId, setUnmutedVideoId] = useState(null);
   const [activeModalReel, setActiveModalReel] = useState(null);
-
-  const currentOrigin =
-    typeof window !== "undefined" && window.location.origin
-      ? encodeURIComponent(window.location.origin)
-      : "https%3A%2F%2Fthestorybuilder.in";
-
-  const toggleGlobalSound = () => {
-    if (globalMuted) {
-      setGlobalMuted(false);
-    } else {
-      setGlobalMuted(true);
-      setUnmutedVideoId(null);
-    }
-  };
-
-  const toggleCardSound = (id, e) => {
-    e.stopPropagation();
-    if (unmutedVideoId === id) {
-      setUnmutedVideoId(null);
-    } else {
-      setGlobalMuted(false);
-      setUnmutedVideoId(id);
-    }
-  };
+  const [inlinePlayingId, setInlinePlayingId] = useState(null);
 
   return (
     <section
@@ -102,32 +105,9 @@ export default function ReelsSection() {
               Portfolio <span style={{ color: "var(--gold, #D97706)" }}>Reels & Video Showcase</span>
             </h2>
           </div>
-
-          {/* Master Sound Button */}
-          <button
-            type="button"
-            onClick={toggleGlobalSound}
-            style={{
-              background: globalMuted && !unmutedVideoId ? "rgba(15, 23, 42, 0.06)" : "var(--gold, #D97706)",
-              color: globalMuted && !unmutedVideoId ? "var(--text, #0F172A)" : "#FFFFFF",
-              border: "1px solid var(--border)",
-              borderRadius: "100px",
-              padding: "10px 22px",
-              fontSize: "13.5px",
-              fontWeight: 700,
-              cursor: "pointer",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
-              transition: "all 0.25s ease",
-            }}
-          >
-            {globalMuted && !unmutedVideoId ? "🔇 Audio Muted (Click for Sound)" : "🔊 Sound Enabled"}
-          </button>
         </div>
 
-        {/* Video Grid */}
+        {/* Bulletproof Video Reels Grid */}
         <div
           style={{
             display: "grid",
@@ -137,11 +117,8 @@ export default function ReelsSection() {
           }}
         >
           {reelsData.map((reel) => {
-            const isUnmuted = unmutedVideoId === reel.id || (!globalMuted && unmutedVideoId === null);
-            const muteParam = isUnmuted ? 0 : 1;
-
-            // Use youtube-nocookie.com domain with origin parameter to prevent domain blocking issues
-            const embedSrc = `https://www.youtube-nocookie.com/embed/${reel.id}?autoplay=1&mute=${muteParam}&loop=1&playlist=${reel.id}&playsinline=1&rel=0&enablejsapi=1&origin=${currentOrigin}`;
+            const thumbnailUrl = `https://i.ytimg.com/vi/${reel.id}/hqdefault.jpg`;
+            const isPlayingInline = inlinePlayingId === reel.id;
 
             return (
               <motion.div
@@ -153,7 +130,7 @@ export default function ReelsSection() {
                   position: "relative",
                   borderRadius: "22px",
                   overflow: "hidden",
-                  background: "#000000",
+                  background: "#0F172A",
                   aspectRatio: "9 / 16",
                   boxShadow: "0 12px 30px rgba(0,0,0,0.12)",
                   border: "2px solid var(--border)",
@@ -161,7 +138,7 @@ export default function ReelsSection() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "translateY(-6px)";
-                  e.currentTarget.style.boxShadow = "0 20px 42px rgba(217,119,6,0.22)";
+                  e.currentTarget.style.boxShadow = "0 20px 42px rgba(217,119,6,0.25)";
                   e.currentTarget.style.borderColor = "var(--gold, #D97706)";
                 }}
                 onMouseLeave={(e) => {
@@ -171,55 +148,111 @@ export default function ReelsSection() {
                 }}
                 onClick={() => setActiveModalReel(reel)}
               >
-                {/* Embedded Video */}
-                <iframe
-                  src={embedSrc}
-                  title={reel.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    border: 0,
-                    pointerEvents: "auto",
-                  }}
-                />
+                {isPlayingInline ? (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${reel.id}?autoplay=1&controls=1&rel=0`}
+                    title={reel.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      border: 0,
+                    }}
+                  />
+                ) : (
+                  <>
+                    {/* HD YouTube Poster Image (100% reliable, never blocked by Chrome) */}
+                    <img
+                      src={thumbnailUrl}
+                      alt={reel.title}
+                      loading="lazy"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        display: "block",
+                      }}
+                    />
 
-                {/* Floating Sound Toggle */}
-                <button
-                  type="button"
-                  onClick={(e) => toggleCardSound(reel.id, e)}
-                  style={{
-                    position: "absolute",
-                    top: "12px",
-                    right: "12px",
-                    zIndex: 10,
-                    background: isUnmuted ? "var(--gold, #D97706)" : "rgba(0, 0, 0, 0.65)",
-                    backdropFilter: "blur(8px)",
-                    color: "#FFFFFF",
-                    fontSize: "12px",
-                    fontWeight: 700,
-                    padding: "6px 12px",
-                    borderRadius: "100px",
-                    border: "1px solid rgba(255, 255, 255, 0.2)",
-                    cursor: "pointer",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "5px",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-                    transition: "all 0.2s ease",
-                  }}
-                >
-                  {isUnmuted ? "🔊 Sound On" : "🔇 Tap for Sound"}
-                </button>
+                    {/* Dark Vignette Gradient */}
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background:
+                          "linear-gradient(to bottom, rgba(15,23,42,0.4) 0%, rgba(15,23,42,0.1) 50%, rgba(15,23,42,0.85) 100%)",
+                        pointerEvents: "none",
+                      }}
+                    />
+
+                    {/* Glowing Play Button Icon */}
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                        zIndex: 3,
+                        pointerEvents: "none",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: "56px",
+                          height: "56px",
+                          borderRadius: "50%",
+                          background: "var(--gold, #D97706)",
+                          boxShadow: "0 0 25px rgba(217, 119, 6, 0.8)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "#FFFFFF",
+                          fontSize: "20px",
+                          paddingLeft: "3px",
+                        }}
+                      >
+                        ▶
+                      </div>
+                    </div>
+
+                    {/* Card Footer Button */}
+                    <div
+                      style={{
+                        position: "absolute",
+                        bottom: "14px",
+                        left: "14px",
+                        right: "14px",
+                        zIndex: 3,
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <span
+                        style={{
+                          background: "rgba(15, 23, 42, 0.8)",
+                          backdropFilter: "blur(8px)",
+                          color: "#FFFFFF",
+                          fontSize: "12px",
+                          fontWeight: 700,
+                          padding: "6px 14px",
+                          borderRadius: "100px",
+                          border: "1px solid rgba(255, 255, 255, 0.2)",
+                          boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
+                        }}
+                      >
+                        Watch Reel ▶
+                      </span>
+                    </div>
+                  </>
+                )}
               </motion.div>
             );
           })}
         </div>
       </div>
 
-      {/* Fullscreen Video Modal Lightbox */}
+      {/* Video Modal Lightbox */}
       <AnimatePresence>
         {activeModalReel && (
           <motion.div
@@ -231,7 +264,7 @@ export default function ReelsSection() {
               position: "fixed",
               inset: 0,
               zIndex: 99999,
-              background: "rgba(15, 23, 42, 0.9)",
+              background: "rgba(15, 23, 42, 0.92)",
               backdropFilter: "blur(14px)",
               display: "flex",
               alignItems: "center",
@@ -284,13 +317,32 @@ export default function ReelsSection() {
               {/* Modal Video Player */}
               <div style={{ aspectRatio: "9 / 16", width: "100%", background: "#000" }}>
                 <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${activeModalReel.id}?autoplay=1&mute=0&loop=1&playlist=${activeModalReel.id}&playsinline=1&rel=0&origin=${currentOrigin}`}
+                  src={`https://www.youtube.com/embed/${activeModalReel.id}?autoplay=1&controls=1&rel=0`}
                   title={activeModalReel.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   style={{ width: "100%", height: "100%", border: 0 }}
                 />
+              </div>
+
+              {/* Direct Link Fallback Button */}
+              <div style={{ padding: "16px", textAlign: "center", background: "#0F172A" }}>
+                <a
+                  href={`https://youtube.com/shorts/${activeModalReel.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    color: "var(--gold, #D97706)",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    textDecoration: "none",
+                  }}
+                >
+                  Open Direct on YouTube Shorts ↗
+                </a>
               </div>
             </motion.div>
           </motion.div>
