@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const reelsData = [
@@ -12,11 +12,14 @@ const reelsData = [
 ];
 
 export default function ReelsSection() {
-  // Global sound state (muted by default so videos autoplay continuously in loop)
   const [globalMuted, setGlobalMuted] = useState(true);
-  // Track individual video sound overrides
   const [unmutedVideoId, setUnmutedVideoId] = useState(null);
   const [activeModalReel, setActiveModalReel] = useState(null);
+
+  const currentOrigin =
+    typeof window !== "undefined" && window.location.origin
+      ? encodeURIComponent(window.location.origin)
+      : "https%3A%2F%2Fthestorybuilder.in";
 
   const toggleGlobalSound = () => {
     if (globalMuted) {
@@ -56,7 +59,7 @@ export default function ReelsSection() {
         className="wrap"
         style={{ maxWidth: 1240, margin: "0 auto", padding: "0 20px" }}
       >
-        {/* Section Header */}
+        {/* Header */}
         <div
           style={{
             display: "flex",
@@ -100,7 +103,7 @@ export default function ReelsSection() {
             </h2>
           </div>
 
-          {/* Global Master Audio Control */}
+          {/* Master Sound Button */}
           <button
             type="button"
             onClick={toggleGlobalSound}
@@ -124,7 +127,7 @@ export default function ReelsSection() {
           </button>
         </div>
 
-        {/* Clean Video Reels Grid (No category buttons, no text banners over video) */}
+        {/* Video Grid */}
         <div
           style={{
             display: "grid",
@@ -137,8 +140,8 @@ export default function ReelsSection() {
             const isUnmuted = unmutedVideoId === reel.id || (!globalMuted && unmutedVideoId === null);
             const muteParam = isUnmuted ? 0 : 1;
 
-            // Embedded URL designed for continuous looped autoplay without controls clutter
-            const embedSrc = `https://www.youtube.com/embed/${reel.id}?autoplay=1&mute=${muteParam}&loop=1&playlist=${reel.id}&controls=0&modestbranding=1&rel=0&enablejsapi=1&playsinline=1`;
+            // Use youtube-nocookie.com domain with origin parameter to prevent domain blocking issues
+            const embedSrc = `https://www.youtube-nocookie.com/embed/${reel.id}?autoplay=1&mute=${muteParam}&loop=1&playlist=${reel.id}&playsinline=1&rel=0&enablejsapi=1&origin=${currentOrigin}`;
 
             return (
               <motion.div
@@ -168,11 +171,12 @@ export default function ReelsSection() {
                 }}
                 onClick={() => setActiveModalReel(reel)}
               >
-                {/* Autoplay Looped YouTube Shorts Video Embed */}
+                {/* Embedded Video */}
                 <iframe
                   src={embedSrc}
                   title={reel.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
                   style={{
                     width: "100%",
@@ -182,7 +186,7 @@ export default function ReelsSection() {
                   }}
                 />
 
-                {/* Floating Sound Mute/Unmute Overlay Button */}
+                {/* Floating Sound Toggle */}
                 <button
                   type="button"
                   onClick={(e) => toggleCardSound(reel.id, e)}
@@ -277,12 +281,13 @@ export default function ReelsSection() {
                 ✕
               </button>
 
-              {/* Modal Unmuted Video Player */}
+              {/* Modal Video Player */}
               <div style={{ aspectRatio: "9 / 16", width: "100%", background: "#000" }}>
                 <iframe
-                  src={`https://www.youtube.com/embed/${activeModalReel.id}?autoplay=1&mute=0&loop=1&playlist=${activeModalReel.id}&controls=1&modestbranding=1&rel=0`}
+                  src={`https://www.youtube-nocookie.com/embed/${activeModalReel.id}?autoplay=1&mute=0&loop=1&playlist=${activeModalReel.id}&playsinline=1&rel=0&origin=${currentOrigin}`}
                   title={activeModalReel.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
                   allowFullScreen
                   style={{ width: "100%", height: "100%", border: 0 }}
                 />
