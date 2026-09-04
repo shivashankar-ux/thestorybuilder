@@ -3,20 +3,36 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const reelsData = [
   {
+    id: "QAL6E6fy1f0",
+    title: "Brand Identity & Strategy Reel",
+    tag: "Brand Identity",
+    views: "180K+ Views",
+    metric: "High Impact",
+    desc: "High-impact visual story and brand positioning reel for market expansion.",
+  },
+  {
     id: "1EwM31QxnKk",
     title: "Growth Strategy Case Study",
     tag: "Growth Strategy",
     views: "120K+ Views",
     metric: "3.4x ROAS",
-    desc: "A breakdown of high-converting growth funnels and performance strategy for scaling D2C & service brands.",
+    desc: "A breakdown of high-converting growth funnels and performance strategy for scaling brands.",
+  },
+  {
+    id: "_aVoaZbyXJQ",
+    title: "Meta & Performance Ad Breakdown",
+    tag: "Meta Ads",
+    views: "240K+ Views",
+    metric: "5.2x ROAS",
+    desc: "High-converting ad script & video creative framework engineered for max conversions.",
   },
   {
     id: "rVUkWK8lRmw",
-    title: "Web Development Showcase",
+    title: "Web Development & UI Showcase",
     tag: "Web Development",
     views: "85K+ Views",
     metric: "7-Day Delivery",
-    desc: "High-performance, mobile-first website design built with ultra-fast page load speeds & modern UI design.",
+    desc: "High-performance, mobile-first website design built with ultra-fast page load speeds.",
   },
   {
     id: "VdsrsWmmhiw",
@@ -24,15 +40,15 @@ const reelsData = [
     tag: "Brand Identity",
     views: "95K+ Views",
     metric: "+240% Inbound",
-    desc: "Crafting distinct visual identities, typography systems, and cohesive branding for ambitious founders.",
+    desc: "Crafting distinct visual identities, typography systems, and cohesive branding for founders.",
   },
   {
     id: "k-bJd1yYk1A",
-    title: "Meta Ads Performance Breakdown",
+    title: "Social Media Campaign Results",
     tag: "Meta Ads",
     views: "150K+ Views",
     metric: "4.8x Return",
-    desc: "Data-driven Meta ad creative strategy designed to lower customer acquisition costs and boost conversions.",
+    desc: "Data-driven Meta ad creative strategy designed to lower customer acquisition costs.",
   },
   {
     id: "wDfOBIsFCUE",
@@ -40,7 +56,7 @@ const reelsData = [
     tag: "SEO & Growth",
     views: "210K+ Views",
     metric: "#1 Google Rank",
-    desc: "Leveraging organic search strategies and viral short-form video to build continuous inbound lead pipelines.",
+    desc: "Leveraging organic search strategies and viral short-form video to build continuous lead pipelines.",
   },
 ];
 
