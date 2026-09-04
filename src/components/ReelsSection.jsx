@@ -2,47 +2,17 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const reelsData = [
-  {
-    id: "QAL6E6fy1f0",
-    title: "Brand Identity & Strategy Reel",
-    desc: "High-impact visual story and brand positioning reel.",
-  },
-  {
-    id: "1EwM31QxnKk",
-    title: "Growth Strategy Case Study",
-    desc: "High-converting growth funnels and performance marketing.",
-  },
-  {
-    id: "_aVoaZbyXJQ",
-    title: "Meta & Performance Ad Breakdown",
-    desc: "High-converting ad script & video creative framework.",
-  },
-  {
-    id: "rVUkWK8lRmw",
-    title: "Web Development & UI Showcase",
-    desc: "High-performance, mobile-first website design.",
-  },
-  {
-    id: "VdsrsWmmhiw",
-    title: "Brand Identity Behind The Scenes",
-    desc: "Distinct visual identities and typography systems.",
-  },
-  {
-    id: "k-bJd1yYk1A",
-    title: "Social Media Campaign Results",
-    desc: "Data-driven Meta ad creative strategy.",
-  },
-  {
-    id: "wDfOBIsFCUE",
-    title: "Creative SEO & Organic Growth",
-    desc: "Organic search strategies and viral short-form video.",
-  },
+  { id: "QAL6E6fy1f0", title: "Portfolio Reel 1" },
+  { id: "1EwM31QxnKk", title: "Portfolio Reel 2" },
+  { id: "_aVoaZbyXJQ", title: "Portfolio Reel 3" },
+  { id: "rVUkWK8lRmw", title: "Portfolio Reel 4" },
+  { id: "VdsrsWmmhiw", title: "Portfolio Reel 5" },
+  { id: "k-bJd1yYk1A", title: "Portfolio Reel 6" },
+  { id: "wDfOBIsFCUE", title: "Portfolio Reel 7" },
 ];
 
 export default function ReelsSection() {
-  // Global master sound state (muted by default so videos autoplay continuously in loop)
   const [globalMuted, setGlobalMuted] = useState(true);
-  // Track individual video sound overrides
   const [unmutedVideoId, setUnmutedVideoId] = useState(null);
   const [activeModalReel, setActiveModalReel] = useState(null);
 
@@ -70,8 +40,8 @@ export default function ReelsSection() {
       className="reels-section sr"
       id="reels"
       style={{
-        paddingTop: "70px",
-        paddingBottom: "85px",
+        paddingTop: "60px",
+        paddingBottom: "75px",
         background: "var(--card, #FFFFFF)",
         color: "var(--text, #0F172A)",
         borderTop: "1px solid var(--border)",
@@ -82,7 +52,7 @@ export default function ReelsSection() {
     >
       <div
         className="wrap"
-        style={{ maxWidth: 1240, margin: "0 auto", padding: "0 20px" }}
+        style={{ maxWidth: 1240, margin: "0 auto", padding: "0 16px" }}
       >
         {/* Section Header */}
         <div
@@ -91,8 +61,8 @@ export default function ReelsSection() {
             justifyContent: "space-between",
             alignItems: "center",
             flexWrap: "wrap",
-            gap: "16px",
-            marginBottom: "32px",
+            gap: "14px",
+            marginBottom: "28px",
           }}
         >
           <div>
@@ -107,8 +77,8 @@ export default function ReelsSection() {
                 background: "rgba(217,119,6,0.1)",
                 color: "var(--gold, #D97706)",
                 fontWeight: 700,
-                fontSize: "13px",
-                marginBottom: "10px",
+                fontSize: "12.5px",
+                marginBottom: "8px",
                 border: "1px solid rgba(217,119,6,0.2)",
               }}
             >
@@ -116,19 +86,19 @@ export default function ReelsSection() {
             </span>
             <h2
               style={{
-                fontSize: "clamp(2rem, 4vw, 3rem)",
+                fontSize: "clamp(1.75rem, 5vw, 2.8rem)",
                 fontFamily: "var(--fd)",
                 fontWeight: 800,
                 color: "var(--text, #0F172A)",
                 margin: 0,
-                lineHeight: 1.15,
+                lineHeight: 1.18,
               }}
             >
               Portfolio <span style={{ color: "var(--gold, #D97706)" }}>Reels & Video Showcase</span>
             </h2>
           </div>
 
-          {/* Master Sound Button */}
+          {/* Master Sound Button (Touch Friendly) */}
           <button
             type="button"
             onClick={toggleGlobalSound}
@@ -137,8 +107,9 @@ export default function ReelsSection() {
               color: globalMuted && !unmutedVideoId ? "var(--text, #0F172A)" : "#FFFFFF",
               border: "1px solid var(--border)",
               borderRadius: "100px",
-              padding: "10px 22px",
-              fontSize: "13.5px",
+              padding: "10px 20px",
+              minHeight: "42px",
+              fontSize: "13px",
               fontWeight: 700,
               cursor: "pointer",
               display: "inline-flex",
@@ -146,18 +117,19 @@ export default function ReelsSection() {
               gap: "8px",
               boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
               transition: "all 0.25s ease",
+              touchAction: "manipulation",
             }}
           >
-            {globalMuted && !unmutedVideoId ? "🔇 Muted (Click to Unmute All)" : "🔊 Sound Enabled"}
+            {globalMuted && !unmutedVideoId ? "🔇 Muted (Click for Sound)" : "🔊 Sound Enabled"}
           </button>
         </div>
 
-        {/* Video Grid - Autoplay Muted Loops */}
+        {/* Responsive Mobile-Optimized Grid */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-            gap: "22px",
+            gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
+            gap: "16px",
             justifyContent: "center",
           }}
         >
@@ -165,7 +137,6 @@ export default function ReelsSection() {
             const isUnmuted = unmutedVideoId === reel.id || (!globalMuted && unmutedVideoId === null);
             const muteParam = isUnmuted ? 0 : 1;
 
-            // YouTube Privacy-Enhanced embed URL with controls=1 and autoplay muted loop
             const embedSrc = `https://www.youtube-nocookie.com/embed/${reel.id}?autoplay=1&mute=${muteParam}&loop=1&playlist=${reel.id}&playsinline=1&controls=1&rel=0`;
 
             return (
@@ -176,13 +147,14 @@ export default function ReelsSection() {
                 transition={{ duration: 0.3 }}
                 style={{
                   position: "relative",
-                  borderRadius: "22px",
+                  borderRadius: "20px",
                   overflow: "hidden",
                   background: "#000000",
                   aspectRatio: "9 / 16",
-                  boxShadow: "0 12px 30px rgba(0,0,0,0.12)",
+                  boxShadow: "0 10px 28px rgba(0,0,0,0.12)",
                   border: "2px solid var(--border)",
                   cursor: "pointer",
+                  touchAction: "manipulation",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = "translateY(-6px)";
@@ -191,7 +163,7 @@ export default function ReelsSection() {
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 12px 30px rgba(0,0,0,0.12)";
+                  e.currentTarget.style.boxShadow = "0 10px 28px rgba(0,0,0,0.12)";
                   e.currentTarget.style.borderColor = "var(--border)";
                 }}
                 onClick={() => setActiveModalReel(reel)}
@@ -210,19 +182,19 @@ export default function ReelsSection() {
                   }}
                 />
 
-                {/* Floating Sound Toggle Button */}
+                {/* Touch-Optimized Floating Sound Toggle */}
                 <button
                   type="button"
                   onClick={(e) => toggleCardSound(reel.id, e)}
                   style={{
                     position: "absolute",
-                    top: "12px",
-                    right: "12px",
+                    top: "10px",
+                    right: "10px",
                     zIndex: 10,
-                    background: isUnmuted ? "var(--gold, #D97706)" : "rgba(0, 0, 0, 0.75)",
+                    background: isUnmuted ? "var(--gold, #D97706)" : "rgba(0, 0, 0, 0.78)",
                     backdropFilter: "blur(8px)",
                     color: "#FFFFFF",
-                    fontSize: "12px",
+                    fontSize: "11.5px",
                     fontWeight: 700,
                     padding: "6px 12px",
                     borderRadius: "100px",
@@ -230,12 +202,13 @@ export default function ReelsSection() {
                     cursor: "pointer",
                     display: "inline-flex",
                     alignItems: "center",
-                    gap: "5px",
+                    gap: "4px",
                     boxShadow: "0 4px 14px rgba(0,0,0,0.4)",
                     transition: "all 0.2s ease",
+                    touchAction: "manipulation",
                   }}
                 >
-                  {isUnmuted ? "🔊 Sound On" : "🔇 Tap to Unmute"}
+                  {isUnmuted ? "🔊 Sound On" : "🔇 Tap for Sound"}
                 </button>
               </motion.div>
             );
@@ -243,7 +216,7 @@ export default function ReelsSection() {
         </div>
       </div>
 
-      {/* Lightbox / Video Modal */}
+      {/* Touch-Optimized Lightbox Video Modal */}
       <AnimatePresence>
         {activeModalReel && (
           <motion.div
@@ -260,7 +233,7 @@ export default function ReelsSection() {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              padding: "20px",
+              padding: "16px",
             }}
           >
             <motion.div
@@ -272,8 +245,9 @@ export default function ReelsSection() {
                 background: "#000000",
                 borderRadius: "24px",
                 overflow: "hidden",
-                maxWidth: "420px",
-                width: "100%",
+                maxWidth: "400px",
+                width: "92vw",
+                maxHeight: "90vh",
                 border: "2px solid var(--gold, #D97706)",
                 boxShadow: "0 30px 80px rgba(0,0,0,0.7)",
                 color: "#FFFFFF",
@@ -286,20 +260,21 @@ export default function ReelsSection() {
                 onClick={() => setActiveModalReel(null)}
                 style={{
                   position: "absolute",
-                  top: "14px",
-                  right: "14px",
+                  top: "12px",
+                  right: "12px",
                   zIndex: 10,
-                  background: "rgba(0,0,0,0.7)",
+                  background: "rgba(0,0,0,0.75)",
                   border: "1px solid rgba(255,255,255,0.3)",
                   color: "#FFFFFF",
-                  width: "38px",
-                  height: "38px",
+                  width: "44px",
+                  height: "44px",
                   borderRadius: "50%",
-                  fontSize: "18px",
+                  fontSize: "20px",
                   cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
+                  touchAction: "manipulation",
                 }}
               >
                 ✕
@@ -316,7 +291,7 @@ export default function ReelsSection() {
                 />
               </div>
 
-              {/* Direct Link Fallback Button */}
+              {/* Direct Fallback Button */}
               <div style={{ padding: "14px", textAlign: "center", background: "#0F172A" }}>
                 <a
                   href={`https://youtube.com/shorts/${activeModalReel.id}`}
