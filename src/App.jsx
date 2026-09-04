@@ -10,6 +10,8 @@ import About from "./components/About";
 import Services from "./components/Services";
 import Process from "./components/Process";
 import Projects from "./components/Projects";
+import ReelsSection from "./components/ReelsSection";
+
 
 import FAQ from "./components/FAQ";
 import CTABanner from "./components/CTABanner";
@@ -286,6 +288,8 @@ export default function App() {
             <Services />
             <Process />
             <Projects setPage={navigate} navigate={navigate} />
+            <ReelsSection />
+
 
             <FAQ setPage={navigate} />
             <CTABanner setPage={navigate} />
