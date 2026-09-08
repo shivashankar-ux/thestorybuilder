@@ -17,8 +17,8 @@ function loadRazorpayScript() {
 
 export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
   const [buyerName, setBuyerName] = useState(() => {
-    if (typeof window !== "undefined") return localStorage.getItem("tsb_buyer_name") || "";
-    return "";
+    if (typeof window !== "undefined") return localStorage.getItem("tsb_buyer_name") || "Customer";
+    return "Customer";
   });
   const [buyerEmail, setBuyerEmail] = useState(() => {
     if (typeof window !== "undefined") return localStorage.getItem("tsb_buyer_email") || "";
@@ -235,6 +235,7 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
                 value={buyerEmail}
                 onChange={(e) => setBuyerEmail(e.target.value)}
                 disabled={loading}
+                autoFocus
                 required
               />
             </div>
