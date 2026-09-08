@@ -5,13 +5,29 @@ import CheckoutModal from "./CheckoutModal";
 
 const fallbackEbooks = [
   {
+    id: "fb-astro",
+    title: "Astrology for Beginners: Astro 6 Playbook",
+    slug: "astro6-for-beginners",
+    description: "Master planetary positions, natal charts, zodiac house alignments, and practical horoscopes step-by-step with this complete playbook.",
+    cover_image_url: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=800&q=80",
+    price_inr: 499,
+    file_url: "ebooks-private/Astro6-for-Beginners.docx",
+    chapters: [
+      "01. Introduction to Planetary Positions & Zodiac Houses",
+      "02. Natal Chart Interpretation Frameworks",
+      "03. Sun, Moon & Rising Sign Alignment Strategy",
+      "04. Planetary Transits & Life Cycle Timing",
+      "05. Real-World Case Examples & Step-by-Step Exercises",
+    ],
+  },
+  {
     id: "fb-1",
     title: "The 7-Day Web Design & Conversion Blueprint",
     slug: "7-day-web-design-blueprint",
     description: "The exact blueprint used by high-converting digital agencies to build, launch, and monetize premium custom websites in 7 days flat.",
     cover_image_url: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
     price_inr: 499,
-    file_url: "ebooks/sample-1.pdf",
+    file_url: "ebooks-private/Astro6-for-Beginners.docx",
     chapters: [
       "01. Architecture of High-Converting Landing Pages",
       "02. Typography & Color Tokens for Premium Brands",
