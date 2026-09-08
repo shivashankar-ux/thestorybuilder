@@ -40,16 +40,29 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
     setLoading(true);
 
     try {
-      // 1. Create order on server
-      const res = await fetch("/api/razorpay/create-order", {
+      // 1. Create order on server (tries /api/create-order or fallback /api/razorpay/create-order)
+      let res = await fetch("/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ebook_id: ebook.id,
+          amount: Math.round(Number(ebook.price_inr || 499) * 100),
           buyer_name: buyerName.trim(),
           buyer_email: buyerEmail.trim(),
         }),
       });
+
+      if (!res.ok) {
+        res = await fetch("/api/razorpay/create-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ebook_id: ebook.id,
+            buyer_name: buyerName.trim(),
+            buyer_email: buyerEmail.trim(),
+          }),
+        });
+      }
 
       const data = await res.json();
 
@@ -65,9 +78,9 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
 
       // 3. Configure and open Razorpay Checkout modal
       const options = {
-        key: data.key_id,
+        key: data.key_id || import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_TZdNyNIUFEW2BL",
         amount: data.amount,
-        currency: data.currency,
+        currency: data.currency || "INR",
         name: "The Story Builder",
         description: `Ebook: ${ebook.title}`,
         image: ebook.cover_image_url || "https://thestorybuilder.in/logo.png",
@@ -82,8 +95,8 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
         handler: async function (response) {
           setLoading(true);
           try {
-            // 4. Verify payment signature on server
-            const verifyRes = await fetch("/api/razorpay/verify", {
+            // 4. Verify payment signature on server (tries /api/verify-payment or fallback /api/razorpay/verify)
+            let verifyRes = await fetch("/api/verify-payment", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
@@ -92,6 +105,18 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
                 razorpay_signature: response.razorpay_signature,
               }),
             });
+
+            if (!verifyRes.ok) {
+              verifyRes = await fetch("/api/razorpay/verify", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                }),
+              });
+            }
 
             const verifyData = await verifyRes.json();
 
