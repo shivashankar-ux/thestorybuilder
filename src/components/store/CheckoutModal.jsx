@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 function loadRazorpayScript() {
@@ -168,7 +169,9 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
     }
   };
 
-  return (
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <AnimatePresence>
       <div className="store-modal-overlay" onClick={onClose}>
         <motion.div
@@ -265,6 +268,7 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
           </div>
         </motion.div>
       </div>
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
