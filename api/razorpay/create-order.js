@@ -45,8 +45,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ ok: false, error: "Please enter a valid email address." });
     }
 
-    const keyId = process.env.RAZORPAY_KEY_ID;
-    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    const keyId = process.env.RAZORPAY_KEY_ID || process.env.VITE_RAZORPAY_KEY_ID || process.env.ITE_RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID;
+    const keySecret = process.env.RAZORPAY_KEY_SECRET || process.env.VITE_RAZORPAY_KEY_SECRET;
 
     if (!keyId || !keySecret) {
       console.error("RAZORPAY_KEY_ID or RAZORPAY_KEY_SECRET environment variables missing.");
