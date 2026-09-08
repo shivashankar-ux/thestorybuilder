@@ -81,18 +81,33 @@ export default function Footer({ setPage }) {
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14, marginBottom: 20 }}>
               <li><a href="/privacy" onClick={(e) => { e.preventDefault(); navTo("privacy"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Privacy Policy</a></li>
               <li><a href="/terms" onClick={(e) => { e.preventDefault(); navTo("terms"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Terms & Conditions</a></li>
+              <li><a href="/shipping-policy" onClick={(e) => { e.preventDefault(); navTo("shipping"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Shipping & Delivery Policy</a></li>
+              <li><a href="/refund-cancellation" onClick={(e) => { e.preventDefault(); navTo("refund"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Refund & Cancellation</a></li>
               <li><a href="/cookies" onClick={(e) => { e.preventDefault(); navTo("cookies"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Cookie Policy</a></li>
               <li><a href="/disclaimer" onClick={(e) => { e.preventDefault(); navTo("disclaimer"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Disclaimer</a></li>
-              <li><a href="/refund-cancellation" onClick={(e) => { e.preventDefault(); navTo("refund"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Refund & Cancellation</a></li>
             </ul>
 
-            <div style={{ display: "flex", gap: 12 }}>
+            <div style={{ display: "flex", gap: 12, marginBottom: 16 }}>
               <a href="https://wa.me/918341928526" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style={{ color: "#facc15", fontSize: 20, textDecoration: "none" }}>💬</a>
               <a href="tel:+918341928526" aria-label="Phone" style={{ color: "#facc15", fontSize: 20, textDecoration: "none" }}>📞</a>
               <a href="mailto:shivashankar.7991@gmail.com" aria-label="Email" style={{ color: "#facc15", fontSize: 20, textDecoration: "none" }}>✉️</a>
             </div>
           </div>
 
+        </div>
+
+        {/* RAZORPAY & PAYMENT ACCEPTANCE BADGE */}
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 20, paddingBottom: 20, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16, fontSize: 12, color: "#8b97b5" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+            <span style={{ fontWeight: 700, color: "#eef2ff", letterSpacing: 0.5 }}>PAYMENTS ACCEPTED:</span>
+            <span style={{ background: "rgba(255,255,255,0.06)", padding: "4px 8px", borderRadius: 4, color: "#fff", fontWeight: 600 }}>UPI (GPay / PhonePe / Paytm)</span>
+            <span style={{ background: "rgba(255,255,255,0.06)", padding: "4px 8px", borderRadius: 4, color: "#fff", fontWeight: 600 }}>Visa / Mastercard / RuPay</span>
+            <span style={{ background: "rgba(255,255,255,0.06)", padding: "4px 8px", borderRadius: 4, color: "#fff", fontWeight: 600 }}>NetBanking</span>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#facc15", fontWeight: 700 }}>
+            <span>🔒 256-Bit Encrypted Payments Secured by Razorpay</span>
+          </div>
         </div>
 
         <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 24, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 16, color: "var(--muted, #94a3b8)", fontSize: 13 }}>

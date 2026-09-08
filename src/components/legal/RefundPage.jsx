@@ -64,24 +64,36 @@ export default function RefundPage({ setPage }) {
 
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 22, fontFamily: "var(--fd)", fontWeight: 700, color: "var(--text, #1A1208)", marginBottom: 14, borderBottom: "1px solid var(--border)", paddingBottom: 10 }}>
-            4. Refund Processing
+            4. Digital Products & Ebook Purchases
+          </h2>
+          <ul style={{ paddingLeft: 24, marginBottom: 16, color: "var(--muted, #4a4031)", lineHeight: 1.8 }}>
+            <li><strong style={{ color: "var(--text)" }}>Instant Delivery Policy:</strong> Due to the immediate downloadable nature of digital ebooks and playbooks, purchases are non-refundable once the file link has been accessed or downloaded.</li>
+            <li><strong style={{ color: "var(--text)" }}>Duplicate Charges / Technical Failure:</strong> If you are charged twice for a single transaction due to network error, or if your account is debited but the system fails to generate a download link, a 100% full refund will be processed immediately upon notification.</li>
+            <li><strong style={{ color: "var(--text)" }}>Defective File Guarantee:</strong> If the downloaded PDF file is damaged, incomplete, or corrupted, we will immediately re-issue a corrected digital copy or provide a full refund if reported within 7 days.</li>
+          </ul>
+        </section>
+
+        <section style={{ marginBottom: 36 }}>
+          <h2 style={{ fontSize: 22, fontFamily: "var(--fd)", fontWeight: 700, color: "var(--text, #1A1208)", marginBottom: 14, borderBottom: "1px solid var(--border)", paddingBottom: 10 }}>
+            5. Refund Processing SLA & Timelines
           </h2>
           <p style={{ color: "var(--muted, #4a4031)", lineHeight: 1.8 }}>
-            Eligible refunds approved by management will be processed using the original payment method within 7–10 working days of written approval.
+            All approved refunds will be processed back to the customer's original payment method (Credit Card, Debit Card, NetBanking, UPI, or Wallet) via our payment gateway partner, <strong style={{ color: "var(--text)" }}>Razorpay</strong>. Refunds typically reflect in the buyer's bank account within <strong style={{ color: "var(--text)" }}>5 to 7 working days</strong> from the date of refund approval.
           </p>
         </section>
 
         <section style={{ marginBottom: 36 }}>
           <h2 style={{ fontSize: 22, fontFamily: "var(--fd)", fontWeight: 700, color: "var(--text, #1A1208)", marginBottom: 14, borderBottom: "1px solid var(--border)", paddingBottom: 10 }}>
-            5. Contact Us
+            6. Contact Support for Refunds
           </h2>
           <p style={{ color: "var(--muted, #4a4031)", lineHeight: 1.8 }}>
-            For refund or cancellation requests, please email us directly with your project details:
+            For any refund, cancellation, or billing inquiries, please reach out to us with your Razorpay order/payment ID:
           </p>
           <p style={{ marginTop: 12, color: "var(--text, #1A1208)", fontWeight: 600 }}>
-            The Story Builder<br />
+            The Story Builder Support Desk<br />
             Email: <a href="mailto:shivashankar.7991@gmail.com" style={{ color: "var(--gold)", textDecoration: "underline" }}>shivashankar.7991@gmail.com</a><br />
-            Phone: <a href="tel:+918341928526" style={{ color: "var(--gold)", textDecoration: "underline" }}>+91 83419 28526</a>
+            Phone / WhatsApp: <a href="tel:+918341928526" style={{ color: "var(--gold)", textDecoration: "underline" }}>+91 83419 28526</a><br />
+            Operating Hours: Mon - Sat (9:00 AM - 7:00 PM IST)
           </p>
         </section>
       </div>

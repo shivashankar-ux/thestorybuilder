@@ -30,6 +30,7 @@ import TermsPage from "./components/legal/TermsPage";
 import CookiesPage from "./components/legal/CookiesPage";
 import DisclaimerPage from "./components/legal/DisclaimerPage";
 import RefundPage from "./components/legal/RefundPage";
+import ShippingPage from "./components/legal/ShippingPage";
 import WebDevPage from "./components/services/WebDevPage";
 import PerformanceMarketingPage from "./components/services/PerformanceMarketingPage";
 import SocialMediaPage from "./components/services/SocialMediaPage";
@@ -87,6 +88,7 @@ function getRouteFromPath(pathStr) {
   if (p === "/cookies") return { page: "cookies", slug: null };
   if (p === "/disclaimer") return { page: "disclaimer", slug: null };
   if (p === "/refund-cancellation" || p === "/refund") return { page: "refund", slug: null };
+  if (p === "/shipping-policy" || p === "/shipping-delivery" || p === "/shipping") return { page: "shipping", slug: null };
   if (p === "/blog" || p === "/resources") return { page: "blog", slug: null };
   if (p === "/store" || p === "/storefront" || p === "/ebooks") return { page: "store", slug: null };
   if (p === "/store/success") return { page: "store-success", slug: null };
@@ -121,6 +123,7 @@ function getPathFromRoute(page, slug) {
   if (page === "cookies") return "/cookies";
   if (page === "disclaimer") return "/disclaimer";
   if (page === "refund") return "/refund-cancellation";
+  if (page === "shipping") return "/shipping-policy";
   if (page === "blog") return "/blog";
   if (page === "store") return "/store";
   if (page === "store-success") return "/store/success";
@@ -210,6 +213,10 @@ const pageMetadata = {
   refund: {
     title: "Refund & Cancellation Policy | The Story Builder",
     desc: "Transparent policies governing project deposits, retainers, and refund processing terms.",
+  },
+  shipping: {
+    title: "Shipping & Digital Delivery Policy | The Story Builder",
+    desc: "Terms governing 100% electronic digital goods delivery for ebooks and playbooks.",
   },
   blog: {
     title: "Growth Guides & Marketing Resources | The Story Builder",
@@ -417,6 +424,12 @@ export default function App() {
         {page === "refund" && (
           <motion.div key="refund" {...pageTransition}>
             <RefundPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "shipping" && (
+          <motion.div key="shipping" {...pageTransition}>
+            <ShippingPage setPage={navigate} />
           </motion.div>
         )}
 
