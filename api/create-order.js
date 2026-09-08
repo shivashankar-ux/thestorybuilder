@@ -94,10 +94,11 @@ export default async function handler(req, res) {
     let dbOrderId = null;
     if (supabase && (ebook_id || buyer_email)) {
       try {
+        const isUuid = typeof ebook_id === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(ebook_id);
         const { data: orderData } = await supabase
           .from("orders")
           .insert({
-            ebook_id: ebook_id || null,
+            ebook_id: isUuid ? ebook_id : null,
             buyer_name: buyer_name || "Customer",
             buyer_email: buyer_email || "customer@example.com",
             razorpay_order_id: razorpayOrder.id,

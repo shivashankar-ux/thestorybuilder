@@ -59,22 +59,19 @@ export default async function handler(req, res) {
     const supabase = getSupabaseServiceRoleClient();
     let ebook = null;
 
-    if (supabase) {
-      const { data, error } = await supabase
+    const isUuid = typeof ebook_id === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(ebook_id);
+
+    if (supabase && isUuid) {
+      const { data } = await supabase
         .from("ebooks")
         .select("*")
         .eq("id", ebook_id)
         .single();
-
-      if (error || !data) {
-        return res.status(404).json({ ok: false, error: "Ebook not found." });
-      }
       ebook = data;
-    } else {
-      return res.status(500).json({ ok: false, error: "Supabase connection unavailable." });
     }
 
-    const amountInPaise = Math.round(Number(ebook.price_inr) * 100);
+    const priceInr = ebook?.price_inr || (req.body?.amount ? req.body.amount / 100 : 499);
+    const amountInPaise = Math.round(Number(priceInr) * 100);
 
     const razorpay = new Razorpay({
       key_id: keyId,
@@ -88,28 +85,33 @@ export default async function handler(req, res) {
       currency: "INR",
       receipt: receiptId,
       notes: {
-        ebook_id: ebook.id,
-        ebook_title: ebook.title,
+        ebook_id: ebook_id || "",
+        ebook_title: ebook?.title || "Digital Ebook",
         buyer_email: buyer_email.trim(),
         buyer_name: buyer_name.trim(),
       },
     });
 
     // Record pending order in Supabase orders table
-    const { data: orderData, error: orderErr } = await supabase
-      .from("orders")
-      .insert({
-        ebook_id: ebook.id,
-        buyer_name: buyer_name.trim(),
-        buyer_email: buyer_email.trim(),
-        razorpay_order_id: razorpayOrder.id,
-        status: "pending",
-      })
-      .select()
-      .single();
+    let dbOrderId = null;
+    if (supabase) {
+      const { data: orderData, error: orderErr } = await supabase
+        .from("orders")
+        .insert({
+          ebook_id: isUuid ? ebook_id : null,
+          buyer_name: buyer_name.trim(),
+          buyer_email: buyer_email.trim(),
+          razorpay_order_id: razorpayOrder.id,
+          status: "pending",
+        })
+        .select()
+        .single();
 
-    if (orderErr) {
-      console.error("Failed to insert pending order to DB:", orderErr);
+      if (orderErr) {
+        console.error("Failed to insert pending order to DB:", orderErr);
+      } else {
+        dbOrderId = orderData?.id || null;
+      }
     }
 
     return res.status(200).json({
