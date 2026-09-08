@@ -28,7 +28,7 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  if (!isOpen || !ebook) return null;
+  if (!isOpen || !ebook || typeof document === "undefined" || !document.body) return null;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
