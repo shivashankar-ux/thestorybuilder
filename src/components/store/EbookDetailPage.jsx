@@ -105,41 +105,129 @@ export default function EbookDetailPage({ slug, setPage }) {
     if (slug) fetchEbook();
   }, [slug]);
 
-  const handlePurchaseSuccess = ({ order_id }) => {
-    setIsModalOpen(false);
-    if (setPage) {
-      setPage(`/store/success?order_id=${order_id}`);
-    } else {
-      window.location.href = `/store/success?order_id=${order_id}`;
+  const [buying, setBuying] = useState(false);
+
+  const handleBuyNowClick = async () => {
+    if (!ebook) return;
+    setBuying(true);
+
+    try {
+      const payload = JSON.stringify({
+        ebook_id: ebook.id || ebook.slug,
+        amount: Math.round(Number(ebook.price_inr || 499) * 100),
+        buyer_name: localStorage.getItem("tsb_buyer_name") || "Customer",
+        buyer_email: localStorage.getItem("tsb_buyer_email") || "customer@example.com",
+      });
+
+      let res;
+      try {
+        res = await fetch("https://www.thestorybuilder.in/api/create-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: payload,
+        });
+      } catch (e1) {
+        console.warn("Primary API error:", e1);
+      }
+
+      if (!res || !res.ok) {
+        try {
+          res = await fetch("/api/create-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: payload,
+          });
+        } catch (e2) {}
+      }
+
+      let data = {};
+      if (res) {
+        try { data = await res.json(); } catch (e3) {}
+      }
+
+      if (!res || !res.ok || !data.ok) {
+        setBuying(false);
+        setIsModalOpen(true);
+        return;
+      }
+
+      // Load Razorpay Script
+      if (!window.Razorpay) {
+        const sdkReady = await new Promise((resolve) => {
+          const script = document.createElement("script");
+          script.src = "https://checkout.razorpay.com/v1/checkout.js";
+          script.onload = () => resolve(true);
+          script.onerror = () => resolve(false);
+          document.body.appendChild(script);
+        });
+
+        if (!sdkReady) {
+          setBuying(false);
+          setIsModalOpen(true);
+          return;
+        }
+      }
+
+      const options = {
+        key: data.key_id || import.meta.env.ITE_RAZORPAY_KEY_ID || import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_live_TZe3RioKUQ4fhP",
+        amount: data.amount,
+        currency: data.currency || "INR",
+        name: "The Story Builder",
+        description: `Ebook: ${ebook.title}`,
+        image: ebook.cover_image_url || "https://thestorybuilder.in/logo.png",
+        order_id: data.order_id,
+        theme: { color: "#f97316" },
+        handler: async function (response) {
+          setBuying(true);
+          try {
+            const verifyPayload = JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+
+            let verifyRes;
+            try {
+              verifyRes = await fetch("https://www.thestorybuilder.in/api/verify-payment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: verifyPayload,
+              });
+            } catch (ve1) {}
+
+            if (!verifyRes || !verifyRes.ok) {
+              verifyRes = await fetch("/api/verify-payment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: verifyPayload,
+              });
+            }
+
+            setBuying(false);
+            handlePurchaseSuccess({ order_id: response.razorpay_order_id });
+          } catch (vErr) {
+            setBuying(false);
+            setIsModalOpen(true);
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            setBuying(false);
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", function () {
+        setBuying(false);
+        setIsModalOpen(true);
+      });
+      rzp.open();
+    } catch (err) {
+      setBuying(false);
+      setIsModalOpen(true);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="wrap store-loading-detail">
-        <div className="store-card-skeleton" style={{ height: "400px" }} />
-      </div>
-    );
-  }
-
-  if (!ebook) {
-    return (
-      <div className="wrap store-not-found">
-        <h2>Ebook Not Found</h2>
-        <button className="btn btn-gold" onClick={() => setPage && setPage("/store")}>
-          Return to Store
-        </button>
-      </div>
-    );
-  }
-
-  const chapterList = ebook.chapters || [
-    "01. Introduction & Executive Summary",
-    "02. Core Framework & Tactical Principles",
-    "03. Implementation Checklist & Tools",
-    "04. Real-World Case Studies & Examples",
-    "05. Scaling & Execution Roadmap",
-  ];
 
   return (
     <main className="store-detail-page-wrapper">
@@ -192,12 +280,21 @@ export default function EbookDetailPage({ slug, setPage }) {
 
               <button
                 className="btn btn-gold btn-large btn-full"
-                onClick={() => setIsModalOpen(true)}
+                onClick={handleBuyNowClick}
+                disabled={buying}
               >
-                Buy Now — Instant Download
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                {buying ? (
+                  <span className="btn-spinner-wrapper">
+                    <span className="btn-spinner" /> Launching Razorpay...
+                  </span>
+                ) : (
+                  <>
+                    Buy Now — Instant Download
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </>
+                )}
               </button>
 
               <div className="security-badges">
