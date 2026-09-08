@@ -52,7 +52,7 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
     setLoading(true);
 
     try {
-      // 1. Create order on server (tries /api/create-order, fallback www, or fallback /api/razorpay/create-order)
+      // 1. Create order on server (tries live domain if on localhost or non-www)
       const orderPayload = JSON.stringify({
         ebook_id: ebook.id,
         amount: Math.round(Number(ebook.price_inr || 499) * 100),
@@ -60,29 +60,43 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
         buyer_email: buyerEmail.trim(),
       });
 
-      let res = await fetch("/api/create-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: orderPayload,
-      });
+      const primaryApi = "https://www.thestorybuilder.in/api/create-order";
+      const fallbackApi = "/api/create-order";
 
-      if (!res.ok) {
-        res = await fetch("https://www.thestorybuilder.in/api/create-order", {
+      let res;
+      try {
+        res = await fetch(primaryApi, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: orderPayload,
         });
+      } catch (fErr) {
+        console.warn("Primary API fetch error, trying relative fallback:", fErr);
       }
 
-      if (!res.ok) {
-        res = await fetch("/api/razorpay/create-order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: orderPayload,
-        });
+      if (!res || !res.ok) {
+        try {
+          res = await fetch(fallbackApi, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: orderPayload,
+          });
+        } catch (fErr2) {
+          console.warn("Fallback API fetch error:", fErr2);
+        }
       }
 
-      const data = await res.json();
+      if (!res) {
+        throw new Error("Unable to connect to order creation server. Please check your internet connection.");
+      }
+
+      let data = {};
+      try {
+        data = await res.json();
+      } catch (parseErr) {
+        console.error("Failed to parse order JSON response:", parseErr);
+        throw new Error("Server returned an invalid response format.");
+      }
 
       if (!res.ok || !data.ok) {
         throw new Error(data.error || "Failed to create payment order. Please try again.");
@@ -120,31 +134,39 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
             });
 
             // 4. Verify payment signature on server
-            let verifyRes = await fetch("/api/verify-payment", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: verifyPayload,
-            });
-
-            if (!verifyRes.ok) {
+            let verifyRes;
+            try {
               verifyRes = await fetch("https://www.thestorybuilder.in/api/verify-payment", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: verifyPayload,
               });
+            } catch (vErr1) {
+              console.warn("Primary verification fetch error:", vErr1);
             }
 
-            if (!verifyRes.ok) {
-              verifyRes = await fetch("/api/razorpay/verify", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: verifyPayload,
-              });
+            if (!verifyRes || !verifyRes.ok) {
+              try {
+                verifyRes = await fetch("/api/verify-payment", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: verifyPayload,
+                });
+              } catch (vErr2) {
+                console.warn("Fallback verification fetch error:", vErr2);
+              }
             }
 
-            const verifyData = await verifyRes.json();
+            let verifyData = {};
+            if (verifyRes) {
+              try {
+                verifyData = await verifyRes.json();
+              } catch (vParseErr) {
+                console.error("Failed to parse verification JSON:", vParseErr);
+              }
+            }
 
-            if (!verifyRes.ok || !verifyData.ok) {
+            if (!verifyRes || !verifyRes.ok || !verifyData.ok) {
               throw new Error(verifyData.error || "Payment verification failed.");
             }
 
