@@ -52,27 +52,33 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
     setLoading(true);
 
     try {
-      // 1. Create order on server (tries /api/create-order or fallback /api/razorpay/create-order)
+      // 1. Create order on server (tries /api/create-order, fallback www, or fallback /api/razorpay/create-order)
+      const orderPayload = JSON.stringify({
+        ebook_id: ebook.id,
+        amount: Math.round(Number(ebook.price_inr || 499) * 100),
+        buyer_name: buyerName.trim(),
+        buyer_email: buyerEmail.trim(),
+      });
+
       let res = await fetch("/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ebook_id: ebook.id,
-          amount: Math.round(Number(ebook.price_inr || 499) * 100),
-          buyer_name: buyerName.trim(),
-          buyer_email: buyerEmail.trim(),
-        }),
+        body: orderPayload,
       });
+
+      if (!res.ok) {
+        res = await fetch("https://www.thestorybuilder.in/api/create-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: orderPayload,
+        });
+      }
 
       if (!res.ok) {
         res = await fetch("/api/razorpay/create-order", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            ebook_id: ebook.id,
-            buyer_name: buyerName.trim(),
-            buyer_email: buyerEmail.trim(),
-          }),
+          body: orderPayload,
         });
       }
 
@@ -107,26 +113,32 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
         handler: async function (response) {
           setLoading(true);
           try {
-            // 4. Verify payment signature on server (tries /api/verify-payment or fallback /api/razorpay/verify)
+            const verifyPayload = JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature,
+            });
+
+            // 4. Verify payment signature on server
             let verifyRes = await fetch("/api/verify-payment", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-              }),
+              body: verifyPayload,
             });
+
+            if (!verifyRes.ok) {
+              verifyRes = await fetch("https://www.thestorybuilder.in/api/verify-payment", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: verifyPayload,
+              });
+            }
 
             if (!verifyRes.ok) {
               verifyRes = await fetch("/api/razorpay/verify", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  razorpay_signature: response.razorpay_signature,
-                }),
+                body: verifyPayload,
               });
             }
 
