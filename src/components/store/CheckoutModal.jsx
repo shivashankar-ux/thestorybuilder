@@ -16,8 +16,14 @@ function loadRazorpayScript() {
 }
 
 export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
-  const [buyerName, setBuyerName] = useState("");
-  const [buyerEmail, setBuyerEmail] = useState("");
+  const [buyerName, setBuyerName] = useState(() => {
+    if (typeof window !== "undefined") return localStorage.getItem("tsb_buyer_name") || "";
+    return "";
+  });
+  const [buyerEmail, setBuyerEmail] = useState(() => {
+    if (typeof window !== "undefined") return localStorage.getItem("tsb_buyer_email") || "";
+    return "";
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -35,6 +41,11 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
     if (!buyerEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail.trim())) {
       setError("Please enter a valid email address.");
       return;
+    }
+
+    if (typeof window !== "undefined") {
+      localStorage.setItem("tsb_buyer_name", buyerName.trim());
+      localStorage.setItem("tsb_buyer_email", buyerEmail.trim());
     }
 
     setLoading(true);
