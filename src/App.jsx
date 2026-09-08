@@ -41,6 +41,11 @@ import BlogPage from "./components/BlogPage";
 import NotFoundPage from "./components/NotFoundPage";
 import CookieConsent from "./components/CookieConsent";
 
+// Store Component Imports
+import StoreFrontPage from "./components/store/StoreFrontPage";
+import EbookDetailPage from "./components/store/EbookDetailPage";
+import StoreSuccessPage from "./components/store/StoreSuccessPage";
+
 import {
   trackPageView,
   trackEvent,
@@ -83,6 +88,13 @@ function getRouteFromPath(pathStr) {
   if (p === "/disclaimer") return { page: "disclaimer", slug: null };
   if (p === "/refund-cancellation" || p === "/refund") return { page: "refund", slug: null };
   if (p === "/blog" || p === "/resources") return { page: "blog", slug: null };
+  if (p === "/store" || p === "/storefront" || p === "/ebooks") return { page: "store", slug: null };
+  if (p === "/store/success") return { page: "store-success", slug: null };
+
+  if (p.startsWith("/store/")) {
+    const slug = p.replace("/store/", "");
+    return { page: "store-detail", slug };
+  }
 
   if (p.startsWith("/case-studies/")) {
     const slug = p.replace("/case-studies/", "");
@@ -110,12 +122,27 @@ function getPathFromRoute(page, slug) {
   if (page === "disclaimer") return "/disclaimer";
   if (page === "refund") return "/refund-cancellation";
   if (page === "blog") return "/blog";
+  if (page === "store") return "/store";
+  if (page === "store-success") return "/store/success";
+  if (page === "store-detail" && slug) return `/store/${slug}`;
   if (page === "case" && slug) return `/case-studies/${slug}`;
   if (page === "not-found") return "/404";
   return "/";
 }
 
 const pageMetadata = {
+  store: {
+    title: "Digital Ebook Store & Playbooks | The Story Builder",
+    desc: "Actionable playbooks, step-by-step guides, and digital blueprints for website development, branding, and performance marketing.",
+  },
+  "store-success": {
+    title: "Order Confirmed — Download Your Ebook | The Story Builder",
+    desc: "Thank you for your purchase! Access your secure digital ebook download link.",
+  },
+  "store-detail": {
+    title: "Digital Ebook Playbook | The Story Builder",
+    desc: "Master high-converting digital strategy with actionable playbooks from The Story Builder.",
+  },
   home: {
     title: "Website Design Hyderabad — Web Design & Development Agency | The Story Builder",
     desc: "Website design & web development agency in Hyderabad. Custom websites, performance marketing, and brand strategy shipped in 7 days for businesses across India.",
@@ -396,6 +423,24 @@ export default function App() {
         {page === "blog" && (
           <motion.div key="blog" {...pageTransition}>
             <BlogPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "store" && (
+          <motion.div key="store" {...pageTransition}>
+            <StoreFrontPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "store-detail" && (
+          <motion.div key={`store-detail-${caseSlug}`} {...pageTransition}>
+            <EbookDetailPage slug={caseSlug} setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "store-success" && (
+          <motion.div key="store-success" {...pageTransition}>
+            <StoreSuccessPage setPage={navigate} />
           </motion.div>
         )}
 

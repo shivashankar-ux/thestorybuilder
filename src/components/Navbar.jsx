@@ -49,6 +49,9 @@ export default function Navbar({ page, setPage }) {
     } else if (dest === "pricing") {
       setPage("pricing");
       setMenuOpen(false);
+    } else if (dest === "store") {
+      setPage("store");
+      setMenuOpen(false);
     } else if (dest === "faq") {
       setPage("faq");
       setMenuOpen(false);
@@ -67,6 +70,7 @@ export default function Navbar({ page, setPage }) {
     { id: "home",     label: "Home",     href: "/" },
     { id: "services", label: "Services", href: "/services" },
     { id: "pricing",  label: "Pricing",  href: "/pricing" },
+    { id: "store",    label: "Store",    href: "/store" },
     { id: "projects", label: "Work",     href: "/#projects" },
     { id: "reels",    label: "Reels",    href: "/#reels" },
     { id: "faq",      label: "FAQ",      href: "/faq" },

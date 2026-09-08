@@ -1,1 +1,16 @@
-{"projectId":"prj_rBMIm5BCpy1PT1M7twkC5vbg8lGO","orgId":"team_c6lPlniespSzvfKKSN9mjfKn","projectName":"thestorybuilder"}
+{
+  "projectId": "prj_rBMIm5BCpy1PT1M7twkC5vbg8lGO",
+  "orgId": "team_c6lPlniespSzvfKKSN9mjfKn",
+  "projectName": "thestorybuilder",
+  "settings": {
+    "createdAt": 1785515696625,
+    "framework": "vite",
+    "devCommand": null,
+    "installCommand": null,
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist",
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "24.x"
+  }
+}

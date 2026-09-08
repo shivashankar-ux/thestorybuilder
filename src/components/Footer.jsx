@@ -51,6 +51,7 @@ export default function Footer({ setPage }) {
               <li><a href="/" onClick={(e) => { e.preventDefault(); navTo("home"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Home</a></li>
               <li><a href="/services" onClick={(e) => { e.preventDefault(); navTo("services"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Services</a></li>
               <li><a href="/pricing" onClick={(e) => { e.preventDefault(); navTo("pricing"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Pricing Plans</a></li>
+              <li><a href="/store" onClick={(e) => { e.preventDefault(); navTo("store"); }} style={{ color: "#facc15", fontWeight: 700, textDecoration: "none" }}>Ebook Store 📚</a></li>
               <li><a href="/#projects" onClick={(e) => { e.preventDefault(); scrollTo("projects"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Case Studies</a></li>
               <li><a href="/faq" onClick={(e) => { e.preventDefault(); navTo("faq"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>FAQ</a></li>
               <li><a href="/contact" onClick={(e) => { e.preventDefault(); navTo("contact"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Contact Us</a></li>
