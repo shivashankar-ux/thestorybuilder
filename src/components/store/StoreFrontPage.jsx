@@ -10,7 +10,7 @@ const fallbackEbooks = [
     slug: "astro6-for-beginners",
     description: "Master planetary positions, natal charts, zodiac house alignments, and practical horoscopes step-by-step with this complete playbook.",
     cover_image_url: "https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=800&q=80",
-    price_inr: 499,
+    price_inr: 2,
     file_url: "ebooks-private/Astro6-for-Beginners.docx",
   },
   {
@@ -19,7 +19,7 @@ const fallbackEbooks = [
     slug: "7-day-web-design-blueprint",
     description: "The exact blueprint used by high-converting digital agencies to build, launch, and monetize premium custom websites in 7 days flat.",
     cover_image_url: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
-    price_inr: 499,
+    price_inr: 2,
     file_url: "ebooks-private/Astro6-for-Beginners.docx",
   },
   {
@@ -28,7 +28,7 @@ const fallbackEbooks = [
     slug: "performance-marketing-playbook",
     description: "Master Meta & Google Ads without burning budget. Learn audience targeting, creative testing framework, and scale ROAS predictably.",
     cover_image_url: "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
-    price_inr: 799,
+    price_inr: 2,
     file_url: "ebooks/sample-2.pdf",
   },
   {
@@ -37,7 +37,7 @@ const fallbackEbooks = [
     slug: "brand-authority-masterclass",
     description: "Craft compelling brand messaging, high-status visual identity, and positions that command premium pricing in crowded markets.",
     cover_image_url: "https://images.unsplash.com/photo-1532012197267-da84d127e765?auto=format&fit=crop&w=800&q=80",
-    price_inr: 599,
+    price_inr: 2,
     file_url: "ebooks/sample-3.pdf",
   },
 ];

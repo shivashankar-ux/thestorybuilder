@@ -60,7 +60,7 @@ export default async function handler(req, res) {
 
     // Default minimum fallback if amount is missing
     if (!finalAmountPaise || isNaN(finalAmountPaise)) {
-      finalAmountPaise = 49900; // ₹499 default
+      finalAmountPaise = 200; // ₹2 default
     }
 
     // Validation: Minimum amount 100 paise (₹1)

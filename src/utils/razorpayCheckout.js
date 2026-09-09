@@ -58,7 +58,7 @@ export async function startRazorpayCheckout({ ebook, onSuccess, onError }) {
 
     const payload = {
       ebook_id:    ebook.id,
-      amount:      Math.round(Number(ebook.price_inr || 499) * 100),
+      amount:      Math.round(Number(ebook.price_inr || 2) * 100),
       buyer_name:  savedName  || "Customer",
       buyer_email: savedEmail || "",
     };
