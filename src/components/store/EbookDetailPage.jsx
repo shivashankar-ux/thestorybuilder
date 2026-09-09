@@ -114,11 +114,7 @@ export default function EbookDetailPage({ slug, setPage }) {
       ebook,
       onSuccess: ({ order_id }) => {
         setBuying(false);
-        if (setPage) {
-          setPage(`/store/success?order_id=${order_id}`);
-        } else {
-          window.location.href = `/store/success?order_id=${order_id}`;
-        }
+        window.location.href = `/store/success?order_id=${order_id}`;
       },
       onError: (msg) => {
         setBuying(false);

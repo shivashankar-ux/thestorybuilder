@@ -128,6 +128,54 @@ export default async function handler(req, res) {
           signedUrl = signedData?.signedUrl || null;
         }
       }
+
+      // Automatically email the ebook download link to the buyer
+      if (updatedOrder && updatedOrder.buyer_email && signedUrl) {
+        try {
+          const smtpUser = process.env.SMTP_EMAIL;
+          const smtpPass = process.env.SMTP_PASSWORD;
+          
+          if (smtpUser && smtpPass) {
+            // dynamic import to avoid bundling issues if possible, but static import at top is better
+            // We'll use a dynamic import for nodemailer here to ensure it's only loaded when needed
+            const nodemailer = await import("nodemailer");
+            const transporter = nodemailer.createTransport({
+              service: "gmail",
+              auth: {
+                user: smtpUser,
+                pass: smtpPass,
+              },
+            });
+
+            const mailOptions = {
+              from: `"The Story Builder" <${smtpUser}>`,
+              to: updatedOrder.buyer_email,
+              subject: `Your Ebook Purchase: ${ebook.title}`,
+              html: `
+                <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #eee; border-radius: 8px;">
+                  <h2 style="color: #f97316;">Thank you for your purchase!</h2>
+                  <p>Hi ${updatedOrder.buyer_name || "Customer"},</p>
+                  <p>We have successfully received your payment for <strong>${ebook.title}</strong>.</p>
+                  <p>You can download your secure digital copy using the button below. Please note that this link expires in 24 hours.</p>
+                  <div style="margin: 30px 0; text-align: center;">
+                    <a href="${signedUrl}" style="background-color: #f97316; color: white; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Download Ebook</a>
+                  </div>
+                  <p style="font-size: 13px; color: #666;">If the button doesn't work, copy and paste this link into your browser:<br><br>${signedUrl}</p>
+                  <p>If you have any issues, reply directly to this email and our support team will help you out!</p>
+                  <p>Best regards,<br><strong>The Story Builder Team</strong></p>
+                </div>
+              `,
+            };
+
+            await transporter.sendMail(mailOptions);
+            console.log("Purchase email sent successfully to", updatedOrder.buyer_email);
+          } else {
+            console.warn("SMTP_EMAIL or SMTP_PASSWORD not set. Skipping email delivery.");
+          }
+        } catch (emailErr) {
+          console.error("Failed to send purchase email:", emailErr);
+        }
+      }
     }
 
     return res.status(200).json({

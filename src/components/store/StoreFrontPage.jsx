@@ -82,11 +82,7 @@ export default function StoreFrontPage({ setPage }) {
       ebook,
       onSuccess: ({ order_id }) => {
         setBuyingId(null);
-        if (setPage) {
-          setPage(`/store/success?order_id=${order_id}`);
-        } else {
-          window.location.href = `/store/success?order_id=${order_id}`;
-        }
+        window.location.href = `/store/success?order_id=${order_id}`;
       },
       onError: (msg) => {
         setBuyingId(null);
