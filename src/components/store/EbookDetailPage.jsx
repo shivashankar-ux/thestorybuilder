@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { supabase, isSupabaseConfigured } from "../../utils/supabaseClient";
-import CheckoutModal from "./CheckoutModal";
+import { startRazorpayCheckout } from "../../utils/razorpayCheckout";
 
 const fallbackEbooks = [
   {
@@ -73,7 +73,8 @@ const fallbackEbooks = [
 export default function EbookDetailPage({ slug, setPage }) {
   const [ebook, setEbook] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [buying, setBuying] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
     async function fetchEbook() {
@@ -96,7 +97,6 @@ export default function EbookDetailPage({ slug, setPage }) {
         }
       }
 
-      // Fallback search
       const found = fallbackEbooks.find((e) => e.slug === slug) || fallbackEbooks[0];
       setEbook(found);
       setLoading(false);
@@ -105,129 +105,46 @@ export default function EbookDetailPage({ slug, setPage }) {
     if (slug) fetchEbook();
   }, [slug]);
 
-  const [buying, setBuying] = useState(false);
-
   const handleBuyNowClick = async () => {
-    if (!ebook) return;
+    if (buying || !ebook) return;
     setBuying(true);
+    setErrorMsg(null);
 
-    try {
-      const payload = JSON.stringify({
-        ebook_id: ebook.id || ebook.slug,
-        amount: Math.round(Number(ebook.price_inr || 499) * 100),
-        buyer_name: localStorage.getItem("tsb_buyer_name") || "Customer",
-        buyer_email: localStorage.getItem("tsb_buyer_email") || "customer@example.com",
-      });
-
-      let res;
-      try {
-        res = await fetch("https://www.thestorybuilder.in/api/create-order", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: payload,
-        });
-      } catch (e1) {
-        console.warn("Primary API error:", e1);
-      }
-
-      if (!res || !res.ok) {
-        try {
-          res = await fetch("/api/create-order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: payload,
-          });
-        } catch (e2) {}
-      }
-
-      let data = {};
-      if (res) {
-        try { data = await res.json(); } catch (e3) {}
-      }
-
-      if (!res || !res.ok || !data.ok) {
+    await startRazorpayCheckout({
+      ebook,
+      onSuccess: ({ order_id }) => {
         setBuying(false);
-        setIsModalOpen(true);
-        return;
-      }
-
-      // Load Razorpay Script
-      if (!window.Razorpay) {
-        const sdkReady = await new Promise((resolve) => {
-          const script = document.createElement("script");
-          script.src = "https://checkout.razorpay.com/v1/checkout.js";
-          script.onload = () => resolve(true);
-          script.onerror = () => resolve(false);
-          document.body.appendChild(script);
-        });
-
-        if (!sdkReady) {
-          setBuying(false);
-          setIsModalOpen(true);
-          return;
+        if (setPage) {
+          setPage(`/store/success?order_id=${order_id}`);
+        } else {
+          window.location.href = `/store/success?order_id=${order_id}`;
         }
-      }
-
-      const options = {
-        key: data.key_id || import.meta.env.ITE_RAZORPAY_KEY_ID || import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_live_TZe3RioKUQ4fhP",
-        amount: data.amount,
-        currency: data.currency || "INR",
-        name: "The Story Builder",
-        description: `Ebook: ${ebook.title}`,
-        image: ebook.cover_image_url || "https://thestorybuilder.in/logo.png",
-        order_id: data.order_id,
-        theme: { color: "#f97316" },
-        handler: async function (response) {
-          setBuying(true);
-          try {
-            const verifyPayload = JSON.stringify({
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            });
-
-            let verifyRes;
-            try {
-              verifyRes = await fetch("https://www.thestorybuilder.in/api/verify-payment", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: verifyPayload,
-              });
-            } catch (ve1) {}
-
-            if (!verifyRes || !verifyRes.ok) {
-              verifyRes = await fetch("/api/verify-payment", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: verifyPayload,
-              });
-            }
-
-            setBuying(false);
-            handlePurchaseSuccess({ order_id: response.razorpay_order_id });
-          } catch (vErr) {
-            setBuying(false);
-            setIsModalOpen(true);
-          }
-        },
-        modal: {
-          ondismiss: function () {
-            setBuying(false);
-          },
-        },
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.on("payment.failed", function () {
+      },
+      onError: (msg) => {
         setBuying(false);
-        setIsModalOpen(true);
-      });
-      rzp.open();
-    } catch (err) {
-      setBuying(false);
-      setIsModalOpen(true);
-    }
+        if (msg) setErrorMsg(msg);
+      },
+    });
   };
+
+  if (loading) {
+    return (
+      <main className="store-detail-page-wrapper">
+        <div className="hero-bg" aria-hidden="true">
+          <div className="orb o1" /><div className="orb o2" /><div className="dots" />
+        </div>
+        <div className="wrap">
+          <div className="store-loading-grid">
+            <div className="store-card-skeleton" style={{ height: 600 }} />
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  if (!ebook) return null;
+
+  const chapterList = ebook.chapters || [];
 
   return (
     <main className="store-detail-page-wrapper">
@@ -247,6 +164,17 @@ export default function EbookDetailPage({ slug, setPage }) {
             Back to Store
           </button>
         </nav>
+
+        {/* ERROR BANNER */}
+        {errorMsg && (
+          <div className="store-error-banner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{errorMsg}</span>
+            <button onClick={() => setErrorMsg(null)} aria-label="Dismiss">×</button>
+          </div>
+        )}
 
         {/* HERO / PRODUCT GRID */}
         <div className="store-detail-grid">
@@ -322,12 +250,6 @@ export default function EbookDetailPage({ slug, setPage }) {
         </div>
       </div>
 
-      <CheckoutModal
-        ebook={ebook}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSuccess={handlePurchaseSuccess}
-      />
     </main>
   );
 }

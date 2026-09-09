@@ -110,7 +110,7 @@ export default function CheckoutModal({ ebook, isOpen, onClose, onSuccess }) {
 
       // 3. Configure and open Razorpay Checkout modal
       const options = {
-        key: data.key_id || import.meta.env.ITE_RAZORPAY_KEY_ID || import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_live_TZe3RioKUQ4fhP",
+        key: data.key_id || import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_live_TZe3RioKUQ4fhP",
         amount: data.amount,
         currency: data.currency || "INR",
         name: "The Story Builder",

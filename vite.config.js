@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   envPrefix: ['VITE_', 'ITE_', 'NEXT_PUBLIC_'],
-  plugins: [react()],
   build: {
     rollupOptions: {
       output: {
@@ -24,6 +23,12 @@ export default defineConfig({
       }
     },
     chunkSizeWarningLimit: 1000
-  }
+  },
+  server: {
+    proxy: {
+      '/api': 'http://localhost:5174'
+    }
+  },
+  plugins: [react()]
 })
 

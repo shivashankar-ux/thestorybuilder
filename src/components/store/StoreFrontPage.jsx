@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { supabase, isSupabaseConfigured } from "../../utils/supabaseClient";
-import CheckoutModal from "./CheckoutModal";
+import { startRazorpayCheckout } from "../../utils/razorpayCheckout";
 
 const fallbackEbooks = [
   {
@@ -45,8 +45,8 @@ const fallbackEbooks = [
 export default function StoreFrontPage({ setPage }) {
   const [ebooks, setEbooks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedEbook, setSelectedEbook] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [buyingId, setBuyingId] = useState(null); // track which ebook is being purchased
+  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
     async function fetchEbooks() {
@@ -65,27 +65,34 @@ export default function StoreFrontPage({ setPage }) {
           }
         }
       } catch (err) {
-        console.warn("Could not fetch ebooks from Supabase, using fallback ebooks list:", err);
+        console.warn("Could not fetch ebooks from Supabase, using fallback:", err);
       }
       setEbooks(fallbackEbooks);
       setLoading(false);
     }
-
     fetchEbooks();
   }, []);
 
-  const handleBuyNow = (ebook) => {
-    setSelectedEbook(ebook);
-    setIsModalOpen(true);
-  };
+  const handleBuyNow = async (ebook) => {
+    if (buyingId) return; // prevent double click
+    setBuyingId(ebook.id);
+    setErrorMsg(null);
 
-  const handlePurchaseSuccess = ({ order_id }) => {
-    setIsModalOpen(false);
-    if (setPage) {
-      setPage(`/store/success?order_id=${order_id}`);
-    } else {
-      window.location.href = `/store/success?order_id=${order_id}`;
-    }
+    await startRazorpayCheckout({
+      ebook,
+      onSuccess: ({ order_id }) => {
+        setBuyingId(null);
+        if (setPage) {
+          setPage(`/store/success?order_id=${order_id}`);
+        } else {
+          window.location.href = `/store/success?order_id=${order_id}`;
+        }
+      },
+      onError: (msg) => {
+        setBuyingId(null);
+        if (msg) setErrorMsg(msg); // null = user just dismissed
+      },
+    });
   };
 
   return (
@@ -102,91 +109,106 @@ export default function StoreFrontPage({ setPage }) {
           <span className="tag">DIGITAL EBOOK STORE</span>
           <h1 className="sec-h">
             Actionable Playbooks for<br />
-            <em>Founders & Creators.</em>
+            <em>Founders &amp; Creators.</em>
           </h1>
           <p className="muted store-intro">
             Proven frameworks, step-by-step guides, and digital blueprints to accelerate your web design, branding, and performance marketing.
           </p>
         </header>
 
-        {/* EBOOKS GRID */}
-        {loading ? (
-          <div className="store-loading-grid">
-            {[1, 2, 3].map((n) => (
-              <div key={n} className="store-card-skeleton" />
-            ))}
-          </div>
-        ) : (
-          <div className="store-grid">
-            {ebooks.map((ebook, idx) => (
-              <motion.article
-                key={ebook.id}
-                className="store-card"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: idx * 0.1 }}
-              >
-                <div
-                  className="store-card-cover-wrapper"
-                  onClick={() => setPage && setPage(`/store/${ebook.slug}`)}
-                >
-                  <img
-                    src={ebook.cover_image_url}
-                    alt={ebook.title}
-                    className="store-card-cover-img"
-                    loading="lazy"
-                  />
-                  <span className="store-card-badge">DIGITAL PDF</span>
-                </div>
-
-                <div className="store-card-body">
-                  <h3
-                    className="store-card-title"
-                    onClick={() => setPage && setPage(`/store/${ebook.slug}`)}
-                  >
-                    {ebook.title}
-                  </h3>
-
-                  <p className="store-card-desc">{ebook.description}</p>
-
-                  <div className="store-card-footer">
-                    <div className="store-card-price-row">
-                      <span className="store-card-price">₹{ebook.price_inr}</span>
-                      <span className="store-card-tax">Instant PDF Download</span>
-                    </div>
-
-                    <div className="store-card-actions">
-                      <button
-                        className="btn btn-gold btn-sm"
-                        onClick={() => handleBuyNow(ebook)}
-                      >
-                        Buy Now
-                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                          <path
-                            d="M3 8h10M9 4l4 4-4 4"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </button>
-
-                      <button
-                        className="btn btn-ghost btn-sm"
-                        onClick={() => setPage && setPage(`/store/${ebook.slug}`)}
-                      >
-                        Details
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.article>
-            ))}
+        {/* ERROR BANNER */}
+        {errorMsg && (
+          <div className="store-error-banner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{errorMsg}</span>
+            <button onClick={() => setErrorMsg(null)} aria-label="Dismiss">×</button>
           </div>
         )}
 
-        {/* TRUST BADGES / GUARANTEE */}
+        {/* EBOOKS GRID */}
+        {loading ? (
+          <div className="store-loading-grid">
+            {[1, 2, 3].map((n) => <div key={n} className="store-card-skeleton" />)}
+          </div>
+        ) : (
+          <div className="store-grid">
+            {ebooks.map((ebook, idx) => {
+              const isBuying = buyingId === ebook.id;
+              return (
+                <motion.article
+                  key={ebook.id}
+                  className="store-card"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: idx * 0.08 }}
+                >
+                  <div
+                    className="store-card-cover-wrapper"
+                    onClick={() => setPage && setPage(`/store/${ebook.slug}`)}
+                  >
+                    <img
+                      src={ebook.cover_image_url}
+                      alt={ebook.title}
+                      className="store-card-cover-img"
+                      loading="lazy"
+                    />
+                    <span className="store-card-badge">DIGITAL PDF</span>
+                  </div>
+
+                  <div className="store-card-body">
+                    <h3
+                      className="store-card-title"
+                      onClick={() => setPage && setPage(`/store/${ebook.slug}`)}
+                    >
+                      {ebook.title}
+                    </h3>
+                    <p className="store-card-desc">{ebook.description}</p>
+
+                    <div className="store-card-footer">
+                      <div className="store-card-price-row">
+                        <span className="store-card-price">₹{ebook.price_inr}</span>
+                        <span className="store-card-tax">Instant PDF Download</span>
+                      </div>
+
+                      <div className="store-card-actions">
+                        <button
+                          className="btn btn-gold btn-sm"
+                          onClick={() => handleBuyNow(ebook)}
+                          disabled={!!buyingId}
+                        >
+                          {isBuying ? (
+                            <span className="btn-spinner-wrapper">
+                              <span className="btn-spinner" /> Launching...
+                            </span>
+                          ) : (
+                            <>
+                              Buy Now
+                              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
+                            </>
+                          )}
+                        </button>
+
+                        <button
+                          className="btn btn-ghost btn-sm"
+                          onClick={() => setPage && setPage(`/store/${ebook.slug}`)}
+                          disabled={!!buyingId}
+                        >
+                          Details
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </motion.article>
+              );
+            })}
+          </div>
+        )}
+
+        {/* TRUST BADGE */}
         <section className="store-guarantee-section">
           <div className="store-guarantee-card">
             <div className="store-guarantee-icon">
@@ -195,20 +217,12 @@ export default function StoreFrontPage({ setPage }) {
               </svg>
             </div>
             <div>
-              <h4>100% Secure Checkout & Instant Access</h4>
+              <h4>100% Secure Checkout &amp; Instant Access</h4>
               <p>Purchases are encrypted via Razorpay. Direct PDF download link delivered instantly to your inbox.</p>
             </div>
           </div>
         </section>
       </div>
-
-      {/* CHECKOUT MODAL */}
-      <CheckoutModal
-        ebook={selectedEbook}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSuccess={handlePurchaseSuccess}
-      />
     </main>
   );
 }
