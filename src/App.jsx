@@ -46,6 +46,7 @@ import CookieConsent from "./components/CookieConsent";
 import StoreFrontPage from "./components/store/StoreFrontPage";
 import EbookDetailPage from "./components/store/EbookDetailPage";
 import StoreSuccessPage from "./components/store/StoreSuccessPage";
+import AdminDashboard from "./components/store/AdminDashboard";
 
 import {
   trackPageView,
@@ -93,6 +94,7 @@ function getRouteFromPath(pathStr) {
   if (p === "/store" || p === "/storefront" || p === "/ebooks") return { page: "store", slug: null };
   if (p === "/store/success") return { page: "store-success", slug: null };
 
+  if (p === "/store/admin") return { page: "store-admin", slug: null };
   if (p.startsWith("/store/")) {
     const slug = p.replace("/store/", "");
     return { page: "store-detail", slug };
@@ -127,6 +129,7 @@ function getPathFromRoute(page, slug) {
   if (page === "blog") return "/blog";
   if (page === "store") return "/store";
   if (page === "store-success") return "/store/success";
+  if (page === "store-admin") return "/store/admin";
   if (page === "store-detail" && slug) return `/store/${slug}`;
   if (page === "case" && slug) return `/case-studies/${slug}`;
   if (page === "not-found") return "/404";
@@ -141,6 +144,10 @@ const pageMetadata = {
   "store-success": {
     title: "Order Confirmed — Download Your Ebook | The Story Builder",
     desc: "Thank you for your purchase! Access your secure digital ebook download link.",
+  },
+  "store-admin": {
+    title: "Store Admin | The Story Builder",
+    desc: "Admin dashboard to manage ebooks.",
   },
   "store-detail": {
     title: "Digital Ebook Playbook | The Story Builder",
@@ -454,6 +461,12 @@ export default function App() {
         {page === "store-success" && (
           <motion.div key="store-success" {...pageTransition}>
             <StoreSuccessPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "store-admin" && (
+          <motion.div key="store-admin" {...pageTransition}>
+            <AdminDashboard setPage={navigate} />
           </motion.div>
         )}
 
