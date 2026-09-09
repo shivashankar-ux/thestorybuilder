@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { supabase, isSupabaseConfigured } from "../../utils/supabaseClient";
-import { startRazorpayCheckout } from "../../utils/razorpayCheckout";
+import CheckoutModal from "./CheckoutModal";
 
 const fallbackEbooks = [
   {
@@ -74,6 +74,7 @@ export default function EbookDetailPage({ slug, setPage }) {
   const [ebook, setEbook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [buying, setBuying] = useState(false);
+  const [selectedEbookForCheckout, setSelectedEbookForCheckout] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
@@ -105,22 +106,10 @@ export default function EbookDetailPage({ slug, setPage }) {
     if (slug) fetchEbook();
   }, [slug]);
 
-  const handleBuyNowClick = async () => {
+  const handleBuyNowClick = () => {
     if (buying || !ebook) return;
-    setBuying(true);
+    setSelectedEbookForCheckout(ebook);
     setErrorMsg(null);
-
-    await startRazorpayCheckout({
-      ebook,
-      onSuccess: ({ order_id }) => {
-        setBuying(false);
-        window.location.href = `/store/success?order_id=${order_id}`;
-      },
-      onError: (msg) => {
-        setBuying(false);
-        if (msg) setErrorMsg(msg);
-      },
-    });
   };
 
   if (loading) {
@@ -246,6 +235,18 @@ export default function EbookDetailPage({ slug, setPage }) {
         </div>
       </div>
 
+      {/* RENDER CHECKOUT MODAL HERE */}
+      {selectedEbookForCheckout && (
+        <CheckoutModal
+          isOpen={!!selectedEbookForCheckout}
+          ebook={selectedEbookForCheckout}
+          onClose={() => setSelectedEbookForCheckout(null)}
+          onSuccess={({ order_id }) => {
+            setSelectedEbookForCheckout(null);
+            window.location.href = `/store/success?order_id=${order_id}`;
+          }}
+        />
+      )}
     </main>
   );
 }
