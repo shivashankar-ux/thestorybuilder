@@ -140,7 +140,9 @@ export default async function handler(req, res) {
             // We'll use a dynamic import for nodemailer here to ensure it's only loaded when needed
             const nodemailer = await import("nodemailer");
             const transporter = nodemailer.createTransport({
-              service: "gmail",
+              host: process.env.SMTP_HOST || "smtp.gmail.com",
+              port: Number(process.env.SMTP_PORT) || 465,
+              secure: true,
               auth: {
                 user: smtpUser,
                 pass: smtpPass,
