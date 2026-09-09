@@ -29,7 +29,6 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
 
     setUploadingState(prev => ({ ...prev, [type]: true }));
     try {
-      // 1. Get Signed URL from our secure API
       const res = await fetch("/api/admin-upload", {
         method: "POST",
         headers: {
@@ -41,7 +40,6 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
       const data = await res.json();
       if (!data.ok) throw new Error(data.error);
 
-      // 2. Upload directly to Supabase Storage using the signed URL
       const uploadRes = await fetch(data.signedUrl, {
         method: "PUT",
         headers: { "Content-Type": file.type },
@@ -50,13 +48,10 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
       
       if (!uploadRes.ok) throw new Error("Failed to upload file to storage.");
 
-      // 3. Save the path to form data
       if (type === "cover") {
-        // For public images, construct the public URL
         const publicUrl = `https://prxgbhxjdesjsybrskhx.supabase.co/storage/v1/object/public/${data.path}`;
         setFormData(prev => ({ ...prev, cover_image_url: publicUrl }));
       } else {
-        // For private ebooks, save the path
         setFormData(prev => ({ ...prev, file_url: data.path }));
       }
       alert(`${type === "cover" ? "Image" : "Document"} uploaded successfully!`);
@@ -99,61 +94,149 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
     setLoading(false);
   };
 
-  const inputStyle = { width: "100%", padding: "12px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.2)", background: "rgba(255,255,255,0.05)", color: "#fff", marginBottom: "15px" };
-  const labelStyle = { display: "block", color: "rgba(255,255,255,0.7)", marginBottom: "5px", fontSize: "14px" };
+  const inputStyle = { 
+    width: "100%", 
+    padding: "12px", 
+    borderRadius: "8px", 
+    border: "1px solid var(--border)", 
+    background: "var(--bg)", 
+    color: "var(--text)", 
+    outline: "none",
+    fontSize: "14px",
+    fontFamily: "var(--fb)"
+  };
+  
+  const labelStyle = { 
+    display: "block", 
+    color: "var(--text)", 
+    marginBottom: "6px", 
+    fontSize: "14px",
+    fontWeight: 600 
+  };
+  
+  const cardStyle = {
+    background: "var(--card)",
+    border: "1px solid var(--border)",
+    borderRadius: "12px",
+    padding: "24px",
+    marginBottom: "24px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.02)"
+  };
 
   return (
-    <main className="store-detail-page-wrapper" style={{ minHeight: "100vh", padding: "120px 20px" }}>
-      <div className="hero-bg" aria-hidden="true"><div className="orb o1" /><div className="orb o2" /></div>
-      <div className="wrap" style={{ position: "relative", zIndex: 10, maxWidth: "800px", margin: "0 auto", background: "rgba(255,255,255,0.02)", padding: "40px", borderRadius: "16px", border: "1px solid rgba(255,255,255,0.1)" }}>
+    <main style={{ minHeight: "100vh", background: "var(--bg)", padding: "calc(var(--nav) + 40px) 20px 100px" }}>
+      <div className="wrap" style={{ maxWidth: "1000px", margin: "0 auto" }}>
         
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "30px" }}>
-          <h2 style={{ color: "#fff", margin: 0 }}>{isNew ? "Create New Ebook" : "Edit Ebook"}</h2>
-          <button onClick={onCancel} style={{ background: "transparent", color: "#fff", border: "1px solid rgba(255,255,255,0.2)", padding: "8px 16px", borderRadius: "6px", cursor: "pointer" }}>Cancel</button>
+        {/* Header */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <button onClick={onCancel} style={{ background: "transparent", border: "1px solid var(--border)", padding: "8px", borderRadius: "8px", cursor: "pointer", display: "flex", alignItems: "center", color: "var(--text)" }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            </button>
+            <div>
+              <h2 style={{ color: "var(--text)", margin: 0, fontSize: "24px", fontFamily: "var(--fd)", fontWeight: 800, letterSpacing: "-0.5px" }}>
+                {isNew ? "Create Product" : "Edit Product"}
+              </h2>
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: "12px" }}>
+            <button className="btn btn-ghost" onClick={onCancel}>Cancel</button>
+            <button className="btn btn-gold" onClick={handleSubmit} disabled={loading || uploadingState.cover || uploadingState.file}>
+              {loading ? "Saving..." : "Save Product"}
+            </button>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px" }}>
-            <div>
-              <label style={labelStyle}>Book Title</label>
-              <input style={inputStyle} name="title" value={formData.title} onChange={handleChange} required />
-            </div>
-            <div>
-              <label style={labelStyle}>URL Slug</label>
-              <input style={inputStyle} name="slug" value={formData.slug} onChange={handleChange} required />
-            </div>
-          </div>
-
-          <label style={labelStyle}>Description</label>
-          <textarea style={{...inputStyle, minHeight: "100px"}} name="description" value={formData.description} onChange={handleChange} required />
-
-          <label style={labelStyle}>Price (₹)</label>
-          <input style={inputStyle} type="number" name="price_inr" value={formData.price_inr} onChange={handleChange} required />
-
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "20px", marginBottom: "15px" }}>
-            <div style={{ background: "rgba(255,255,255,0.03)", padding: "20px", borderRadius: "8px", border: "1px dashed rgba(255,255,255,0.2)" }}>
-              <label style={labelStyle}>1. Upload Cover Image</label>
-              <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, "cover", "public-assets")} style={{ color: "#fff", marginBottom: "10px" }} />
-              {uploadingState.cover && <span style={{ color: "#f5a623", fontSize: "12px" }}>Uploading...</span>}
-              <input style={{...inputStyle, marginBottom: 0, marginTop: "10px", fontSize: "12px"}} name="cover_image_url" value={formData.cover_image_url} onChange={handleChange} placeholder="Or paste image URL" />
-            </div>
+        <form onSubmit={handleSubmit} style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px", alignItems: "start" }}>
+          
+          {/* Left Column - Main Details */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
             
-            <div style={{ background: "rgba(255,255,255,0.03)", padding: "20px", borderRadius: "8px", border: "1px dashed rgba(255,255,255,0.2)" }}>
-              <label style={labelStyle}>2. Upload Ebook Document (PDF/DOCX)</label>
-              <input type="file" accept=".pdf,.doc,.docx" onChange={(e) => handleFileUpload(e, "file", "ebooks-private")} style={{ color: "#fff", marginBottom: "10px" }} />
-              {uploadingState.file && <span style={{ color: "#f5a623", fontSize: "12px" }}>Uploading...</span>}
-              <input style={{...inputStyle, marginBottom: 0, marginTop: "10px", fontSize: "12px"}} name="file_url" value={formData.file_url} onChange={handleChange} placeholder="Or paste file path (e.g. ebooks-private/file.pdf)" />
+            <div style={cardStyle}>
+              <h3 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "20px", color: "var(--text)", fontFamily: "var(--fd)" }}>General Information</h3>
+              
+              <div style={{ marginBottom: "20px" }}>
+                <label style={labelStyle}>Product Title</label>
+                <input style={inputStyle} name="title" value={formData.title} onChange={handleChange} placeholder="e.g. Astrology for Beginners" required />
+              </div>
+
+              <div style={{ marginBottom: "20px" }}>
+                <label style={labelStyle}>URL Slug</label>
+                <input style={inputStyle} name="slug" value={formData.slug} onChange={handleChange} placeholder="e.g. astrology-for-beginners" required />
+              </div>
+
+              <div>
+                <label style={labelStyle}>Description</label>
+                <textarea style={{...inputStyle, minHeight: "120px", resize: "vertical"}} name="description" value={formData.description} onChange={handleChange} placeholder="Write a compelling description for your ebook..." required />
+              </div>
             </div>
+
+            <div style={cardStyle}>
+              <h3 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "8px", color: "var(--text)", fontFamily: "var(--fd)" }}>What You Get (Chapters)</h3>
+              <p style={{ fontSize: "13px", color: "var(--muted)", marginBottom: "20px" }}>Enter each chapter or bullet point on a new line. These will render as a list on the product page.</p>
+              
+              <textarea style={{...inputStyle, minHeight: "200px", resize: "vertical"}} name="chapters" value={formData.chapters} onChange={handleChange} placeholder="01. Introduction to topic...&#10;02. Deep dive into strategy...&#10;03. Case studies..." />
+            </div>
+
           </div>
 
-          <label style={labelStyle}>Chapters / What You Get (One per line)</label>
-          <textarea style={{...inputStyle, minHeight: "150px"}} name="chapters" value={formData.chapters} onChange={handleChange} placeholder="01. Introduction to topic..." />
+          {/* Right Column - Pricing & Media */}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            
+            <div style={cardStyle}>
+              <h3 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "20px", color: "var(--text)", fontFamily: "var(--fd)" }}>Pricing</h3>
+              
+              <div>
+                <label style={labelStyle}>Price (INR)</label>
+                <div style={{ position: "relative" }}>
+                  <span style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "var(--muted)", fontWeight: 600 }}>₹</span>
+                  <input style={{...inputStyle, paddingLeft: "30px"}} type="number" name="price_inr" value={formData.price_inr} onChange={handleChange} placeholder="0.00" required />
+                </div>
+              </div>
+            </div>
 
-          <button type="submit" disabled={loading || uploadingState.cover || uploadingState.file} style={{ width: "100%", background: "#f5a623", color: "#000", padding: "15px", borderRadius: "8px", fontWeight: "bold", border: "none", cursor: "pointer", marginTop: "10px" }}>
-            {loading ? "Saving..." : "Publish Ebook"}
-          </button>
+            <div style={cardStyle}>
+              <h3 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "20px", color: "var(--text)", fontFamily: "var(--fd)" }}>Cover Image</h3>
+              
+              {formData.cover_image_url && (
+                <div style={{ marginBottom: "16px", borderRadius: "8px", overflow: "hidden", border: "1px solid var(--border)", background: "var(--surf)", aspectRatio: "16/10" }}>
+                  <img src={formData.cover_image_url} alt="Cover Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                </div>
+              )}
+              
+              <div style={{ background: "var(--surf)", padding: "16px", borderRadius: "8px", border: "1px dashed var(--border)", textAlign: "center", marginBottom: "12px" }}>
+                <input type="file" id="coverUpload" accept="image/*" onChange={(e) => handleFileUpload(e, "cover", "public-assets")} style={{ display: "none" }} />
+                <label htmlFor="coverUpload" className="btn btn-ghost" style={{ cursor: "pointer", width: "100%", justifyContent: "center", padding: "10px", fontSize: "13px" }}>
+                  {uploadingState.cover ? "Uploading..." : "Upload Cover Image"}
+                </label>
+              </div>
+              
+              <input style={{...inputStyle, fontSize: "12px", padding: "10px"}} name="cover_image_url" value={formData.cover_image_url} onChange={handleChange} placeholder="Or paste image URL" />
+            </div>
+
+            <div style={cardStyle}>
+              <h3 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "20px", color: "var(--text)", fontFamily: "var(--fd)" }}>Digital Product File</h3>
+              
+              {formData.file_url && (
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px", background: "rgba(34, 197, 94, 0.1)", border: "1px solid rgba(34, 197, 94, 0.2)", borderRadius: "8px", marginBottom: "16px" }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                  <span style={{ fontSize: "13px", color: "#22c55e", fontWeight: 600, wordBreak: "break-all" }}>{formData.file_url.split('/').pop()}</span>
+                </div>
+              )}
+
+              <div style={{ background: "var(--surf)", padding: "16px", borderRadius: "8px", border: "1px dashed var(--border)", textAlign: "center", marginBottom: "12px" }}>
+                <input type="file" id="fileUpload" accept=".pdf,.doc,.docx" onChange={(e) => handleFileUpload(e, "file", "ebooks-private")} style={{ display: "none" }} />
+                <label htmlFor="fileUpload" className="btn btn-ghost" style={{ cursor: "pointer", width: "100%", justifyContent: "center", padding: "10px", fontSize: "13px" }}>
+                  {uploadingState.file ? "Uploading..." : "Upload Document"}
+                </label>
+              </div>
+              
+              <input style={{...inputStyle, fontSize: "12px", padding: "10px"}} name="file_url" value={formData.file_url} onChange={handleChange} placeholder="Or paste file path (e.g. ebooks-private/file.pdf)" />
+            </div>
+
+          </div>
+
         </form>
-
       </div>
     </main>
   );
