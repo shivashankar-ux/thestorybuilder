@@ -86,10 +86,10 @@ export default function EbookDetailPage({ slug, setPage }) {
             .from("ebooks")
             .select("*")
             .eq("slug", slug)
-            .single();
+            .limit(1);
 
-          if (!error && data) {
-            setEbook(data);
+          if (!error && data && data.length > 0) {
+            setEbook(data[0]);
             setLoading(false);
             return;
           }
