@@ -127,6 +127,10 @@ export default async function handler(req, res) {
             .createSignedUrl(cleanPath, 86400);
           signedUrl = signedData?.signedUrl || null;
         }
+      } else {
+        // Fallback for test ebooks (which don't exist in the database)
+        ebook = { title: "The Story Builder (Test Ebook)" };
+        signedUrl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
       }
 
       // Automatically email the ebook download link to the buyer
