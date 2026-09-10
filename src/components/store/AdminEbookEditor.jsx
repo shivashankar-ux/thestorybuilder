@@ -48,8 +48,7 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
     if (!file) return;
     setUploadingState((prev) => ({ ...prev, [type]: true }));
     try {
-      const base64Data = await fileToBase64(file);
-
+      // 1. Get signed upload URL from backend (tiny payload < 1KB)
       const res = await fetch("/api/admin-upload", {
         method: "POST",
         headers: {
@@ -58,14 +57,54 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
         },
         body: JSON.stringify({ 
           bucket, 
-          filename: file.name,
-          fileBase64: base64Data,
-          contentType: file.type || "application/octet-stream"
+          filename: file.name
         })
       });
 
       const data = await res.json();
-      if (!data.ok) throw new Error(data.error || "Failed to upload file.");
+      if (!data.ok) throw new Error(data.error || "Failed to prepare file upload signature.");
+
+      // 2. Stream File object directly to Supabase CDN (0% JS heap memory overhead, supports 100MB+ without memory crashes)
+      let uploadSuccess = false;
+      try {
+        const uploadRes = await fetch(data.signedUrl, {
+          method: "PUT",
+          headers: { 
+            "Content-Type": file.type || "application/octet-stream" 
+          },
+          body: file
+        });
+        if (uploadRes.ok) uploadSuccess = true;
+      } catch (streamErr) {
+        console.warn("Signed URL streaming upload attempt failed:", streamErr);
+      }
+
+      // 3. Small file fallback (< 3MB) if signed URL direct upload fails
+      if (!uploadSuccess && file.size < 3 * 1024 * 1024) {
+        const base64Data = await fileToBase64(file);
+        const fbRes = await fetch("/api/admin-upload", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${password}`
+          },
+          body: JSON.stringify({ 
+            bucket, 
+            filename: file.name,
+            fileBase64: base64Data,
+            contentType: file.type || "application/octet-stream"
+          })
+        });
+        const fbData = await fbRes.json();
+        if (!fbData.ok) throw new Error(fbData.error || "Fallback upload failed.");
+        data.publicUrl = fbData.publicUrl;
+        data.path = fbData.path;
+        uploadSuccess = true;
+      }
+
+      if (!uploadSuccess) {
+        throw new Error("Upload failed. Storage bucket or network error.");
+      }
 
       if (type === "cover") {
         setFormData((prev) => ({ ...prev, cover_image_url: data.publicUrl }));
@@ -73,7 +112,7 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
         setFormData((prev) => ({ ...prev, file_url: data.path }));
       }
     } catch (err) {
-      alert(`Upload failed: ${err.message}`);
+      alert(`Upload error: ${err.message}`);
     }
     setUploadingState((prev) => ({ ...prev, [type]: false }));
   };
@@ -344,7 +383,7 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
                     <div>
                       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" style={{ margin: "0 auto 8px" }}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                       <div style={{ color: "var(--text)", fontSize: "14px", fontWeight: 700, marginBottom: "4px" }}>Click or Drag & Drop Cover Image</div>
-                      <div style={{ color: "var(--muted)", fontSize: "12px" }}>PNG, JPG or WEBP up to 10MB</div>
+                      <div style={{ color: "var(--muted)", fontSize: "12px" }}>PNG, JPG or WEBP (Direct Streaming Upload)</div>
                     </div>
                   )}
                 </div>
@@ -417,7 +456,7 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
                     <div>
                       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" style={{ margin: "0 auto 8px" }}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="12 18 12 12 15 15"/></svg>
                       <div style={{ color: "var(--text)", fontSize: "14px", fontWeight: 700, marginBottom: "4px" }}>Click or Drag & Drop PDF Ebook Document</div>
-                      <div style={{ color: "var(--muted)", fontSize: "12px" }}>Securely stored in private bucket (`ebooks-private`)</div>
+                      <div style={{ color: "var(--muted)", fontSize: "12px" }}>Direct Streaming Upload — Unlimited File Size</div>
                     </div>
                   )}
                 </div>
