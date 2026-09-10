@@ -48,19 +48,15 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
   const uploadFileToSupabase = async (file, type, bucket) => {
     if (!file) return;
     setUploadingState((prev) => ({ ...prev, [type]: true }));
-    const CHUNK_SIZE = 1.5 * 1024 * 1024; // 1.5MB chunk size (ultra-fast & memory safe)
 
     try {
-      const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
-      const uploadId = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
-      let finalResult = null;
+      let finalPublicUrl = "";
+      let finalStoragePath = "";
+      const isSmallFile = file.size <= 3.5 * 1024 * 1024; // 3.5MB threshold
 
-      for (let i = 0; i < totalChunks; i++) {
-        const start = i * CHUNK_SIZE;
-        const end = Math.min(file.size, start + CHUNK_SIZE);
-        const chunkBlob = file.slice(start, end);
-        const base64Chunk = await fileToBase64(chunkBlob);
-
+      if (isSmallFile) {
+        // Direct Fast Serverless Upload (1.5s)
+        const base64Data = await fileToBase64(file);
         const res = await fetch("/api/admin-upload", {
           method: "POST",
           headers: {
@@ -70,32 +66,79 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
           body: JSON.stringify({
             bucket,
             filename: file.name,
-            fileBase64: base64Chunk,
-            contentType: file.type || "application/octet-stream",
-            uploadId,
-            chunkIndex: i,
-            totalChunks
+            fileBase64: base64Data,
+            contentType: file.type || "application/octet-stream"
           })
         });
 
-        const data = await res.json();
-        if (!data.ok) throw new Error(data.error || `Failed chunk ${i + 1} upload.`);
-
-        if (data.done || totalChunks === 1) {
-          finalResult = data;
-          break;
+        const resText = await res.text();
+        let data;
+        try {
+          data = JSON.parse(resText);
+        } catch (e) {
+          throw new Error(`Server error (${res.status}): ${resText.substring(0, 80)}`);
         }
+
+        if (!data.ok) throw new Error(data.error || "Upload failed.");
+        finalPublicUrl = data.publicUrl;
+        finalStoragePath = data.path;
+
+      } else {
+
+        // Streaming Signed Upload for Large Files (> 3.5MB)
+        const res = await fetch("/api/admin-upload", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${password}`
+          },
+          body: JSON.stringify({ bucket, filename: file.name })
+        });
+
+        const resText = await res.text();
+        let data;
+        try {
+          data = JSON.parse(resText);
+        } catch (e) {
+          throw new Error(`Server signature error (${res.status}): ${resText.substring(0, 80)}`);
+        }
+
+        if (!data.ok) throw new Error(data.error || "Upload signature failed.");
+
+        let uploadSuccess = false;
+        if (data.token && data.filePath && supabase) {
+          try {
+            const { error: sErr } = await supabase.storage
+              .from(bucket)
+              .uploadToSignedUrl(data.filePath, data.token, file);
+            if (!sErr) uploadSuccess = true;
+          } catch (s1) {
+            console.warn("Supabase SDK uploadToSignedUrl warning:", s1);
+          }
+        }
+
+        if (!uploadSuccess && data.signedUrl) {
+          const putRes = await fetch(data.signedUrl, {
+            method: "PUT",
+            headers: { "Content-Type": file.type || "application/octet-stream" },
+            body: file
+          });
+          if (putRes.ok) uploadSuccess = true;
+        }
+
+        if (!uploadSuccess) throw new Error("Large file upload failed. Please check network connection.");
+        finalPublicUrl = data.publicUrl;
+        finalStoragePath = data.path;
       }
 
-      if (finalResult) {
-        if (type === "cover") {
-          setFormData((prev) => ({ ...prev, cover_image_url: finalResult.publicUrl }));
-        } else {
-          setFormData((prev) => ({ ...prev, file_url: finalResult.path }));
-        }
+      if (type === "cover") {
+        setFormData((prev) => ({ ...prev, cover_image_url: finalPublicUrl }));
+      } else {
+        setFormData((prev) => ({ ...prev, file_url: finalStoragePath }));
       }
+
     } catch (err) {
-      alert(`Upload error: ${err.message}`);
+      alert(`Upload Notice: ${err.message}`);
     } finally {
       setUploadingState((prev) => ({ ...prev, [type]: false }));
     }
@@ -140,14 +183,22 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
         },
         body: JSON.stringify(payload)
       });
-      const data = await res.json();
+
+      const resText = await res.text();
+      let data;
+      try {
+        data = JSON.parse(resText);
+      } catch (parseErr) {
+        throw new Error(`Server error (${res.status}): ${resText.substring(0, 80)}`);
+      }
+
       if (data.ok) {
         onSave(data.ebook, isNew);
       } else {
         alert(data.error || "Failed to save product.");
       }
     } catch (err) {
-      alert("Error saving ebook to server.");
+      alert(`Save error: ${err.message}`);
     }
     setLoading(false);
   };
@@ -440,7 +491,7 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
                     <div>
                       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" style={{ margin: "0 auto 8px" }}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="12 18 12 12 15 15"/></svg>
                       <div style={{ color: "var(--text)", fontSize: "14px", fontWeight: 700, marginBottom: "4px" }}>Click or Drag & Drop PDF Ebook Document</div>
-                      <div style={{ color: "var(--muted)", fontSize: "12px" }}>Fast 2-Second Serverless Streaming</div>
+                      <div style={{ color: "var(--muted)", fontSize: "12px" }}>Fast Direct Streaming Upload</div>
                     </div>
                   )}
                 </div>
