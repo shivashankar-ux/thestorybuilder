@@ -1,8 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (err) => reject(err);
+  });
+}
 
 export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) {
   const isNew = !ebook;
+  const coverInputRef = useRef(null);
+  const fileInputRef = useRef(null);
+
   const [formData, setFormData] = useState({
     title: ebook?.title || "",
     slug: ebook?.slug || "",
@@ -36,28 +48,27 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
     if (!file) return;
     setUploadingState((prev) => ({ ...prev, [type]: true }));
     try {
+      const base64Data = await fileToBase64(file);
+
       const res = await fetch("/api/admin-upload", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${password}`
         },
-        body: JSON.stringify({ bucket, filename: file.name })
+        body: JSON.stringify({ 
+          bucket, 
+          filename: file.name,
+          fileBase64: base64Data,
+          contentType: file.type || "application/octet-stream"
+        })
       });
+
       const data = await res.json();
-      if (!data.ok) throw new Error(data.error || "Failed to get upload signature.");
-
-      const uploadRes = await fetch(data.signedUrl, {
-        method: "PUT",
-        headers: { "Content-Type": file.type || "application/octet-stream" },
-        body: file
-      });
-
-      if (!uploadRes.ok) throw new Error("Failed to upload file to storage.");
+      if (!data.ok) throw new Error(data.error || "Failed to upload file.");
 
       if (type === "cover") {
-        const publicUrl = `https://prxgbhxjdesjsybrskhx.supabase.co/storage/v1/object/public/${data.path}`;
-        setFormData((prev) => ({ ...prev, cover_image_url: publicUrl }));
+        setFormData((prev) => ({ ...prev, cover_image_url: data.publicUrl }));
       } else {
         setFormData((prev) => ({ ...prev, file_url: data.path }));
       }
@@ -281,7 +292,21 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
               {/* Cover Image Dropzone */}
               <div style={{ marginBottom: "24px" }}>
                 <label style={labelStyle}>Product Cover Image</label>
+
+                <input
+                  ref={coverInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      uploadFileToSupabase(e.target.files[0], "cover", "public-assets");
+                    }
+                  }}
+                  style={{ display: "none" }}
+                />
+
                 <div
+                  onClick={() => coverInputRef.current?.click()}
                   onDragOver={(e) => handleDrag(e, "cover", true)}
                   onDragLeave={(e) => handleDrag(e, "cover", false)}
                   onDrop={(e) => handleDrop(e, "cover", "public-assets")}
@@ -295,14 +320,6 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
                     cursor: "pointer"
                   }}
                 >
-                  <input
-                    type="file"
-                    id="coverUpload"
-                    accept="image/*"
-                    onChange={(e) => uploadFileToSupabase(e.target.files[0], "cover", "public-assets")}
-                    style={{ display: "none" }}
-                  />
-                  
                   {uploadingState.cover ? (
                     <div style={{ color: "var(--gold)", fontSize: "14px", fontWeight: 600 }}>
                       Uploading cover image...
@@ -314,22 +331,53 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
                         <div style={{ color: "#22c55e", fontSize: "13px", fontWeight: 700, marginBottom: "4px" }}>✓ Cover Image Attached</div>
                         <span style={{ fontSize: "12px", color: "var(--muted)", wordBreak: "break-all", display: "block" }}>{formData.cover_image_url}</span>
                       </div>
-                      <label htmlFor="coverUpload" className="btn btn-ghost" style={{ fontSize: "12px", cursor: "pointer", whiteSpace: "nowrap" }}>Change</label>
+                      <button 
+                        type="button" 
+                        className="btn btn-ghost" 
+                        onClick={(e) => { e.stopPropagation(); coverInputRef.current?.click(); }}
+                        style={{ fontSize: "12px", cursor: "pointer", whiteSpace: "nowrap" }}
+                      >
+                        Change Image
+                      </button>
                     </div>
                   ) : (
-                    <label htmlFor="coverUpload" style={{ cursor: "pointer", display: "block" }}>
+                    <div>
                       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" style={{ margin: "0 auto 8px" }}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                      <div style={{ color: "var(--text)", fontSize: "14px", fontWeight: 700, marginBottom: "4px" }}>Drag & Drop Cover Image</div>
+                      <div style={{ color: "var(--text)", fontSize: "14px", fontWeight: 700, marginBottom: "4px" }}>Click or Drag & Drop Cover Image</div>
                       <div style={{ color: "var(--muted)", fontSize: "12px" }}>PNG, JPG or WEBP up to 10MB</div>
-                    </label>
+                    </div>
                   )}
+                </div>
+
+                <div style={{ marginTop: "10px" }}>
+                  <input
+                    style={{ ...inputStyle, fontSize: "12px", padding: "10px" }}
+                    name="cover_image_url"
+                    value={formData.cover_image_url}
+                    onChange={handleChange}
+                    placeholder="Or paste cover image URL directly (e.g. https://...)"
+                  />
                 </div>
               </div>
 
               {/* Private PDF File Dropzone */}
               <div>
                 <label style={labelStyle}>Digital Product File (PDF / DOC)</label>
+
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      uploadFileToSupabase(e.target.files[0], "file", "ebooks-private");
+                    }
+                  }}
+                  style={{ display: "none" }}
+                />
+
                 <div
+                  onClick={() => fileInputRef.current?.click()}
                   onDragOver={(e) => handleDrag(e, "file", true)}
                   onDragLeave={(e) => handleDrag(e, "file", false)}
                   onDrop={(e) => handleDrop(e, "file", "ebooks-private")}
@@ -343,14 +391,6 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
                     cursor: "pointer"
                   }}
                 >
-                  <input
-                    type="file"
-                    id="fileUpload"
-                    accept=".pdf,.doc,.docx"
-                    onChange={(e) => uploadFileToSupabase(e.target.files[0], "file", "ebooks-private")}
-                    style={{ display: "none" }}
-                  />
-
                   {uploadingState.file ? (
                     <div style={{ color: "#22c55e", fontSize: "14px", fontWeight: 600 }}>
                       Uploading digital document...
@@ -364,15 +404,32 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
                         <div style={{ color: "#22c55e", fontSize: "13px", fontWeight: 700, marginBottom: "2px" }}>✓ PDF Attached & Linked</div>
                         <span style={{ fontSize: "12px", color: "var(--muted)", wordBreak: "break-all" }}>{formData.file_url}</span>
                       </div>
-                      <label htmlFor="fileUpload" className="btn btn-ghost" style={{ fontSize: "12px", cursor: "pointer", whiteSpace: "nowrap" }}>Replace</label>
+                      <button 
+                        type="button" 
+                        className="btn btn-ghost" 
+                        onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+                        style={{ fontSize: "12px", cursor: "pointer", whiteSpace: "nowrap" }}
+                      >
+                        Replace File
+                      </button>
                     </div>
                   ) : (
-                    <label htmlFor="fileUpload" style={{ cursor: "pointer", display: "block" }}>
+                    <div>
                       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" style={{ margin: "0 auto 8px" }}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="12 18 12 12 15 15"/></svg>
-                      <div style={{ color: "var(--text)", fontSize: "14px", fontWeight: 700, marginBottom: "4px" }}>Drag & Drop PDF Ebook Document</div>
+                      <div style={{ color: "var(--text)", fontSize: "14px", fontWeight: 700, marginBottom: "4px" }}>Click or Drag & Drop PDF Ebook Document</div>
                       <div style={{ color: "var(--muted)", fontSize: "12px" }}>Securely stored in private bucket (`ebooks-private`)</div>
-                    </label>
+                    </div>
                   )}
+                </div>
+
+                <div style={{ marginTop: "10px" }}>
+                  <input
+                    style={{ ...inputStyle, fontSize: "12px", padding: "10px" }}
+                    name="file_url"
+                    value={formData.file_url}
+                    onChange={handleChange}
+                    placeholder="Or paste file storage path directly (e.g. ebooks-private/my-book.pdf)"
+                  />
                 </div>
               </div>
 
@@ -497,9 +554,9 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
                   </div>
 
                   <div style={{ borderTop: "1px solid var(--border)", paddingTop: "14px" }}>
-                    <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--text)", uppercase: "true", marginBottom: "8px" }}>WHAT YOU GET:</div>
+                    <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--text)", textTransform: "uppercase", marginBottom: "8px" }}>WHAT YOU GET:</div>
                     {chaptersArray.length === 0 ? (
-                      <div style={{ color: "var(--muted)", fontSize: "12px", italic: "true" }}>No chapters added yet.</div>
+                      <div style={{ color: "var(--muted)", fontSize: "12px", fontStyle: "italic" }}>No chapters added yet.</div>
                     ) : (
                       <ul style={{ margin: 0, paddingLeft: "16px", color: "var(--muted)", fontSize: "12px" }}>
                         {chaptersArray.slice(0, 5).map((chap, i) => (
