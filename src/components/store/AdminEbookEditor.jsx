@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
+import { supabase } from "../../utils/supabaseClient";
 
 function fileToBase64(file) {
   return new Promise((resolve, reject) => {
@@ -47,70 +48,109 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
   const uploadFileToSupabase = async (file, type, bucket) => {
     if (!file) return;
     setUploadingState((prev) => ({ ...prev, [type]: true }));
+    let uploadSuccess = false;
+    let finalPublicUrl = "";
+    let finalStoragePath = "";
+
     try {
-      // 1. Get signed upload URL from backend (tiny payload < 1KB)
+      // 1. Get signed upload metadata from server
       const res = await fetch("/api/admin-upload", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${password}`
         },
-        body: JSON.stringify({ 
-          bucket, 
-          filename: file.name
-        })
+        body: JSON.stringify({ bucket, filename: file.name })
       });
 
       const data = await res.json();
       if (!data.ok) throw new Error(data.error || "Failed to prepare file upload signature.");
 
-      // 2. Stream File object directly to Supabase CDN (0% JS heap memory overhead, supports 100MB+ without memory crashes)
-      let uploadSuccess = false;
-      try {
-        const uploadRes = await fetch(data.signedUrl, {
-          method: "PUT",
-          headers: { 
-            "Content-Type": file.type || "application/octet-stream" 
-          },
-          body: file
-        });
-        if (uploadRes.ok) uploadSuccess = true;
-      } catch (streamErr) {
-        console.warn("Signed URL streaming upload attempt failed:", streamErr);
+      finalPublicUrl = data.publicUrl;
+      finalStoragePath = data.path;
+
+      // Method 1: Official Supabase SDK uploadToSignedUrl (Native streaming, CORS & auth handled)
+      if (data.token && data.filePath && supabase) {
+        try {
+          const { error: sErr } = await supabase.storage
+            .from(bucket)
+            .uploadToSignedUrl(data.filePath, data.token, file);
+          if (!sErr) uploadSuccess = true;
+        } catch (e1) {
+          console.warn("Method 1 (uploadToSignedUrl) failed:", e1);
+        }
       }
 
-      // 3. Small file fallback (< 3MB) if signed URL direct upload fails
-      if (!uploadSuccess && file.size < 3 * 1024 * 1024) {
-        const base64Data = await fileToBase64(file);
-        const fbRes = await fetch("/api/admin-upload", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${password}`
-          },
-          body: JSON.stringify({ 
-            bucket, 
-            filename: file.name,
-            fileBase64: base64Data,
-            contentType: file.type || "application/octet-stream"
-          })
-        });
-        const fbData = await fbRes.json();
-        if (!fbData.ok) throw new Error(fbData.error || "Fallback upload failed.");
-        data.publicUrl = fbData.publicUrl;
-        data.path = fbData.path;
-        uploadSuccess = true;
+      // Method 2: Standard fetch PUT request to signedUrl
+      if (!uploadSuccess && data.signedUrl) {
+        try {
+          const putRes = await fetch(data.signedUrl, {
+            method: "PUT",
+            headers: { "Content-Type": file.type || "application/octet-stream" },
+            body: file
+          });
+          if (putRes.ok) uploadSuccess = true;
+        } catch (e2) {
+          console.warn("Method 2 (fetch PUT) failed:", e2);
+        }
+      }
+
+      // Method 3: Direct Supabase Client Upload
+      if (!uploadSuccess && supabase) {
+        try {
+          const cleanName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+          const { data: directData, error: directErr } = await supabase.storage
+            .from(bucket)
+            .upload(cleanName, file, { upsert: true });
+
+          if (!directErr && directData) {
+            finalStoragePath = `${bucket}/${cleanName}`;
+            finalPublicUrl = `https://prxgbhxjdesjsybrskhx.supabase.co/storage/v1/object/public/${bucket}/${cleanName}`;
+            uploadSuccess = true;
+          }
+        } catch (e3) {
+          console.warn("Method 3 (direct upload) failed:", e3);
+        }
+      }
+
+      // Method 4: Small file (< 4MB) Base64 fallback
+      if (!uploadSuccess && file.size < 4 * 1024 * 1024) {
+        try {
+          const base64Data = await fileToBase64(file);
+          const fbRes = await fetch("/api/admin-upload", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${password}`
+            },
+            body: JSON.stringify({
+              bucket,
+              filename: file.name,
+              fileBase64: base64Data,
+              contentType: file.type || "application/octet-stream"
+            })
+          });
+          const fbData = await fbRes.json();
+          if (fbData.ok) {
+            finalPublicUrl = fbData.publicUrl;
+            finalStoragePath = fbData.path;
+            uploadSuccess = true;
+          }
+        } catch (e4) {
+          console.warn("Method 4 (base64 fallback) failed:", e4);
+        }
       }
 
       if (!uploadSuccess) {
-        throw new Error("Upload failed. Storage bucket or network error.");
+        throw new Error("Unable to complete upload after trying 4 redundant storage methods. Please check internet connection.");
       }
 
       if (type === "cover") {
-        setFormData((prev) => ({ ...prev, cover_image_url: data.publicUrl }));
+        setFormData((prev) => ({ ...prev, cover_image_url: finalPublicUrl }));
       } else {
-        setFormData((prev) => ({ ...prev, file_url: data.path }));
+        setFormData((prev) => ({ ...prev, file_url: finalStoragePath }));
       }
+
     } catch (err) {
       alert(`Upload error: ${err.message}`);
     }
@@ -383,7 +423,7 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
                     <div>
                       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" style={{ margin: "0 auto 8px" }}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                       <div style={{ color: "var(--text)", fontSize: "14px", fontWeight: 700, marginBottom: "4px" }}>Click or Drag & Drop Cover Image</div>
-                      <div style={{ color: "var(--muted)", fontSize: "12px" }}>PNG, JPG or WEBP (Direct Streaming Upload)</div>
+                      <div style={{ color: "var(--muted)", fontSize: "12px" }}>PNG, JPG or WEBP (Direct Ultra-Fast Upload)</div>
                     </div>
                   )}
                 </div>
@@ -456,7 +496,7 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
                     <div>
                       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" style={{ margin: "0 auto 8px" }}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="12 18 12 12 15 15"/></svg>
                       <div style={{ color: "var(--text)", fontSize: "14px", fontWeight: 700, marginBottom: "4px" }}>Click or Drag & Drop PDF Ebook Document</div>
-                      <div style={{ color: "var(--muted)", fontSize: "12px" }}>Direct Streaming Upload — Unlimited File Size</div>
+                      <div style={{ color: "var(--muted)", fontSize: "12px" }}>4-Layer Failover Streaming — Unlimited File Size</div>
                     </div>
                   )}
                 </div>

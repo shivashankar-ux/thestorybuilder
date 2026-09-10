@@ -54,10 +54,10 @@ export default async function handler(req, res) {
       console.warn("Bucket check/creation warning:", bErr.message);
     }
 
-    // Clean path name
+    // Clean path name safely
     const path = `${Date.now()}_${filename.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
 
-    // 1. Direct Base64 Upload (Recommended & CORS-Proof)
+    // 1. Direct Base64 Upload (For small files)
     if (fileBase64) {
       const base64Data = fileBase64.replace(/^data:.*?;base64,/, "");
       const buffer = Buffer.from(base64Data, "base64");
@@ -83,7 +83,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // 2. Signed Upload URL (Fallback)
+    // 2. Signed Upload URL (For large files & streaming)
     const { data: signedData, error: signedErr } = await supabase.storage
       .from(bucket)
       .createSignedUploadUrl(path);
@@ -95,6 +95,8 @@ export default async function handler(req, res) {
     return res.status(200).json({ 
       ok: true, 
       signedUrl: signedData.signedUrl, 
+      token: signedData.token,
+      filePath: path,
       path: `${bucket}/${path}`,
       publicUrl: `${supabaseUrl}/storage/v1/object/public/${bucket}/${path}`
     });
