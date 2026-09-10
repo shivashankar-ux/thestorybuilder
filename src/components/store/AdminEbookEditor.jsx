@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 
 export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) {
   const isNew = !ebook;
@@ -6,28 +7,34 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
     title: ebook?.title || "",
     slug: ebook?.slug || "",
     description: ebook?.description || "",
-    price_inr: ebook?.price_inr || "",
+    price_inr: ebook?.price_inr ?? 2,
     cover_image_url: ebook?.cover_image_url || "",
     file_url: ebook?.file_url || "",
     chapters: ebook?.chapters ? ebook.chapters.join("\n") : ""
   });
+
   const [loading, setLoading] = useState(false);
   const [uploadingState, setUploadingState] = useState({ cover: false, file: false });
+  const [dragActiveState, setDragActiveState] = useState({ cover: false, file: false });
+  const [previewTab, setPreviewTab] = useState("card"); // "card" | "detail"
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-      ...(name === "title" && isNew ? { slug: value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') } : {})
-    }));
+    setFormData((prev) => {
+      const updated = { ...prev, [name]: value };
+      if (name === "title" && isNew) {
+        updated.slug = value
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/(^-|-$)+/g, "");
+      }
+      return updated;
+    });
   };
 
-  const handleFileUpload = async (e, type, bucket) => {
-    const file = e.target.files[0];
+  const uploadFileToSupabase = async (file, type, bucket) => {
     if (!file) return;
-
-    setUploadingState(prev => ({ ...prev, [type]: true }));
+    setUploadingState((prev) => ({ ...prev, [type]: true }));
     try {
       const res = await fetch("/api/admin-upload", {
         method: "POST",
@@ -38,27 +45,41 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
         body: JSON.stringify({ bucket, filename: file.name })
       });
       const data = await res.json();
-      if (!data.ok) throw new Error(data.error);
+      if (!data.ok) throw new Error(data.error || "Failed to get upload signature.");
 
       const uploadRes = await fetch(data.signedUrl, {
         method: "PUT",
-        headers: { "Content-Type": file.type },
+        headers: { "Content-Type": file.type || "application/octet-stream" },
         body: file
       });
-      
+
       if (!uploadRes.ok) throw new Error("Failed to upload file to storage.");
 
       if (type === "cover") {
         const publicUrl = `https://prxgbhxjdesjsybrskhx.supabase.co/storage/v1/object/public/${data.path}`;
-        setFormData(prev => ({ ...prev, cover_image_url: publicUrl }));
+        setFormData((prev) => ({ ...prev, cover_image_url: publicUrl }));
       } else {
-        setFormData(prev => ({ ...prev, file_url: data.path }));
+        setFormData((prev) => ({ ...prev, file_url: data.path }));
       }
-      alert(`${type === "cover" ? "Image" : "Document"} uploaded successfully!`);
     } catch (err) {
       alert(`Upload failed: ${err.message}`);
     }
-    setUploadingState(prev => ({ ...prev, [type]: false }));
+    setUploadingState((prev) => ({ ...prev, [type]: false }));
+  };
+
+  const handleDrag = (e, type, isDragOver) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActiveState((prev) => ({ ...prev, [type]: isDragOver }));
+  };
+
+  const handleDrop = (e, type, bucket) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActiveState((prev) => ({ ...prev, [type]: false }));
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      uploadFileToSupabase(e.dataTransfer.files[0], type, bucket);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -68,7 +89,10 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
     const payload = {
       ...formData,
       price_inr: Number(formData.price_inr),
-      chapters: formData.chapters.split("\n").map(c => c.trim()).filter(Boolean)
+      chapters: formData.chapters
+        .split("\n")
+        .map((c) => c.trim())
+        .filter(Boolean)
     };
 
     if (!isNew) payload.id = ebook.id;
@@ -86,157 +110,413 @@ export default function AdminEbookEditor({ ebook, password, onSave, onCancel }) 
       if (data.ok) {
         onSave(data.ebook, isNew);
       } else {
-        alert(data.error || "Failed to save.");
+        alert(data.error || "Failed to save product.");
       }
     } catch (err) {
-      alert("Error saving ebook.");
+      alert("Error saving ebook to server.");
     }
     setLoading(false);
   };
 
-  const inputStyle = { 
-    width: "100%", 
-    padding: "12px", 
-    borderRadius: "8px", 
-    border: "1px solid var(--border)", 
-    background: "var(--bg)", 
-    color: "var(--text)", 
+  const inputStyle = {
+    width: "100%",
+    padding: "12px 14px",
+    borderRadius: "10px",
+    border: "1px solid var(--border)",
+    background: "var(--bg)",
+    color: "var(--text)",
     outline: "none",
     fontSize: "14px",
-    fontFamily: "var(--fb)"
+    fontFamily: "var(--fb)",
+    boxSizing: "border-box",
+    transition: "border-color 0.2s"
   };
-  
-  const labelStyle = { 
-    display: "block", 
-    color: "var(--text)", 
-    marginBottom: "6px", 
-    fontSize: "14px",
-    fontWeight: 600 
+
+  const labelStyle = {
+    display: "block",
+    color: "var(--text)",
+    marginBottom: "6px",
+    fontSize: "13px",
+    fontWeight: 700
   };
-  
+
   const cardStyle = {
     background: "var(--card)",
     border: "1px solid var(--border)",
-    borderRadius: "12px",
+    borderRadius: "16px",
     padding: "24px",
     marginBottom: "24px",
-    boxShadow: "0 2px 8px rgba(0,0,0,0.02)"
+    boxShadow: "0 4px 16px rgba(0,0,0,0.02)"
   };
 
+  const chaptersArray = formData.chapters
+    .split("\n")
+    .map((c) => c.trim())
+    .filter(Boolean);
+
   return (
-    <main style={{ minHeight: "100vh", background: "var(--bg)", padding: "calc(var(--nav) + 40px) 20px 100px" }}>
-      <div className="wrap" style={{ maxWidth: "1000px", margin: "0 auto" }}>
+    <main style={{ minHeight: "100vh", background: "var(--bg)", padding: "calc(var(--nav) + 32px) 20px 100px" }}>
+      <div className="wrap" style={{ maxWidth: "1380px", margin: "0 auto" }}>
         
-        {/* Header */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <button onClick={onCancel} style={{ background: "transparent", border: "1px solid var(--border)", padding: "8px", borderRadius: "8px", cursor: "pointer", display: "flex", alignItems: "center", color: "var(--text)" }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        {/* Header Bar */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "32px", flexWrap: "wrap", gap: "16px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+            <button
+              onClick={onCancel}
+              style={{
+                background: "var(--card)",
+                border: "1px solid var(--border)",
+                padding: "10px",
+                borderRadius: "10px",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                color: "var(--text)"
+              }}
+              title="Back to Products"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
             </button>
             <div>
+              <span style={{ fontSize: "12px", color: "var(--muted)", fontWeight: 600 }}>Product Studio</span>
               <h2 style={{ color: "var(--text)", margin: 0, fontSize: "24px", fontFamily: "var(--fd)", fontWeight: 800, letterSpacing: "-0.5px" }}>
-                {isNew ? "Create Product" : "Edit Product"}
+                {isNew ? "Create New Product" : `Editing "${ebook.title}"`}
               </h2>
             </div>
           </div>
+
           <div style={{ display: "flex", gap: "12px" }}>
-            <button className="btn btn-ghost" onClick={onCancel}>Cancel</button>
-            <button className="btn btn-gold" onClick={handleSubmit} disabled={loading || uploadingState.cover || uploadingState.file}>
-              {loading ? "Saving..." : "Save Product"}
+            <button className="btn btn-ghost" onClick={onCancel} type="button">Cancel</button>
+            <button
+              className="btn btn-gold"
+              onClick={handleSubmit}
+              disabled={loading || uploadingState.cover || uploadingState.file}
+              style={{ padding: "10px 24px" }}
+            >
+              {loading ? "Saving Product..." : isNew ? "Publish Product" : "Save Changes"}
             </button>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: "24px", alignItems: "start" }}>
+        {/* 2-Column Studio Grid: Left CMS Form | Right Live Studio Preview */}
+        <div style={{ display: "grid", gridTemplateColumns: "1.3fr 1fr", gap: "32px", alignItems: "start" }}>
           
-          {/* Left Column - Main Details */}
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          {/* LEFT COLUMN: CMS FORM */}
+          <form onSubmit={handleSubmit}>
             
+            {/* General Info Card */}
             <div style={cardStyle}>
-              <h3 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "20px", color: "var(--text)", fontFamily: "var(--fd)" }}>General Information</h3>
-              
+              <h3 style={{ fontSize: "16px", fontWeight: 800, marginBottom: "20px", color: "var(--text)", fontFamily: "var(--fd)", display: "flex", alignItems: "center", gap: "8px" }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                General Details
+              </h3>
+
               <div style={{ marginBottom: "20px" }}>
                 <label style={labelStyle}>Product Title</label>
-                <input style={inputStyle} name="title" value={formData.title} onChange={handleChange} placeholder="e.g. Astrology for Beginners" required />
+                <input
+                  style={inputStyle}
+                  name="title"
+                  value={formData.title}
+                  onChange={handleChange}
+                  placeholder="e.g. Astrology & Zodiac Blueprint"
+                  required
+                />
               </div>
 
               <div style={{ marginBottom: "20px" }}>
-                <label style={labelStyle}>URL Slug</label>
-                <input style={inputStyle} name="slug" value={formData.slug} onChange={handleChange} placeholder="e.g. astrology-for-beginners" required />
-              </div>
-
-              <div>
-                <label style={labelStyle}>Description</label>
-                <textarea style={{...inputStyle, minHeight: "120px", resize: "vertical"}} name="description" value={formData.description} onChange={handleChange} placeholder="Write a compelling description for your ebook..." required />
-              </div>
-            </div>
-
-            <div style={cardStyle}>
-              <h3 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "8px", color: "var(--text)", fontFamily: "var(--fd)" }}>What You Get (Chapters)</h3>
-              <p style={{ fontSize: "13px", color: "var(--muted)", marginBottom: "20px" }}>Enter each chapter or bullet point on a new line. These will render as a list on the product page.</p>
-              
-              <textarea style={{...inputStyle, minHeight: "200px", resize: "vertical"}} name="chapters" value={formData.chapters} onChange={handleChange} placeholder="01. Introduction to topic...&#10;02. Deep dive into strategy...&#10;03. Case studies..." />
-            </div>
-
-          </div>
-
-          {/* Right Column - Pricing & Media */}
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            
-            <div style={cardStyle}>
-              <h3 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "20px", color: "var(--text)", fontFamily: "var(--fd)" }}>Pricing</h3>
-              
-              <div>
-                <label style={labelStyle}>Price (INR)</label>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                  <label style={{ ...labelStyle, marginBottom: 0 }}>URL Slug</label>
+                  <span style={{ fontSize: "11px", color: "var(--muted)" }}>Auto-generated</span>
+                </div>
                 <div style={{ position: "relative" }}>
-                  <span style={{ position: "absolute", left: "12px", top: "50%", transform: "translateY(-50%)", color: "var(--muted)", fontWeight: 600 }}>₹</span>
-                  <input style={{...inputStyle, paddingLeft: "30px"}} type="number" name="price_inr" value={formData.price_inr} onChange={handleChange} placeholder="0.00" required />
+                  <span style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "var(--muted)", fontSize: "13px" }}>/store/</span>
+                  <input
+                    style={{ ...inputStyle, paddingLeft: "70px" }}
+                    name="slug"
+                    value={formData.slug}
+                    onChange={handleChange}
+                    placeholder="astrology-zodiac-blueprint"
+                    required
+                  />
                 </div>
               </div>
+
+              <div style={{ marginBottom: "20px" }}>
+                <label style={labelStyle}>Description & Tagline</label>
+                <textarea
+                  style={{ ...inputStyle, minHeight: "120px", resize: "vertical" }}
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="Write a high-converting description explaining what founders and creators will gain from this playbook..."
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={labelStyle}>Price (INR ₹)</label>
+                <div style={{ position: "relative", maxWidth: "200px" }}>
+                  <span style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)", color: "var(--gold)", fontWeight: 800 }}>₹</span>
+                  <input
+                    style={{ ...inputStyle, paddingLeft: "32px", fontSize: "16px", fontWeight: 700 }}
+                    type="number"
+                    name="price_inr"
+                    value={formData.price_inr}
+                    onChange={handleChange}
+                    placeholder="2"
+                    required
+                  />
+                </div>
+              </div>
+
             </div>
 
+            {/* Media Uploads Card */}
             <div style={cardStyle}>
-              <h3 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "20px", color: "var(--text)", fontFamily: "var(--fd)" }}>Cover Image</h3>
-              
-              {formData.cover_image_url && (
-                <div style={{ marginBottom: "16px", borderRadius: "8px", overflow: "hidden", border: "1px solid var(--border)", background: "var(--surf)", aspectRatio: "16/10" }}>
-                  <img src={formData.cover_image_url} alt="Cover Preview" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              <h3 style={{ fontSize: "16px", fontWeight: 800, marginBottom: "20px", color: "var(--text)", fontFamily: "var(--fd)", display: "flex", alignItems: "center", gap: "8px" }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" strokeWidth="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                Media & File Attachments
+              </h3>
+
+              {/* Cover Image Dropzone */}
+              <div style={{ marginBottom: "24px" }}>
+                <label style={labelStyle}>Product Cover Image</label>
+                <div
+                  onDragOver={(e) => handleDrag(e, "cover", true)}
+                  onDragLeave={(e) => handleDrag(e, "cover", false)}
+                  onDrop={(e) => handleDrop(e, "cover", "public-assets")}
+                  style={{
+                    border: dragActiveState.cover ? "2px dashed var(--gold)" : "2px dashed var(--border)",
+                    background: dragActiveState.cover ? "rgba(249,115,22,0.05)" : "var(--surf)",
+                    borderRadius: "12px",
+                    padding: "24px",
+                    textAlign: "center",
+                    transition: "all 0.2s",
+                    cursor: "pointer"
+                  }}
+                >
+                  <input
+                    type="file"
+                    id="coverUpload"
+                    accept="image/*"
+                    onChange={(e) => uploadFileToSupabase(e.target.files[0], "cover", "public-assets")}
+                    style={{ display: "none" }}
+                  />
+                  
+                  {uploadingState.cover ? (
+                    <div style={{ color: "var(--gold)", fontSize: "14px", fontWeight: 600 }}>
+                      Uploading cover image...
+                    </div>
+                  ) : formData.cover_image_url ? (
+                    <div style={{ display: "flex", alignItems: "center", gap: "16px", textAlign: "left" }}>
+                      <img src={formData.cover_image_url} alt="Cover Preview" style={{ width: "64px", height: "80px", objectFit: "cover", borderRadius: "8px", border: "1px solid var(--border)" }} />
+                      <div style={{ flex: 1 }}>
+                        <div style={{ color: "#22c55e", fontSize: "13px", fontWeight: 700, marginBottom: "4px" }}>✓ Cover Image Attached</div>
+                        <span style={{ fontSize: "12px", color: "var(--muted)", wordBreak: "break-all", display: "block" }}>{formData.cover_image_url}</span>
+                      </div>
+                      <label htmlFor="coverUpload" className="btn btn-ghost" style={{ fontSize: "12px", cursor: "pointer", whiteSpace: "nowrap" }}>Change</label>
+                    </div>
+                  ) : (
+                    <label htmlFor="coverUpload" style={{ cursor: "pointer", display: "block" }}>
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" style={{ margin: "0 auto 8px" }}><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                      <div style={{ color: "var(--text)", fontSize: "14px", fontWeight: 700, marginBottom: "4px" }}>Drag & Drop Cover Image</div>
+                      <div style={{ color: "var(--muted)", fontSize: "12px" }}>PNG, JPG or WEBP up to 10MB</div>
+                    </label>
+                  )}
                 </div>
-              )}
-              
-              <div style={{ background: "var(--surf)", padding: "16px", borderRadius: "8px", border: "1px dashed var(--border)", textAlign: "center", marginBottom: "12px" }}>
-                <input type="file" id="coverUpload" accept="image/*" onChange={(e) => handleFileUpload(e, "cover", "public-assets")} style={{ display: "none" }} />
-                <label htmlFor="coverUpload" className="btn btn-ghost" style={{ cursor: "pointer", width: "100%", justifyContent: "center", padding: "10px", fontSize: "13px" }}>
-                  {uploadingState.cover ? "Uploading..." : "Upload Cover Image"}
-                </label>
               </div>
-              
-              <input style={{...inputStyle, fontSize: "12px", padding: "10px"}} name="cover_image_url" value={formData.cover_image_url} onChange={handleChange} placeholder="Or paste image URL" />
+
+              {/* Private PDF File Dropzone */}
+              <div>
+                <label style={labelStyle}>Digital Product File (PDF / DOC)</label>
+                <div
+                  onDragOver={(e) => handleDrag(e, "file", true)}
+                  onDragLeave={(e) => handleDrag(e, "file", false)}
+                  onDrop={(e) => handleDrop(e, "file", "ebooks-private")}
+                  style={{
+                    border: dragActiveState.file ? "2px dashed #22c55e" : "2px dashed var(--border)",
+                    background: dragActiveState.file ? "rgba(34,197,94,0.05)" : "var(--surf)",
+                    borderRadius: "12px",
+                    padding: "24px",
+                    textAlign: "center",
+                    transition: "all 0.2s",
+                    cursor: "pointer"
+                  }}
+                >
+                  <input
+                    type="file"
+                    id="fileUpload"
+                    accept=".pdf,.doc,.docx"
+                    onChange={(e) => uploadFileToSupabase(e.target.files[0], "file", "ebooks-private")}
+                    style={{ display: "none" }}
+                  />
+
+                  {uploadingState.file ? (
+                    <div style={{ color: "#22c55e", fontSize: "14px", fontWeight: 600 }}>
+                      Uploading digital document...
+                    </div>
+                  ) : formData.file_url ? (
+                    <div style={{ display: "flex", alignItems: "center", gap: "16px", textAlign: "left" }}>
+                      <div style={{ width: "44px", height: "44px", borderRadius: "10px", background: "rgba(34,197,94,0.15)", color: "#22c55e", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>
+                      </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ color: "#22c55e", fontSize: "13px", fontWeight: 700, marginBottom: "2px" }}>✓ PDF Attached & Linked</div>
+                        <span style={{ fontSize: "12px", color: "var(--muted)", wordBreak: "break-all" }}>{formData.file_url}</span>
+                      </div>
+                      <label htmlFor="fileUpload" className="btn btn-ghost" style={{ fontSize: "12px", cursor: "pointer", whiteSpace: "nowrap" }}>Replace</label>
+                    </div>
+                  ) : (
+                    <label htmlFor="fileUpload" style={{ cursor: "pointer", display: "block" }}>
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" strokeWidth="1.5" style={{ margin: "0 auto 8px" }}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><polyline points="12 18 12 12 15 15"/></svg>
+                      <div style={{ color: "var(--text)", fontSize: "14px", fontWeight: 700, marginBottom: "4px" }}>Drag & Drop PDF Ebook Document</div>
+                      <div style={{ color: "var(--muted)", fontSize: "12px" }}>Securely stored in private bucket (`ebooks-private`)</div>
+                    </label>
+                  )}
+                </div>
+              </div>
+
             </div>
 
+            {/* Chapters & Highlights */}
             <div style={cardStyle}>
-              <h3 style={{ fontSize: "16px", fontWeight: 700, marginBottom: "20px", color: "var(--text)", fontFamily: "var(--fd)" }}>Digital Product File</h3>
-              
-              {formData.file_url && (
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", padding: "12px", background: "rgba(34, 197, 94, 0.1)", border: "1px solid rgba(34, 197, 94, 0.2)", borderRadius: "8px", marginBottom: "16px" }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                  <span style={{ fontSize: "13px", color: "#22c55e", fontWeight: 600, wordBreak: "break-all" }}>{formData.file_url.split('/').pop()}</span>
-                </div>
-              )}
-
-              <div style={{ background: "var(--surf)", padding: "16px", borderRadius: "8px", border: "1px dashed var(--border)", textAlign: "center", marginBottom: "12px" }}>
-                <input type="file" id="fileUpload" accept=".pdf,.doc,.docx" onChange={(e) => handleFileUpload(e, "file", "ebooks-private")} style={{ display: "none" }} />
-                <label htmlFor="fileUpload" className="btn btn-ghost" style={{ cursor: "pointer", width: "100%", justifyContent: "center", padding: "10px", fontSize: "13px" }}>
-                  {uploadingState.file ? "Uploading..." : "Upload Document"}
-                </label>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                <h3 style={{ fontSize: "16px", fontWeight: 800, color: "var(--text)", fontFamily: "var(--fd)", margin: 0 }}>
+                  Chapters / What You Get
+                </h3>
+                <span style={{ fontSize: "12px", color: "var(--gold)", fontWeight: 700 }}>
+                  {chaptersArray.length} Bullet(s)
+                </span>
               </div>
+              <p style={{ fontSize: "13px", color: "var(--muted)", marginBottom: "16px" }}>
+                Enter each chapter title or feature bullet on a new line.
+              </p>
               
-              <input style={{...inputStyle, fontSize: "12px", padding: "10px"}} name="file_url" value={formData.file_url} onChange={handleChange} placeholder="Or paste file path (e.g. ebooks-private/file.pdf)" />
+              <textarea
+                style={{ ...inputStyle, minHeight: "180px", resize: "vertical", fontFamily: "monospace", fontSize: "13px" }}
+                name="chapters"
+                value={formData.chapters}
+                onChange={handleChange}
+                placeholder={"01. Introduction & Setup\n02. Core Principles\n03. Advanced Strategies\n04. Templates & Checklists"}
+              />
             </div>
 
+          </form>
+
+          {/* RIGHT COLUMN: LIVE INTERACTIVE PREVIEW */}
+          <div style={{ position: "sticky", top: "calc(var(--nav) + 20px)" }}>
+            <div style={cardStyle}>
+              
+              {/* Studio Preview Header */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px", paddingBottom: "14px", borderBottom: "1px solid var(--border)" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#22c55e", display: "inline-block", boxShadow: "0 0 6px #22c55e" }} />
+                  <span style={{ fontSize: "13px", fontWeight: 700, color: "var(--text)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Live Store Preview</span>
+                </div>
+
+                <div style={{ background: "var(--surf)", border: "1px solid var(--border)", padding: "2px", borderRadius: "8px", display: "flex", gap: "2px" }}>
+                  <button
+                    onClick={() => setPreviewTab("card")}
+                    style={{
+                      background: previewTab === "card" ? "var(--card)" : "transparent",
+                      color: previewTab === "card" ? "var(--text)" : "var(--muted)",
+                      border: "none",
+                      padding: "4px 10px",
+                      borderRadius: "6px",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      cursor: "pointer"
+                    }}
+                  >
+                    Card
+                  </button>
+                  <button
+                    onClick={() => setPreviewTab("detail")}
+                    style={{
+                      background: previewTab === "detail" ? "var(--card)" : "transparent",
+                      color: previewTab === "detail" ? "var(--text)" : "var(--muted)",
+                      border: "none",
+                      padding: "4px 10px",
+                      borderRadius: "6px",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      cursor: "pointer"
+                    }}
+                  >
+                    Detail
+                  </button>
+                </div>
+              </div>
+
+              {/* Preview Content */}
+              {previewTab === "card" ? (
+                
+                /* Store Card Preview */
+                <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "16px", overflow: "hidden" }}>
+                  <div style={{ height: "200px", background: "var(--surf)", borderBottom: "1px solid var(--border)", position: "relative", overflow: "hidden" }}>
+                    {formData.cover_image_url ? (
+                      <img src={formData.cover_image_url} alt="Live Preview Cover" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    ) : (
+                      <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--muted)", fontSize: "13px" }}>
+                        Cover Image Preview
+                      </div>
+                    )}
+                    <span style={{ position: "absolute", top: "12px", right: "12px", background: "rgba(0,0,0,0.75)", color: "var(--gold)", padding: "4px 12px", borderRadius: "100px", fontSize: "12px", fontWeight: 800 }}>
+                      ₹{formData.price_inr || 2}
+                    </span>
+                  </div>
+
+                  <div style={{ padding: "20px" }}>
+                    <h4 style={{ color: "var(--text)", fontSize: "18px", fontWeight: 800, margin: "0 0 8px", fontFamily: "var(--fd)" }}>
+                      {formData.title || "Product Title Preview"}
+                    </h4>
+                    <p style={{ color: "var(--muted)", fontSize: "13px", margin: "0 0 16px", lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                      {formData.description || "Compelling description of what buyers gain from this playbook will appear here."}
+                    </p>
+
+                    <button className="btn btn-gold" style={{ width: "100%", justifyContent: "center", padding: "10px" }} type="button">
+                      Buy Now — ₹{formData.price_inr || 2}
+                    </button>
+                  </div>
+                </div>
+
+              ) : (
+
+                /* Detail Page Preview */
+                <div style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "16px", padding: "20px" }}>
+                  <div style={{ display: "flex", gap: "14px", marginBottom: "16px", alignItems: "center" }}>
+                    <div style={{ width: "50px", height: "65px", borderRadius: "6px", background: "var(--surf)", border: "1px solid var(--border)", overflow: "hidden", flexShrink: 0 }}>
+                      {formData.cover_image_url && <img src={formData.cover_image_url} alt="Thumbnail" style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
+                    </div>
+                    <div>
+                      <h4 style={{ color: "var(--text)", fontSize: "16px", fontWeight: 800, margin: "0 0 4px", fontFamily: "var(--fd)" }}>
+                        {formData.title || "Title Preview"}
+                      </h4>
+                      <span style={{ fontSize: "14px", fontWeight: 800, color: "var(--gold)" }}>₹{formData.price_inr || 2}</span>
+                    </div>
+                  </div>
+
+                  <div style={{ borderTop: "1px solid var(--border)", paddingTop: "14px" }}>
+                    <div style={{ fontSize: "12px", fontWeight: 700, color: "var(--text)", uppercase: "true", marginBottom: "8px" }}>WHAT YOU GET:</div>
+                    {chaptersArray.length === 0 ? (
+                      <div style={{ color: "var(--muted)", fontSize: "12px", italic: "true" }}>No chapters added yet.</div>
+                    ) : (
+                      <ul style={{ margin: 0, paddingLeft: "16px", color: "var(--muted)", fontSize: "12px" }}>
+                        {chaptersArray.slice(0, 5).map((chap, i) => (
+                          <li key={i} style={{ marginBottom: "4px" }}>{chap}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+
+              )}
+
+            </div>
           </div>
 
-        </form>
+        </div>
+
       </div>
     </main>
   );
