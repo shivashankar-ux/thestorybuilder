@@ -191,7 +191,7 @@ const pageMetadata = {
   },
   pricing: {
     title: "Transparent Pricing Plans — Websites, Marketing & Reels | The Story Builder",
-    desc: "Clear, predictable packages for web development, Reels shoot & edit, branding, and performance lead generation. Zero hidden fees.",
+    desc: "Clear, predictable packages for web development, Reels shoot & edit, and performance lead generation. Zero hidden fees.",
   },
   contact: {
     title: "Contact Us — Talk to The Story Builder Digital Agency Hyderabad",

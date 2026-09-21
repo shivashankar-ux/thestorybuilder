@@ -69,7 +69,6 @@ export default function Footer({ setPage }) {
               <li><a href="/services/seo-services-hyderabad" onClick={(e) => { e.preventDefault(); navTo("service-seo"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>SEO Services Hyderabad</a></li>
               <li><a href="/services/google-ads-hyderabad" onClick={(e) => { e.preventDefault(); navTo("service-google-ads"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Google Ads Hyderabad</a></li>
               <li><a href="/services/social-media-marketing" onClick={(e) => { e.preventDefault(); navTo("service-smm"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Social Media Marketing</a></li>
-              <li><a href="/services/branding" onClick={(e) => { e.preventDefault(); navTo("service-branding"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Brand Strategy</a></li>
             </ul>
           </div>
 

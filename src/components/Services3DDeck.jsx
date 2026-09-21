@@ -48,21 +48,6 @@ const servicesData = [
     route: "service-smm",
   },
   {
-    id: "service-branding",
-    tag: "Premium Brand Identity",
-    title: "Brand Strategy & Identity Design",
-    category: "Logo Suites & Brand Systems",
-    desc: "Build a brand identity that commands instant trust. Vector logo suites, curated color palettes, typography rules, and brand guidelines.",
-    highlights: [
-      "Primary & Secondary Logo Suite",
-      "Color & Typography Hierarchy",
-      "Social & Business Stationery",
-      "Full Brand Guidelines PDF",
-    ],
-    img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1600&q=80",
-    route: "service-branding",
-  },
-  {
     id: "service-seo",
     tag: "Organic Search Dominance",
     title: "Search Engine Optimization (SEO)",

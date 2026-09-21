@@ -45,27 +45,9 @@ const servicesData = [
     ),
   },
   {
-    id: "branding",
-    route: "service-branding",
-    step: "03 • BRANDING",
-    title: "Branding & Visual Identity",
-    subtitle: "Strategy & Design Systems",
-    desc: "Command trust and prestige with bespoke logo suites, cohesive color palettes, typography hierarchies, and complete brand design systems.",
-    pills: ["Logo Design", "Color & Typography", "Brand Style Guides", "Visual Assets"],
-    accentColor: "#f59e0b",
-    gradient: "linear-gradient(135deg, rgba(245, 158, 11, 0.14) 0%, rgba(217, 119, 6, 0.05) 100%)",
-    borderColor: "rgba(245, 158, 11, 0.35)",
-    glowColor: "rgba(245, 158, 11, 0.3)",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-      </svg>
-    ),
-  },
-  {
     id: "performance-marketing",
     route: "service-perf-mktg",
-    step: "04 • MARKETING",
+    step: "03 • MARKETING",
     title: "Performance Marketing",
     subtitle: "Paid Ads & Lead Funnels",
     desc: "ROI-driven Meta & Google ad campaigns built for high lead volume, positive return on ad spend (ROAS), and automated conversion tracking.",
@@ -112,7 +94,7 @@ export default function CoreServicesGrid({ setPage }) {
             Everything your brand needs to <em className="gold">stand out &amp; scale.</em>
           </h2>
           <p className="muted sr core-services-subtitle">
-            Explore our 4 core service pillars engineered to elevate your online presence, captivate your audience, and drive real business growth.
+            Explore our core service pillars engineered to elevate your online presence, captivate your audience, and drive real business growth.
           </p>
         </div>
 

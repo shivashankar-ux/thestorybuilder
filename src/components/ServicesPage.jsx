@@ -43,18 +43,6 @@ const allServices = [
     ),
   },
   {
-    id: "branding",
-    route: "service-branding",
-    tag: "BRAND AUTHORITY",
-    title: "Brand Strategy & Visual Identity",
-    desc: "Vector logo suites, curated color palettes, typography rules, and brand guidelines that make your business command trust.",
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-        <path d="M12 2l3 6 6 1-4.5 4.4 1 6.6L12 17l-5.5 3 1-6.6L3 9l6-1 3-6z" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
-  {
     id: "seo",
     route: "service-web-dev",
     tag: "ORGANIC TRAFFIC",
