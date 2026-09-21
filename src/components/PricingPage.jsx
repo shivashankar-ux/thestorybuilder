@@ -20,7 +20,7 @@ const pricingCategories = [
       {
         badge: "STARTER",
         name: "Starter",
-        price: "Rs.13,000",
+        price: "Rs. 13,000",
         cadence: "project",
         desc: "Perfect for businesses starting their online journey.",
         features: [
@@ -59,7 +59,7 @@ const pricingCategories = [
       {
         badge: "PREMIUM",
         name: "Premium",
-        price: "Rs.30,000",
+        price: "Rs. 30,000",
         cadence: "project",
         desc: "For businesses ready to dominate online and scale.",
         features: [
@@ -169,7 +169,7 @@ const pricingCategories = [
       {
         badge: "STARTER",
         name: "Starter",
-        price: "Rs.14,999",
+        price: "Rs. 14,999",
         cadence: "month",
         desc: "Get your first leads flowing with Meta Ads.",
         features: [
@@ -188,7 +188,7 @@ const pricingCategories = [
       {
         badge: "MOST POPULAR",
         name: "Growth",
-        price: "Rs.24,000",
+        price: "Rs. 24,000",
         cadence: "month",
         desc: "Multi-platform campaigns built to consistently generate leads.",
         features: [
@@ -209,7 +209,7 @@ const pricingCategories = [
       {
         badge: "PREMIUM",
         name: "Premium",
-        price: "Rs.35,000",
+        price: "Rs. 35,000",
         cadence: "month",
         desc: "Full-funnel lead generation with automation and scaling.",
         features: [

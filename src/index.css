@@ -2681,23 +2681,27 @@ a:focus-visible,
 .price-value-row {
   display: flex;
   align-items: baseline;
+  flex-wrap: nowrap;
+  white-space: nowrap;
   gap: 6px;
   margin-bottom: 8px;
 }
 
 .price-amount {
   font-family: var(--fd);
-  font-size: clamp(30px, 4vw, 42px);
+  font-size: clamp(24px, 3.2vw, 36px);
   font-weight: 800;
   color: var(--text);
   letter-spacing: -1.2px;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .price-cadence {
   font-size: 13.5px;
   color: var(--muted);
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .tier-description-text {
