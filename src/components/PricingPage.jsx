@@ -81,11 +81,11 @@ const pricingCategories = [
   },
   {
     id: "instagram",
-    name: "Instagram Management",
-    tagline: "Done-for-you Instagram content, strategy, and growth — so you can focus on running your business.",
-    note: "All packages are month-to-month. No long-term contracts. Cancel anytime.",
+    name: "Reels Shoot & Edit",
+    tagline: "High-impact video production — we shoot and edit short-form Reels for your business.",
+    note: "All packages include professional video shooting & post-production editing.",
     themeClass: "theme-magenta",
-    pillars: ["Reels included", "Custom Creatives", "No Templates", "Growth Focused"],
+    pillars: ["Video Shoot Included", "Professional Editing", "Color Grading & Captions", "Trending Audio"],
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
@@ -95,66 +95,59 @@ const pricingCategories = [
     ),
     tiers: [
       {
-        badge: "BASIC",
-        name: "Basic",
-        price: "Rs.9,999",
-        cadence: "month",
-        desc: "Build your presence with consistent, quality content.",
+        badge: "STARTER",
+        name: "4 Reels Package",
+        price: "Rs. 10,000",
+        cadence: "package",
+        desc: "Shoot & edit for 4 high-converting short-form Reels.",
         features: [
-          "8 creatives per month",
-          "2 Reels (scripted + edited)",
-          "3 Carousel posts",
-          "3 Static posts",
-          "Caption writing + hashtags",
-          "Content calendar",
-          "Instagram bio optimization",
-          "Monthly performance report",
-          "7-day story highlights setup"
+          "4 Reels shot & edited",
+          "Professional camera & lighting setup",
+          "Hook & script assistance",
+          "Custom text overlays & captions",
+          "Trending audio & sound effects",
+          "Cinematic color grading",
+          "1 revision round per Reel"
         ],
-        cta: "Get Started",
+        cta: "Get 4 Reels",
         highlight: false
       },
       {
         badge: "MOST POPULAR",
-        name: "Growth",
-        price: "Rs. 14,000",
-        cadence: "month",
-        desc: "Grow your audience with Reels, strategy, and engagement.",
+        name: "6 Reels Package",
+        price: "Rs. 15,000",
+        cadence: "package",
+        desc: "Shoot & edit for 6 high-converting short-form Reels.",
         features: [
-          "12 creatives per month",
-          "4 Reels (scripted + edited)",
-          "4 Carousel posts",
-          "4 Static posts",
-          "Caption writing + hashtags",
-          "Content calendar + strategy",
-          "Community management",
-          "Story posts (3x/week)",
-          "Hashtag research & rotation",
-          "Monthly analytics report"
+          "6 Reels shot & edited",
+          "Professional camera & lighting setup",
+          "Hook & script assistance",
+          "Custom text overlays & captions",
+          "Trending audio & sound effects",
+          "Cinematic color grading",
+          "2 revision rounds per Reel",
+          "Fast turnaround"
         ],
-        cta: "Start Growing",
+        cta: "Get 6 Reels",
         highlight: true
       },
       {
         badge: "PREMIUM",
-        name: "Premium",
-        price: "Rs. 21,000",
-        cadence: "month",
-        desc: "Full-service Instagram management built to generate leads.",
+        name: "8 Reels Package",
+        price: "Rs. 18,000",
+        cadence: "package",
+        desc: "Shoot & edit for 8 high-converting short-form Reels.",
         features: [
-          "18 creatives per month",
-          "6 Reels (scripted + edited)",
-          "6 Carousel posts",
-          "6 Static posts",
-          "Daily stories",
-          "Caption + copywriting",
-          "Community mgmt + DM replies",
-          "Festival & campaign creatives",
-          "Competitor analysis",
-          "Bi-weekly strategy call",
-          "Detailed monthly report"
+          "8 Reels shot & edited",
+          "Professional camera & lighting setup",
+          "Hook & script assistance",
+          "Custom text overlays & captions",
+          "Trending audio & sound effects",
+          "Cinematic color grading",
+          "2 revision rounds per Reel",
+          "Priority editing & delivery"
         ],
-        cta: "Scale My Brand",
+        cta: "Get 8 Reels",
         highlight: false
       }
     ]

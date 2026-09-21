@@ -182,16 +182,16 @@ const pageMetadata = {
     desc: "Precision Google Search Ads, Display & Performance Max management in Hyderabad. Engineered for qualified B2B & local buyer lead generation.",
   },
   "service-smm": {
-    title: "Social Media Marketing & Instagram Management | The Story Builder",
-    desc: "Done-for-you Instagram growth, short-form Reels scripts, custom visual content, and brand authority campaigns for business founders.",
+    title: "Reels Shoot & Edit Production Services | The Story Builder",
+    desc: "Professional short-form Reels video production. We shoot and edit high-impact Reels for your business — 4, 6, and 8 Reels packages available.",
   },
   "service-branding": {
     title: "Brand Strategy & Identity Design Studio | The Story Builder",
     desc: "Command authority with logo suites, typography systems, color palettes, and comprehensive brand guidelines built for modern growth.",
   },
   pricing: {
-    title: "Transparent Pricing Plans — Websites, Marketing & Branding | The Story Builder",
-    desc: "Clear, predictable packages for web development, Instagram management, branding, and performance lead generation. Zero hidden fees.",
+    title: "Transparent Pricing Plans — Websites, Marketing & Reels | The Story Builder",
+    desc: "Clear, predictable packages for web development, Reels shoot & edit, branding, and performance lead generation. Zero hidden fees.",
   },
   contact: {
     title: "Contact Us — Talk to The Story Builder Digital Agency Hyderabad",

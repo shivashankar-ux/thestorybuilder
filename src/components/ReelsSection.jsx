@@ -1,39 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+/**
+ * Utility function to extract standard 11-character YouTube video ID
+ * from raw IDs, Shorts links, watch URLs, youtu.be links, or embed links.
+ */
+export function extractYouTubeId(urlOrId) {
+  if (!urlOrId) return "";
+  const str = String(urlOrId).trim();
+
+  // Raw 11-char YouTube ID
+  if (/^[a-zA-Z0-9_-]{11}$/.test(str)) {
+    return str;
+  }
+
+  // YouTube Shorts link: https://youtube.com/shorts/QAL6E6fy1f0
+  const shortsMatch = str.match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/i);
+  if (shortsMatch) return shortsMatch[1];
+
+  // YouTube Watch link: https://www.youtube.com/watch?v=QAL6E6fy1f0
+  const watchMatch = str.match(/[?&]v=([a-zA-Z0-9_-]{11})/i);
+  if (watchMatch) return watchMatch[1];
+
+  // Shortened link: https://youtu.be/QAL6E6fy1f0
+  const youtuBeMatch = str.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/i);
+  if (youtuBeMatch) return youtuBeMatch[1];
+
+  // Embed link: https://www.youtube.com/embed/QAL6E6fy1f0
+  const embedMatch = str.match(/youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/i);
+  if (embedMatch) return embedMatch[1];
+
+  return str;
+}
+
 const reelsData = [
-  { id: "QAL6E6fy1f0", title: "Portfolio Reel 1" },
-  { id: "1EwM31QxnKk", title: "Portfolio Reel 2" },
-  { id: "_aVoaZbyXJQ", title: "Portfolio Reel 3" },
-  { id: "rVUkWK8lRmw", title: "Portfolio Reel 4" },
-  { id: "VdsrsWmmhiw", title: "Portfolio Reel 5" },
-  { id: "k-bJd1yYk1A", title: "Portfolio Reel 6" },
-  { id: "wDfOBIsFCUE", title: "Portfolio Reel 7" },
+  { url: "https://youtube.com/shorts/QAL6E6fy1f0", title: "Brand Identity Showcase", category: "Branding" },
+  { url: "https://youtube.com/shorts/1EwM31QxnKk", title: "Social Ad Creative", category: "Performance Ads" },
+  { url: "https://youtube.com/shorts/_aVoaZbyXJQ", title: "High-Converting Funnel", category: "Web Design" },
+  { url: "https://youtube.com/shorts/rVUkWK8lRmw", title: "Local SEO Growth", category: "SEO Growth" },
+  { url: "https://youtube.com/shorts/VdsrsWmmhiw", title: "Instagram Content Strategy", category: "Social Growth" },
+  { url: "https://youtube.com/shorts/k-bJd1yYk1A", title: "E-Commerce Campaign", category: "Meta Ads" },
+  { url: "https://youtube.com/shorts/wDfOBIsFCUE", title: "Founder Personal Branding", category: "Reels & Shorts" },
 ];
 
 export default function ReelsSection() {
-  const [globalMuted, setGlobalMuted] = useState(true);
-  const [unmutedVideoId, setUnmutedVideoId] = useState(null);
-  const [activeModalReel, setActiveModalReel] = useState(null);
+  const [activeModalIndex, setActiveModalIndex] = useState(null);
 
-  const toggleGlobalSound = () => {
-    if (globalMuted) {
-      setGlobalMuted(false);
-    } else {
-      setGlobalMuted(true);
-      setUnmutedVideoId(null);
+  const activeReel = activeModalIndex !== null ? reelsData[activeModalIndex] : null;
+  const activeVideoId = activeReel ? extractYouTubeId(activeReel.url) : null;
+
+  const handlePrev = (e) => {
+    e?.stopPropagation();
+    if (activeModalIndex !== null) {
+      setActiveModalIndex((prev) => (prev > 0 ? prev - 1 : reelsData.length - 1));
     }
   };
 
-  const toggleCardSound = (id, e) => {
-    e.stopPropagation();
-    if (unmutedVideoId === id) {
-      setUnmutedVideoId(null);
-    } else {
-      setGlobalMuted(false);
-      setUnmutedVideoId(id);
+  const handleNext = (e) => {
+    e?.stopPropagation();
+    if (activeModalIndex !== null) {
+      setActiveModalIndex((prev) => (prev < reelsData.length - 1 ? prev + 1 : 0));
     }
   };
+
+  // Keyboard navigation for modal player
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (activeModalIndex === null) return;
+      if (e.key === "Escape") {
+        setActiveModalIndex(null);
+      } else if (e.key === "ArrowLeft") {
+        handlePrev();
+      } else if (e.key === "ArrowRight") {
+        handleNext();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeModalIndex]);
 
   return (
     <section
@@ -62,7 +107,7 @@ export default function ReelsSection() {
             alignItems: "center",
             flexWrap: "wrap",
             gap: "14px",
-            marginBottom: "28px",
+            marginBottom: "32px",
           }}
         >
           <div>
@@ -82,7 +127,7 @@ export default function ReelsSection() {
                 border: "1px solid rgba(217,119,6,0.2)",
               }}
             >
-              🎬 Portfolio Reels
+              🎬 Portfolio Reels & Shorts
             </span>
             <h2
               style={{
@@ -98,138 +143,172 @@ export default function ReelsSection() {
             </h2>
           </div>
 
-          {/* Master Sound Button (Touch Friendly) */}
-          <button
-            type="button"
-            onClick={toggleGlobalSound}
+          <p
             style={{
-              background: globalMuted && !unmutedVideoId ? "rgba(15, 23, 42, 0.06)" : "var(--gold, #D97706)",
-              color: globalMuted && !unmutedVideoId ? "var(--text, #0F172A)" : "#FFFFFF",
-              border: "1px solid var(--border)",
-              borderRadius: "100px",
-              padding: "10px 20px",
-              minHeight: "42px",
-              fontSize: "13px",
-              fontWeight: 700,
-              cursor: "pointer",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
-              transition: "all 0.25s ease",
-              touchAction: "manipulation",
+              fontSize: "14px",
+              color: "var(--muted, #64748B)",
+              margin: 0,
+              maxWidth: "380px",
+              lineHeight: 1.5,
             }}
           >
-            {globalMuted && !unmutedVideoId ? "🔇 Muted (Click for Sound)" : "🔊 Sound Enabled"}
-          </button>
+            Click any video below to watch in full HD short-form video player.
+          </p>
         </div>
 
         {/* Responsive Mobile-Optimized Grid */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))",
-            gap: "16px",
+            gridTemplateColumns: "repeat(auto-fill, minmax(170px, 1fr))",
+            gap: "20px",
             justifyContent: "center",
           }}
         >
-          {reelsData.map((reel) => {
-            const isUnmuted = unmutedVideoId === reel.id || (!globalMuted && unmutedVideoId === null);
-            const muteParam = isUnmuted ? 0 : 1;
-
-            const embedSrc = `https://www.youtube-nocookie.com/embed/${reel.id}?autoplay=1&mute=${muteParam}&loop=1&playlist=${reel.id}&playsinline=1&controls=1&rel=0`;
+          {reelsData.map((reel, idx) => {
+            const videoId = extractYouTubeId(reel.url);
+            const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
 
             return (
               <motion.div
-                key={reel.id}
+                key={videoId || idx}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.3, delay: idx * 0.05 }}
                 style={{
                   position: "relative",
                   borderRadius: "20px",
                   overflow: "hidden",
-                  background: "#000000",
+                  background: "#0F172A",
                   aspectRatio: "9 / 16",
                   boxShadow: "0 10px 28px rgba(0,0,0,0.12)",
                   border: "2px solid var(--border)",
                   cursor: "pointer",
                   touchAction: "manipulation",
                 }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-6px)";
-                  e.currentTarget.style.boxShadow = "0 20px 42px rgba(217,119,6,0.22)";
-                  e.currentTarget.style.borderColor = "var(--gold, #D97706)";
+                whileHover={{
+                  y: -6,
+                  borderColor: "var(--gold, #D97706)",
+                  boxShadow: "0 20px 42px rgba(217,119,6,0.25)",
                 }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 10px 28px rgba(0,0,0,0.12)";
-                  e.currentTarget.style.borderColor = "var(--border)";
-                }}
-                onClick={() => setActiveModalReel(reel)}
+                onClick={() => setActiveModalIndex(idx)}
               >
-                {/* Autoplay Looped YouTube Shorts Video Embed */}
-                <iframe
-                  src={embedSrc}
-                  title={reel.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
+                {/* Poster Thumbnail Image */}
+                <img
+                  src={thumbnailUrl}
+                  alt={reel.title}
+                  loading="lazy"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = `https://img.youtube.com/vi/${videoId}/0.jpg`;
+                  }}
                   style={{
                     width: "100%",
                     height: "100%",
-                    border: 0,
-                    pointerEvents: "auto",
+                    objectFit: "cover",
+                    display: "block",
+                    transition: "transform 0.4s ease",
                   }}
                 />
 
-                {/* Touch-Optimized Floating Sound Toggle */}
-                <button
-                  type="button"
-                  onClick={(e) => toggleCardSound(reel.id, e)}
+                {/* Dark Gradient Overlay for Contrast & Readability */}
+                <div
                   style={{
                     position: "absolute",
-                    top: "10px",
-                    right: "10px",
-                    zIndex: 10,
-                    background: isUnmuted ? "var(--gold, #D97706)" : "rgba(0, 0, 0, 0.78)",
-                    backdropFilter: "blur(8px)",
-                    color: "#FFFFFF",
-                    fontSize: "11.5px",
-                    fontWeight: 700,
-                    padding: "6px 12px",
-                    borderRadius: "100px",
-                    border: "1px solid rgba(255, 255, 255, 0.25)",
-                    cursor: "pointer",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "4px",
-                    boxShadow: "0 4px 14px rgba(0,0,0,0.4)",
-                    transition: "all 0.2s ease",
-                    touchAction: "manipulation",
+                    inset: 0,
+                    background:
+                      "linear-gradient(to top, rgba(15, 23, 42, 0.92) 0%, rgba(15, 23, 42, 0.25) 50%, rgba(0,0,0,0.4) 100%)",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    padding: "14px",
                   }}
                 >
-                  {isUnmuted ? "🔊 Sound On" : "🔇 Tap for Sound"}
-                </button>
+                  {/* Category Tag */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span
+                      style={{
+                        background: "rgba(0,0,0,0.65)",
+                        backdropFilter: "blur(6px)",
+                        color: "#FFFFFF",
+                        fontSize: "10.5px",
+                        fontWeight: 700,
+                        padding: "4px 9px",
+                        borderRadius: "100px",
+                        border: "1px solid rgba(255,255,255,0.2)",
+                        letterSpacing: "0.02em",
+                      }}
+                    >
+                      {reel.category || "Reel"}
+                    </span>
+                  </div>
+
+                  {/* Play Button & Title */}
+                  <div style={{ textAlign: "center" }}>
+                    {/* YouTube Shorts Red Play Badge */}
+                    <div
+                      style={{
+                        width: "48px",
+                        height: "48px",
+                        borderRadius: "50%",
+                        background: "var(--gold, #D97706)",
+                        color: "#FFFFFF",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        margin: "0 auto 12px",
+                        boxShadow: "0 6px 20px rgba(217,119,6,0.5)",
+                        fontSize: "18px",
+                      }}
+                    >
+                      ▶
+                    </div>
+
+                    <h3
+                      style={{
+                        color: "#FFFFFF",
+                        fontSize: "13.5px",
+                        fontWeight: 700,
+                        margin: 0,
+                        lineHeight: 1.3,
+                        textShadow: "0 2px 8px rgba(0,0,0,0.8)",
+                      }}
+                    >
+                      {reel.title}
+                    </h3>
+                    <span
+                      style={{
+                        display: "inline-block",
+                        marginTop: "4px",
+                        fontSize: "11px",
+                        color: "var(--gold, #F59E0B)",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Click to Play 🔊
+                    </span>
+                  </div>
+                </div>
               </motion.div>
             );
           })}
         </div>
       </div>
 
-      {/* Touch-Optimized Lightbox Video Modal */}
+      {/* Full-Screen Touch-Optimized YouTube Shorts Video Modal */}
       <AnimatePresence>
-        {activeModalReel && (
+        {activeModalIndex !== null && activeReel && activeVideoId && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => setActiveModalReel(null)}
+            onClick={() => setActiveModalIndex(null)}
             style={{
               position: "fixed",
               inset: 0,
               zIndex: 99999,
-              background: "rgba(15, 23, 42, 0.92)",
-              backdropFilter: "blur(14px)",
+              background: "rgba(15, 23, 42, 0.94)",
+              backdropFilter: "blur(16px)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -245,66 +324,189 @@ export default function ReelsSection() {
                 background: "#000000",
                 borderRadius: "24px",
                 overflow: "hidden",
-                maxWidth: "400px",
+                maxWidth: "420px",
                 width: "92vw",
-                maxHeight: "90vh",
+                maxHeight: "92vh",
                 border: "2px solid var(--gold, #D97706)",
-                boxShadow: "0 30px 80px rgba(0,0,0,0.7)",
+                boxShadow: "0 30px 90px rgba(0,0,0,0.85)",
                 color: "#FFFFFF",
                 position: "relative",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
-              {/* Close Button */}
-              <button
-                type="button"
-                onClick={() => setActiveModalReel(null)}
+              {/* Modal Top Header Bar */}
+              <div
                 style={{
-                  position: "absolute",
-                  top: "12px",
-                  right: "12px",
-                  zIndex: 10,
-                  background: "rgba(0,0,0,0.75)",
-                  border: "1px solid rgba(255,255,255,0.3)",
-                  color: "#FFFFFF",
-                  width: "44px",
-                  height: "44px",
-                  borderRadius: "50%",
-                  fontSize: "20px",
-                  cursor: "pointer",
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  touchAction: "manipulation",
+                  justifyContent: "space-between",
+                  padding: "12px 16px",
+                  background: "rgba(15, 23, 42, 0.95)",
+                  borderBottom: "1px solid rgba(255,255,255,0.1)",
+                  zIndex: 10,
                 }}
               >
-                ✕
-              </button>
+                <div>
+                  <h4 style={{ margin: 0, fontSize: "14px", fontWeight: 700, color: "#FFFFFF" }}>
+                    {activeReel.title}
+                  </h4>
+                  <span style={{ fontSize: "11px", color: "var(--gold, #D97706)", fontWeight: 600 }}>
+                    Reel {activeModalIndex + 1} of {reelsData.length}
+                  </span>
+                </div>
 
-              {/* Modal Unmuted Video Player */}
-              <div style={{ aspectRatio: "9 / 16", width: "100%", background: "#000" }}>
+                {/* Close Button */}
+                <button
+                  type="button"
+                  onClick={() => setActiveModalIndex(null)}
+                  style={{
+                    background: "rgba(255,255,255,0.12)",
+                    border: "1px solid rgba(255,255,255,0.25)",
+                    color: "#FFFFFF",
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "50%",
+                    fontSize: "18px",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    transition: "all 0.2s ease",
+                  }}
+                  title="Close (Esc)"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Modal Vertical 9:16 YouTube Shorts Video Player */}
+              <div style={{ aspectRatio: "9 / 16", width: "100%", background: "#000000", position: "relative" }}>
                 <iframe
-                  src={`https://www.youtube-nocookie.com/embed/${activeModalReel.id}?autoplay=1&mute=0&loop=1&playlist=${activeModalReel.id}&controls=1&rel=0`}
-                  title={activeModalReel.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  src={`https://www.youtube.com/embed/${activeVideoId}?autoplay=1&mute=0&loop=1&playlist=${activeVideoId}&controls=1&rel=0&enablejsapi=1`}
+                  title={activeReel.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                   allowFullScreen
                   style={{ width: "100%", height: "100%", border: 0 }}
                 />
+
+                {/* Left Navigation Arrow */}
+                <button
+                  type="button"
+                  onClick={handlePrev}
+                  style={{
+                    position: "absolute",
+                    left: "10px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    zIndex: 5,
+                    background: "rgba(0,0,0,0.65)",
+                    backdropFilter: "blur(6px)",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                    color: "#FFFFFF",
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    fontSize: "18px",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+                  }}
+                  title="Previous Reel (←)"
+                >
+                  ‹
+                </button>
+
+                {/* Right Navigation Arrow */}
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  style={{
+                    position: "absolute",
+                    right: "10px",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    zIndex: 5,
+                    background: "rgba(0,0,0,0.65)",
+                    backdropFilter: "blur(6px)",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                    color: "#FFFFFF",
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "50%",
+                    fontSize: "18px",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+                  }}
+                  title="Next Reel (→)"
+                >
+                  ›
+                </button>
               </div>
 
-              {/* Direct Fallback Button */}
-              <div style={{ padding: "14px", textAlign: "center", background: "#0F172A" }}>
+              {/* Bottom Actions Footer */}
+              <div
+                style={{
+                  padding: "12px 16px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  background: "#0F172A",
+                  borderTop: "1px solid rgba(255,255,255,0.1)",
+                }}
+              >
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <button
+                    type="button"
+                    onClick={handlePrev}
+                    style={{
+                      background: "rgba(255,255,255,0.08)",
+                      border: "1px solid rgba(255,255,255,0.15)",
+                      color: "#FFFFFF",
+                      borderRadius: "8px",
+                      padding: "6px 12px",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                    }}
+                  >
+                    ← Prev
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    style={{
+                      background: "rgba(255,255,255,0.08)",
+                      border: "1px solid rgba(255,255,255,0.15)",
+                      color: "#FFFFFF",
+                      borderRadius: "8px",
+                      padding: "6px 12px",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                    }}
+                  >
+                    Next →
+                  </button>
+                </div>
+
                 <a
-                  href={`https://youtube.com/shorts/${activeModalReel.id}`}
+                  href={`https://youtube.com/shorts/${activeVideoId}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
                     color: "var(--gold, #D97706)",
-                    fontSize: "13.5px",
+                    fontSize: "12.5px",
                     fontWeight: 700,
                     textDecoration: "none",
                   }}
                 >
-                  Open Direct on YouTube Shorts ↗
+                  Open on YouTube ↗
                 </a>
               </div>
             </motion.div>

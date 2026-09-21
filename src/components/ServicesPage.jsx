@@ -32,9 +32,9 @@ const allServices = [
   {
     id: "social",
     route: "service-smm",
-    tag: "ORGANIC GROWTH",
-    title: "Social Media Marketing & Reels",
-    desc: "Done-for-you Instagram management, short-form Reels scripts, graphic carousels, and strategic audience building.",
+    tag: "HIGH-IMPACT VIDEO",
+    title: "Reels Shoot & Edit",
+    desc: "End-to-end Reels video production. We shoot and edit engaging short-form video content tailored for maximum watch time and brand engagement.",
     icon: (
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke="#D97706" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
