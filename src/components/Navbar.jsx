@@ -78,11 +78,12 @@ export default function Navbar({ page, setPage }) {
   return (
     <header className={`header${scrolled ? " scrolled" : ""}`} id="header">
       <div className="nav-inner">
-
-        <a className="logo" href="/" onClick={(e) => { e.preventDefault(); handleNav("home"); }}
-          style={{ background:"none", border:"none", color:"#FFFDF9", whiteSpace: "nowrap", textDecoration: "none" }}>
-          <span>The </span>Story Builder
-        </a>
+        <div className="logo-wrap">
+          <a className="logo" href="/" onClick={(e) => { e.preventDefault(); handleNav("home"); }}
+            style={{ background:"none", border:"none", color:"#FFFDF9", whiteSpace: "nowrap", textDecoration: "none" }}>
+            <span>The </span>Story Builder
+          </a>
+        </div>
 
         <nav className="nav-links">
           {navItems.map((item) => (
@@ -98,18 +99,20 @@ export default function Navbar({ page, setPage }) {
           ))}
         </nav>
 
-        <a className="nav-cta" href="/contact" onClick={(e) => { e.preventDefault(); handleNav("contact"); }} style={{ textDecoration: "none" }}>
-          Let's Talk
-        </a>
+        <div className="nav-cta-wrap">
+          <a className="nav-cta" href="/contact" onClick={(e) => { e.preventDefault(); handleNav("contact"); }} style={{ textDecoration: "none" }}>
+            Let's Talk
+          </a>
 
-        <button
-          className={`burger${menuOpen ? " open" : ""}`}
-          aria-label="Toggle menu"
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          <span /><span /><span />
-        </button>
+          <button
+            className={`burger${menuOpen ? " open" : ""}`}
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            <span /><span /><span />
+          </button>
+        </div>
       </div>
 
       {menuOpen && (
