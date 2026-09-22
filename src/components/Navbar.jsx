@@ -69,8 +69,6 @@ export default function Navbar({ page, setPage }) {
   const navItems = [
     { id: "home",     label: "Home",     href: "/" },
     { id: "services", label: "Services", href: "/services" },
-    { id: "pricing",  label: "Pricing",  href: "/pricing" },
-    { id: "store",    label: "Store",    href: "/store" },
     { id: "projects", label: "Work",     href: "/#projects" },
     { id: "reels",    label: "Reels",    href: "/#reels" },
     { id: "faq",      label: "FAQ",      href: "/faq" },

@@ -47,9 +47,9 @@ export default function BrandingPage({ setPage }) {
 
       <div style={{ textAlign: "center", background: "var(--card, #FFFDF9)", border: "1px solid rgba(217,119,6,0.3)", padding: 40, borderRadius: 20, boxShadow: "0 10px 30px rgba(0,0,0,0.05)" }}>
         <h3 style={{ fontSize: 26, color: "var(--text, #1A1208)", marginBottom: 12, fontFamily: "var(--fd)" }}>Build a brand that customers remember.</h3>
-        <p style={{ color: "var(--muted, #665843)", marginBottom: 24 }}>One-time branding packages starting from ₹7,999 with full file ownership.</p>
-        <button className="btn btn-gold" onClick={() => setPage && setPage("pricing")}>
-          Explore Branding Packages →
+        <p style={{ color: "var(--muted, #665843)", marginBottom: 24 }}>Get custom brand identity packages with full file ownership.</p>
+        <button className="btn btn-gold" onClick={() => setPage && setPage("contact")}>
+          Book Free Strategy Call →
         </button>
       </div>
     </main>

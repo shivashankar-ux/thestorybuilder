@@ -226,9 +226,6 @@ export default function ServicesPage({ setPage }) {
             <button className="btn btn-gold" onClick={() => setPage && setPage("contact")} style={{ padding: "14px 28px", fontSize: 15 }}>
               Book Free Strategy Call →
             </button>
-            <button className="btn btn-ghost" onClick={() => setPage && setPage("pricing")} style={{ padding: "14px 28px", fontSize: 15 }}>
-              View Transparent Pricing
-            </button>
           </div>
         </section>
       </div>

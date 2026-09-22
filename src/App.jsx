@@ -81,7 +81,8 @@ function getRouteFromPath(pathStr) {
   if (p === "/services/google-ads-hyderabad" || p === "/service-google-ads") return { page: "service-google-ads", slug: null };
   if (p === "/services/social-media-marketing" || p === "/service-smm") return { page: "service-smm", slug: null };
   if (p === "/services/branding" || p === "/service-branding") return { page: "service-branding", slug: null };
-  if (p === "/pricing") return { page: "pricing", slug: null };
+  // Hidden for now
+  // if (p === "/pricing") return { page: "pricing", slug: null };
   if (p === "/contact") return { page: "contact", slug: null };
   if (p === "/faq") return { page: "faq", slug: null };
   if (p === "/privacy") return { page: "privacy", slug: null };
@@ -91,14 +92,14 @@ function getRouteFromPath(pathStr) {
   if (p === "/refund-cancellation" || p === "/refund") return { page: "refund", slug: null };
   if (p === "/shipping-policy" || p === "/shipping-delivery" || p === "/shipping") return { page: "shipping", slug: null };
   if (p === "/blog" || p === "/resources") return { page: "blog", slug: null };
-  if (p === "/store" || p === "/storefront" || p === "/ebooks") return { page: "store", slug: null };
-  if (p === "/store/success") return { page: "store-success", slug: null };
-
-  if (p === "/store/admin") return { page: "store-admin", slug: null };
-  if (p.startsWith("/store/")) {
-    const slug = p.replace("/store/", "");
-    return { page: "store-detail", slug };
-  }
+  // Hidden for now
+  // if (p === "/store" || p === "/storefront" || p === "/ebooks") return { page: "store", slug: null };
+  // if (p === "/store/success") return { page: "store-success", slug: null };
+  // if (p === "/store/admin") return { page: "store-admin", slug: null };
+  // if (p.startsWith("/store/")) {
+  //   const slug = p.replace("/store/", "");
+  //   return { page: "store-detail", slug };
+  // }
 
   if (p.startsWith("/case-studies/")) {
     const slug = p.replace("/case-studies/", "");
