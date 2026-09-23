@@ -6,6 +6,24 @@
   <title data-gumroad-field="name">The Local Business Content Engine</title>
   <meta name="description" content="30 days of simple, ready-to-use content ideas, hooks and AI prompts to help your local business post consistently and get more customers." />
   
+  <!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1416964727051831');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1416964727051831&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -452,7 +470,7 @@
       if (p2) p2.value = val;
     }
 
-    // Connect both custom price checkout buttons to postMessage
+    // Connect both custom price checkout buttons to postMessage & track Meta Pixel InitiateCheckout
     function attachBuyHandler(buttonId, inputId) {
       const btn = document.getElementById(buttonId);
       if (!btn) return;
@@ -462,6 +480,9 @@
         if (v !== '') {
           var n = parseFloat(v);
           if (!isNaN(n) && n >= 0) params.price = String(n);
+        }
+        if (typeof window !== 'undefined' && typeof window.fbq === 'function') {
+          window.fbq('track', 'InitiateCheckout', { value: params.price || '80', currency: 'INR' });
         }
         parent.postMessage({ type: 'gumroad:checkout', params: params }, '*');
       });
