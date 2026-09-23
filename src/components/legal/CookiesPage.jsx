@@ -59,7 +59,7 @@ export default function CookiesPage({ setPage }) {
           </h2>
           <ul style={{ paddingLeft: 24, color: "var(--muted, #4a4031)", lineHeight: 1.8 }}>
             <li><strong style={{ color: "var(--text)" }}>Google Analytics (G-9NQBHF1BQD):</strong> Google privacy policies apply. You can opt out using the Google Analytics Opt-Out Browser Add-on.</li>
-            <li><strong style={{ color: "var(--text)" }}>Meta Pixel (1069792155491301):</strong> Meta privacy policies apply. You can manage Facebook ad preferences inside your Facebook account settings.</li>
+            <li><strong style={{ color: "var(--text)" }}>Meta Pixel (1416964727051831):</strong> Meta privacy policies apply. You can manage Facebook ad preferences inside your Facebook account settings.</li>
             <li><strong style={{ color: "var(--text)" }}>Calendly Embed:</strong> Calendly sets functional cookies when loading interactive appointment booking widgets.</li>
           </ul>
         </section>
