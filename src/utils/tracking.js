@@ -119,7 +119,154 @@ function basePayload() {
 
 let pageviewSent = false;
 
+// Meta Pixel Standard Event Map according to official Meta specifications
+const META_STANDARD_EVENTS = {
+  addpaymentinfo: "AddPaymentInfo",
+  addtocart: "AddToCart",
+  addtowishlist: "AddToWishlist",
+  completeregistration: "CompleteRegistration",
+  contact: "Contact",
+  customizeproduct: "CustomizeProduct",
+  donate: "Donate",
+  findlocation: "FindLocation",
+  initiatecheckout: "InitiateCheckout",
+  lead: "Lead",
+  purchase: "Purchase",
+  schedule: "Schedule",
+  search: "Search",
+  starttrial: "StartTrial",
+  submitapplication: "SubmitApplication",
+  subscribe: "Subscribe",
+  viewcontent: "ViewContent",
+};
+
+/**
+ * Resolves event name to Meta Pixel standard event if applicable
+ */
+function resolveMetaStandardEvent(name) {
+  if (!name) return null;
+  const sanitized = name.toLowerCase().replace(/[^a-z]/g, "");
+  
+  if (META_STANDARD_EVENTS[sanitized]) {
+    return META_STANDARD_EVENTS[sanitized];
+  }
+
+  // Alias & keyword mapping to standard events
+  if (
+    sanitized === "contactformsubmitted" ||
+    sanitized === "exitintentclaimed" ||
+    sanitized === "freeauditclaimed" ||
+    sanitized === "leadformsubmit" ||
+    sanitized === "quoterequest"
+  ) {
+    return "Lead";
+  }
+
+  if (
+    sanitized.includes("whatsapp") ||
+    sanitized.includes("phoneclick") ||
+    sanitized.includes("emailclick") ||
+    sanitized.includes("contactclick")
+  ) {
+    return "Contact";
+  }
+
+  if (
+    sanitized.includes("book") ||
+    sanitized.includes("schedule") ||
+    sanitized.includes("calendly")
+  ) {
+    return "Schedule";
+  }
+
+  if (
+    sanitized.includes("pricing") ||
+    sanitized.includes("services") ||
+    sanitized.includes("viewedpage") ||
+    sanitized.includes("viewcase") ||
+    sanitized.includes("viewarticle")
+  ) {
+    return "ViewContent";
+  }
+
+  if (
+    sanitized.includes("location") ||
+    sanitized.includes("address") ||
+    sanitized.includes("mapclick")
+  ) {
+    return "FindLocation";
+  }
+
+  if (
+    sanitized.includes("newsletter") ||
+    sanitized.includes("subscribe") ||
+    sanitized.includes("retainer")
+  ) {
+    return "Subscribe";
+  }
+
+  if (
+    sanitized.includes("customizepackage") ||
+    sanitized.includes("quotebuilder") ||
+    sanitized.includes("pricingcalculator")
+  ) {
+    return "CustomizeProduct";
+  }
+
+  if (
+    sanitized.includes("projectapplication") ||
+    sanitized.includes("submitproposal")
+  ) {
+    return "SubmitApplication";
+  }
+
+  if (
+    sanitized.includes("trial") ||
+    sanitized.includes("build7day")
+  ) {
+    return "StartTrial";
+  }
+
+  if (
+    sanitized.includes("search")
+  ) {
+    return "Search";
+  }
+
+  if (
+    sanitized.includes("checkout") ||
+    sanitized.includes("getstarted") ||
+    sanitized.includes("chooseplan")
+  ) {
+    return "InitiateCheckout";
+  }
+
+  if (
+    sanitized.includes("payment") ||
+    sanitized.includes("payinfo")
+  ) {
+    return "AddPaymentInfo";
+  }
+
+  if (
+    sanitized.includes("purchase") ||
+    sanitized.includes("ordersuccess")
+  ) {
+    return "Purchase";
+  }
+
+  return null;
+}
+
 export async function trackPageView(page) {
+  if (typeof window !== "undefined" && typeof window.fbq === "function" && hasAnalyticsConsent()) {
+    try {
+      window.fbq("track", "PageView");
+    } catch (err) {
+      console.warn("Meta Pixel PageView error:", err);
+    }
+  }
+
   if (!isEnabled() || !hasAnalyticsConsent()) return;
   const geo = await fetchGeo();
   await send({
@@ -136,21 +283,9 @@ export async function trackEvent(name, extra = {}) {
   // Fire Meta Pixel Events only if user has granted analytics/marketing consent
   if (typeof window !== "undefined" && typeof window.fbq === "function" && hasAnalyticsConsent()) {
     try {
-      if (name === "contact_form_submitted") {
-        window.fbq("track", "Lead", {
-          content_name: extra.project || "Contact Form",
-          content_category: extra.area || "General",
-        });
-      } else if (name.includes("whatsapp") || name.includes("wa_")) {
-        window.fbq("track", "Contact", { channel: "WhatsApp", ...extra });
-      } else if (name.includes("phone_click") || name.includes("email_click")) {
-        window.fbq("track", "Contact", { method: name, ...extra });
-      } else if (name.includes("book") || name.includes("schedule") || name.includes("calendly")) {
-        window.fbq("track", "Schedule", extra);
-      } else if (name.includes("pricing") || name.includes("services")) {
-        window.fbq("track", "ViewContent", { content_type: "page", name, ...extra });
-      } else if (name === "exit_intent_claimed") {
-        window.fbq("track", "Lead", { content_name: "Free Audit Claim" });
+      const stdEvent = resolveMetaStandardEvent(name);
+      if (stdEvent) {
+        window.fbq("track", stdEvent, { ...extra });
       } else {
         window.fbq("trackCustom", name, extra);
       }
@@ -182,6 +317,25 @@ export async function trackEvent(name, extra = {}) {
   });
 }
 
+/* Standalone Meta Pixel Standard Event Helper Functions */
+export const trackAddPaymentInfo = (extra = {}) => trackEvent("AddPaymentInfo", extra);
+export const trackAddToCart = (extra = {}) => trackEvent("AddToCart", extra);
+export const trackAddToWishlist = (extra = {}) => trackEvent("AddToWishlist", extra);
+export const trackCompleteRegistration = (extra = {}) => trackEvent("CompleteRegistration", extra);
+export const trackContact = (extra = {}) => trackEvent("Contact", extra);
+export const trackCustomizeProduct = (extra = {}) => trackEvent("CustomizeProduct", extra);
+export const trackDonate = (extra = {}) => trackEvent("Donate", extra);
+export const trackFindLocation = (extra = {}) => trackEvent("FindLocation", extra);
+export const trackInitiateCheckout = (extra = {}) => trackEvent("InitiateCheckout", extra);
+export const trackLead = (extra = {}) => trackEvent("Lead", extra);
+export const trackPurchase = (extra = {}) => trackEvent("Purchase", { currency: "INR", ...extra });
+export const trackSchedule = (extra = {}) => trackEvent("Schedule", extra);
+export const trackSearch = (extra = {}) => trackEvent("Search", extra);
+export const trackStartTrial = (extra = {}) => trackEvent("StartTrial", extra);
+export const trackSubmitApplication = (extra = {}) => trackEvent("SubmitApplication", extra);
+export const trackSubscribe = (extra = {}) => trackEvent("Subscribe", extra);
+export const trackViewContent = (extra = {}) => trackEvent("ViewContent", extra);
+
 /* Engagement timer — fires once after 30s on the site */
 let engagedFired = false;
 export function startEngagementTimer() {
@@ -204,11 +358,13 @@ export function bindAutoTracking() {
       const link = e.target.closest("a");
       if (link && link.href) {
         if (link.href.includes("wa.me")) {
-          trackEvent("whatsapp_click", { href: link.href });
+          trackContact({ channel: "WhatsApp", href: link.href });
         } else if (link.href.startsWith("tel:")) {
-          trackEvent("phone_click", { href: link.href });
+          trackContact({ method: "phone", href: link.href });
         } else if (link.href.startsWith("mailto:")) {
-          trackEvent("email_click", { href: link.href });
+          trackContact({ method: "email", href: link.href });
+        } else if (link.href.includes("maps.google.com") || link.href.includes("goo.gl/maps")) {
+          trackFindLocation({ search_string: link.href });
         }
       }
 
@@ -221,5 +377,6 @@ export function bindAutoTracking() {
     { passive: true, capture: true }
   );
 }
+
 
 
