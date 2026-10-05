@@ -37,6 +37,7 @@ import SocialMediaPage from "./components/services/SocialMediaPage";
 import BrandingPage from "./components/services/BrandingPage";
 import SeoServicesPage from "./components/services/SeoServicesPage";
 import GoogleAdsPage from "./components/services/GoogleAdsPage";
+import ReelsLandingPage from "./components/services/ReelsLandingPage";
 import FAQPage from "./components/FAQPage";
 import BlogPage from "./components/BlogPage";
 import NotFoundPage from "./components/NotFoundPage";
@@ -79,7 +80,7 @@ function getRouteFromPath(pathStr) {
   if (p === "/services/performance-marketing" || p === "/service-perf-mktg") return { page: "service-perf-mktg", slug: null };
   if (p === "/services/seo-services-hyderabad" || p === "/service-seo") return { page: "service-seo", slug: null };
   if (p === "/services/google-ads-hyderabad" || p === "/service-google-ads") return { page: "service-google-ads", slug: null };
-  if (p === "/services/social-media-marketing" || p === "/service-smm") return { page: "service-smm", slug: null };
+  if (p === "/services/social-media-marketing" || p === "/service-smm" || p === "/reels" || p === "/services/reels" || p === "/reels-service") return { page: "reels", slug: null };
   if (p === "/services/branding" || p === "/service-branding") return { page: "service-branding", slug: null };
   // Hidden for now
   // if (p === "/pricing") return { page: "pricing", slug: null };
@@ -116,7 +117,7 @@ function getPathFromRoute(page, slug) {
   if (page === "service-perf-mktg") return "/services/performance-marketing";
   if (page === "service-seo") return "/services/seo-services-hyderabad";
   if (page === "service-google-ads") return "/services/google-ads-hyderabad";
-  if (page === "service-smm") return "/services/social-media-marketing";
+  if (page === "service-smm" || page === "reels") return "/services/social-media-marketing";
   if (page === "service-branding") return "/services/branding";
   if (page === "pricing") return "/pricing";
   if (page === "contact") return "/contact";
@@ -381,9 +382,9 @@ export default function App() {
           </motion.div>
         )}
 
-        {page === "service-smm" && (
-          <motion.div key="service-smm" {...pageTransition}>
-            <SocialMediaPage setPage={navigate} />
+        {(page === "service-smm" || page === "reels") && (
+          <motion.div key="reels" {...pageTransition}>
+            <ReelsLandingPage setPage={navigate} />
           </motion.div>
         )}
 
