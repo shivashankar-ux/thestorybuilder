@@ -120,7 +120,7 @@ export default async function handler(req, res) {
     console.log("📥 [US Lead Received]:", payload);
 
     // 1. Send to Google Sheet Webhook if configured
-    const sheetWebhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
+    const sheetWebhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL || "https://script.google.com/macros/s/AKfycbydxaBIDfzPs1DcN95oaYZozZiNVQdjIKBTT-dOu9235entWoleMObjWrk2x_iA1uOBqw/exec";
     if (sheetWebhookUrl && sheetWebhookUrl.startsWith("https://")) {
       try {
         await fetch(sheetWebhookUrl, {
