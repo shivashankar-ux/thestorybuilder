@@ -119,6 +119,22 @@ export default async function handler(req, res) {
 
     console.log("📥 [US Lead Received]:", payload);
 
+    // 1. Send to Google Sheet Webhook if configured
+    const sheetWebhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
+    if (sheetWebhookUrl && sheetWebhookUrl.startsWith("https://")) {
+      try {
+        await fetch(sheetWebhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        console.log("✅ Lead posted to Google Sheet successfully");
+      } catch (sheetErr) {
+        console.warn("Google Sheet Webhook error:", sheetErr);
+      }
+    }
+
+    // 2. Telegram Alert
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
 
