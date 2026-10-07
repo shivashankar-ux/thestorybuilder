@@ -9,11 +9,11 @@ export function captureUTMParams() {
 
   try {
     const params = new URLSearchParams(window.location.search);
-    const utmKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+    const trackingKeys = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "fbclid", "gclid"];
     const foundUTMs = {};
 
     let hasNewUTM = false;
-    utmKeys.forEach((key) => {
+    trackingKeys.forEach((key) => {
       const val = params.get(key);
       if (val) {
         foundUTMs[key] = val;

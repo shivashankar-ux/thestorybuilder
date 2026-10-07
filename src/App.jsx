@@ -38,6 +38,7 @@ import BrandingPage from "./components/services/BrandingPage";
 import SeoServicesPage from "./components/services/SeoServicesPage";
 import GoogleAdsPage from "./components/services/GoogleAdsPage";
 import ReelsLandingPage from "./components/services/ReelsLandingPage";
+import USVideoEditingLandingPage from "./components/services/USVideoEditingLandingPage";
 import FAQPage from "./components/FAQPage";
 import BlogPage from "./components/BlogPage";
 import NotFoundPage from "./components/NotFoundPage";
@@ -81,6 +82,7 @@ function getRouteFromPath(pathStr) {
   if (p === "/services/seo-services-hyderabad" || p === "/service-seo") return { page: "service-seo", slug: null };
   if (p === "/services/google-ads-hyderabad" || p === "/service-google-ads") return { page: "service-google-ads", slug: null };
   if (p === "/services/social-media-marketing" || p === "/service-smm" || p === "/reels" || p === "/services/reels" || p === "/reels-service") return { page: "reels", slug: null };
+  if (p === "/us-video-editing" || p === "/us-editing" || p === "/services/us-video-editing" || p === "/us-video-service") return { page: "us-video-editing", slug: null };
   if (p === "/services/branding" || p === "/service-branding") return { page: "service-branding", slug: null };
   // Hidden for now
   // if (p === "/pricing") return { page: "pricing", slug: null };
@@ -118,6 +120,7 @@ function getPathFromRoute(page, slug) {
   if (page === "service-seo") return "/services/seo-services-hyderabad";
   if (page === "service-google-ads") return "/services/google-ads-hyderabad";
   if (page === "service-smm" || page === "reels") return "/services/social-media-marketing";
+  if (page === "us-video-editing") return "/us-video-editing";
   if (page === "service-branding") return "/services/branding";
   if (page === "pricing") return "/pricing";
   if (page === "contact") return "/contact";
@@ -186,6 +189,10 @@ const pageMetadata = {
   "service-smm": {
     title: "Reels Shoot & Edit Production Services | The Story Builder",
     desc: "Professional short-form Reels video production. We shoot and edit high-impact Reels for your business — 4, 6, and 8 Reels packages available.",
+  },
+  "us-video-editing": {
+    title: "Professional Video Editing Services for Businesses & Creators | The Story Builder",
+    desc: "Your Content Team, Without Hiring an In-House Editor. High-converting recurring video editing for US coaches, consultants, creators, brands, and agencies.",
   },
   "service-branding": {
     title: "Brand Strategy & Identity Design Studio | The Story Builder",
@@ -385,6 +392,12 @@ export default function App() {
         {(page === "service-smm" || page === "reels") && (
           <motion.div key="reels" {...pageTransition}>
             <ReelsLandingPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "us-video-editing" && (
+          <motion.div key="us-video-editing" {...pageTransition}>
+            <USVideoEditingLandingPage setPage={navigate} />
           </motion.div>
         )}
 
