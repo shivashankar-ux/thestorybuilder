@@ -1830,24 +1830,55 @@ export default function USVideoEditingLandingPage({ setPage }) {
                   <div style={{ marginTop: 6 }}>✓ Custom monthly volume setup prepared</div>
                   <div style={{ marginTop: 6 }}>✓ 48-hour delivery commitment activated</div>
                 </div>
-                <button
-                  onClick={() => {
-                    setFormSubmitted(false);
-                    setCurrentStep(1);
-                  }}
+                <div
                   style={{
-                    background: "rgba(255,255,255,0.08)",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                    color: "#FFFFFF",
-                    padding: "12px 24px",
-                    borderRadius: 99,
-                    fontSize: 14,
-                    fontWeight: 700,
-                    cursor: "pointer",
+                    display: "flex",
+                    gap: 12,
+                    justifyContent: "center",
+                    flexWrap: "wrap",
                   }}
                 >
-                  Submit Another Request
-                </button>
+                  <a
+                    href={`https://wa.me/919989679185?text=${encodeURIComponent(
+                      `Hi StoryBuilder! I just submitted a US Video Editing quote request:\n\n👤 Name: ${formData.name}\n📧 Email: ${formData.email}\n📱 Phone: ${formData.phone}\n🏢 Brand: ${formData.company || "N/A"}\n💼 Type: ${formData.business_type}\n📦 Volume: ${formData.monthly_volume} videos/mo\n💬 Notes: ${formData.message || "N/A"}`
+                    )}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      background: "rgba(37,211,102,0.15)",
+                      border: "1px solid rgba(37,211,102,0.5)",
+                      color: "#25D366",
+                      padding: "12px 24px",
+                      borderRadius: 99,
+                      fontSize: 14,
+                      fontWeight: 700,
+                      textDecoration: "none",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 8,
+                    }}
+                  >
+                    💬 Chat on WhatsApp Instant
+                  </a>
+                  <button
+                    onClick={() => {
+                      setFormSubmitted(false);
+                      setCurrentStep(1);
+                    }}
+                    style={{
+                      background: "rgba(255,255,255,0.08)",
+                      border: "1px solid rgba(255,255,255,0.15)",
+                      color: "#FFFFFF",
+                      padding: "12px 24px",
+                      borderRadius: 99,
+                      fontSize: 14,
+                      fontWeight: 700,
+                      cursor: "pointer",
+                    }}
+                  >
+                    Submit Another Request
+                  </button>
+                </div>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmitLeadForm}>
