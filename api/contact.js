@@ -15,7 +15,6 @@ function isRateLimited(ip) {
   const now = Date.now();
   const record = rateLimitMap.get(ip);
 
-  // Clean up old entries periodically
   if (rateLimitMap.size > 1000) {
     for (const [key, value] of rateLimitMap.entries()) {
       if (now > value.resetTime) rateLimitMap.delete(key);
@@ -45,15 +44,52 @@ function sanitizeText(str) {
     .replace(/'/g, "&#039;");
 }
 
+async function sendGoogleSheetWebhook(payload) {
+  const sheetWebhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
+  if (!sheetWebhookUrl || !sheetWebhookUrl.startsWith("https://")) {
+    console.warn("⚠️ GOOGLE_SHEET_WEBHOOK_URL is not configured.");
+    return false;
+  }
+
+  try {
+    const res = await fetch(sheetWebhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      redirect: "follow",
+    });
+
+    if (res.status === 302 || res.status === 301 || res.status === 307) {
+      const location = res.headers.get("location");
+      if (location) {
+        await fetch(location, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      }
+    }
+
+    if (res.ok) {
+      console.log("✅ Lead successfully posted to Google Sheet");
+      return true;
+    } else {
+      console.warn("⚠️ Google Sheet Webhook returned HTTP status:", res.status);
+      return false;
+    }
+  } catch (err) {
+    console.warn("⚠️ Error dispatching to Google Sheet Webhook:", err.message);
+    return false;
+  }
+}
+
 export default async function handler(req, res) {
-  // Only allow POST requests
   if (req.method !== "POST") {
     return res.status(405).json({ ok: false, error: "Method not allowed" });
   }
 
   const clientIp = getClientIp(req);
 
-  // Enforce IP Rate Limiting
   if (isRateLimited(clientIp)) {
     return res.status(429).json({
       ok: false,
@@ -61,21 +97,24 @@ export default async function handler(req, res) {
     });
   }
 
-  // Validate Origin / Referer domain header if present
   const origin = req.headers.origin || req.headers.referer || "";
-  if (origin && !origin.includes("thestorybuilder.in") && !origin.includes("localhost") && !origin.includes("127.0.0.1") && !origin.includes("vercel.app")) {
+  if (
+    origin &&
+    !origin.includes("thestorybuilder.in") &&
+    !origin.includes("localhost") &&
+    !origin.includes("127.0.0.1") &&
+    !origin.includes("vercel.app")
+  ) {
     return res.status(403).json({ ok: false, error: "Forbidden origin" });
   }
 
   try {
     const { name, email, phone, area, project, message, utm, honeypot } = req.body || {};
 
-    // Honeypot check for bots — if honeypot field is filled, silently succeed without sending
     if (honeypot && typeof honeypot === "string" && honeypot.trim() !== "") {
       return res.status(200).json({ ok: true, message: "Message received" });
     }
 
-    // Strict input length validation & bounds checking
     if (!name || typeof name !== "string" || name.trim().length < 2 || name.trim().length > 100) {
       return res.status(400).json({ ok: false, error: "Please provide a valid name (2-100 characters)." });
     }
@@ -100,52 +139,75 @@ export default async function handler(req, res) {
       return res.status(400).json({ ok: false, error: "Please provide a message between 5 and 2000 characters." });
     }
 
-    // Retrieve Telegram credentials strictly from server environment variables
+    // Extract UTM details
+    const utmObj = utm && typeof utm === "object" ? utm : {};
+    const utm_source = sanitizeText(String(utmObj.utm_source || "direct").slice(0, 100));
+    const utm_medium = sanitizeText(String(utmObj.utm_medium || "none").slice(0, 100));
+    const utm_campaign = sanitizeText(String(utmObj.utm_campaign || "none").slice(0, 100));
+    const utm_content = sanitizeText(String(utmObj.utm_content || "").slice(0, 100));
+    const utm_term = sanitizeText(String(utmObj.utm_term || "").slice(0, 100));
+    const fbclid = sanitizeText(String(utmObj.fbclid || "").slice(0, 100));
+    const gclid = sanitizeText(String(utmObj.gclid || "").slice(0, 100));
+
+    const sheetPayload = {
+      timestamp: new Date().toISOString(),
+      form_type: "Contact Form",
+      name: sanitizeText(name.trim()),
+      email: sanitizeText(email.trim()),
+      phone: phone ? sanitizeText(phone.trim()) : "Not provided",
+      area: area ? sanitizeText(area.trim()) : "Not specified",
+      project: project ? sanitizeText(project.trim()) : "Not specified",
+      message: sanitizeText(message.trim()),
+      utm_source,
+      utm_medium,
+      utm_campaign,
+      utm_content,
+      utm_term,
+      fbclid,
+      gclid,
+      landing_page: sanitizeText(utmObj.landing_page || "/contact"),
+    };
+
+    // 1. Send to Google Sheets Webhook
+    await sendGoogleSheetWebhook(sheetPayload);
+
+    // 2. Send to Telegram
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID;
 
-    if (!botToken || !chatId) {
-      console.error("TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID environment variable is missing.");
-      return res.status(200).json({
-        ok: true,
-        note: "Submission recorded. Telegram notification pending environment variable configuration.",
-      });
-    }
+    if (botToken && chatId) {
+      const utmDetails = [
+        "📌 Source: " + utm_source,
+        "📌 Medium: " + utm_medium,
+        "📌 Campaign: " + utm_campaign,
+        fbclid ? "⚡ Meta Click ID: " + fbclid : "",
+        gclid ? "⚡ Google Click ID: " + gclid : "",
+      ].filter(Boolean).join("\n");
 
-    // Format & sanitize attribution details
-    const utmDetails = utm && typeof utm === "object" ? [
-      "📌 UTM Source: " + sanitizeText(String(utm.utm_source || "direct / none").slice(0, 50)),
-      "📌 UTM Medium: " + sanitizeText(String(utm.utm_medium || "none").slice(0, 50)),
-      "📌 UTM Campaign: " + sanitizeText(String(utm.utm_campaign || "none").slice(0, 50)),
-    ].join("\n") : "📌 Source: Direct / Organic";
+      const text = [
+        "🔔 **New Portfolio Enquiry!**",
+        "━━━━━━━━━━━━━━━━━━━━━",
+        "👤 **Name:** " + sheetPayload.name,
+        "📧 **Email:** " + sheetPayload.email,
+        "📱 **Phone:** " + sheetPayload.phone,
+        "📍 **Area:** " + sheetPayload.area,
+        "💼 **Project:** " + sheetPayload.project,
+        "💬 **Message:** " + sheetPayload.message,
+        "━━━━━━━━━━━━━━━━━━━━━",
+        utmDetails,
+        "⏰ " + new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
+      ].join("\n");
 
-    const text = [
-      "🔔 New Portfolio Enquiry!",
-      "",
-      "👤 Name: " + sanitizeText(name.trim()),
-      "📧 Email: " + sanitizeText(email.trim()),
-      "📱 Phone: " + (phone ? sanitizeText(phone.trim()) : "Not provided"),
-      "📍 Area: " + (area ? sanitizeText(area.trim()) : "Not specified"),
-      "💼 Project: " + (project ? sanitizeText(project.trim()) : "Not specified"),
-      "💬 Message: " + sanitizeText(message.trim()),
-      "",
-      utmDetails,
-      "",
-      "📅 " + new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }),
-    ].join("\n");
-
-    const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-    const response = await fetch(telegramUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: chatId, text }),
-    });
-
-    const data = await response.json();
-
-    if (!data.ok) {
-      console.error("Telegram API Error:", data);
-      return res.status(500).json({ ok: false, error: "Failed to dispatch message." });
+      try {
+        const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+        await fetch(telegramUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: chatId, text, parse_mode: "Markdown" }),
+        });
+      } catch (tgErr) {
+        console.warn("Telegram dispatch failed:", tgErr);
+      }
     }
 
     return res.status(200).json({ ok: true, message: "Enquiry submitted successfully." });
@@ -154,4 +216,3 @@ export default async function handler(req, res) {
     return res.status(500).json({ ok: false, error: "An unexpected error occurred." });
   }
 }
-

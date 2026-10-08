@@ -324,7 +324,7 @@ export default function App() {
   return (
     <div>
       <div className="grain" aria-hidden="true" />
-      {page !== "landing" && <Navbar page={page} setPage={navigate} />}
+      {page !== "landing" && page !== "us-video-editing" && <Navbar page={page} setPage={navigate} />}
 
       <AnimatePresence mode="wait">
         {page === "home" && (
@@ -498,10 +498,10 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {page !== "landing" && <Footer setPage={navigate} />}
+      {page !== "landing" && page !== "us-video-editing" && <Footer setPage={navigate} />}
 
-      {page !== "landing" && <WhatsAppButton />}
-      {page !== "landing" && <ExitIntent setPage={navigate} />}
+      {page !== "landing" && page !== "us-video-editing" && <WhatsAppButton />}
+      {page !== "landing" && page !== "us-video-editing" && <ExitIntent setPage={navigate} />}
       <CookieConsent setPage={navigate} />
     </div>
   );

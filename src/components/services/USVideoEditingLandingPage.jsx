@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { trackPageView, trackEvent, trackLead } from "../../utils/tracking";
 import { getUTMParams } from "../../utils/utm";
 
-// Data-driven Portfolio Videos (Extensible & easily modifiable)
+// Data-driven Portfolio Videos
 const PORTFOLIO_ITEMS = [
   {
     id: "QAL6E6fy1f0",
@@ -82,67 +82,68 @@ const CATEGORIES = [
 
 // Content Types for Form Step 1
 const CONTENT_TYPE_OPTIONS = [
-  { id: "reels_shorts", label: "Reels / Shorts (9:16)", desc: "Vertical videos for IG, TikTok & YT Shorts" },
-  { id: "podcast_clips", label: "Podcast Clips", desc: "Short nuggets extracted from audio/video podcasts" },
-  { id: "youtube_long", label: "YouTube Videos (16:9)", desc: "Full long-form videos, vlogs & tutorials" },
-  { id: "video_ads", label: "Video Ads", desc: "High-converting paid ad creatives for Meta & TikTok" },
-  { id: "personal_brand", label: "Personal Brand Content", desc: "Authority talking-head & breakdown videos" },
-  { id: "other", label: "Other / Mixed Content", desc: "Custom mix of long & short-form video content" },
+  { id: "reels_shorts", label: "Reels / Shorts (9:16)", desc: "Vertical videos for IG, TikTok & YT Shorts", icon: "📱" },
+  { id: "podcast_clips", label: "Podcast Clips", desc: "Short nuggets extracted from audio/video podcasts", icon: "🎙️" },
+  { id: "youtube_long", label: "YouTube Videos (16:9)", desc: "Full long-form videos, vlogs & tutorials", icon: "🎬" },
+  { id: "video_ads", label: "Direct Response Video Ads", desc: "High-converting paid ad creatives for Meta & TikTok", icon: "⚡" },
+  { id: "personal_brand", label: "Personal Brand Content", desc: "Authority talking-head & breakdown videos", icon: "👑" },
+  { id: "other", label: "Custom Mixed Plan", desc: "Tailored combination of long & short-form video content", icon: "✨" },
 ];
 
 // Monthly Volume Options
 const VOLUME_OPTIONS = [
-  { id: "4_videos", title: "4 VIDEOS / MONTH", subtitle: "For getting started", count: "4" },
-  { id: "8_videos", title: "8 VIDEOS / MONTH", subtitle: "For consistent posting", count: "8" },
-  { id: "12_videos", title: "12 VIDEOS / MONTH", subtitle: "For growing content brands", count: "12" },
-  { id: "20_plus", title: "20+ VIDEOS / MONTH", subtitle: "For high-volume creators & agencies", count: "20+" },
-  { id: "not_sure", title: "NOT SURE YET", subtitle: "We'll help you decide on the call", count: "Not sure" },
+  { id: "4_videos", title: "4 VIDEOS / MO", subtitle: "Getting Started", count: "4", estSavings: "Save $2,500/mo" },
+  { id: "8_videos", title: "8 VIDEOS / MO", subtitle: "Consistent Growth", count: "8", popular: true, estSavings: "Save $4,200/mo" },
+  { id: "12_videos", title: "12 VIDEOS / MO", subtitle: "High Authority", count: "12", estSavings: "Save $5,500/mo" },
+  { id: "20_plus", title: "20+ VIDEOS / MO", subtitle: "Agency / Enterprise", count: "20+", estSavings: "Save $8,000/mo" },
+  { id: "not_sure", title: "NOT SURE YET", subtitle: "Custom Recommendation", count: "Custom", estSavings: "Tailored Quote" },
 ];
 
 // Business Types
 const BUSINESS_TYPES = [
-  "Coach",
-  "Consultant",
-  "Creator",
+  "Coach / Mentor",
+  "Consultant / Advisor",
+  "Creator / Influencer",
   "Personal Brand",
   "Podcaster",
-  "Real Estate",
-  "Agency",
-  "Business",
-  "Other",
+  "Real Estate Professional",
+  "Agency Owner",
+  "E-Commerce / D2C Brand",
+  "B2B SaaS / Tech Founder",
+  "Other Business",
 ];
 
-// What We Can Edit Cards
+// Edit Services Cards
 const EDIT_SERVICES_CARDS = [
-  { title: "Short-Form Reels", desc: "9:16 vertical videos with scroll-stopping hooks, kinetic subtitles, sound effects, and fast-paced visual cuts for Instagram & TikTok." },
-  { title: "YouTube Shorts", desc: "High-retention vertical short videos engineered to perform under YouTube's algorithm and convert viewers into channel subscribers." },
-  { title: "Podcast Clips", desc: "Micro-content extracted from audio and video podcast episodes featuring clean multi-camera switches, audio cleaning, and animated captions." },
-  { title: "Long-form YouTube", desc: "Comprehensive horizontal video editing with custom intro hooks, lower thirds, screen shares, B-roll overlays, and chapter marker cuts." },
-  { title: "Talking-head Videos", desc: "Polished authority content for thought leaders with awkward pauses cut out, motion graphic popups, and crisp audio leveling." },
-  { title: "Social Media Content", desc: "Platform-native video edits designed specifically for LinkedIn, Twitter/X, Instagram feeds, and Facebook video posts." },
-  { title: "Video Ads", desc: "High-ROAS Direct Response ad creatives crafted for Meta Ads, TikTok Ads, and YouTube PMax campaigns to maximize click-through rates." },
-  { title: "Personal Brand Content", desc: "Signature-style video edits that reinforce your visual identity, voice, and positioning to build audience trust and authority." },
+  { title: "Short-Form Reels", icon: "⚡", desc: "9:16 vertical videos with scroll-stopping hooks, kinetic subtitles, sound effects, and fast-paced visual cuts for Instagram & TikTok." },
+  { title: "YouTube Shorts", icon: "🚀", desc: "High-retention vertical short videos engineered to perform under YouTube's algorithm and convert viewers into channel subscribers." },
+  { title: "Podcast Clips", icon: "🎙️", desc: "Micro-content extracted from audio and video podcast episodes featuring clean multi-camera switches, audio cleaning, and animated captions." },
+  { title: "Long-form YouTube", icon: "🎬", desc: "Comprehensive horizontal video editing with custom intro hooks, lower thirds, screen shares, B-roll overlays, and chapter marker cuts." },
+  { title: "Talking-head Videos", icon: "🗣️", desc: "Polished authority content for thought leaders with awkward pauses cut out, motion graphic popups, and crisp audio leveling." },
+  { title: "Social Media Content", icon: "📲", desc: "Platform-native video edits designed specifically for LinkedIn, Twitter/X, Instagram feeds, and Facebook video posts." },
+  { title: "Video Ads", icon: "🔥", desc: "High-ROAS Direct Response ad creatives crafted for Meta Ads, TikTok Ads, and YouTube PMax campaigns to maximize click-through rates." },
+  { title: "Personal Brand Content", icon: "👑", desc: "Signature-style video edits that reinforce your visual identity, voice, and positioning to build audience trust and authority." },
 ];
 
-// Target Customer Cards
+// Target Audience Cards
 const TARGET_AUDIENCE_CARDS = [
-  { role: "COACHES", text: "Turn your expertise and client case studies into consistent, authority-building short-form content that fills your calendar." },
-  { role: "CONSULTANTS", text: "Turn client conversations, presentations, and industry insights into high-end polished content for LinkedIn and YouTube." },
-  { role: "PERSONAL BRANDS", text: "Stay visible across every major video platform daily without spending 15+ hours every week sitting inside video editors." },
-  { role: "PODCASTERS", text: "Extract 5 to 10 viral clip nuggets from every single podcast episode to cross-promote your show on short-form platforms." },
-  { role: "REAL ESTATE PROFESSIONALS", text: "Turn property walkthroughs, market updates, and personal brand footage into sleek, high-converting video content." },
-  { role: "AGENCIES", text: "Extend your video delivery bandwidth instantly without the payroll overhead of hiring, training, and managing full-time in-house editors." },
+  { role: "COACHES", badge: "AUTHORITY", text: "Turn your expertise and client case studies into consistent, authority-building short-form content that fills your calendar with qualified leads." },
+  { role: "CONSULTANTS", badge: "POSITIONING", text: "Turn client conversations, presentations, and industry insights into high-end polished content for LinkedIn and YouTube." },
+  { role: "PERSONAL BRANDS", badge: "SCALE", text: "Stay visible across every major video platform daily without spending 15+ hours every week sitting inside video editing software." },
+  { role: "PODCASTERS", badge: "VIRAL CLIPS", text: "Extract 5 to 10 viral clip nuggets from every single podcast episode to cross-promote your show on short-form platforms." },
+  { role: "REAL ESTATE", badge: "LISTINGS", text: "Turn property walkthroughs, market updates, and personal brand footage into sleek, high-converting video content that buyers love." },
+  { role: "AGENCIES", badge: "WHITE-LABEL", text: "Extend your video delivery bandwidth instantly without the payroll overhead of hiring, training, and managing full-time in-house editors." },
 ];
 
 // FAQ Items
 const FAQ_ITEMS = [
   {
     q: "Do you work with clients in the US?",
-    a: "Yes! Over 80% of our client base is located across the US and Canada. We operate with seamless async workflows and dedicated US-friendly hours for project communication and file delivery.",
+    a: "Yes! Over 80% of our client base is located across the US and Canada. We operate with seamless async workflows (Google Drive, Frame.io, Slack/WhatsApp) and dedicated US-friendly hours for project communication and file delivery.",
   },
   {
     q: "Do I need to provide the raw footage?",
-    a: "Yes. You record the raw footage on your phone, camera, or podcast setup. Once uploaded to our shared Drive or Frame.io link, our editing team handles 100% of the cutting, captions, sound, B-roll, color grading, and final exports.",
+    a: "Yes. You record raw footage on your phone, camera, or podcast setup. Once uploaded to our shared Drive or Frame.io link, our editing team handles 100% of the cutting, kinetic captions, sound FX, B-roll, color grading, and final exports.",
   },
   {
     q: "Can you follow our existing brand style?",
@@ -165,8 +166,8 @@ const FAQ_ITEMS = [
     a: "Our standard turnaround is 48 hours for short-form video edits. Long-form YouTube videos or complex ad campaigns are delivered within 3 to 4 business days.",
   },
   {
-    q: "Can you work with agencies?",
-    a: "Yes! We offer white-label video editing partnerships for marketing agencies, social media managers, and creative directors looking for a reliable execution team.",
+    q: "Can you work with agencies on a white-label basis?",
+    a: "Yes! We offer white-label video editing partnerships for marketing agencies, social media managers, and creative directors looking for a reliable execution team without payroll overhead.",
   },
   {
     q: "Do you offer ongoing monthly editing?",
@@ -183,28 +184,30 @@ const TESTIMONIALS = [
   {
     name: "Marcus Vance",
     role: "Executive Performance Coach",
-    company: "Vance Leadership Group (Austin, TX)",
+    location: "Austin, TX",
     text: "Before working with them, I had 40GB of raw podcast footage sitting on my hard drive that I never had time to touch. Now I drop raw files into Drive and get 8 scroll-stopping Reels back every week. My inbound leads have doubled.",
     rating: 5,
+    avatar: "👨🏽‍💼",
   },
   {
     name: "Elena Rostova",
     role: "Real Estate Broker & Founder",
-    company: "Prime Key Properties (Miami, FL)",
+    location: "Miami, FL",
     text: "Finding reliable freelance editors was a nightmare until I found this team. The turnaround is clockwork, the captions look super high-end, and I saved over $5,000/month compared to hiring a full-time editor.",
     rating: 5,
+    avatar: "👩🏼‍💼",
   },
   {
     name: "David Sterling",
     role: "Agency Principal",
-    company: "Sterling Digital Media (Chicago, IL)",
+    location: "Chicago, IL",
     text: "We white-label their editing team for 6 of our agency's retainers. They handle short-form reels and YouTube shorts seamlessly. Extremely dependable and high-converting quality.",
     rating: 5,
+    avatar: "👨🏻‍💻",
   },
 ];
 
 export default function USVideoEditingLandingPage({ setPage }) {
-  // Navigation & Scroll helper
   const scrollToSection = (id) => {
     const el = document.getElementById(id);
     if (el) {
@@ -212,22 +215,21 @@ export default function USVideoEditingLandingPage({ setPage }) {
     }
   };
 
-  // Portfolio State
+  // State Management
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [activeVideoModal, setActiveVideoModal] = useState(null);
-
-  // Before / After Interactive Visual Toggle
-  const [baMode, setBaMode] = useState("after"); // 'before' | 'after'
-
-  // FAQ State
+  const [baMode, setBaMode] = useState("after");
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
+
+  // ROI Calculator State
+  const [calcVolume, setCalcVolume] = useState(12);
 
   // Qualification Form Multi-step State
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     content_types: ["reels_shorts"],
     monthly_volume: "8",
-    business_type: "Coach",
+    business_type: "Coach / Mentor",
     name: "",
     email: "",
     phone: "",
@@ -245,18 +247,16 @@ export default function USVideoEditingLandingPage({ setPage }) {
     trackPageView("/us-video-editing");
   }, []);
 
-  // Filtered portfolio
   const filteredPortfolio =
     activeCategory === "ALL"
       ? PORTFOLIO_ITEMS
       : PORTFOLIO_ITEMS.filter((item) => item.category === activeCategory);
 
-  // Handle Form Field Updates
   const handleContentTypeToggle = (id) => {
     setFormData((prev) => {
       const exists = prev.content_types.includes(id);
       if (exists) {
-        if (prev.content_types.length === 1) return prev; // keep at least one
+        if (prev.content_types.length === 1) return prev;
         return { ...prev, content_types: prev.content_types.filter((c) => c !== id) };
       } else {
         return { ...prev, content_types: [...prev.content_types, id] };
@@ -268,7 +268,7 @@ export default function USVideoEditingLandingPage({ setPage }) {
     setFormData((prev) => ({ ...prev, monthly_volume: volCount }));
     trackEvent("selected_content_volume", { volume: volCount });
     scrollToSection("quote-form");
-    setCurrentStep(2);
+    setCurrentStep(3);
   };
 
   const handleNextStep = () => {
@@ -296,7 +296,6 @@ export default function USVideoEditingLandingPage({ setPage }) {
     setCurrentStep((prev) => Math.max(prev - 1, 1));
   };
 
-  // Submit Lead Qualification Form
   const handleSubmitLeadForm = async (e) => {
     e.preventDefault();
     setFormError("");
@@ -319,8 +318,8 @@ export default function USVideoEditingLandingPage({ setPage }) {
       monthly_volume: formData.monthly_volume,
       business_type: formData.business_type,
       message: formData.message.trim(),
-      utm_source: utmParams.utm_source || "meta_ad",
-      utm_medium: utmParams.utm_medium || "paid_social",
+      utm_source: utmParams.utm_source || "direct",
+      utm_medium: utmParams.utm_medium || "none",
       utm_campaign: utmParams.utm_campaign || "us_editing_funnel",
       utm_content: utmParams.utm_content || "",
       utm_term: utmParams.utm_term || "",
@@ -332,14 +331,12 @@ export default function USVideoEditingLandingPage({ setPage }) {
     };
 
     try {
-      // Fire Meta Pixel Lead standard event
       trackLead({
         content_name: "US Video Editing Quote Request",
         monthly_volume: formData.monthly_volume,
         business_type: formData.business_type,
       });
 
-      // Submit payload to backend endpoint
       const response = await fetch("/api/us-quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -352,7 +349,6 @@ export default function USVideoEditingLandingPage({ setPage }) {
         setFormSubmitted(true);
         trackEvent("lead_submitted_success", { volume: formData.monthly_volume });
       } else {
-        // Fallback smooth completion if offline/dev server
         setFormSubmitted(true);
         trackEvent("lead_submitted_fallback");
       }
@@ -364,31 +360,37 @@ export default function USVideoEditingLandingPage({ setPage }) {
     }
   };
 
+  // ROI Math
+  const inHouseCost = 5500;
+  const freelancerCost = 2800;
+  const tsbCost = Math.round(calcVolume * 65);
+  const monthlySavings = inHouseCost - tsbCost;
+
   return (
     <div
       style={{
-        background: "#080B11",
-        color: "#F1F5F9",
+        background: "#050811",
+        color: "#F8FAFC",
         minHeight: "100vh",
         fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
         position: "relative",
         overflowX: "hidden",
       }}
     >
-      {/* Background Ambient Glowing Orbs */}
+      {/* Dynamic Background Glow Orbs */}
       <div
         aria-hidden="true"
         style={{
           position: "absolute",
-          top: -120,
+          top: -160,
           left: "50%",
           transform: "translateX(-50%)",
-          width: "100%",
-          maxWidth: 1200,
-          height: 650,
+          width: "120%",
+          maxWidth: 1300,
+          height: 700,
           background:
-            "radial-gradient(ellipse at 50% 20%, rgba(99, 102, 241, 0.18), rgba(59, 130, 246, 0.08) 45%, transparent 70%)",
-          filter: "blur(60px)",
+            "radial-gradient(ellipse at 50% 20%, rgba(99, 102, 241, 0.22), rgba(59, 130, 246, 0.12) 40%, rgba(6, 182, 212, 0.05) 65%, transparent 80%)",
+          filter: "blur(70px)",
           pointerEvents: "none",
           zIndex: 0,
         }}
@@ -397,28 +399,42 @@ export default function USVideoEditingLandingPage({ setPage }) {
         aria-hidden="true"
         style={{
           position: "absolute",
-          top: "1800px",
-          right: "-10%",
-          width: 500,
-          height: 500,
-          background: "radial-gradient(circle, rgba(168, 85, 247, 0.12), transparent 70%)",
+          top: 1400,
+          right: "-15%",
+          width: 600,
+          height: 600,
+          background: "radial-gradient(circle, rgba(168, 85, 247, 0.14), transparent 70%)",
+          filter: "blur(90px)",
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      />
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: 3200,
+          left: "-10%",
+          width: 550,
+          height: 550,
+          background: "radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%)",
           filter: "blur(80px)",
           pointerEvents: "none",
           zIndex: 0,
         }}
       />
 
-      {/* Top Header Navigation Strip */}
+      {/* Sticky Header Navigation */}
       <header
         style={{
           position: "sticky",
           top: 0,
           zIndex: 50,
-          background: "rgba(8, 11, 17, 0.82)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.07)",
-          padding: "16px 20px",
+          background: "rgba(5, 8, 17, 0.85)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+          padding: "16px 24px",
         }}
       >
         <div
@@ -430,69 +446,58 @@ export default function USVideoEditingLandingPage({ setPage }) {
             justifyContent: "space-between",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <span
               style={{
-                width: 32,
-                height: 32,
-                borderRadius: 8,
+                width: 36,
+                height: 36,
+                borderRadius: 10,
                 background: "linear-gradient(135deg, #6366F1, #3B82F6)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontWeight: 800,
-                fontSize: 16,
+                fontWeight: 900,
+                fontSize: 17,
                 color: "#FFFFFF",
-                boxShadow: "0 4px 14px rgba(99, 102, 241, 0.4)",
+                boxShadow: "0 0 20px rgba(99, 102, 241, 0.5)",
               }}
             >
               ▶
             </span>
-            <span
-              style={{
-                fontWeight: 800,
-                fontSize: 19,
-                letterSpacing: "-0.03em",
-                color: "#FFFFFF",
-              }}
-            >
-              TheStoryBuilder <span style={{ color: "#38BDF8", fontSize: 13, fontWeight: 600 }}>US</span>
-            </span>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span
+                style={{
+                  fontWeight: 900,
+                  fontSize: 18,
+                  letterSpacing: "-0.03em",
+                  color: "#FFFFFF",
+                  lineHeight: 1.1,
+                }}
+              >
+                TheStoryBuilder <span style={{ color: "#38BDF8", fontSize: 12, fontWeight: 700 }}>US</span>
+              </span>
+              <span style={{ fontSize: 10, color: "#64748B", fontWeight: 600 }}>RECURRING VIDEO EDITING</span>
+            </div>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-            <button
-              onClick={() => scrollToSection("portfolio")}
-              style={{
-                background: "transparent",
-                border: "none",
-                color: "#94A3B8",
-                fontSize: 14,
-                fontWeight: 600,
-                cursor: "pointer",
-                display: "none",
-              }}
-              className="desktop-only-link"
-            >
-              Portfolio
-            </button>
+          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
             <button
               onClick={() => scrollToSection("quote-form")}
               data-track="header-cta"
               style={{
-                background: "linear-gradient(135deg, #3B82F6, #2563EB)",
+                background: "linear-gradient(135deg, #3B82F6 0%, #2563EB 100%)",
                 color: "#FFFFFF",
                 border: "none",
-                padding: "10px 20px",
+                padding: "10px 22px",
                 borderRadius: 99,
                 fontSize: 14,
-                fontWeight: 700,
+                fontWeight: 800,
                 cursor: "pointer",
-                boxShadow: "0 4px 20px rgba(59, 130, 246, 0.35)",
+                boxShadow: "0 4px 20px rgba(59, 130, 246, 0.4)",
                 transition: "transform 0.2s, boxShadow 0.2s",
               }}
             >
-              Get Custom Quote
+              Get Custom Quote →
             </button>
           </div>
         </div>
@@ -503,57 +508,58 @@ export default function USVideoEditingLandingPage({ setPage }) {
       {/* ========================================================================= */}
       <section
         style={{
-          paddingTop: "60px",
-          paddingBottom: "80px",
+          paddingTop: "70px",
+          paddingBottom: "90px",
           position: "relative",
           zIndex: 1,
         }}
       >
-        <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 20px" }}>
+        <div style={{ maxWidth: 1240, margin: "0 auto", padding: "0 24px" }}>
           <div
             style={{
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-              gap: 48,
+              gap: 52,
               alignItems: "center",
             }}
           >
-            {/* Left Hero Copy */}
+            {/* Left Column Copy */}
             <div>
               <div
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: 8,
-                  padding: "6px 14px",
+                  gap: 10,
+                  padding: "8px 16px",
                   borderRadius: 99,
                   background: "rgba(99, 102, 241, 0.12)",
-                  border: "1px solid rgba(99, 102, 241, 0.3)",
+                  border: "1px solid rgba(99, 102, 241, 0.35)",
                   color: "#818CF8",
                   fontSize: 12,
-                  fontWeight: 700,
-                  letterSpacing: "0.05em",
-                  marginBottom: 20,
+                  fontWeight: 800,
+                  letterSpacing: "0.06em",
+                  marginBottom: 24,
                   textTransform: "uppercase",
+                  boxShadow: "0 4px 14px rgba(99, 102, 241, 0.15)",
                 }}
               >
-                <span>🇺🇸</span> US-FOCUSED RECURRING VIDEO EDITING
+                <span>🇺🇸</span> US-FOCUSED RECURRING VIDEO EDITING STUDIO
               </div>
 
               <h1
                 style={{
-                  fontSize: "clamp(2.4rem, 4.8vw, 4.2rem)",
+                  fontSize: "clamp(2.5rem, 5vw, 4.4rem)",
                   fontWeight: 900,
-                  lineHeight: 1.1,
+                  lineHeight: 1.08,
                   letterSpacing: "-0.03em",
                   color: "#F8FAFC",
-                  margin: "0 0 20px 0",
+                  margin: "0 0 24px 0",
                 }}
               >
                 Your Content Team, Without Hiring an{" "}
                 <span
                   style={{
-                    background: "linear-gradient(135deg, #60A5FA 0%, #818CF8 50%, #C084FC 100%)",
+                    background: "linear-gradient(135deg, #60A5FA 0%, #818CF8 40%, #C084FC 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
@@ -564,35 +570,35 @@ export default function USVideoEditingLandingPage({ setPage }) {
 
               <p
                 style={{
-                  fontSize: "clamp(1.05rem, 1.8vw, 1.25rem)",
+                  fontSize: "clamp(1.1rem, 1.9vw, 1.3rem)",
                   color: "#94A3B8",
                   lineHeight: 1.6,
-                  margin: "0 0 32px 0",
-                  maxWidth: 580,
+                  margin: "0 0 36px 0",
+                  maxWidth: 600,
                 }}
               >
-                Send us your raw footage. We turn it into polished, platform-ready content for your brand — without the cost and hassle of building an in-house editing team.
+                Send us your raw footage. We turn it into polished, high-converting vertical Reels & long-form YouTube content — delivered in 48 hours without the $65,000/yr in-house overhead.
               </p>
 
               {/* CTAs */}
-              <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 28 }}>
+              <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 32 }}>
                 <button
                   onClick={() => scrollToSection("quote-form")}
                   data-track="hero-cta"
                   style={{
                     background: "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)",
                     color: "#FFFFFF",
-                    padding: "16px 32px",
+                    padding: "18px 36px",
                     borderRadius: 99,
                     fontSize: 16,
                     fontWeight: 800,
                     border: "none",
                     cursor: "pointer",
-                    boxShadow: "0 10px 30px rgba(37, 99, 235, 0.45)",
+                    boxShadow: "0 10px 30px rgba(37, 99, 235, 0.5)",
                     transition: "all 0.2s ease",
                   }}
                 >
-                  Get My Custom Editing Quote →
+                  Get Custom Editing Quote →
                 </button>
                 <button
                   onClick={() => scrollToSection("portfolio")}
@@ -601,7 +607,7 @@ export default function USVideoEditingLandingPage({ setPage }) {
                     background: "rgba(255, 255, 255, 0.05)",
                     color: "#E2E8F0",
                     border: "1px solid rgba(255, 255, 255, 0.16)",
-                    padding: "16px 28px",
+                    padding: "18px 30px",
                     borderRadius: 99,
                     fontSize: 16,
                     fontWeight: 700,
@@ -609,36 +615,46 @@ export default function USVideoEditingLandingPage({ setPage }) {
                     transition: "all 0.2s ease",
                   }}
                 >
-                  See Our Work
+                  Watch Video Edits ▶
                 </button>
               </div>
 
-              {/* Trust statement */}
+              {/* Trust Indicators */}
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 10,
+                  gap: 16,
                   fontSize: 13,
                   color: "#64748B",
                   fontWeight: 600,
+                  flexWrap: "wrap",
                 }}
               >
-                <span style={{ color: "#10B981" }}>✓</span> Built for creators, coaches, consultants, brands & agencies.
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ color: "#10B981", fontWeight: 900 }}>✓</span> 48-Hour Turnaround
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ color: "#10B981", fontWeight: 900 }}>✓</span> Unlimited Revisions
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{ color: "#10B981", fontWeight: 900 }}>✓</span> Dedicated US Brand Kit
+                </div>
               </div>
             </div>
 
-            {/* Right Visual Transformation Showcase */}
+            {/* Right Interactive Studio Canvas Mockup */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
               style={{
                 background: "rgba(15, 23, 42, 0.75)",
+                backdropFilter: "blur(20px)",
                 border: "1px solid rgba(255, 255, 255, 0.12)",
                 borderRadius: 24,
                 padding: 24,
-                boxShadow: "0 25px 60px rgba(0, 0, 0, 0.6)",
+                boxShadow: "0 25px 70px rgba(0, 0, 0, 0.75)",
                 position: "relative",
               }}
             >
@@ -658,10 +674,10 @@ export default function USVideoEditingLandingPage({ setPage }) {
                   <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#F59E0B" }} />
                   <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#10B981" }} />
                 </div>
-                <span style={{ fontSize: 11, fontWeight: 700, color: "#64748B", letterSpacing: "0.1em" }}>
+                <span style={{ fontSize: 11, fontWeight: 800, color: "#94A3B8", letterSpacing: "0.1em" }}>
                   TIMELINE PREVIEW — RAW TO REEL
                 </span>
-                <span style={{ fontSize: 11, color: "#38BDF8", fontWeight: 700 }}>48H DELIVERY</span>
+                <span style={{ fontSize: 11, color: "#38BDF8", fontWeight: 800 }}>48H SLA</span>
               </div>
 
               {/* Mock Video Canvas & Editing Workspace */}
@@ -686,7 +702,7 @@ export default function USVideoEditingLandingPage({ setPage }) {
                     justifyContent: "space-between",
                     padding: 16,
                     position: "relative",
-                    border: "1px solid rgba(99, 102, 241, 0.3)",
+                    border: "1px solid rgba(99, 102, 241, 0.35)",
                   }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -724,20 +740,20 @@ export default function USVideoEditingLandingPage({ setPage }) {
                       style={{
                         background: "#000000",
                         color: "#FACC15",
-                        fontSize: 16,
+                        fontSize: 15,
                         fontWeight: 900,
                         padding: "4px 10px",
                         borderRadius: 6,
-                        boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+                        boxShadow: "0 4px 14px rgba(0,0,0,0.6)",
                         letterSpacing: "-0.01em",
                       }}
                     >
-                      "STOP WASTING 10+ HOURS EDITING..."
+                      "STOP WASTING 15+ HOURS EDITING..."
                     </span>
                   </div>
 
                   {/* Audio Waveform & Feature Pills */}
-                  <div style={{ display: "flex", gap: 6, justifyContent: "center" }}>
+                  <div style={{ display: "flex", gap: 6, justifyContent: "center", flexWrap: "wrap" }}>
                     {["Kinetic Captions", "Sound FX", "Color Grade", "Clean Cuts"].map((feat) => (
                       <span
                         key={feat}
@@ -758,7 +774,6 @@ export default function USVideoEditingLandingPage({ setPage }) {
 
                 {/* Simulated Timeline Tracks */}
                 <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 6 }}>
-                  {/* Track 1: Video */}
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <span style={{ fontSize: 10, color: "#64748B", width: 45, fontWeight: 700 }}>V1 CUTS</span>
                     <div style={{ flex: 1, display: "flex", gap: 4 }}>
@@ -767,7 +782,6 @@ export default function USVideoEditingLandingPage({ setPage }) {
                       <div style={{ flex: 2, height: 14, background: "#8B5CF6", borderRadius: 4 }} />
                     </div>
                   </div>
-                  {/* Track 2: Audio */}
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <span style={{ fontSize: 10, color: "#64748B", width: 45, fontWeight: 700 }}>AUDIO</span>
                     <div style={{ flex: 1, height: 10, background: "rgba(16, 185, 129, 0.3)", borderRadius: 4, display: "flex", alignItems: "center", padding: "0 6px" }}>
@@ -786,13 +800,13 @@ export default function USVideoEditingLandingPage({ setPage }) {
       {/* ========================================================================= */}
       <section
         style={{
-          padding: "80px 20px",
-          background: "#0B0E17",
+          padding: "90px 24px",
+          background: "#080C16",
           borderTop: "1px solid rgba(255,255,255,0.06)",
           borderBottom: "1px solid rgba(255,255,255,0.06)",
         }}
       >
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+        <div style={{ maxWidth: 1140, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 54 }}>
             <span
               style={{
@@ -807,8 +821,8 @@ export default function USVideoEditingLandingPage({ setPage }) {
             </span>
             <h2
               style={{
-                fontSize: "clamp(2rem, 3.8vw, 3rem)",
-                fontWeight: 800,
+                fontSize: "clamp(2.2rem, 4vw, 3.2rem)",
+                fontWeight: 900,
                 margin: "12px 0 16px 0",
                 lineHeight: 1.15,
                 color: "#F8FAFC",
@@ -817,7 +831,7 @@ export default function USVideoEditingLandingPage({ setPage }) {
               Your Content Doesn't Need More Ideas. <br />
               <span style={{ color: "#94A3B8" }}>It Needs Execution.</span>
             </h2>
-            <p style={{ color: "#64748B", fontSize: 16, maxWidth: 600, margin: "0 auto" }}>
+            <p style={{ color: "#64748B", fontSize: 16, maxWidth: 640, margin: "0 auto" }}>
               Most founders and creators don't lack ideas. The bottleneck is the painful production process between recording and posting.
             </p>
           </div>
@@ -833,8 +847,8 @@ export default function USVideoEditingLandingPage({ setPage }) {
             {[
               {
                 icon: "📱",
-                title: "Footage sitting on your phone or drive",
-                desc: "Hours of great recordings gathered during podcasts, property tours, or speeches never make it to social media.",
+                title: "Footage sitting on your drive",
+                desc: "Hours of great recordings gathered during podcasts, speeches, or walkthroughs never make it to social media.",
               },
               {
                 icon: "⏳",
@@ -861,14 +875,13 @@ export default function USVideoEditingLandingPage({ setPage }) {
                 key={idx}
                 style={{
                   background: "rgba(15, 23, 42, 0.6)",
-                  border: "1px solid rgba(255, 255, 255, 0.07)",
-                  borderRadius: 18,
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  borderRadius: 20,
                   padding: 28,
-                  transition: "border 0.2s",
                 }}
               >
-                <div style={{ fontSize: 28, marginBottom: 14 }}>{item.icon}</div>
-                <h3 style={{ fontSize: 18, fontWeight: 700, color: "#F1F5F9", margin: "0 0 10px 0" }}>
+                <div style={{ fontSize: 32, marginBottom: 14 }}>{item.icon}</div>
+                <h3 style={{ fontSize: 18, fontWeight: 800, color: "#F1F5F9", margin: "0 0 10px 0" }}>
                   {item.title}
                 </h3>
                 <p style={{ color: "#94A3B8", fontSize: 14, lineHeight: 1.6, margin: 0 }}>
@@ -878,44 +891,43 @@ export default function USVideoEditingLandingPage({ setPage }) {
             ))}
           </div>
 
-          {/* Transition */}
           <div
             style={{
               textAlign: "center",
-              background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(59, 130, 246, 0.08))",
-              border: "1px solid rgba(99, 102, 241, 0.25)",
-              borderRadius: 20,
-              padding: "24px 32px",
-              maxWidth: 700,
+              background: "linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(59, 130, 246, 0.08))",
+              border: "1px solid rgba(99, 102, 241, 0.3)",
+              borderRadius: 24,
+              padding: "28px 36px",
+              maxWidth: 740,
               margin: "0 auto",
             }}
           >
-            <span style={{ fontSize: 18, fontWeight: 800, color: "#818CF8" }}>
+            <span style={{ fontSize: 19, fontWeight: 900, color: "#818CF8" }}>
               That's where we come in.
             </span>
-            <p style={{ margin: "6px 0 0 0", color: "#CBD5E1", fontSize: 15 }}>
-              You focus on recording your expertise. We handle 100% of the editing, sound design, and delivery.
+            <p style={{ margin: "8px 0 0 0", color: "#CBD5E1", fontSize: 15, lineHeight: 1.6 }}>
+              You focus on recording your expertise. We handle 100% of the cutting, kinetic captions, sound design, color grading, and delivery.
             </p>
           </div>
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* SECTION 3 — THE SOLUTION                                                 */}
+      {/* SECTION 3 — INTERACTIVE ROI CALCULATOR                                   */}
       {/* ========================================================================= */}
-      <section style={{ padding: "90px 20px", position: "relative" }}>
+      <section id="roi-calculator" style={{ padding: "90px 24px", background: "#050811" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 60 }}>
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
             <span
               style={{
                 fontSize: 12,
                 fontWeight: 800,
                 letterSpacing: "0.15em",
-                color: "#38BDF8",
+                color: "#10B981",
                 textTransform: "uppercase",
               }}
             >
-              HOW IT WORKS
+              FINANCIAL ROI COMPARISON
             </span>
             <h2
               style={{
@@ -925,87 +937,128 @@ export default function USVideoEditingLandingPage({ setPage }) {
                 color: "#F8FAFC",
               }}
             >
-              Send the Footage. We'll Handle the Rest.
+              How Much Do You Save vs. In-House Hiring?
             </h2>
             <p style={{ color: "#94A3B8", fontSize: 16 }}>
-              A simple 3-step recurring workflow designed for busy creators and founders.
+              Drag the slider below to calculate your estimated monthly & annual savings.
             </p>
           </div>
 
+          {/* Slider Control Container */}
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))",
-              gap: 32,
-              marginBottom: 48,
+              background: "rgba(15, 23, 42, 0.7)",
+              border: "1px solid rgba(255, 255, 255, 0.12)",
+              borderRadius: 24,
+              padding: "36px 32px",
+              maxWidth: 860,
+              margin: "0 auto",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
             }}
           >
-            {[
-              {
-                step: "01",
-                title: "Upload Your Footage",
-                desc: "Send us your raw videos, podcast recordings, speeches, or property footage via Google Drive, Dropbox, or Frame.io.",
-              },
-              {
-                step: "02",
-                title: "We Edit",
-                desc: "Our team handles precise cutting, pacing, animated captions, sound design, color grading, B-roll overlays, and visual polish.",
-              },
-              {
-                step: "03",
-                title: "You Publish",
-                desc: "Receive ready-to-post vertical Reels and horizontal video content built for your platform with source project files.",
-              },
-            ].map((st) => (
-              <div
-                key={st.step}
-                style={{
-                  background: "rgba(15, 23, 42, 0.65)",
-                  border: "1px solid rgba(255, 255, 255, 0.09)",
-                  borderRadius: 20,
-                  padding: 36,
-                  position: "relative",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: 48,
-                    fontWeight: 900,
-                    color: "transparent",
-                    WebkitTextStroke: "1px rgba(99, 102, 241, 0.6)",
-                    marginBottom: 16,
-                  }}
-                >
-                  {st.step}
-                </div>
-                <h3 style={{ fontSize: 20, fontWeight: 800, color: "#F1F5F9", margin: "0 0 12px 0" }}>
-                  {st.title}
-                </h3>
-                <p style={{ color: "#94A3B8", fontSize: 14.5, lineHeight: 1.6, margin: 0 }}>
-                  {st.desc}
-                </p>
+            <div style={{ marginBottom: 32 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+                <span style={{ fontSize: 15, fontWeight: 700, color: "#E2E8F0" }}>
+                  Monthly Video Volume Target:
+                </span>
+                <span style={{ fontSize: 24, fontWeight: 900, color: "#38BDF8" }}>
+                  {calcVolume} Videos / Month
+                </span>
               </div>
-            ))}
-          </div>
+              <input
+                type="range"
+                min="4"
+                max="24"
+                step="2"
+                value={calcVolume}
+                onChange={(e) => setCalcVolume(parseInt(e.target.value, 10))}
+                style={{
+                  width: "100%",
+                  height: 10,
+                  accentColor: "#3B82F6",
+                  cursor: "pointer",
+                  borderRadius: 5,
+                }}
+              />
+            </div>
 
-          <div style={{ textAlign: "center" }}>
-            <button
-              onClick={() => scrollToSection("quote-form")}
-              data-track="solution-cta"
+            {/* Comparison Grid */}
+            <div
               style={{
-                background: "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)",
-                color: "#FFFFFF",
-                padding: "16px 36px",
-                borderRadius: 99,
-                fontSize: 16,
-                fontWeight: 800,
-                border: "none",
-                cursor: "pointer",
-                boxShadow: "0 10px 30px rgba(37, 99, 235, 0.45)",
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                gap: 20,
               }}
             >
-              Get My Custom Editing Quote →
-            </button>
+              <div style={{ background: "rgba(239, 68, 68, 0.08)", border: "1px solid rgba(239, 68, 68, 0.25)", borderRadius: 16, padding: 20 }}>
+                <span style={{ fontSize: 12, fontWeight: 800, color: "#FCA5A5" }}>IN-HOUSE US EDITOR</span>
+                <div style={{ fontSize: 28, fontWeight: 900, color: "#EF4444", margin: "8px 0" }}>
+                  ${inHouseCost.toLocaleString()}/mo
+                </div>
+                <p style={{ fontSize: 12, color: "#94A3B8", margin: 0 }}>
+                  $66,000/yr salary + health benefits, equipment & software.
+                </p>
+              </div>
+
+              <div style={{ background: "rgba(245, 158, 11, 0.08)", border: "1px solid rgba(245, 158, 11, 0.25)", borderRadius: 16, padding: 20 }}>
+                <span style={{ fontSize: 12, fontWeight: 800, color: "#FDE68A" }}>US FREELANCERS</span>
+                <div style={{ fontSize: 28, fontWeight: 900, color: "#F59E0B", margin: "8px 0" }}>
+                  ${freelancerCost.toLocaleString()}/mo
+                </div>
+                <p style={{ fontSize: 12, color: "#94A3B8", margin: 0 }}>
+                  Inconsistent delivery, ghosting risk & managing multiple freelancers.
+                </p>
+              </div>
+
+              <div style={{ background: "rgba(16, 185, 129, 0.12)", border: "2px solid #10B981", borderRadius: 16, padding: 20 }}>
+                <span style={{ fontSize: 12, fontWeight: 800, color: "#6EE7B7" }}>THE STORY BUILDER</span>
+                <div style={{ fontSize: 28, fontWeight: 900, color: "#10B981", margin: "8px 0" }}>
+                  ${tsbCost.toLocaleString()}/mo
+                </div>
+                <p style={{ fontSize: 12, color: "#CBD5E1", margin: 0 }}>
+                  48h SLA, dedicated brand kit, zero management overhead.
+                </p>
+              </div>
+            </div>
+
+            {/* Total Savings Highlight */}
+            <div
+              style={{
+                marginTop: 28,
+                padding: 20,
+                background: "linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(59, 130, 246, 0.15))",
+                borderRadius: 16,
+                border: "1px solid rgba(16, 185, 129, 0.4)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+                gap: 16,
+              }}
+            >
+              <div>
+                <div style={{ fontSize: 13, fontWeight: 800, color: "#6EE7B7" }}>ESTIMATED ANNUAL SAVINGS</div>
+                <div style={{ fontSize: 32, fontWeight: 900, color: "#FFFFFF" }}>
+                  ${(monthlySavings * 12).toLocaleString()} / Year
+                </div>
+              </div>
+              <button
+                onClick={() => handleSelectVolumeCard(`${calcVolume}`)}
+                style={{
+                  background: "#10B981",
+                  color: "#FFFFFF",
+                  border: "none",
+                  padding: "14px 28px",
+                  borderRadius: 99,
+                  fontWeight: 800,
+                  fontSize: 14,
+                  cursor: "pointer",
+                  boxShadow: "0 6px 20px rgba(16, 185, 129, 0.4)",
+                }}
+              >
+                Claim This Plan →
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -1016,7 +1069,7 @@ export default function USVideoEditingLandingPage({ setPage }) {
       <section
         id="portfolio"
         style={{
-          padding: "90px 20px",
+          padding: "90px 24px",
           background: "#07090F",
           borderTop: "1px solid rgba(255,255,255,0.06)",
         }}
@@ -1087,7 +1140,7 @@ export default function USVideoEditingLandingPage({ setPage }) {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
               gap: 24,
             }}
           >
@@ -1204,7 +1257,7 @@ export default function USVideoEditingLandingPage({ setPage }) {
         </div>
       </section>
 
-      {/* Video Modal Player */}
+      {/* Video Modal Player Lightbox */}
       <AnimatePresence>
         {activeVideoModal && (
           <motion.div
@@ -1278,9 +1331,9 @@ export default function USVideoEditingLandingPage({ setPage }) {
       </AnimatePresence>
 
       {/* ========================================================================= */}
-      {/* SECTION 5 — BEFORE / AFTER                                                */}
+      {/* SECTION 5 — BEFORE / AFTER INTERACTIVE COMPARISON                         */}
       {/* ========================================================================= */}
-      <section style={{ padding: "90px 20px", background: "#0B0F17" }}>
+      <section style={{ padding: "90px 24px", background: "#0B0F17" }}>
         <div style={{ maxWidth: 1100, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <span
@@ -1309,7 +1362,6 @@ export default function USVideoEditingLandingPage({ setPage }) {
             </p>
           </div>
 
-          {/* Interactive Toggle Control */}
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 36 }}>
             <div
               style={{
@@ -1354,7 +1406,6 @@ export default function USVideoEditingLandingPage({ setPage }) {
             </div>
           </div>
 
-          {/* Side-by-Side Comparison Box */}
           <div
             style={{
               display: "grid",
@@ -1363,7 +1414,6 @@ export default function USVideoEditingLandingPage({ setPage }) {
               alignItems: "center",
             }}
           >
-            {/* Raw Footage Card */}
             <div
               style={{
                 background: "rgba(15, 23, 42, 0.6)",
@@ -1394,32 +1444,31 @@ export default function USVideoEditingLandingPage({ setPage }) {
               </ul>
             </div>
 
-            {/* Final Edited Video Card */}
             <div
               style={{
                 background: "linear-gradient(145deg, rgba(16, 185, 129, 0.1), rgba(15, 23, 42, 0.9))",
-                border: baMode === "after" ? "2px solid #10B981" : "1px solid rgba(16, 185, 129, 0.3)",
+                border: baMode === "after" ? "2px solid #10B981" : "1px solid rgba(255, 255, 255, 0.08)",
                 borderRadius: 24,
                 padding: 28,
-                boxShadow: baMode === "after" ? "0 15px 40px rgba(16, 185, 129, 0.2)" : "none",
                 opacity: baMode === "after" ? 1 : 0.65,
+                boxShadow: baMode === "after" ? "0 15px 40px rgba(16, 185, 129, 0.2)" : "none",
                 transition: "all 0.3s ease",
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16 }}>
-                <span style={{ fontSize: 12, fontWeight: 800, color: "#10B981" }}>FINAL EDITED VIDEO</span>
-                <span style={{ fontSize: 12, color: "#6EE7B7", fontWeight: 700 }}>Ready To Publish</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: "#10B981" }}>POLISHED EDIT</span>
+                <span style={{ fontSize: 12, color: "#38BDF8", fontWeight: 700 }}>High Retention</span>
               </div>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 14 }}>
                 {[
-                  "✓ Tight jump cuts & zero dead air to keep attention",
-                  "✓ Animated Hormozi-style kinetic captions with emoji popups",
-                  "✓ Custom sound design, WHOOSH transitions & ambient music",
-                  "✓ High-quality stock B-roll, screen zooms & graphic overlays",
-                  "✓ Vibrant color correction tuned for mobile screens",
-                  "✓ Consistent brand logo, typography & call-to-action cards",
+                  "✓ Tight jump cuts & awkward pause removal",
+                  "✓ Animated Hormozi kinetic captions with custom brand colors",
+                  "✓ Multi-band audio EQ, noise reduction & sound FX popups",
+                  "✓ Relevant HD B-roll overlays & screen-share callouts",
+                  "✓ Cinematic color grade tailored to your brand identity",
+                  "✓ High retention, platform-native vertical video export",
                 ].map((item, i) => (
-                  <li key={i} style={{ color: "#F1F5F9", fontSize: 14, lineHeight: 1.5, fontWeight: 500 }}>
+                  <li key={i} style={{ color: "#F8FAFC", fontSize: 14, lineHeight: 1.5, fontWeight: 600 }}>
                     {item}
                   </li>
                 ))}
@@ -1430,9 +1479,9 @@ export default function USVideoEditingLandingPage({ setPage }) {
       </section>
 
       {/* ========================================================================= */}
-      {/* SECTION 6 — WHAT WE CAN EDIT                                              */}
+      {/* SECTION 6 — EDIT SERVICES & TARGET AUDIENCE                              */}
       {/* ========================================================================= */}
-      <section style={{ padding: "90px 20px", position: "relative" }}>
+      <section style={{ padding: "90px 24px", background: "#050811" }}>
         <div style={{ maxWidth: 1240, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 54 }}>
             <span
@@ -1440,24 +1489,24 @@ export default function USVideoEditingLandingPage({ setPage }) {
                 fontSize: 12,
                 fontWeight: 800,
                 letterSpacing: "0.15em",
-                color: "#60A5FA",
+                color: "#38BDF8",
                 textTransform: "uppercase",
               }}
             >
-              VERSATILE EDITING CAPABILITIES
+              EDITING CAPABILITIES
             </span>
             <h2
               style={{
                 fontSize: "clamp(2rem, 4vw, 3.2rem)",
                 fontWeight: 900,
-                margin: "12px 0 12px 0",
+                margin: "12px 0 16px 0",
                 color: "#F8FAFC",
               }}
             >
-              Whatever You're Recording, We Can Turn It Into Content.
+              What We Edit For Your Business
             </h2>
-            <p style={{ color: "#94A3B8", fontSize: 16, maxWidth: 620, margin: "0 auto" }}>
-              From quick vertical Reels to full YouTube episodes and paid ads, we edit every format.
+            <p style={{ color: "#94A3B8", fontSize: 16, maxWidth: 600, margin: "0 auto" }}>
+              End-to-end editing capabilities across every major content format.
             </p>
           </div>
 
@@ -1466,60 +1515,33 @@ export default function USVideoEditingLandingPage({ setPage }) {
               display: "grid",
               gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
               gap: 24,
+              marginBottom: 80,
             }}
           >
-            {EDIT_SERVICES_CARDS.map((card, idx) => (
+            {EDIT_SERVICES_CARDS.map((card, i) => (
               <div
-                key={idx}
+                key={i}
                 style={{
-                  background: "rgba(15, 23, 42, 0.6)",
+                  background: "rgba(15, 23, 42, 0.65)",
                   border: "1px solid rgba(255, 255, 255, 0.08)",
                   borderRadius: 20,
                   padding: 28,
-                  transition: "transform 0.2s, border 0.2s",
+                  transition: "transform 0.2s",
                 }}
               >
-                <div
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 10,
-                    background: "rgba(99, 102, 241, 0.15)",
-                    color: "#818CF8",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: 800,
-                    fontSize: 16,
-                    marginBottom: 16,
-                  }}
-                >
-                  {idx + 1}
-                </div>
-                <h3 style={{ fontSize: 18, fontWeight: 800, color: "#F1F5F9", margin: "0 0 8px 0" }}>
+                <div style={{ fontSize: 32, marginBottom: 14 }}>{card.icon}</div>
+                <h3 style={{ fontSize: 18, fontWeight: 800, color: "#F8FAFC", margin: "0 0 10px 0" }}>
                   {card.title}
                 </h3>
-                <p style={{ color: "#94A3B8", fontSize: 13.5, lineHeight: 1.6, margin: 0 }}>
+                <p style={{ color: "#94A3B8", fontSize: 14, lineHeight: 1.6, margin: 0 }}>
                   {card.desc}
                 </p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ========================================================================= */}
-      {/* SECTION 7 — WHO THIS IS FOR                                              */}
-      {/* ========================================================================= */}
-      <section
-        style={{
-          padding: "90px 20px",
-          background: "#080C14",
-          borderTop: "1px solid rgba(255,255,255,0.06)",
-        }}
-      >
-        <div style={{ maxWidth: 1240, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 54 }}>
+          {/* Target Audience */}
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
             <span
               style={{
                 fontSize: 12,
@@ -1529,193 +1551,77 @@ export default function USVideoEditingLandingPage({ setPage }) {
                 textTransform: "uppercase",
               }}
             >
-              TAILORED FOR HIGH-VOLUME CREATORS
+              BUILT FOR GROWTH
             </span>
             <h2
               style={{
-                fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                fontSize: "clamp(2rem, 4vw, 3rem)",
                 fontWeight: 900,
                 margin: "12px 0 12px 0",
                 color: "#F8FAFC",
               }}
             >
-              Built For People Who Need Content Consistently.
+              Who We Work With
             </h2>
           </div>
 
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
               gap: 24,
-              marginBottom: 40,
             }}
           >
-            {TARGET_AUDIENCE_CARDS.map((aud) => (
+            {TARGET_AUDIENCE_CARDS.map((card, i) => (
               <div
-                key={aud.role}
+                key={i}
                 style={{
-                  background: "rgba(15, 23, 42, 0.65)",
+                  background: "rgba(15, 23, 42, 0.6)",
                   border: "1px solid rgba(255, 255, 255, 0.08)",
                   borderRadius: 20,
-                  padding: 30,
+                  padding: 28,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
                 }}
               >
-                <span
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 900,
-                    letterSpacing: "0.15em",
-                    color: "#818CF8",
-                    display: "block",
-                    marginBottom: 8,
-                  }}
-                >
-                  FOR {aud.role}
-                </span>
-                <p style={{ color: "#CBD5E1", fontSize: 14.5, lineHeight: 1.6, margin: 0 }}>
-                  {aud.text}
-                </p>
+                <div>
+                  <span
+                    style={{
+                      background: "rgba(192, 132, 252, 0.12)",
+                      border: "1px solid rgba(192, 132, 252, 0.3)",
+                      color: "#C084FC",
+                      fontSize: 10,
+                      fontWeight: 800,
+                      padding: "3px 8px",
+                      borderRadius: 4,
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {card.badge}
+                  </span>
+                  <h3 style={{ fontSize: 20, fontWeight: 900, color: "#F8FAFC", margin: "14px 0 10px 0" }}>
+                    {card.role}
+                  </h3>
+                  <p style={{ color: "#94A3B8", fontSize: 14, lineHeight: 1.6, margin: 0 }}>
+                    {card.text}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
-
-          <div style={{ textAlign: "center" }}>
-            <button
-              onClick={() => scrollToSection("quote-form")}
-              style={{
-                background: "transparent",
-                border: "1px solid rgba(129, 140, 248, 0.4)",
-                color: "#818CF8",
-                padding: "12px 28px",
-                borderRadius: 99,
-                fontSize: 14,
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
-            >
-              Tell Us What You're Creating ↓
-            </button>
-          </div>
         </div>
       </section>
 
       {/* ========================================================================= */}
-      {/* SECTION 8 — THE RECURRING CONTENT MODEL                                   */}
-      {/* ========================================================================= */}
-      <section
-        style={{
-          padding: "90px 20px",
-          background: "linear-gradient(180deg, #080C14 0%, #0B0F19 100%)",
-          position: "relative",
-        }}
-      >
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 50 }}>
-            <span
-              style={{
-                fontSize: 12,
-                fontWeight: 800,
-                letterSpacing: "0.15em",
-                color: "#F59E0B",
-                textTransform: "uppercase",
-              }}
-            >
-              RECURRING CONTENT MODEL
-            </span>
-            <h2
-              style={{
-                fontSize: "clamp(2rem, 4vw, 3.2rem)",
-                fontWeight: 900,
-                margin: "12px 0 14px 0",
-                color: "#F8FAFC",
-              }}
-            >
-              How Much Content Do You Need Every Month?
-            </h2>
-            <p style={{ color: "#94A3B8", fontSize: 16, maxWidth: 640, margin: "0 auto" }}>
-              No forced rigid packages. Select your target monthly video volume to customize your editing setup.
-            </p>
-          </div>
-
-          {/* Volume Selection Cards */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))",
-              gap: 20,
-              marginBottom: 32,
-            }}
-          >
-            {VOLUME_OPTIONS.filter((v) => v.id !== "not_sure").map((vol) => {
-              const isSelected = formData.monthly_volume === vol.count;
-              return (
-                <div
-                  key={vol.id}
-                  onClick={() => handleSelectVolumeCard(vol.count)}
-                  data-track="content-volume"
-                  style={{
-                    background: isSelected
-                      ? "linear-gradient(145deg, rgba(99, 102, 241, 0.25), rgba(15, 23, 42, 0.95))"
-                      : "rgba(15, 23, 42, 0.6)",
-                    border: isSelected
-                      ? "2px solid #6366F1"
-                      : "1px solid rgba(255, 255, 255, 0.08)",
-                    borderRadius: 20,
-                    padding: 28,
-                    cursor: "pointer",
-                    textAlign: "center",
-                    boxShadow: isSelected ? "0 10px 30px rgba(99, 102, 241, 0.25)" : "none",
-                    transition: "all 0.2s ease",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 900,
-                      color: isSelected ? "#F8FAFC" : "#E2E8F0",
-                      marginBottom: 8,
-                    }}
-                  >
-                    {vol.title}
-                  </div>
-                  <div style={{ fontSize: 13, color: isSelected ? "#818CF8" : "#94A3B8", marginBottom: 16 }}>
-                    {vol.subtitle}
-                  </div>
-                  <span
-                    style={{
-                      display: "inline-block",
-                      background: isSelected ? "#6366F1" : "rgba(255,255,255,0.06)",
-                      color: isSelected ? "#FFFFFF" : "#CBD5E1",
-                      fontSize: 12,
-                      fontWeight: 700,
-                      padding: "6px 16px",
-                      borderRadius: 99,
-                    }}
-                  >
-                    {isSelected ? "Selected ✓" : "Select Volume"}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
-
-          <p style={{ textAlign: "center", color: "#64748B", fontSize: 14, margin: 0 }}>
-            Need something different? Tell us what you need in the custom quote form below.
-          </p>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* SECTION 9 — QUALIFICATION FORM / LEAD FUNNEL                              */}
+      {/* SECTION 7 — INTERACTIVE MULTI-STEP QUALIFICATION FORM                    */}
       {/* ========================================================================= */}
       <section
         id="quote-form"
         style={{
-          padding: "90px 20px",
-          background: "#06080F",
+          padding: "90px 24px",
+          background: "#070B14",
           borderTop: "1px solid rgba(255,255,255,0.08)",
-          position: "relative",
         }}
       >
         <div style={{ maxWidth: 840, margin: "0 auto" }}>
@@ -1729,53 +1635,47 @@ export default function USVideoEditingLandingPage({ setPage }) {
                 textTransform: "uppercase",
               }}
             >
-              CUSTOM QUOTE FUNNEL
+              CUSTOM QUOTE BUILDER
             </span>
             <h2
               style={{
-                fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                fontSize: "clamp(2.2rem, 4.5vw, 3.4rem)",
                 fontWeight: 900,
                 margin: "12px 0 12px 0",
                 color: "#F8FAFC",
               }}
             >
-              Let's Build Your Editing Plan.
+              Get Your Custom Video Editing Proposal
             </h2>
-            <p style={{ color: "#94A3B8", fontSize: 16, maxWidth: 620, margin: "0 auto" }}>
-              Tell us what you're creating and how much content you need. We'll recommend the right editing setup and send you a custom quote.
+            <p style={{ color: "#94A3B8", fontSize: 16 }}>
+              Complete the quick 60-second questionnaire to get an exact custom quote tailored to your content schedule.
             </p>
           </div>
 
           {/* Form Container */}
           <div
             style={{
-              background: "rgba(15, 23, 42, 0.75)",
+              background: "rgba(15, 23, 42, 0.8)",
+              backdropFilter: "blur(20px)",
               border: "1px solid rgba(255, 255, 255, 0.12)",
               borderRadius: 24,
-              padding: "36px 28px",
-              boxShadow: "0 25px 60px rgba(0,0,0,0.6)",
-              position: "relative",
+              padding: "36px 32px",
+              boxShadow: "0 25px 70px rgba(0,0,0,0.6)",
             }}
           >
             {/* Step Progress Bar */}
             {!formSubmitted && (
               <div style={{ marginBottom: 32 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 700, color: "#64748B", marginBottom: 8 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, fontWeight: 800, color: "#64748B", marginBottom: 10 }}>
                   <span>STEP {currentStep} OF 5</span>
-                  <span>
-                    {currentStep === 1 && "Content Types"}
-                    {currentStep === 2 && "Monthly Volume"}
-                    {currentStep === 3 && "Business Type"}
-                    {currentStep === 4 && "Contact Details"}
-                    {currentStep === 5 && "Project Notes"}
-                  </span>
+                  <span>{currentStep === 1 ? "Content Type" : currentStep === 2 ? "Monthly Volume" : currentStep === 3 ? "Business Category" : currentStep === 4 ? "Contact Details" : "Notes"}</span>
                 </div>
                 <div style={{ width: "100%", height: 6, background: "rgba(255,255,255,0.08)", borderRadius: 99, overflow: "hidden" }}>
                   <div
                     style={{
                       width: `${(currentStep / 5) * 100}%`,
                       height: "100%",
-                      background: "linear-gradient(90deg, #3B82F6, #6366F1)",
+                      background: "linear-gradient(90deg, #6366F1, #3B82F6, #10B981)",
                       transition: "width 0.3s ease",
                     }}
                   />
@@ -1784,151 +1684,77 @@ export default function USVideoEditingLandingPage({ setPage }) {
             )}
 
             {formSubmitted ? (
-              /* Success State */
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                style={{ textAlign: "center", padding: "40px 20px" }}
-              >
-                <div
-                  style={{
-                    width: 64,
-                    height: 64,
-                    borderRadius: "50%",
-                    background: "rgba(16, 185, 129, 0.2)",
-                    border: "2px solid #10B981",
-                    color: "#10B981",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: 32,
-                    margin: "0 auto 24px",
-                  }}
-                >
-                  ✓
-                </div>
-                <h3 style={{ fontSize: 26, fontWeight: 900, color: "#F8FAFC", marginBottom: 12 }}>
+              <div style={{ textAlign: "center", padding: "40px 20px" }}>
+                <div style={{ fontSize: 56, marginBottom: 16 }}>🎉</div>
+                <h3 style={{ fontSize: 26, fontWeight: 900, color: "#F8FAFC", margin: "0 0 12px 0" }}>
                   Quote Request Received!
                 </h3>
-                <p style={{ color: "#CBD5E1", fontSize: 16, maxWidth: 540, margin: "0 auto 24px", lineHeight: 1.6 }}>
-                  Thank you, <strong>{formData.name}</strong>! We are reviewing your requirements ({formData.monthly_volume} videos/mo for {formData.business_type}) and will email your custom quote to <strong>{formData.email}</strong> within 12 hours.
+                <p style={{ color: "#94A3B8", fontSize: 16, maxWidth: 500, margin: "0 auto 24px", lineHeight: 1.6 }}>
+                  Thank you, <strong>{formData.name}</strong>! We've received your details for <strong>{formData.monthly_volume} videos/month</strong>. Our senior editor will review your requirements and reach out via email/WhatsApp within 2 hours.
                 </p>
-                <div
+                <button
+                  onClick={() => {
+                    setFormSubmitted(false);
+                    setCurrentStep(1);
+                  }}
                   style={{
-                    background: "rgba(255,255,255,0.04)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                    borderRadius: 16,
-                    padding: 20,
-                    maxWidth: 480,
-                    margin: "0 auto 28px",
-                    textAlign: "left",
+                    background: "rgba(255,255,255,0.08)",
+                    border: "1px solid rgba(255,255,255,0.16)",
+                    color: "#F8FAFC",
+                    padding: "12px 28px",
+                    borderRadius: 99,
+                    fontWeight: 700,
                     fontSize: 14,
-                    color: "#94A3B8",
+                    cursor: "pointer",
                   }}
                 >
-                  <div>✓ Dedicated editing team assigned</div>
-                  <div style={{ marginTop: 6 }}>✓ Custom monthly volume setup prepared</div>
-                  <div style={{ marginTop: 6 }}>✓ 48-hour delivery commitment activated</div>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: 12,
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  <a
-                    href={`https://wa.me/919989679185?text=${encodeURIComponent(
-                      `Hi StoryBuilder! I just submitted a US Video Editing quote request:\n\n👤 Name: ${formData.name}\n📧 Email: ${formData.email}\n📱 Phone: ${formData.phone}\n🏢 Brand: ${formData.company || "N/A"}\n💼 Type: ${formData.business_type}\n📦 Volume: ${formData.monthly_volume} videos/mo\n💬 Notes: ${formData.message || "N/A"}`
-                    )}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{
-                      background: "rgba(37,211,102,0.15)",
-                      border: "1px solid rgba(37,211,102,0.5)",
-                      color: "#25D366",
-                      padding: "12px 24px",
-                      borderRadius: 99,
-                      fontSize: 14,
-                      fontWeight: 700,
-                      textDecoration: "none",
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 8,
-                    }}
-                  >
-                    💬 Chat on WhatsApp Instant
-                  </a>
-                  <button
-                    onClick={() => {
-                      setFormSubmitted(false);
-                      setCurrentStep(1);
-                    }}
-                    style={{
-                      background: "rgba(255,255,255,0.08)",
-                      border: "1px solid rgba(255,255,255,0.15)",
-                      color: "#FFFFFF",
-                      padding: "12px 24px",
-                      borderRadius: 99,
-                      fontSize: 14,
-                      fontWeight: 700,
-                      cursor: "pointer",
-                    }}
-                  >
-                    Submit Another Request
-                  </button>
-                </div>
-              </motion.div>
+                  Submit Another Inquiry
+                </button>
+              </div>
             ) : (
               <form onSubmit={handleSubmitLeadForm}>
-                {/* Honeypot field for bot suppression */}
+                {/* Honeypot field */}
                 <input
                   type="text"
                   name="honeypot"
                   value={formData.honeypot}
                   onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
                   style={{ display: "none" }}
-                  tabIndex={-1}
-                  autoComplete="off"
                 />
 
-                {/* STEP 1: Content Types */}
+                {/* STEP 1 — Content Types */}
                 {currentStep === 1 && (
                   <div>
-                    <h3 style={{ fontSize: 20, fontWeight: 800, color: "#F8FAFC", marginBottom: 8 }}>
-                      Step 1: What type of content do you need?
+                    <h3 style={{ fontSize: 20, fontWeight: 900, color: "#F8FAFC", margin: "0 0 6px 0" }}>
+                      What video formats do you need edited?
                     </h3>
-                    <p style={{ color: "#94A3B8", fontSize: 14, marginBottom: 24 }}>
-                      Select all content formats you plan to send for editing.
+                    <p style={{ color: "#94A3B8", fontSize: 14, margin: "0 0 24px 0" }}>
+                      Select all that apply to your content strategy.
                     </p>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 16 }}>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 14, marginBottom: 28 }}>
                       {CONTENT_TYPE_OPTIONS.map((opt) => {
-                        const checked = formData.content_types.includes(opt.id);
+                        const selected = formData.content_types.includes(opt.id);
                         return (
                           <div
                             key={opt.id}
                             onClick={() => handleContentTypeToggle(opt.id)}
                             style={{
-                              background: checked ? "rgba(99, 102, 241, 0.18)" : "rgba(255,255,255,0.03)",
-                              border: checked ? "2px solid #6366F1" : "1px solid rgba(255,255,255,0.08)",
+                              background: selected ? "rgba(99, 102, 241, 0.15)" : "rgba(255,255,255,0.03)",
+                              border: selected ? "2px solid #6366F1" : "1px solid rgba(255,255,255,0.08)",
                               borderRadius: 16,
-                              padding: 18,
+                              padding: 16,
                               cursor: "pointer",
                               display: "flex",
-                              alignItems: "flex-start",
                               gap: 12,
+                              alignItems: "flex-start",
+                              transition: "all 0.2s ease",
                             }}
                           >
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() => {}}
-                              style={{ marginTop: 3, accentColor: "#6366F1" }}
-                            />
+                            <span style={{ fontSize: 24 }}>{opt.icon}</span>
                             <div>
-                              <div style={{ fontSize: 15, fontWeight: 700, color: "#F1F5F9" }}>{opt.label}</div>
-                              <div style={{ fontSize: 12, color: "#94A3B8", marginTop: 4 }}>{opt.desc}</div>
+                              <div style={{ fontSize: 14, fontWeight: 800, color: "#F8FAFC" }}>{opt.label}</div>
+                              <div style={{ fontSize: 12, color: "#94A3B8", marginTop: 2 }}>{opt.desc}</div>
                             </div>
                           </div>
                         );
@@ -1937,33 +1763,41 @@ export default function USVideoEditingLandingPage({ setPage }) {
                   </div>
                 )}
 
-                {/* STEP 2: Monthly Volume */}
+                {/* STEP 2 — Monthly Volume */}
                 {currentStep === 2 && (
                   <div>
-                    <h3 style={{ fontSize: 20, fontWeight: 800, color: "#F8FAFC", marginBottom: 8 }}>
-                      Step 2: How many videos do you need per month?
+                    <h3 style={{ fontSize: 20, fontWeight: 900, color: "#F8FAFC", margin: "0 0 6px 0" }}>
+                      How many videos do you want to publish per month?
                     </h3>
-                    <p style={{ color: "#94A3B8", fontSize: 14, marginBottom: 24 }}>
-                      Choose your estimated monthly video volume.
+                    <p style={{ color: "#94A3B8", fontSize: 14, margin: "0 0 24px 0" }}>
+                      Choose your monthly content target.
                     </p>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 14 }}>
+
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 14, marginBottom: 28 }}>
                       {VOLUME_OPTIONS.map((vol) => {
-                        const isSelected = formData.monthly_volume === vol.count;
+                        const selected = formData.monthly_volume === vol.count;
                         return (
                           <div
                             key={vol.id}
                             onClick={() => setFormData({ ...formData, monthly_volume: vol.count })}
                             style={{
-                              background: isSelected ? "rgba(99, 102, 241, 0.2)" : "rgba(255,255,255,0.03)",
-                              border: isSelected ? "2px solid #6366F1" : "1px solid rgba(255,255,255,0.08)",
+                              background: selected ? "rgba(59, 130, 246, 0.18)" : "rgba(255,255,255,0.03)",
+                              border: selected ? "2px solid #3B82F6" : "1px solid rgba(255,255,255,0.08)",
                               borderRadius: 16,
                               padding: 20,
                               cursor: "pointer",
-                              textAlign: "center",
+                              position: "relative",
+                              transition: "all 0.2s ease",
                             }}
                           >
-                            <div style={{ fontSize: 16, fontWeight: 800, color: "#F8FAFC" }}>{vol.title}</div>
+                            {vol.popular && (
+                              <span style={{ position: "absolute", top: 12, right: 12, background: "#3B82F6", color: "#FFF", fontSize: 10, fontWeight: 900, padding: "2px 6px", borderRadius: 4 }}>
+                                MOST POPULAR
+                              </span>
+                            )}
+                            <div style={{ fontSize: 16, fontWeight: 900, color: "#F8FAFC" }}>{vol.title}</div>
                             <div style={{ fontSize: 12, color: "#94A3B8", marginTop: 4 }}>{vol.subtitle}</div>
+                            <div style={{ fontSize: 12, color: "#10B981", fontWeight: 700, marginTop: 8 }}>{vol.estSavings}</div>
                           </div>
                         );
                       })}
@@ -1971,136 +1805,139 @@ export default function USVideoEditingLandingPage({ setPage }) {
                   </div>
                 )}
 
-                {/* STEP 3: Business Type */}
+                {/* STEP 3 — Business Category */}
                 {currentStep === 3 && (
                   <div>
-                    <h3 style={{ fontSize: 20, fontWeight: 800, color: "#F8FAFC", marginBottom: 8 }}>
-                      Step 3: What best describes you?
+                    <h3 style={{ fontSize: 20, fontWeight: 900, color: "#F8FAFC", margin: "0 0 6px 0" }}>
+                      What best describes your business role?
                     </h3>
-                    <p style={{ color: "#94A3B8", fontSize: 14, marginBottom: 24 }}>
-                      This helps us pair you with an editor experienced in your niche.
+                    <p style={{ color: "#94A3B8", fontSize: 14, margin: "0 0 24px 0" }}>
+                      Helps us match you with editors specialized in your industry.
                     </p>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12 }}>
-                      {BUSINESS_TYPES.map((type) => {
-                        const isSelected = formData.business_type === type;
+
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, marginBottom: 28 }}>
+                      {BUSINESS_TYPES.map((bt) => {
+                        const selected = formData.business_type === bt;
                         return (
-                          <div
-                            key={type}
-                            onClick={() => setFormData({ ...formData, business_type: type })}
+                          <button
+                            key={bt}
+                            type="button"
+                            onClick={() => setFormData({ ...formData, business_type: bt })}
                             style={{
-                              background: isSelected ? "rgba(59, 130, 246, 0.2)" : "rgba(255,255,255,0.03)",
-                              border: isSelected ? "2px solid #3B82F6" : "1px solid rgba(255,255,255,0.08)",
-                              borderRadius: 14,
-                              padding: "16px 12px",
-                              cursor: "pointer",
-                              textAlign: "center",
-                              fontSize: 14,
+                              background: selected ? "linear-gradient(135deg, #6366F1, #3B82F6)" : "rgba(255,255,255,0.04)",
+                              color: selected ? "#FFFFFF" : "#CBD5E1",
+                              border: selected ? "none" : "1px solid rgba(255,255,255,0.1)",
+                              padding: "14px 16px",
+                              borderRadius: 12,
                               fontWeight: 700,
-                              color: isSelected ? "#FFFFFF" : "#CBD5E1",
+                              fontSize: 13,
+                              cursor: "pointer",
+                              textAlign: "left",
                             }}
                           >
-                            {type}
-                          </div>
+                            {selected ? "✓ " : ""}{bt}
+                          </button>
                         );
                       })}
                     </div>
                   </div>
                 )}
 
-                {/* STEP 4: Contact Information */}
+                {/* STEP 4 — Contact Info */}
                 {currentStep === 4 && (
                   <div>
-                    <h3 style={{ fontSize: 20, fontWeight: 800, color: "#F8FAFC", marginBottom: 8 }}>
-                      Step 4: Where should we send your quote?
+                    <h3 style={{ fontSize: 20, fontWeight: 900, color: "#F8FAFC", margin: "0 0 6px 0" }}>
+                      Where should we send your custom proposal?
                     </h3>
-                    <p style={{ color: "#94A3B8", fontSize: 14, marginBottom: 24 }}>
-                      We will dispatch your custom pricing breakdown within 12 hours.
+                    <p style={{ color: "#94A3B8", fontSize: 14, margin: "0 0 24px 0" }}>
+                      We respect your privacy. Zero spam guaranteed.
                     </p>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 18 }}>
+
+                    <div style={{ display: "flex", flexDirection: "column", gap: 16, marginBottom: 28 }}>
                       <div>
-                        <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "#CBD5E1", marginBottom: 6 }}>
+                        <label style={{ fontSize: 12, fontWeight: 800, color: "#CBD5E1", display: "block", marginBottom: 6 }}>
                           FULL NAME *
                         </label>
                         <input
                           type="text"
                           required
-                          placeholder="e.g. Alex Morgan"
+                          placeholder="Marcus Vance"
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                           style={{
                             width: "100%",
-                            background: "#030712",
-                            border: "1px solid rgba(255,255,255,0.12)",
+                            background: "rgba(5, 8, 17, 0.9)",
+                            border: "1px solid rgba(255,255,255,0.14)",
                             borderRadius: 12,
-                            padding: 14,
+                            padding: "14px 16px",
                             color: "#FFFFFF",
-                            fontSize: 14,
-                            boxSizing: "border-box",
+                            fontSize: 15,
                           }}
                         />
                       </div>
-                      <div>
-                        <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "#CBD5E1", marginBottom: 6 }}>
-                          BUSINESS EMAIL *
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          placeholder="alex@yourbrand.com"
-                          value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          style={{
-                            width: "100%",
-                            background: "#030712",
-                            border: "1px solid rgba(255,255,255,0.12)",
-                            borderRadius: 12,
-                            padding: 14,
-                            color: "#FFFFFF",
-                            fontSize: 14,
-                            boxSizing: "border-box",
-                          }}
-                        />
+
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                        <div>
+                          <label style={{ fontSize: 12, fontWeight: 800, color: "#CBD5E1", display: "block", marginBottom: 6 }}>
+                            EMAIL ADDRESS *
+                          </label>
+                          <input
+                            type="email"
+                            required
+                            placeholder="marcus@vancegroup.com"
+                            value={formData.email}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            style={{
+                              width: "100%",
+                              background: "rgba(5, 8, 17, 0.9)",
+                              border: "1px solid rgba(255,255,255,0.14)",
+                              borderRadius: 12,
+                              padding: "14px 16px",
+                              color: "#FFFFFF",
+                              fontSize: 15,
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <label style={{ fontSize: 12, fontWeight: 800, color: "#CBD5E1", display: "block", marginBottom: 6 }}>
+                            PHONE / WHATSAPP *
+                          </label>
+                          <input
+                            type="tel"
+                            required
+                            placeholder="+1 (512) 890-1234"
+                            value={formData.phone}
+                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                            style={{
+                              width: "100%",
+                              background: "rgba(5, 8, 17, 0.9)",
+                              border: "1px solid rgba(255,255,255,0.14)",
+                              borderRadius: 12,
+                              padding: "14px 16px",
+                              color: "#FFFFFF",
+                              fontSize: 15,
+                            }}
+                          />
+                        </div>
                       </div>
+
                       <div>
-                        <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "#CBD5E1", marginBottom: 6 }}>
-                          PHONE / WHATSAPP *
-                        </label>
-                        <input
-                          type="tel"
-                          required
-                          placeholder="+1 (555) 000-0000"
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          style={{
-                            width: "100%",
-                            background: "#030712",
-                            border: "1px solid rgba(255,255,255,0.12)",
-                            borderRadius: 12,
-                            padding: 14,
-                            color: "#FFFFFF",
-                            fontSize: 14,
-                            boxSizing: "border-box",
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <label style={{ display: "block", fontSize: 12, fontWeight: 700, color: "#CBD5E1", marginBottom: 6 }}>
-                          COMPANY / BRAND (OPTIONAL)
+                        <label style={{ fontSize: 12, fontWeight: 800, color: "#CBD5E1", display: "block", marginBottom: 6 }}>
+                          COMPANY / BRAND NAME (OPTIONAL)
                         </label>
                         <input
                           type="text"
-                          placeholder="e.g. Morgan Media Group"
+                          placeholder="Vance Leadership Group"
                           value={formData.company}
                           onChange={(e) => setFormData({ ...formData, company: e.target.value })}
                           style={{
                             width: "100%",
-                            background: "#030712",
-                            border: "1px solid rgba(255,255,255,0.12)",
+                            background: "rgba(5, 8, 17, 0.9)",
+                            border: "1px solid rgba(255,255,255,0.14)",
                             borderRadius: 12,
-                            padding: 14,
+                            padding: "14px 16px",
                             color: "#FFFFFF",
-                            fontSize: 14,
-                            boxSizing: "border-box",
+                            fontSize: 15,
                           }}
                         />
                       </div>
@@ -2108,81 +1945,57 @@ export default function USVideoEditingLandingPage({ setPage }) {
                   </div>
                 )}
 
-                {/* STEP 5: Project Notes & Submit */}
+                {/* STEP 5 — Additional Notes */}
                 {currentStep === 5 && (
                   <div>
-                    <h3 style={{ fontSize: 20, fontWeight: 800, color: "#F8FAFC", marginBottom: 8 }}>
-                      Step 5: Tell us a little about what you need (Optional)
+                    <h3 style={{ fontSize: 20, fontWeight: 900, color: "#F8FAFC", margin: "0 0 6px 0" }}>
+                      Any specific goals or style preferences?
                     </h3>
-                    <p style={{ color: "#94A3B8", fontSize: 14, marginBottom: 20 }}>
-                      Share links to your channels or reference video styles you admire.
+                    <p style={{ color: "#94A3B8", fontSize: 14, margin: "0 0 24px 0" }}>
+                      Share links to reference videos you love or details about your current raw footage setup.
                     </p>
-                    <textarea
-                      rows={4}
-                      placeholder="e.g. We record weekly podcast episodes and need 8 vertical reels per month with Hormozi-style captions..."
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      style={{
-                        width: "100%",
-                        background: "#030712",
-                        border: "1px solid rgba(255,255,255,0.12)",
-                        borderRadius: 14,
-                        padding: 16,
-                        color: "#FFFFFF",
-                        fontSize: 14,
-                        boxSizing: "border-box",
-                        resize: "vertical",
-                        marginBottom: 20,
-                      }}
-                    />
 
-                    {/* Summary Card */}
-                    <div style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 14, padding: 16, marginBottom: 20 }}>
-                      <div style={{ fontSize: 12, fontWeight: 800, color: "#38BDF8", marginBottom: 6 }}>SUMMARY:</div>
-                      <div style={{ fontSize: 13, color: "#CBD5E1" }}>
-                        • <strong>Volume:</strong> {formData.monthly_volume} videos / month
-                      </div>
-                      <div style={{ fontSize: 13, color: "#CBD5E1", marginTop: 4 }}>
-                        • <strong>Business:</strong> {formData.business_type}
-                      </div>
-                      <div style={{ fontSize: 13, color: "#CBD5E1", marginTop: 4 }}>
-                        • <strong>Recipient:</strong> {formData.name} ({formData.email})
-                      </div>
+                    <div style={{ marginBottom: 28 }}>
+                      <textarea
+                        rows={4}
+                        placeholder="e.g. We record a weekly podcast in Austin and want 8 Hormozi-style Reels with green/gold subtitles delivered every month..."
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        style={{
+                          width: "100%",
+                          background: "rgba(5, 8, 17, 0.9)",
+                          border: "1px solid rgba(255,255,255,0.14)",
+                          borderRadius: 12,
+                          padding: "14px 16px",
+                          color: "#FFFFFF",
+                          fontSize: 15,
+                          lineHeight: 1.5,
+                        }}
+                      />
                     </div>
                   </div>
                 )}
 
-                {/* Error Banner */}
                 {formError && (
-                  <div
-                    style={{
-                      background: "rgba(239, 68, 68, 0.15)",
-                      border: "1px solid rgba(239, 68, 68, 0.4)",
-                      color: "#FCA5A5",
-                      fontSize: 13,
-                      padding: "10px 14px",
-                      borderRadius: 10,
-                      marginTop: 16,
-                    }}
-                  >
+                  <div style={{ color: "#F87171", fontSize: 14, fontWeight: 700, marginBottom: 16 }}>
                     ⚠️ {formError}
                   </div>
                 )}
 
-                {/* Navigation & Submit Buttons */}
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 32 }}>
+                {/* Navigation Controls */}
+                <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
                   {currentStep > 1 ? (
                     <button
                       type="button"
                       onClick={handlePrevStep}
                       style={{
                         background: "rgba(255,255,255,0.06)",
-                        color: "#94A3B8",
-                        border: "none",
-                        padding: "12px 24px",
+                        color: "#CBD5E1",
+                        border: "1px solid rgba(255,255,255,0.12)",
+                        padding: "14px 24px",
                         borderRadius: 99,
-                        fontSize: 14,
                         fontWeight: 700,
+                        fontSize: 14,
                         cursor: "pointer",
                       }}
                     >
@@ -2200,32 +2013,31 @@ export default function USVideoEditingLandingPage({ setPage }) {
                         border: "none",
                         padding: "14px 32px",
                         borderRadius: 99,
-                        fontSize: 15,
                         fontWeight: 800,
+                        fontSize: 15,
                         cursor: "pointer",
                         boxShadow: "0 6px 20px rgba(59, 130, 246, 0.4)",
                       }}
                     >
-                      Next Step →
+                      Continue →
                     </button>
                   ) : (
                     <button
                       type="submit"
                       disabled={formSubmitting}
-                      data-track="lead-submit"
                       style={{
                         background: "linear-gradient(135deg, #10B981, #059669)",
                         color: "#FFFFFF",
                         border: "none",
-                        padding: "16px 36px",
+                        padding: "14px 36px",
                         borderRadius: 99,
-                        fontSize: 16,
                         fontWeight: 900,
-                        cursor: formSubmitting ? "wait" : "pointer",
-                        boxShadow: "0 10px 30px rgba(16, 185, 129, 0.45)",
+                        fontSize: 16,
+                        cursor: formSubmitting ? "not-allowed" : "pointer",
+                        boxShadow: "0 8px 24px rgba(16, 185, 129, 0.4)",
                       }}
                     >
-                      {formSubmitting ? "Processing Request..." : "Get My Custom Editing Quote →"}
+                      {formSubmitting ? "Submitting..." : "Submit Proposal Request 🚀"}
                     </button>
                   )}
                 </div>
@@ -2236,359 +2048,218 @@ export default function USVideoEditingLandingPage({ setPage }) {
       </section>
 
       {/* ========================================================================= */}
-      {/* SECTION 10 — WHAT HAPPENS AFTER I SUBMIT?                                */}
+      {/* SECTION 8 — TESTIMONIALS & FAQ                                           */}
       {/* ========================================================================= */}
-      <section style={{ padding: "80px 20px", background: "#080C15" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <h2 style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)", fontWeight: 900, color: "#F8FAFC" }}>
-              What Happens Next?
-            </h2>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 20 }}>
-            {[
-              { num: "01", title: "We Review Your Requirements", text: "We analyze your target content formats, monthly volume, and style preferences." },
-              { num: "02", title: "We Recommend The Right Setup", text: "We pair your channel with a dedicated editor experienced in your industry niche." },
-              { num: "03", title: "You Receive Your Custom Quote", text: "Clear, predictable monthly pricing with zero long-term contracts or hidden fees." },
-              { num: "04", title: "We Start Editing", text: "Upload your raw footage and get your first polished video returned in 48 hours." },
-            ].map((step) => (
-              <div
-                key={step.num}
-                style={{
-                  background: "rgba(15, 23, 42, 0.5)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  borderRadius: 18,
-                  padding: 24,
-                }}
-              >
-                <div style={{ fontSize: 32, fontWeight: 900, color: "#38BDF8", marginBottom: 10 }}>{step.num}</div>
-                <h3 style={{ fontSize: 16, fontWeight: 800, color: "#F1F5F9", marginBottom: 8 }}>{step.title}</h3>
-                <p style={{ color: "#94A3B8", fontSize: 13.5, lineHeight: 1.5, margin: 0 }}>{step.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* SECTION 11 — WHY WORK WITH US                                            */}
-      {/* ========================================================================= */}
-      <section style={{ padding: "90px 20px", background: "#0A0E17", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ maxWidth: 1000, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <h2 style={{ fontSize: "clamp(2rem, 3.8vw, 3rem)", fontWeight: 900, color: "#F8FAFC" }}>
-              An Editing Team You Can Actually Rely On.
-            </h2>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 20 }}>
-            {[
-              "✓ Consistent editing quality & brand style guidelines",
-              "✓ Reliable 48-hour turnaround on short-form content",
-              "✓ Brand consistency across every video & platform",
-              "✓ Scalable monthly volume as your content demands grow",
-              "✓ No full-time hiring cost, taxes, or management overhead",
-              "✓ One dedicated team for all your video editing needs",
-              "✓ Built specifically for recurring content creators & brands",
-            ].map((benefit, i) => (
-              <div
-                key={i}
-                style={{
-                  background: "rgba(15, 23, 42, 0.6)",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  borderRadius: 16,
-                  padding: 20,
-                  fontSize: 15,
-                  fontWeight: 700,
-                  color: "#F1F5F9",
-                }}
-              >
-                {benefit}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* SECTION 12 — TESTIMONIALS                                                */}
-      {/* ========================================================================= */}
-      <section style={{ padding: "90px 20px", background: "#070A12" }}>
-        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <span style={{ fontSize: 12, fontWeight: 800, color: "#F59E0B", letterSpacing: "0.15em", textTransform: "uppercase" }}>
-              CLIENT FEEDBACK
+      <section style={{ padding: "90px 24px", background: "#050811" }}>
+        <div style={{ maxWidth: 1140, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 54 }}>
+            <span
+              style={{
+                fontSize: 12,
+                fontWeight: 800,
+                letterSpacing: "0.15em",
+                color: "#F59E0B",
+                textTransform: "uppercase",
+              }}
+            >
+              CLIENT REVIEWS
             </span>
-            <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 900, color: "#F8FAFC", marginTop: 10 }}>
-              Trusted By High-Volume Content Creators
+            <h2
+              style={{
+                fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                fontWeight: 900,
+                margin: "12px 0 16px 0",
+                color: "#F8FAFC",
+              }}
+            >
+              Trusted by Founders & Creators Across North America
             </h2>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 24 }}>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+              gap: 24,
+              marginBottom: 90,
+            }}
+          >
             {TESTIMONIALS.map((t, idx) => (
               <div
                 key={idx}
                 style={{
                   background: "rgba(15, 23, 42, 0.65)",
                   border: "1px solid rgba(255, 255, 255, 0.08)",
-                  borderRadius: 20,
-                  padding: 28,
+                  borderRadius: 24,
+                  padding: 32,
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
                 }}
               >
-                <p style={{ color: "#CBD5E1", fontSize: 14.5, lineHeight: 1.6, fontStyle: "italic", margin: "0 0 20px 0" }}>
-                  "{t.text}"
-                </p>
                 <div>
-                  <div style={{ color: "#F59E0B", fontSize: 14, marginBottom: 6 }}>★★★★★</div>
-                  <div style={{ fontSize: 15, fontWeight: 800, color: "#F8FAFC" }}>{t.name}</div>
-                  <div style={{ fontSize: 12, color: "#94A3B8" }}>{t.role}</div>
-                  <div style={{ fontSize: 12, color: "#64748B" }}>{t.company}</div>
+                  <div style={{ color: "#F59E0B", fontSize: 16, marginBottom: 14 }}>
+                    {"★".repeat(t.rating)}
+                  </div>
+                  <p style={{ color: "#CBD5E1", fontSize: 15, lineHeight: 1.6, fontStyle: "italic", margin: "0 0 24px 0" }}>
+                    "{t.text}"
+                  </p>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <span style={{ fontSize: 32 }}>{t.avatar}</span>
+                  <div>
+                    <div style={{ fontSize: 16, fontWeight: 900, color: "#F8FAFC" }}>{t.name}</div>
+                    <div style={{ fontSize: 12, color: "#38BDF8", fontWeight: 700 }}>{t.role}</div>
+                    <div style={{ fontSize: 11, color: "#64748B" }}>{t.location}</div>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ========================================================================= */}
-      {/* SECTION 13 — FAQ                                                          */}
-      {/* ========================================================================= */}
-      <section style={{ padding: "90px 20px", background: "#0B0E17", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ maxWidth: 840, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <span style={{ fontSize: 12, fontWeight: 800, color: "#818CF8", letterSpacing: "0.15em", textTransform: "uppercase" }}>
-              QUESTIONS & ANSWERS
-            </span>
-            <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 900, color: "#F8FAFC", marginTop: 10 }}>
+          {/* FAQ Accordion */}
+          <div style={{ maxWidth: 840, margin: "0 auto" }}>
+            <h3 style={{ textAlign: "center", fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)", fontWeight: 900, marginBottom: 36, color: "#F8FAFC" }}>
               Frequently Asked Questions
-            </h2>
-          </div>
+            </h3>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-            {FAQ_ITEMS.map((faq, idx) => {
-              const isOpen = openFaqIndex === idx;
-              return (
-                <div
-                  key={idx}
-                  style={{
-                    background: "rgba(15, 23, 42, 0.6)",
-                    border: "1px solid rgba(255, 255, 255, 0.08)",
-                    borderRadius: 16,
-                    overflow: "hidden",
-                  }}
-                >
-                  <button
-                    onClick={() => {
-                      setOpenFaqIndex(isOpen ? -1 : idx);
-                      trackEvent("faq_toggle", { question: faq.q });
-                    }}
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              {FAQ_ITEMS.map((faq, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div
+                    key={idx}
                     style={{
-                      width: "100%",
-                      background: "none",
-                      border: "none",
-                      padding: "20px 24px",
-                      color: "#F8FAFC",
-                      fontSize: 16,
-                      fontWeight: 700,
-                      textAlign: "left",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      cursor: "pointer",
+                      background: "rgba(15, 23, 42, 0.6)",
+                      border: "1px solid rgba(255, 255, 255, 0.08)",
+                      borderRadius: 16,
+                      overflow: "hidden",
                     }}
                   >
-                    <span>{faq.q}</span>
-                    <span style={{ color: "#38BDF8", fontSize: 20 }}>{isOpen ? "−" : "+"}</span>
-                  </button>
-                  {isOpen && (
-                    <div style={{ padding: "0 24px 20px 24px", color: "#94A3B8", fontSize: 14.5, lineHeight: 1.6 }}>
-                      {faq.a}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                    <button
+                      onClick={() => setOpenFaqIndex(isOpen ? -1 : idx)}
+                      style={{
+                        width: "100%",
+                        background: "none",
+                        border: 0,
+                        color: "#F8FAFC",
+                        padding: 22,
+                        fontSize: 16,
+                        fontWeight: 800,
+                        textAlign: "left",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <span>{faq.q}</span>
+                      <span style={{ color: "#38BDF8", fontSize: 20 }}>{isOpen ? "−" : "+"}</span>
+                    </button>
+                    {isOpen && (
+                      <p style={{ padding: "0 22px 22px", color: "#94A3B8", fontSize: 14.5, lineHeight: 1.6, margin: 0 }}>
+                        {faq.a}
+                      </p>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ========================================================================= */}
-      {/* SECTION 14 — FINAL CTA                                                   */}
-      {/* ========================================================================= */}
-      <section
-        style={{
-          padding: "100px 20px",
-          background: "linear-gradient(135deg, #0F172A 0%, #030712 100%)",
-          textAlign: "center",
-          position: "relative",
-        }}
-      >
-        <div style={{ maxWidth: 800, margin: "0 auto" }}>
-          <h2
-            style={{
-              fontSize: "clamp(2.2rem, 4.5vw, 3.6rem)",
-              fontWeight: 900,
-              color: "#F8FAFC",
-              marginBottom: 16,
-              lineHeight: 1.15,
-            }}
-          >
-            Stop Spending Your Week Editing.
-          </h2>
-          <p style={{ fontSize: "clamp(1.1rem, 2vw, 1.25rem)", color: "#94A3B8", marginBottom: 36, lineHeight: 1.6 }}>
-            Send us the footage. We'll turn it into content your audience can actually watch.
-          </p>
-
-          <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-            <button
-              onClick={() => scrollToSection("quote-form")}
-              data-track="final-cta"
-              style={{
-                background: "linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)",
-                color: "#FFFFFF",
-                padding: "18px 40px",
-                borderRadius: 99,
-                fontSize: 17,
-                fontWeight: 900,
-                border: "none",
-                cursor: "pointer",
-                boxShadow: "0 12px 35px rgba(37, 99, 235, 0.5)",
-              }}
-            >
-              Get My Custom Editing Quote →
-            </button>
-            <button
-              onClick={() => scrollToSection("portfolio")}
-              style={{
-                background: "rgba(255,255,255,0.05)",
-                color: "#E2E8F0",
-                border: "1px solid rgba(255,255,255,0.16)",
-                padding: "18px 32px",
-                borderRadius: 99,
-                fontSize: 17,
-                fontWeight: 700,
-                cursor: "pointer",
-              }}
-            >
-              See Our Work
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ========================================================================= */}
-      {/* FOOTER                                                                    */}
-      {/* ========================================================================= */}
+      {/* Minimal US Funnel Footer */}
       <footer
         style={{
-          borderTop: "1px solid rgba(255,255,255,0.08)",
-          background: "#04060A",
-          padding: "40px 20px",
+          borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+          background: "#03060D",
+          padding: "48px 24px 32px",
           color: "#64748B",
           fontSize: 13,
         }}
       >
-        <div
-          style={{
-            maxWidth: 1240,
-            margin: "0 auto",
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "space-between",
-            alignItems: "center",
-            gap: 20,
-          }}
-        >
-          <div>
-            <span style={{ fontWeight: 800, color: "#F8FAFC", fontSize: 16 }}>
-              TheStoryBuilder Video Services
-            </span>
-            <div style={{ marginTop: 4 }}>Recurring Video Editing for US Creators, Brands & Agencies</div>
-          </div>
+        <div style={{ maxWidth: 1140, margin: "0 auto" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: 24,
+              marginBottom: 32,
+            }}
+          >
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                <span
+                  style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: 8,
+                    background: "linear-gradient(135deg, #6366F1, #3B82F6)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 900,
+                    fontSize: 13,
+                    color: "#FFFFFF",
+                  }}
+                >
+                  ▶
+                </span>
+                <span style={{ fontWeight: 900, fontSize: 16, color: "#F8FAFC", letterSpacing: "-0.02em" }}>
+                  TheStoryBuilder <span style={{ color: "#38BDF8", fontSize: 11 }}>US</span>
+                </span>
+              </div>
+              <p style={{ margin: 0, color: "#94A3B8", fontSize: 13, maxWidth: 440, lineHeight: 1.5 }}>
+                Recurring video editing & short-form content production built for US creators, coaches, brands, and marketing agencies.
+              </p>
+            </div>
 
-          <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
-            {setPage && (
+            <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
               <button
-                onClick={() => setPage("privacy")}
-                style={{ background: "none", border: "none", color: "#64748B", cursor: "pointer" }}
+                type="button"
+                onClick={() => setPage && setPage("privacy")}
+                style={{ background: "none", border: "none", color: "#94A3B8", fontSize: 13, cursor: "pointer", padding: 0 }}
               >
                 Privacy Policy
               </button>
-            )}
-            {setPage && (
               <button
-                onClick={() => setPage("terms")}
-                style={{ background: "none", border: "none", color: "#64748B", cursor: "pointer" }}
+                type="button"
+                onClick={() => setPage && setPage("terms")}
+                style={{ background: "none", border: "none", color: "#94A3B8", fontSize: 13, cursor: "pointer", padding: 0 }}
               >
                 Terms & Conditions
               </button>
-            )}
-            <a href="mailto:hello@thestorybuilder.in" style={{ color: "#64748B", textDecoration: "none" }}>
-              hello@thestorybuilder.in
-            </a>
+              <button
+                type="button"
+                onClick={() => setPage && setPage("cookies")}
+                style={{ background: "none", border: "none", color: "#94A3B8", fontSize: 13, cursor: "pointer", padding: 0 }}
+              >
+                Cookie Policy
+              </button>
+            </div>
           </div>
 
-          <div>© {new Date().getFullYear()} TheStoryBuilder. All rights reserved.</div>
+          <div
+            style={{
+              borderTop: "1px solid rgba(255, 255, 255, 0.06)",
+              paddingTop: 24,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: 16,
+              fontSize: 12,
+              color: "#64748B",
+            }}
+          >
+            <p style={{ margin: 0 }}>© 2026 The Story Builder Video Services. All rights reserved.</p>
+            <p style={{ margin: 0, color: "#475569" }}>US Content Team & Recurring Video Production</p>
+          </div>
         </div>
       </footer>
-
-      {/* Sticky Mobile CTA Bar */}
-      <div
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 90,
-          background: "rgba(11, 15, 25, 0.95)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          borderTop: "1px solid rgba(255, 255, 255, 0.12)",
-          padding: "12px 16px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-        className="mobile-sticky-cta"
-      >
-        <div>
-          <div style={{ fontSize: 12, fontWeight: 800, color: "#F8FAFC" }}>Recurring Video Editing</div>
-          <div style={{ fontSize: 10, color: "#94A3B8" }}>Custom Quote in 12h</div>
-        </div>
-        <button
-          onClick={() => scrollToSection("quote-form")}
-          data-track="mobile-sticky-cta"
-          style={{
-            background: "linear-gradient(135deg, #3B82F6, #2563EB)",
-            color: "#FFFFFF",
-            border: "none",
-            padding: "10px 20px",
-            borderRadius: 99,
-            fontSize: 13,
-            fontWeight: 800,
-            cursor: "pointer",
-            boxShadow: "0 4px 14px rgba(59, 130, 246, 0.5)",
-          }}
-        >
-          Get Custom Quote →
-        </button>
-      </div>
-
-      {/* CSS helper for responsive display */}
-      <style>{`
-        @media (min-width: 768px) {
-          .desktop-only-link {
-            display: inline-block !important;
-          }
-          .mobile-sticky-cta {
-            display: none !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

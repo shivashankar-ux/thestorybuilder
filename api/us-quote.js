@@ -44,6 +44,45 @@ function sanitizeText(str) {
     .replace(/'/g, "&#039;");
 }
 
+async function sendGoogleSheetWebhook(payload) {
+  const sheetWebhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL;
+  if (!sheetWebhookUrl || !sheetWebhookUrl.startsWith("https://")) {
+    console.warn("⚠️ GOOGLE_SHEET_WEBHOOK_URL is not configured.");
+    return false;
+  }
+
+  try {
+    const res = await fetch(sheetWebhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      redirect: "follow",
+    });
+
+    if (res.status === 302 || res.status === 301 || res.status === 307) {
+      const location = res.headers.get("location");
+      if (location) {
+        await fetch(location, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      }
+    }
+
+    if (res.ok) {
+      console.log("✅ Lead successfully posted to Google Sheet");
+      return true;
+    } else {
+      console.warn("⚠️ Google Sheet Webhook returned HTTP status:", res.status);
+      return false;
+    }
+  } catch (err) {
+    console.warn("⚠️ Error dispatching to Google Sheet Webhook:", err.message);
+    return false;
+  }
+}
+
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ ok: false, error: "Method not allowed" });
@@ -98,41 +137,30 @@ export default async function handler(req, res) {
     }
 
     const payload = {
+      timestamp: timestamp || new Date().toISOString(),
+      form_type: "US Video Quote Form",
       name: sanitizeText(name.trim()),
       email: sanitizeText(email.trim()),
       phone: sanitizeText(phone.trim()),
       company: sanitizeText((company || "").trim()),
-      content_types: Array.isArray(content_types) ? content_types.map(sanitizeText) : [sanitizeText(String(content_types || ""))],
+      content_types: Array.isArray(content_types) ? content_types.map(sanitizeText).join(", ") : sanitizeText(String(content_types || "")),
       monthly_volume: sanitizeText(String(monthly_volume || "Not specified")),
       business_type: sanitizeText(String(business_type || "Not specified")),
       message: sanitizeText((message || "").trim()),
       utm_source: sanitizeText(utm_source || "direct"),
       utm_medium: sanitizeText(utm_medium || "none"),
       utm_campaign: sanitizeText(utm_campaign || "none"),
-      utm_content: sanitizeText(utm_content || "none"),
-      utm_term: sanitizeText(utm_term || "none"),
+      utm_content: sanitizeText(utm_content || ""),
+      utm_term: sanitizeText(utm_term || ""),
       fbclid: sanitizeText(fbclid || ""),
       gclid: sanitizeText(gclid || ""),
       landing_page: sanitizeText(landing_page || "/us-video-editing"),
-      timestamp: timestamp || new Date().toISOString(),
     };
 
     console.log("📥 [US Lead Received]:", payload);
 
     // 1. Send to Google Sheet Webhook if configured
-    const sheetWebhookUrl = process.env.GOOGLE_SHEET_WEBHOOK_URL || "https://script.google.com/macros/s/AKfycbydxaBIDfzPs1DcN95oaYZozZiNVQdjIKBTT-dOu9235entWoleMObjWrk2x_iA1uOBqw/exec";
-    if (sheetWebhookUrl && sheetWebhookUrl.startsWith("https://")) {
-      try {
-        await fetch(sheetWebhookUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        console.log("✅ Lead posted to Google Sheet successfully");
-      } catch (sheetErr) {
-        console.warn("Google Sheet Webhook error:", sheetErr);
-      }
-    }
+    await sendGoogleSheetWebhook(payload);
 
     // 2. Telegram Alert
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
@@ -147,13 +175,14 @@ export default async function handler(req, res) {
         `📞 **Phone/WhatsApp:** ${payload.phone}`,
         `🏢 **Company/Brand:** ${payload.company || "N/A"}`,
         `💼 **Business Type:** ${payload.business_type}`,
-        `🎬 **Content Types:** ${payload.content_types.join(", ")}`,
+        `🎬 **Content Types:** ${payload.content_types}`,
         `📦 **Monthly Volume:** ${payload.monthly_volume}`,
         `💬 **Notes:** ${payload.message || "None provided"}`,
         "━━━━━━━━━━━━━━━━━━━━━",
         `📌 **Source:** ${payload.utm_source} | ${payload.utm_medium}`,
         `🎯 **Campaign:** ${payload.utm_campaign}`,
         payload.fbclid ? `⚡ **Meta Click ID:** ${payload.fbclid}` : "",
+        payload.gclid ? `⚡ **Google Click ID:** ${payload.gclid}` : "",
         `⏰ **Time:** ${new Date().toLocaleString("en-US", { timeZone: "America/New_York" })} EST`,
       ].filter(Boolean).join("\n");
 
