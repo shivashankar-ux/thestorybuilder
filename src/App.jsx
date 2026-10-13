@@ -39,6 +39,7 @@ import SeoServicesPage from "./components/services/SeoServicesPage";
 import GoogleAdsPage from "./components/services/GoogleAdsPage";
 import ReelsLandingPage from "./components/services/ReelsLandingPage";
 import USVideoEditingLandingPage from "./components/services/USVideoEditingLandingPage";
+import VideoPortfolioPage from "./components/services/VideoPortfolioPage";
 import FAQPage from "./components/FAQPage";
 import BlogPage from "./components/BlogPage";
 import NotFoundPage from "./components/NotFoundPage";
@@ -83,6 +84,7 @@ function getRouteFromPath(pathStr) {
   if (p === "/services/google-ads-hyderabad" || p === "/service-google-ads") return { page: "service-google-ads", slug: null };
   if (p === "/services/social-media-marketing" || p === "/service-smm" || p === "/reels" || p === "/services/reels" || p === "/reels-service") return { page: "reels", slug: null };
   if (p === "/us-video-editing" || p === "/us-editing" || p === "/services/us-video-editing" || p === "/us-video-service") return { page: "us-video-editing", slug: null };
+  if (p === "/video-portfolio" || p === "/video-portfolio/" || p === "/video") return { page: "video-portfolio", slug: null };
   if (p === "/services/branding" || p === "/service-branding") return { page: "service-branding", slug: null };
   // Hidden for now
   // if (p === "/pricing") return { page: "pricing", slug: null };
@@ -121,6 +123,7 @@ function getPathFromRoute(page, slug) {
   if (page === "service-google-ads") return "/services/google-ads-hyderabad";
   if (page === "service-smm" || page === "reels") return "/services/social-media-marketing";
   if (page === "us-video-editing") return "/us-video-editing";
+  if (page === "video-portfolio") return "/video-portfolio";
   if (page === "service-branding") return "/services/branding";
   if (page === "pricing") return "/pricing";
   if (page === "contact") return "/contact";
@@ -193,6 +196,10 @@ const pageMetadata = {
   "us-video-editing": {
     title: "Professional Video Editing Services for Businesses & Creators | The Story Builder",
     desc: "Your Content Team, Without Hiring an In-House Editor. High-converting recurring video editing for US coaches, consultants, creators, brands, and agencies.",
+  },
+  "video-portfolio": {
+    title: "Video Shoot & Edit Services Hyderabad — One Crew, One Brief | The Story Builder",
+    desc: "Professional video shoot and editing in one package. We plan, shoot, and edit brand films, Reels, product videos, and ad creatives for businesses across India.",
   },
   "service-branding": {
     title: "Brand Strategy & Identity Design Studio | The Story Builder",
@@ -324,7 +331,7 @@ export default function App() {
   return (
     <div>
       <div className="grain" aria-hidden="true" />
-      {page !== "landing" && page !== "us-video-editing" && <Navbar page={page} setPage={navigate} />}
+      {page !== "landing" && page !== "us-video-editing" && page !== "video-portfolio" && <Navbar page={page} setPage={navigate} />}
 
       <AnimatePresence mode="wait">
         {page === "home" && (
@@ -398,6 +405,12 @@ export default function App() {
         {page === "us-video-editing" && (
           <motion.div key="us-video-editing" {...pageTransition}>
             <USVideoEditingLandingPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "video-portfolio" && (
+          <motion.div key="video-portfolio" {...pageTransition}>
+            <VideoPortfolioPage setPage={navigate} />
           </motion.div>
         )}
 
@@ -498,10 +511,10 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {page !== "landing" && page !== "us-video-editing" && <Footer setPage={navigate} />}
+      {page !== "landing" && page !== "us-video-editing" && page !== "video-portfolio" && <Footer setPage={navigate} />}
 
-      {page !== "landing" && page !== "us-video-editing" && <WhatsAppButton />}
-      {page !== "landing" && page !== "us-video-editing" && <ExitIntent setPage={navigate} />}
+      {page !== "landing" && page !== "us-video-editing" && page !== "video-portfolio" && <WhatsAppButton />}
+      {page !== "landing" && page !== "us-video-editing" && page !== "video-portfolio" && <ExitIntent setPage={navigate} />}
       <CookieConsent setPage={navigate} />
     </div>
   );

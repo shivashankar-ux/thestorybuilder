@@ -218,6 +218,8 @@ export default function USVideoEditingLandingPage({ setPage }) {
   // State Management
   const [activeCategory, setActiveCategory] = useState("ALL");
   const [activeVideoModal, setActiveVideoModal] = useState(null);
+  const [unmutedVideoId, setUnmutedVideoId] = useState(null);
+  const [carouselIndex, setCarouselIndex] = useState(0);
   const [baMode, setBaMode] = useState("after");
   const [openFaqIndex, setOpenFaqIndex] = useState(0);
 
@@ -1069,46 +1071,74 @@ export default function USVideoEditingLandingPage({ setPage }) {
       <section
         id="portfolio"
         style={{
-          padding: "90px 24px",
-          background: "#07090F",
+          padding: "90px 24px 110px",
+          background: "radial-gradient(ellipse at 50% 30%, #0F172A 0%, #07090F 70%)",
           borderTop: "1px solid rgba(255,255,255,0.06)",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <div style={{ maxWidth: 1240, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 40 }}>
-            <span
+        {/* Ambient Studio Lighting Behind Mirror */}
+        <div
+          style={{
+            position: "absolute",
+            top: "40%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "80%",
+            maxWidth: 900,
+            height: 400,
+            background: "radial-gradient(ellipse, rgba(99, 102, 241, 0.18), rgba(59, 130, 246, 0.1) 40%, transparent 70%)",
+            filter: "blur(60px)",
+            pointerEvents: "none",
+          }}
+        />
+
+        <div style={{ maxWidth: 1280, margin: "0 auto", position: "relative", zIndex: 2 }}>
+          {/* Section Title */}
+          <div style={{ textAlign: "center", marginBottom: 36 }}>
+            <div
               style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                padding: "6px 16px",
+                borderRadius: 99,
+                background: "rgba(99, 102, 241, 0.12)",
+                border: "1px solid rgba(99, 102, 241, 0.3)",
+                color: "#818CF8",
                 fontSize: 12,
                 fontWeight: 800,
-                letterSpacing: "0.15em",
-                color: "#818CF8",
+                letterSpacing: "0.12em",
                 textTransform: "uppercase",
+                marginBottom: 14,
               }}
             >
-              PORTFOLIO & PROOF
-            </span>
+              <span>🎬</span> INTERACTIVE 3D CONCAVE VIDEO CANVAS
+            </div>
             <h2
               style={{
-                fontSize: "clamp(2rem, 4vw, 3.2rem)",
+                fontSize: "clamp(2rem, 4.5vw, 3.4rem)",
                 fontWeight: 900,
-                margin: "12px 0 12px 0",
+                margin: "0 0 12px 0",
                 color: "#F8FAFC",
+                letterSpacing: "-0.02em",
               }}
             >
               Don't Take Our Word For It. Watch The Work.
             </h2>
-            <p style={{ color: "#94A3B8", fontSize: 16, maxWidth: 600, margin: "0 auto 28px" }}>
-              Explore real video edits across formats and business categories.
+            <p style={{ color: "#94A3B8", fontSize: 16, maxWidth: 640, margin: "0 auto 28px", lineHeight: 1.6 }}>
+              Videos play automatically in silent motion. Click any video's sound button to enable audio for that edit.
             </p>
 
-            {/* Filter Tabs */}
+            {/* Category Filter Tabs */}
             <div
               style={{
                 display: "flex",
                 gap: 8,
                 justifyContent: "center",
                 flexWrap: "wrap",
-                marginBottom: 36,
+                marginBottom: 30,
               }}
             >
               {CATEGORIES.map((cat) => (
@@ -1116,6 +1146,7 @@ export default function USVideoEditingLandingPage({ setPage }) {
                   key={cat}
                   onClick={() => {
                     setActiveCategory(cat);
+                    setCarouselIndex(0);
                     trackEvent("portfolio_filter_click", { category: cat });
                   }}
                   style={{
@@ -1127,6 +1158,7 @@ export default function USVideoEditingLandingPage({ setPage }) {
                     fontSize: 13,
                     fontWeight: 700,
                     cursor: "pointer",
+                    boxShadow: activeCategory === cat ? "0 4px 16px rgba(99, 102, 241, 0.4)" : "none",
                     transition: "all 0.2s ease",
                   }}
                 >
@@ -1136,199 +1168,339 @@ export default function USVideoEditingLandingPage({ setPage }) {
             </div>
           </div>
 
-          {/* Video Grid */}
+          {/* 3D CONCAVE MIRROR STAGE */}
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-              gap: 24,
-            }}
-          >
-            {filteredPortfolio.map((item) => (
-              <motion.div
-                key={item.id}
-                layout
-                whileHover={{ y: -6 }}
-                onClick={() => {
-                  setActiveVideoModal(item);
-                  trackEvent("portfolio_video_click", { video_id: item.id, title: item.title });
-                }}
-                data-track="portfolio"
-                style={{
-                  background: "#0F172A",
-                  borderRadius: 20,
-                  overflow: "hidden",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
-                  boxShadow: "0 12px 35px rgba(0,0,0,0.5)",
-                  cursor: "pointer",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                {/* Poster Container */}
-                <div
-                  style={{
-                    position: "relative",
-                    aspectRatio: item.aspect === "9/16" ? "9 / 14" : "16 / 9",
-                    background: "#000000",
-                    overflow: "hidden",
-                  }}
-                >
-                  <img
-                    src={`https://i.ytimg.com/vi/${item.id}/hqdefault.jpg`}
-                    alt={item.title}
-                    loading="lazy"
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      display: "block",
-                      opacity: 0.88,
-                    }}
-                  />
-                  {/* Category Tag Badge */}
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: 12,
-                      left: 12,
-                      background: "rgba(0, 0, 0, 0.75)",
-                      backdropFilter: "blur(4px)",
-                      color: "#38BDF8",
-                      fontSize: 11,
-                      fontWeight: 800,
-                      padding: "4px 10px",
-                      borderRadius: 6,
-                      border: "1px solid rgba(56, 189, 248, 0.3)",
-                    }}
-                  >
-                    {item.tag}
-                  </span>
-
-                  {/* Play Button Overlay */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      background: "rgba(0, 0, 0, 0.25)",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: 52,
-                        height: 52,
-                        borderRadius: "50%",
-                        background: "linear-gradient(135deg, #6366F1, #3B82F6)",
-                        color: "#FFFFFF",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: 20,
-                        paddingLeft: 3,
-                        boxShadow: "0 8px 24px rgba(99, 102, 241, 0.6)",
-                      }}
-                    >
-                      ▶
-                    </div>
-                  </div>
-                </div>
-
-                {/* Card Details */}
-                <div style={{ padding: 18, flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                  <div>
-                    <h3 style={{ fontSize: 16, fontWeight: 800, color: "#F8FAFC", margin: "0 0 6px 0" }}>
-                      {item.title}
-                    </h3>
-                    <p style={{ color: "#94A3B8", fontSize: 13, lineHeight: 1.5, margin: 0 }}>
-                      {item.desc}
-                    </p>
-                  </div>
-                  <div style={{ marginTop: 14, paddingTop: 10, borderTop: "1px solid rgba(255,255,255,0.06)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span style={{ fontSize: 12, color: "#64748B", fontWeight: 600 }}>{item.views}</span>
-                    <span style={{ fontSize: 12, color: "#38BDF8", fontWeight: 700 }}>Watch Edit →</span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Video Modal Player Lightbox */}
-      <AnimatePresence>
-        {activeVideoModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setActiveVideoModal(null)}
-            style={{
-              position: "fixed",
-              inset: 0,
-              zIndex: 99999,
-              background: "rgba(5, 8, 15, 0.94)",
-              backdropFilter: "blur(14px)",
+              position: "relative",
+              height: 560,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              padding: 20,
+              perspective: "1200px",
+              perspectiveOrigin: "50% 50%",
+              WebkitPerspective: "1200px",
+              margin: "20px 0 30px",
             }}
           >
-            <motion.div
-              initial={{ scale: 0.92, y: 16 }}
-              animate={{ scale: 1, y: 0 }}
-              exit={{ scale: 0.92, y: 16 }}
-              onClick={(e) => e.stopPropagation()}
+            {/* Concave Stage Curved Backing Line */}
+            <div
               style={{
-                position: "relative",
-                width: "100%",
-                maxWidth: activeVideoModal.aspect === "9/16" ? 380 : 800,
-                aspectRatio: activeVideoModal.aspect === "9/16" ? "9 / 16" : "16 / 9",
-                maxHeight: "88vh",
-                background: "#000000",
-                borderRadius: 24,
-                overflow: "hidden",
-                boxShadow: "0 25px 80px rgba(0,0,0,0.9)",
-                border: "2px solid rgba(99, 102, 241, 0.5)",
+                position: "absolute",
+                bottom: 20,
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "85%",
+                height: 80,
+                borderBottom: "2px solid rgba(99, 102, 241, 0.3)",
+                borderRadius: "50%",
+                boxShadow: "0 20px 40px rgba(99, 102, 241, 0.15)",
+                pointerEvents: "none",
+              }}
+            />
+
+            {/* Cards Render Loop */}
+            <AnimatePresence initial={false}>
+              {filteredPortfolio.map((item, idx) => {
+                const total = filteredPortfolio.length;
+                let offset = idx - carouselIndex;
+                if (offset > total / 2) offset -= total;
+                if (offset < -total / 2) offset += total;
+
+                // Only render cards within visual range (-2 to 2)
+                if (Math.abs(offset) > 2) return null;
+
+                const isCenter = offset === 0;
+                const isUnmuted = unmutedVideoId === item.id;
+
+                // Concave Mirror geometry math:
+                // Left items (offset < 0) curve inward facing right (+rotateY)
+                // Right items (offset > 0) curve inward facing left (-rotateY)
+                const rotateY = offset * -20;
+                const scale = isCenter ? 1.05 : Math.max(0.75, 1 - Math.abs(offset) * 0.14);
+                const translateX = offset * 300;
+                const translateZ = isCenter ? 80 : -Math.abs(offset) * 110;
+                const zIndex = 20 - Math.abs(offset) * 5;
+                const opacity = isCenter ? 1 : Math.max(0.45, 1 - Math.abs(offset) * 0.3);
+
+                return (
+                  <motion.div
+                    key={item.id}
+                    onClick={() => {
+                      setCarouselIndex(idx);
+                      trackEvent("portfolio_card_focus", { id: item.id, title: item.title });
+                    }}
+                    initial={false}
+                    animate={{
+                      x: translateX,
+                      z: translateZ,
+                      rotateY: rotateY,
+                      scale: scale,
+                      opacity: opacity,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 26,
+                    }}
+                    style={{
+                      position: "absolute",
+                      width: item.aspect === "9/16" ? 270 : 440,
+                      height: item.aspect === "9/16" ? 460 : 330,
+                      zIndex: zIndex,
+                      transformStyle: "preserve-3d",
+                      cursor: "pointer",
+                      borderRadius: 22,
+                      overflow: "hidden",
+                      background: "#090D16",
+                      border: isCenter
+                        ? isUnmuted
+                          ? "2px solid #10B981"
+                          : "2px solid rgba(99, 102, 241, 0.8)"
+                        : "1px solid rgba(255, 255, 255, 0.12)",
+                      boxShadow: isCenter
+                        ? isUnmuted
+                          ? "0 20px 50px rgba(16, 185, 129, 0.4)"
+                          : "0 20px 50px rgba(99, 102, 241, 0.4)"
+                        : "0 10px 30px rgba(0, 0, 0, 0.6)",
+                    }}
+                  >
+                    {/* Autoplay Video Embed Frame */}
+                    <div style={{ position: "relative", width: "100%", height: "100%", background: "#000000" }}>
+                      <iframe
+                        src={`https://www.youtube.com/embed/${item.id}?autoplay=1&mute=${isUnmuted ? 0 : 1}&loop=1&playlist=${item.id}&controls=0&modestbranding=1&rel=0&enablejsapi=1&playsinline=1`}
+                        title={item.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          border: 0,
+                          pointerEvents: isUnmuted ? "auto" : "none",
+                        }}
+                      />
+
+                      {/* Top Badge Overlay */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: 12,
+                          left: 12,
+                          right: 12,
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                          zIndex: 10,
+                          pointerEvents: "none",
+                        }}
+                      >
+                        <span
+                          style={{
+                            background: "rgba(5, 8, 17, 0.82)",
+                            backdropFilter: "blur(8px)",
+                            color: "#38BDF8",
+                            fontSize: 10,
+                            fontWeight: 800,
+                            padding: "4px 10px",
+                            borderRadius: 6,
+                            border: "1px solid rgba(56, 189, 248, 0.3)",
+                          }}
+                        >
+                          {item.tag}
+                        </span>
+
+                        <span
+                          style={{
+                            background: "rgba(5, 8, 17, 0.82)",
+                            backdropFilter: "blur(8px)",
+                            color: "#94A3B8",
+                            fontSize: 10,
+                            fontWeight: 700,
+                            padding: "4px 8px",
+                            borderRadius: 6,
+                          }}
+                        >
+                          {item.views}
+                        </span>
+                      </div>
+
+                      {/* Interactive Sound / Mute Toggle Button Pill */}
+                      <div
+                        style={{
+                          position: "absolute",
+                          bottom: 12,
+                          left: 10,
+                          right: 10,
+                          zIndex: 20,
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 6,
+                        }}
+                      >
+                        {/* Sound Toggle Button */}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCarouselIndex(idx);
+                            if (isUnmuted) {
+                              setUnmutedVideoId(null);
+                              trackEvent("video_muted", { id: item.id });
+                            } else {
+                              setUnmutedVideoId(item.id);
+                              trackEvent("video_unmuted", { id: item.id });
+                            }
+                          }}
+                          style={{
+                            width: "100%",
+                            padding: "10px 12px",
+                            borderRadius: 12,
+                            border: isUnmuted ? "1px solid #10B981" : "1px solid rgba(255, 255, 255, 0.25)",
+                            background: isUnmuted
+                              ? "linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(5, 150, 105, 0.95))"
+                              : "rgba(15, 23, 42, 0.88)",
+                            backdropFilter: "blur(12px)",
+                            color: "#FFFFFF",
+                            fontWeight: 800,
+                            fontSize: 11,
+                            cursor: "pointer",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: 6,
+                            boxShadow: isUnmuted ? "0 4px 16px rgba(16, 185, 129, 0.5)" : "0 4px 14px rgba(0,0,0,0.5)",
+                            transition: "all 0.2s ease",
+                          }}
+                        >
+                          {isUnmuted ? (
+                            <>
+                              <span style={{ fontSize: 13 }}>🔊</span>
+                              <span>SOUND ON — TAP TO MUTE</span>
+                            </>
+                          ) : (
+                            <>
+                              <span style={{ fontSize: 13 }}>🔇</span>
+                              <span>MUTED — TAP FOR SOUND</span>
+                            </>
+                          )}
+                        </button>
+
+                        {/* Title Bar (Visible on Center Card) */}
+                        {isCenter && (
+                          <div
+                            style={{
+                              background: "rgba(5, 8, 17, 0.85)",
+                              backdropFilter: "blur(10px)",
+                              padding: "8px 12px",
+                              borderRadius: 10,
+                              border: "1px solid rgba(255,255,255,0.08)",
+                            }}
+                          >
+                            <div style={{ fontSize: 12, fontWeight: 800, color: "#F8FAFC", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                              {item.title}
+                            </div>
+                            <div style={{ fontSize: 10, color: "#94A3B8", marginTop: 2 }}>
+                              {item.desc}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+
+            {/* Navigation Arrows */}
+            <button
+              onClick={() => {
+                setCarouselIndex((prev) => (prev - 1 + filteredPortfolio.length) % filteredPortfolio.length);
+                trackEvent("portfolio_carousel_prev");
+              }}
+              aria-label="Previous Video"
+              style={{
+                position: "absolute",
+                left: 15,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 30,
+                width: 50,
+                height: 50,
+                borderRadius: "50%",
+                background: "rgba(15, 23, 42, 0.85)",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                color: "#FFFFFF",
+                fontSize: 22,
+                fontWeight: 900,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+                transition: "all 0.2s ease",
               }}
             >
-              <button
-                type="button"
-                onClick={() => setActiveVideoModal(null)}
-                style={{
-                  position: "absolute",
-                  top: 14,
-                  right: 14,
-                  zIndex: 20,
-                  background: "rgba(0,0,0,0.8)",
-                  border: "1px solid rgba(255,255,255,0.3)",
-                  color: "#FFFFFF",
-                  width: 36,
-                  height: 36,
-                  borderRadius: "50%",
-                  fontSize: 16,
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                ✕
-              </button>
-              <iframe
-                src={`https://www.youtube.com/embed/${activeVideoModal.id}?autoplay=1&rel=0&modestbranding=1&playsinline=1`}
-                title={activeVideoModal.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                style={{ width: "100%", height: "100%", border: 0, display: "block" }}
-              />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              ‹
+            </button>
+
+            <button
+              onClick={() => {
+                setCarouselIndex((prev) => (prev + 1) % filteredPortfolio.length);
+                trackEvent("portfolio_carousel_next");
+              }}
+              aria-label="Next Video"
+              style={{
+                position: "absolute",
+                right: 15,
+                top: "50%",
+                transform: "translateY(-50%)",
+                zIndex: 30,
+                width: 50,
+                height: 50,
+                borderRadius: "50%",
+                background: "rgba(15, 23, 42, 0.85)",
+                backdropFilter: "blur(12px)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                color: "#FFFFFF",
+                fontSize: 22,
+                fontWeight: 900,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+                transition: "all 0.2s ease",
+              }}
+            >
+              ›
+            </button>
+          </div>
+
+          {/* Dots Indicator & Counter */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, marginTop: 10 }}>
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              {filteredPortfolio.map((item, idx) => (
+                <button
+                  key={item.id}
+                  onClick={() => setCarouselIndex(idx)}
+                  style={{
+                    width: carouselIndex === idx ? 28 : 10,
+                    height: 10,
+                    borderRadius: 99,
+                    background: carouselIndex === idx ? "linear-gradient(135deg, #6366F1, #3B82F6)" : "rgba(255,255,255,0.2)",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                  }}
+                />
+              ))}
+            </div>
+
+            <span style={{ fontSize: 13, color: "#64748B", fontWeight: 700 }}>
+              Video {carouselIndex + 1} of {filteredPortfolio.length} — {filteredPortfolio[carouselIndex]?.title}
+            </span>
+          </div>
+        </div>
+      </section>
 
       {/* ========================================================================= */}
       {/* SECTION 5 — BEFORE / AFTER INTERACTIVE COMPARISON                         */}
