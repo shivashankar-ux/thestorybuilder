@@ -1081,15 +1081,15 @@ const FAQ_ITEMS = [
   },
   {
     q: "Do I need a script or concept ready before booking?",
-    a: "No! You bring your product, service, or goal. We develop the core concept, scripting hooks, visual storyboard, and shot list before shoot day.",
+    a: "We primarily do the shoot and edit. If you have your concepts, reference reels, or talking points ready, we can shoot and edit right away. If you need dedicated content ideation, scripting, or strategy, that can be added as a separate service.",
   },
   {
     q: "Can you shoot outside Hyderabad?",
-    a: "Yes. While our core crew is based in Hyderabad, Telangana, we travel across India for client campaigns. Travel and accommodation are quoted transparently upfront.",
+    a: "No, we shoot strictly inside Hyderabad. All our on-location shoots are carried out across Hyderabad locations.",
   },
   {
     q: "What camera gear and production equipment do you bring?",
-    a: "We shoot on cinema-line bodies (Sony FX series / Cine lenses), DJI Ronin stabilization gimbals, professional Aputure/Nanlite wireless lighting rigs, and Sennheiser/Rode wireless audio lavaliers.",
+    a: "We generally shoot on the latest flagship iPhone and Sony Alpha series cameras, equipped with wireless lapel microphones and portable lighting rigs for crisp, high-retention video.",
   },
   {
     q: "How many revisions are included in the package?",
@@ -1432,14 +1432,14 @@ export default function VideoPortfolioPage({ setPage }) {
           <section className="vp-hero">
             <div className="vp-wrap">
               <div className="vp-hero-badge">
-                <span>Video Shoot & Edit • Hyderabad & Pan-India</span>
+                <span>Video Shoot & Edit • Hyderabad</span>
               </div>
               <h1>Shot by one crew.<br />Cut by the same team.</h1>
               <div className="vp-hero-grid">
                 <div className="vp-hero-copy">
                   <p className="vp-lede">
-                    Video shoots and editing in one seamless package. Brief us once and get finished
-                    cinema-grade videos tailored for Reels, YouTube, and high-converting paid ads.
+                    Video shoots and editing in one seamless package. Brief us on your requirements and get finished
+                    high-retention videos tailored for Reels, YouTube, and paid ads.
                   </p>
                   <div className="vp-btn-row">
                     <a
@@ -1463,7 +1463,7 @@ export default function VideoPortfolioPage({ setPage }) {
                     </a>
                   </div>
                   <ul className="vp-hero-points">
-                    <li>Crew based in Hyderabad, shooting on-location across India</li>
+                    <li>Crew shooting on-location across Hyderabad on Sony Alpha & latest iPhone</li>
                     <li>First cut delivered within 5 to 7 working days of shoot</li>
                     <li>Two comprehensive revision rounds included per video</li>
                   </ul>
@@ -1659,13 +1659,13 @@ export default function VideoPortfolioPage({ setPage }) {
                     {[
                       {
                         title: "1. Pre-Production & Planning",
-                        desc: "We analyze your business goal, write the concept, create scripting hooks, and lock the shot list so shoot day runs on clockwork.",
-                        chips: ["Strategy call", "Concept & hook writing", "Shot list & storyboard", "Call sheet & schedule"],
+                        desc: "We align on your shoot agenda, talking points, and shot list so shoot day runs on clockwork (dedicated content strategy and scripting available as a separate service).",
+                        chips: ["Shoot prep call", "Shot list & agenda", "Schedule & call sheet", "Content strategy (separate)"],
                       },
                       {
                         title: "2. Shoot Day On-Location",
-                        desc: "Cinema camera crew with lighting, gimbal rigs, and lavalier audio directing on set at your office, studio, or factory.",
-                        chips: ["Cinema 4K cameras", "Lighting design", "Clean lav audio", "Product macro shots", "Director on set"],
+                        desc: "Crew shooting on Sony Alpha and the latest flagship iPhone with wireless lapel audio and portable lighting at your Hyderabad location.",
+                        chips: ["Sony Alpha & iPhone", "Portable lighting", "Clean lav audio", "Product B-roll", "Director on set"],
                       },
                       {
                         title: "3. Post-Production & Color",
@@ -1698,9 +1698,9 @@ export default function VideoPortfolioPage({ setPage }) {
                   <h3>4 Reels</h3>
                   <p className="vp-price">₹10,000 <small>shoot & edit</small></p>
                   <ul>
-                    <li>On-location video shoot</li>
+                    <li>On-location shoot in Hyderabad</li>
                     <li>4 short-form vertical reels (9:16)</li>
-                    <li>Hook scripting & retention pacing</li>
+                    <li>Shot on Sony Alpha & latest iPhone</li>
                     <li>Cinematic color grade & sound design</li>
                     <li>Two revision rounds included</li>
                   </ul>
@@ -1714,9 +1714,9 @@ export default function VideoPortfolioPage({ setPage }) {
                   <h3>6 Reels</h3>
                   <p className="vp-price">₹15,000 <small>shoot & edit</small></p>
                   <ul>
-                    <li>Full on-location video shoot</li>
+                    <li>Full on-location shoot in Hyderabad</li>
                     <li>6 short-form vertical reels (9:16)</li>
-                    <li>Hook scripting, viral pacing & dynamic B-roll</li>
+                    <li>Shot on Sony Alpha & latest iPhone</li>
                     <li>Sound effects, motion graphics & color grade</li>
                     <li>Two revision rounds per video</li>
                   </ul>
@@ -1729,9 +1729,9 @@ export default function VideoPortfolioPage({ setPage }) {
                   <h3>8 Reels</h3>
                   <p className="vp-price">₹20,000 <small>shoot & edit</small></p>
                   <ul>
-                    <li>Extended on-location video shoot</li>
+                    <li>Extended on-location shoot in Hyderabad</li>
                     <li>8 short-form vertical reels (9:16)</li>
-                    <li>Complete monthly content calendar coverage</li>
+                    <li>Batch shoot for your monthly social presence</li>
                     <li>Scroll-stopping hooks, kinetic captions & SFX</li>
                     <li>Two revision rounds per video</li>
                   </ul>
@@ -1780,8 +1780,8 @@ export default function VideoPortfolioPage({ setPage }) {
                 <ol className="vp-tl-grid vp-steps">
                   {[
                     { title: "Discuss", body: "Quick call or WhatsApp brief to clarify your objectives, target viewers, and key deliverables." },
-                    { title: "Plan", body: "We write the hooks, finalize the shot list, and coordinate locations before rolling a second of tape." },
-                    { title: "Shoot", body: "Crew arrives with cinema cameras, lights, and audio. You direct the brand, we direct the frame." },
+                    { title: "Plan", body: "We align on talking points, finalize the shot list, and coordinate the location before shoot day." },
+                    { title: "Shoot", body: "Crew arrives with Sony Alpha & latest iPhone gear, lights, and audio. You guide the brand, we direct the frame." },
                     { title: "Edit", body: "Rough cut, fine pacing, color grade, and sound design. You review the first cut with easy notes." },
                     { title: "Deliver", body: "Finished 4K/HD assets formatted for Reels, YouTube, and Meta Ads ready to publish." },
                   ].map((step, i) => (
