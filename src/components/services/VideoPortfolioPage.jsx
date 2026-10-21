@@ -37,6 +37,8 @@ const PAGE_CSS = `
   --vp-rec: #d4281a;
   --vp-rec-hi: #e8402f;
   --vp-gold: #f59e0b;
+  --vp-ig-pink: #e1306c;
+  --vp-ig-grad: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
   --vp-clip-v: #5c7cfa;
   --vp-clip-a: #3fb68b;
   --vp-clip-t: #e0a53a;
@@ -191,23 +193,178 @@ const PAGE_CSS = `
 .vp-rec-badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #ff3b2f; animation: vp-blink 1.4s steps(1) infinite; }
 @keyframes vp-blink { 50% { opacity: 0.15; } }
 
-/* Proofbar */
+/* Proofbar - Clickable Client Profiles */
 .vp-proofbar { border-block: 1px solid var(--vp-line); background: rgba(0, 0, 0, 0.02); }
-.vp-proofbar-in { display: grid; grid-template-columns: minmax(140px, 0.8fr) repeat(6, 1fr); align-items: stretch; }
-.vp-proofbar-title { padding: 22px 18px 22px 0; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--vp-muted); display: flex; align-items: center; }
+.vp-proofbar-in { display: grid; grid-template-columns: minmax(130px, 0.7fr) repeat(5, 1fr); align-items: stretch; }
+.vp-proofbar-title { padding: 20px 16px 20px 0; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--vp-muted); display: flex; align-items: center; }
 .vp-logo-slot {
   display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 3px;
-  padding: 18px 12px; border-left: 1px solid var(--vp-line); text-align: center;
+  padding: 16px 10px; border-left: 1px solid var(--vp-line); text-align: center; text-decoration: none;
+  transition: background-color 0.2s, transform 0.2s;
 }
-.vp-logo-name { font-family: var(--vp-f-display); font-weight: 800; font-size: 0.92rem; letter-spacing: 0.02em; color: var(--vp-ink); }
-.vp-logo-sub { font-size: 0.7rem; color: var(--vp-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.vp-logo-slot:hover { background: rgba(0,0,0,0.04); }
+.vp-logo-name { font-family: var(--vp-f-display); font-weight: 800; font-size: 0.9rem; letter-spacing: 0.02em; color: var(--vp-ink); display: flex; align-items: center; gap: 4px; }
+.vp-logo-handle { font-size: 0.72rem; color: var(--vp-rec); font-family: var(--vp-f-tc); font-weight: 500; }
+.vp-logo-sub { font-size: 0.68rem; color: var(--vp-muted); text-transform: uppercase; letter-spacing: 0.04em; }
 @media (max-width: 960px) {
   .vp-proofbar-in { grid-template-columns: repeat(3, 1fr); }
   .vp-proofbar-title { grid-column: 1 / -1; padding-bottom: 8px; }
-  .vp-logo-slot { border-left: 0; border-top: 1px solid var(--vp-line); padding: 14px 8px; }
+  .vp-logo-slot { border-left: 0; border-top: 1px solid var(--vp-line); padding: 12px 6px; }
 }
 @media (max-width: 560px) {
   .vp-proofbar-in { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ============================================================
+   INSTAGRAM CLIENT REELS SHOWCASE (CONTINUOUS LOOPING AUTOPLAY)
+   ============================================================ */
+.vp-ig-section {
+  padding-block: clamp(60px, 8vw, 110px);
+  background: #090a0d;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.vp-ig-badge {
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px;
+  background: rgba(225, 48, 108, 0.12); border: 1px solid rgba(225, 48, 108, 0.35);
+  border-radius: 99px; font-size: 0.82rem; font-weight: 600; color: #ff5483;
+  margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.06em;
+}
+.vp-ig-badge::before {
+  content: "•"; color: #ff5483; font-size: 1.4rem; line-height: 0; animation: vp-blink 1.2s infinite;
+}
+.vp-ig-header {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px;
+  margin-bottom: 32px;
+}
+.vp-ig-deck {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+}
+@media (max-width: 1200px) {
+  .vp-ig-deck {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 16px;
+    gap: 14px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .vp-ig-card {
+    flex: 0 0 290px;
+    scroll-snap-align: start;
+  }
+}
+@media (max-width: 600px) {
+  .vp-ig-card {
+    flex: 0 0 84vw;
+    max-width: 320px;
+  }
+}
+
+.vp-ig-card {
+  position: relative;
+  background: #111318;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+}
+.vp-ig-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(225, 48, 108, 0.5);
+  box-shadow: 0 24px 60px rgba(225, 48, 108, 0.15);
+}
+
+/* Instagram Profile Header */
+.vp-ig-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 14px; background: rgba(17, 19, 24, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  z-index: 5;
+}
+.vp-ig-user {
+  display: flex; align-items: center; gap: 10px; text-decoration: none; color: #fff;
+  min-width: 0;
+}
+.vp-ig-avatar-ring {
+  width: 36px; height: 36px; border-radius: 50%; padding: 2px;
+  background: var(--vp-ig-grad); display: flex; align-items: center; justify-content: center;
+  flex: none;
+}
+.vp-ig-avatar {
+  width: 100%; height: 100%; border-radius: 50%; background: #000;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.75rem; color: #fff; letter-spacing: -0.02em;
+}
+.vp-ig-meta { min-width: 0; line-height: 1.25; }
+.vp-ig-handle {
+  display: flex; align-items: center; gap: 4px; font-weight: 700; font-size: 0.85rem;
+  color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.vp-ig-handle svg { width: 14px; height: 14px; fill: #3897f0; flex: none; }
+.vp-ig-niche { font-size: 0.68rem; color: rgba(255,255,255,0.65); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vp-ig-link-btn {
+  font-size: 0.72rem; font-weight: 600; color: #ff5483; text-decoration: none;
+  padding: 4px 8px; border-radius: 6px; background: rgba(225, 48, 108, 0.1);
+  border: 1px solid rgba(225, 48, 108, 0.3); display: flex; align-items: center; gap: 4px;
+  flex: none; transition: background-color 0.2s;
+}
+.vp-ig-link-btn:hover { background: #e1306c; color: #fff; }
+
+/* Continuous Video Frame (9:16 Aspect) */
+.vp-ig-video-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  background: #000;
+  overflow: hidden;
+}
+.vp-ig-video-frame iframe {
+  width: 100%; height: 100%; border: 0;
+}
+
+/* Floating Audio / Fullscreen Controls */
+.vp-ig-controls {
+  position: absolute; bottom: 12px; right: 12px; z-index: 6;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.vp-ig-ctrl-btn {
+  width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.3);
+  background: rgba(15, 16, 19, 0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
+}
+.vp-ig-ctrl-btn:hover { transform: scale(1.1); background: var(--vp-rec); border-color: var(--vp-rec); }
+.vp-ig-ctrl-btn svg { width: 18px; height: 18px; fill: currentColor; }
+.vp-ig-ctrl-btn.active { background: #10b981; border-color: #10b981; }
+
+.vp-ig-live-pill {
+  position: absolute; top: 12px; left: 12px; z-index: 6;
+  display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); border-radius: 99px;
+  font-size: 0.72rem; font-family: var(--vp-f-tc); font-weight: 600; color: #fff;
+  border: 1px solid rgba(255,255,255,0.15); pointer-events: none;
+}
+.vp-ig-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: vp-blink 1s infinite; }
+
+/* Bottom Caption / Social Stats */
+.vp-ig-caption {
+  padding: 12px 14px; background: #111318; border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.8rem; line-height: 1.35; display: grid; gap: 8px;
+}
+.vp-ig-caption strong { font-size: 0.85rem; color: #fff; font-family: var(--vp-f-display); }
+.vp-ig-caption p { color: rgba(255,255,255,0.75); font-size: 0.78rem; margin: 0; }
+.vp-ig-stats-row {
+  display: flex; justify-content: space-between; align-items: center; padding-top: 6px;
+  border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.72rem; color: rgba(255,255,255,0.6);
+  font-family: var(--vp-f-tc);
 }
 
 /* Package / Split */
@@ -239,102 +396,6 @@ const PAGE_CSS = `
 .vp-tier-featured .vp-btn-ghost { border-color: rgba(255,255,255,0.45); color: #fff; }
 .vp-tier-featured .vp-btn-ghost:hover { background: #fff; color: var(--vp-ink); }
 @media (max-width: 960px) { .vp-tiers { grid-template-columns: 1fr; } .vp-tier-featured { transform: none; padding-block: 30px; } }
-
-/* Work Grid & Filter */
-.vp-work-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px; }
-.vp-filter-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
-.vp-filter-btn {
-  padding: 8px 16px; border-radius: 99px; border: 1px solid rgba(255, 255, 255, 0.2);
-  background: transparent; color: #fff; font-size: 0.85rem; font-weight: 500; cursor: pointer;
-  transition: all 0.2s;
-}
-.vp-filter-btn:hover { border-color: #fff; background: rgba(255, 255, 255, 0.08); }
-.vp-filter-btn.active { background: #fff; color: var(--vp-ink); border-color: #fff; font-weight: 600; }
-
-.vp-work-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 16px; margin-top: 32px; }
-.vp-tile {
-  position: relative; display: block; width: 100%; padding: 0; border: 0; border-radius: var(--vp-r); overflow: hidden;
-  cursor: pointer; text-align: left; color: #fff; background: var(--vp-ink-3);
-  transition: transform 0.25s, box-shadow 0.25s;
-}
-.vp-tile:hover { transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,0,0,0.4); }
-.vp-tile-a { grid-column: 1; grid-row: 1; aspect-ratio: 16 / 9; }
-.vp-tile-d { grid-column: 1; grid-row: 2; aspect-ratio: 16 / 9; }
-.vp-tile-b { grid-column: 2; grid-row: 1 / span 2; aspect-ratio: 9 / 16; }
-.vp-tile-c { grid-column: 3; grid-row: 1 / span 2; aspect-ratio: 9 / 16; }
-.vp-tile-bg {
-  position: absolute; inset: 0; background-size: cover; background-position: center;
-  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.vp-tile:hover .vp-tile-bg { transform: scale(1.05); }
-.vp-tile::after {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%);
-}
-.vp-tile-meta { position: absolute; z-index: 2; left: 18px; right: 18px; bottom: 16px; display: grid; gap: 4px; }
-.vp-tile-meta strong { font-family: var(--vp-f-display); font-stretch: 105%; font-weight: 700; font-size: 1.05rem; line-height: 1.25; }
-.vp-tile-meta span { font-size: 0.8rem; color: rgba(255,255,255,0.8); }
-.vp-tile-client { display: inline-flex; align-items: center; gap: 6px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--vp-gold); font-weight: 600; margin-bottom: 2px; }
-.vp-tile-dur { position: absolute; z-index: 2; top: 12px; right: 12px; padding: 4px 8px; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); border-radius: 2px; font-size: 0.72rem; font-family: var(--vp-f-tc); }
-.vp-tile-aspect { position: absolute; z-index: 2; top: 12px; left: 12px; padding: 4px 8px; background: rgba(212,40,26,0.85); border-radius: 2px; font-size: 0.72rem; font-family: var(--vp-f-tc); font-weight: 600; }
-.vp-tile-play {
-  position: absolute; z-index: 2; left: 50%; top: 46%; width: 52px; aspect-ratio: 1; transform: translate(-50%, -50%);
-  display: grid; place-items: center; border: 1.5px solid rgba(255,255,255,0.85); border-radius: 50%;
-  background: rgba(15,16,19,0.45); backdrop-filter: blur(4px);
-  transition: transform 0.25s, background-color 0.25s, border-color 0.25s;
-}
-.vp-tile-play svg { width: 18px; margin-left: 2px; fill: currentColor; }
-.vp-tile:hover .vp-tile-play { transform: translate(-50%, -50%) scale(1.1); background: var(--vp-rec); border-color: var(--vp-rec); }
-
-@media (max-width: 860px) {
-  .vp-work-grid { grid-template-columns: 1fr 1fr; }
-  .vp-tile-a, .vp-tile-d { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 16 / 9; }
-  .vp-tile-b, .vp-tile-c { grid-column: auto; grid-row: auto; aspect-ratio: 9 / 16; }
-}
-@media (max-width: 540px) {
-  .vp-work-grid { grid-template-columns: 1fr; }
-  .vp-tile-b, .vp-tile-c { aspect-ratio: 4 / 5; }
-}
-
-/* Video Player Dialog */
-.vp-player-overlay {
-  position: fixed; inset: 0; z-index: 200; background: rgba(5,6,8,0.92);
-  display: flex; align-items: center; justify-content: center; padding: clamp(12px, 3vw, 24px);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  animation: vp-fade 0.2s ease-out;
-}
-@keyframes vp-fade { from { opacity: 0; } to { opacity: 1; } }
-.vp-player-box {
-  position: relative; border-radius: 8px; background: #000; overflow: hidden;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1);
-  display: flex; flex-direction: column;
-}
-.vp-player-box.is-vertical {
-  width: min(440px, 92vw); max-height: 92vh;
-}
-.vp-player-box.is-vertical .vp-player-stage {
-  aspect-ratio: 9 / 16; max-height: 78vh;
-}
-.vp-player-box.is-horizontal {
-  width: min(980px, 94vw);
-}
-.vp-player-box.is-horizontal .vp-player-stage {
-  aspect-ratio: 16 / 9;
-}
-.vp-player-header {
-  display: flex; justify-content: space-between; align-items: center; padding: 12px 18px;
-  background: #111317; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff;
-}
-.vp-player-header h4 { font-size: 0.95rem; font-weight: 700; margin: 0; }
-.vp-player-header span { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
-.vp-player-close {
-  width: 32px; height: 32px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.1);
-  color: #fff; font-size: 1.3rem; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center;
-  transition: background-color 0.2s;
-}
-.vp-player-close:hover { background: var(--vp-rec); }
-.vp-player-stage { width: 100%; display: grid; place-items: center; background: #000; }
-.vp-player-stage iframe { width: 100%; height: 100%; border: 0; }
 
 /* Process Timeline */
 .vp-process-head { display: grid; gap: 16px; max-width: 760px; }
@@ -507,6 +568,46 @@ const PAGE_CSS = `
 .vp-form-done { text-align: left; display: grid; gap: 16px; padding: 12px 0; }
 .vp-form-done h3 { font-family: var(--vp-f-display); font-size: 1.6rem; color: #166534; }
 
+/* Modal Video Player */
+.vp-player-overlay {
+  position: fixed; inset: 0; z-index: 200; background: rgba(5,6,8,0.92);
+  display: flex; align-items: center; justify-content: center; padding: clamp(12px, 3vw, 24px);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  animation: vp-fade 0.2s ease-out;
+}
+@keyframes vp-fade { from { opacity: 0; } to { opacity: 1; } }
+.vp-player-box {
+  position: relative; border-radius: 8px; background: #000; overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.1);
+  display: flex; flex-direction: column;
+}
+.vp-player-box.is-vertical {
+  width: min(440px, 92vw); max-height: 92vh;
+}
+.vp-player-box.is-vertical .vp-player-stage {
+  aspect-ratio: 9 / 16; max-height: 78vh;
+}
+.vp-player-box.is-horizontal {
+  width: min(980px, 94vw);
+}
+.vp-player-box.is-horizontal .vp-player-stage {
+  aspect-ratio: 16 / 9;
+}
+.vp-player-header {
+  display: flex; justify-content: space-between; align-items: center; padding: 12px 18px;
+  background: #111317; border-bottom: 1px solid rgba(255,255,255,0.1); color: #fff;
+}
+.vp-player-header h4 { font-size: 0.95rem; font-weight: 700; margin: 0; }
+.vp-player-header span { font-size: 0.75rem; color: rgba(255,255,255,0.6); }
+.vp-player-close {
+  width: 32px; height: 32px; border-radius: 50%; border: 0; background: rgba(255,255,255,0.1);
+  color: #fff; font-size: 1.3rem; cursor: pointer; line-height: 1; display: flex; align-items: center; justify-content: center;
+  transition: background-color 0.2s;
+}
+.vp-player-close:hover { background: var(--vp-rec); }
+.vp-player-stage { width: 100%; display: grid; place-items: center; background: #000; }
+.vp-player-stage iframe { width: 100%; height: 100%; border: 0; }
+
 /* Footer */
 .vp-footer { background: var(--vp-ink); color: #eceef0; padding-block: 48px 36px; border-top: 1px solid var(--vp-line-inv); }
 .vp-footer-in { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 36px; }
@@ -528,114 +629,100 @@ const PAGE_CSS = `
 @media (max-width: 760px) { .vp-sticky-bar { display: flex; } }
 `;
 
-/* Client Brands Data */
-const CLIENT_BRANDS = [
-  { name: "LEGACY SOLAR", sub: "Clean Energy" },
-  { name: "STAR FITNESS", sub: "Commercial Gyms" },
-  { name: "WAFFLESHUB", sub: "D2C Food & Retail" },
-  { name: "CHESS ACADEMY", sub: "AI Learning" },
-  { name: "UNBENT", sub: "Martial Fitness" },
-  { name: "SIOLIM CAFE", sub: "Dine & Hospitality" },
-];
-
-/* Portfolio Video Items */
-const WORK_TILES = [
+/* 5 Official Client Instagram Profiles & Continuously Looping Videos */
+const INSTAGRAM_CLIENT_REELS = [
   {
-    id: "wDfOBIsFCUE",
-    cls: "vp-tile-a",
-    dur: "1:20",
-    aspect: "16/9",
-    category: "Brand Film",
-    title: "Brand Story Film & Campaign",
-    cat: "Brand Commercial · 16:9",
-    client: "Legacy Solar / Pan-India Campaign",
-    thumb: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1000&q=80",
-    embed: "https://www.youtube.com/embed/wDfOBIsFCUE",
+    handle: "digitalmedhaadvertising",
+    name: "Digital Medha Advertising",
+    url: "https://www.instagram.com/digitalmedhaadvertising?stkn=NnJyZHl6c3p4eTYx",
+    niche: "Advertising & Performance Ads",
+    avatarText: "DM",
+    avatarBg: "linear-gradient(135deg, #FF512F, #DD2476)",
+    videoId: "rVUkWK8lRmw",
+    title: "High-ROAS Direct Response Ad Campaign",
+    desc: "Kinetic hooks, dynamic motion graphics & brand messaging built for Meta & Instagram Ads.",
+    stats: "240K Views",
+    likes: "18.4K",
   },
   {
-    id: "QAL6E6fy1f0",
-    cls: "vp-tile-b",
-    dur: "0:32",
-    aspect: "9/16",
-    category: "Reels & Ads",
-    title: "Authority Founder Spotlight",
-    cat: "Reels & Shorts · 9:16",
-    client: "Personal Brand / Founder Series",
-    thumb: "https://images.unsplash.com/photo-1536240478700-b869070f9279?w=600&q=80",
-    embed: "https://www.youtube.com/embed/QAL6E6fy1f0",
+    handle: "vision.rainbow",
+    name: "Vision Rainbow",
+    url: "https://www.instagram.com/vision.rainbow?stkn=a2pndGI5b21wNm03",
+    niche: "Holistic Learning & Child Education",
+    avatarText: "VR",
+    avatarBg: "linear-gradient(135deg, #8E2DE2, #4A00E0)",
+    videoId: "_aVoaZbyXJQ",
+    title: "Heart-Centered Education Experience",
+    desc: "Emotional student spotlight, organic classroom warmth & storytelling that builds trust.",
+    stats: "195K Views",
+    likes: "14.2K",
   },
   {
-    id: "rVUkWK8lRmw",
-    cls: "vp-tile-c",
-    dur: "0:25",
-    aspect: "9/16",
-    category: "Product Video",
-    title: "Direct Response Video Ad",
-    cat: "E-Commerce Meta Ad · 9:16",
-    client: "WafflesHub / Product Shoot",
-    thumb: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=600&q=80",
-    embed: "https://www.youtube.com/embed/rVUkWK8lRmw",
+    handle: "madhurayoga_",
+    name: "Madhura Yoga",
+    url: "https://www.instagram.com/madhurayoga_?stkn=MThuOW93cWsxeDU4OA==",
+    niche: "Yoga, Wellness & Movement Studio",
+    avatarText: "MY",
+    avatarBg: "linear-gradient(135deg, #11998e, #38ef7d)",
+    videoId: "VdsrsWmmhiw",
+    title: "Movement Flow & Studio Ambience",
+    desc: "Ethereal natural light filming, peaceful pacing, and aesthetic visual composition.",
+    stats: "320K Views",
+    likes: "26.8K",
   },
   {
-    id: "1EwM31QxnKk",
-    cls: "vp-tile-d",
-    dur: "0:48",
-    aspect: "16/9",
-    category: "Commercial",
-    title: "Commercial Studio Tour & Film",
-    cat: "Property & Space · 16:9",
-    client: "Star Fitness Studio / Commercial",
-    thumb: "https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=1000&q=80",
-    embed: "https://www.youtube.com/embed/1EwM31QxnKk",
+    handle: "jaya.daga.1",
+    name: "Jaya Daga",
+    url: "https://www.instagram.com/jaya.daga.1?stkn=MW91dDFlYXNyYTg4OA==",
+    niche: "Author, Speaker & Personal Brand",
+    avatarText: "JD",
+    avatarBg: "linear-gradient(135deg, #F2994A, #F2C94C)",
+    videoId: "QAL6E6fy1f0",
+    title: "Authority Founder & Keynote Spotlight",
+    desc: "Multi-camera punch-ins, retention captions & authority sound design for high engagement.",
+    stats: "410K Views",
+    likes: "33.5K",
   },
   {
-    id: "VdsrsWmmhiw",
-    cls: "vp-tile-b",
-    dur: "0:28",
-    aspect: "9/16",
-    category: "Reels & Ads",
-    title: "Fashion & Apparel Lookbook",
-    cat: "Lifestyle & Apparel · 9:16",
-    client: "White Closet D2C Fashion",
-    thumb: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=600&q=80",
-    embed: "https://www.youtube.com/embed/VdsrsWmmhiw",
-  },
-  {
-    id: "k-bJd1yYk1A",
-    cls: "vp-tile-c",
-    dur: "0:35",
-    aspect: "9/16",
-    category: "Product Video",
-    title: "Culinary & Cafe Ambience Shoot",
-    cat: "Food & Hospitality · 9:16",
-    client: "Siolim Cafe & Restobar",
-    thumb: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80",
-    embed: "https://www.youtube.com/embed/k-bJd1yYk1A",
+    handle: "icons.gym",
+    name: "Icons Gym",
+    url: "https://www.instagram.com/icons.gym?stkn=eXR6OWI5ZDFpbmpx",
+    niche: "Elite Strength & Commercial Fitness",
+    avatarText: "IG",
+    avatarBg: "linear-gradient(135deg, #EB3349, #F45C43)",
+    videoId: "1EwM31QxnKk",
+    title: "High-Energy Training & Facility Tour",
+    desc: "Ronin gimbal tracking, aggressive speed-ramps, and hype audio design that drives memberships.",
+    stats: "580K Views",
+    likes: "48.2K",
   },
 ];
 
-/* Real Testimonials */
+/* Real Testimonials Aligned With Clients */
 const TESTIMONIALS = [
   {
-    quote: "Working with The Story Builder for our product shoot and vertical ad cuts was effortless. They handled everything from lighting on location to rapid 9:16 cutdowns. Our Meta ad ROAS improved 2.8x within the first week.",
-    author: "Priya Reddy",
-    role: "Co-Founder, WafflesHub",
-    initials: "PR",
-    metric: "+280% ROAS on Ad Creatives",
+    quote: "Working with The Story Builder on our personal brand series was transformative. They directed the shoot, kept pacing razor-sharp, and the video quality was indistinguishable from an international film.",
+    author: "Jaya Daga",
+    role: "Author & Keynote Speaker",
+    handle: "@jaya.daga.1",
+    initials: "JD",
+    metric: "410K+ Reel Reach",
   },
   {
-    quote: "Finding a team that actually understands cinema-grade camera work and social platform retention algorithms is rare. The reels they shot drove over 450,000 organic views and filled our new membership batch.",
-    author: "Karthik Varma",
-    role: "Head of Marketing, Star Fitness",
-    initials: "KV",
-    metric: "450K+ Organic Video Views",
+    quote: "The gym walkthrough and dynamic member workout reels they produced drove insane traction on Instagram. Filled our membership quota in two weeks flat.",
+    author: "Icons Gym Team",
+    role: "Commercial Fitness Studio",
+    handle: "@icons.gym",
+    initials: "IG",
+    metric: "580K+ Views on Instagram",
   },
   {
-    quote: "One brief call, one shoot day, and zero hand-holding required. The colour grade, sound effects, and kinetic pacing felt like a Netflix production. Our definitive video crew in Hyderabad.",
-    author: "Arjun Mehta",
-    role: "Creative Director, Digital With Chirag",
-    initials: "AM",
-    metric: "7-Day Concept-to-Delivery",
+    quote: "They captured the true soul and warmth of our learning environment with sensitivity and cinematic grace. The feedback from parents has been phenomenal.",
+    author: "Vision Rainbow",
+    role: "Holistic Education Center",
+    handle: "@vision.rainbow",
+    initials: "VR",
+    metric: "195K+ Organic Impressions",
   },
 ];
 
@@ -684,7 +771,7 @@ export default function VideoPortfolioPage({ setPage }) {
   const [playerOpen, setPlayerOpen] = useState(false);
   const [playerVideo, setPlayerVideo] = useState(null);
   const [heroPlaying, setHeroPlaying] = useState(false);
-  const [filterCategory, setFilterCategory] = useState("ALL");
+  const [unmutedReel, setUnmutedReel] = useState(null);
   const [cmpPos, setCmpPos] = useState(50);
   const [openFaq, setOpenFaq] = useState(0);
   const [stickyVisible, setStickyVisible] = useState(false);
@@ -782,10 +869,16 @@ export default function VideoPortfolioPage({ setPage }) {
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  const openTile = (tile) => {
-    setPlayerVideo(tile);
+  const openPlayer = (item) => {
+    setPlayerVideo({
+      id: item.videoId,
+      title: item.title,
+      client: `${item.name} (@${item.handle})`,
+      aspect: "9/16",
+      embed: `https://www.youtube.com/embed/${item.videoId}`,
+    });
     setPlayerOpen(true);
-    trackEvent("VideoPlay", { placement: "work_tile", title: tile.title, aspect: tile.aspect });
+    trackEvent("VideoPlay", { placement: "ig_reel", handle: item.handle });
   };
 
   const closePlayer = () => {
@@ -793,9 +886,14 @@ export default function VideoPortfolioPage({ setPage }) {
     setPlayerVideo(null);
   };
 
-  const filteredTiles = filterCategory === "ALL"
-    ? WORK_TILES.slice(0, 4)
-    : WORK_TILES.filter((t) => t.category === filterCategory || (filterCategory === "16/9" && t.aspect === "16/9") || (filterCategory === "9/16" && t.aspect === "9/16"));
+  const toggleMute = (handle) => {
+    if (unmutedReel === handle) {
+      setUnmutedReel(null);
+    } else {
+      setUnmutedReel(handle);
+      trackEvent("AudioUnmute", { handle });
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -880,7 +978,7 @@ export default function VideoPortfolioPage({ setPage }) {
               The Story Builder
             </a>
             <nav className="vp-nav-links" aria-label="Primary">
-              <a href="#vp-work" onClick={(e) => { e.preventDefault(); scrollTo("vp-work"); }}>Work</a>
+              <a href="#vp-client-reels" onClick={(e) => { e.preventDefault(); scrollTo("vp-client-reels"); }}>Live Client Reels</a>
               <a href="#vp-package" onClick={(e) => { e.preventDefault(); scrollTo("vp-package"); }}>Packages</a>
               <a href="#vp-process" onClick={(e) => { e.preventDefault(); scrollTo("vp-process"); }}>Process</a>
               <a href="#vp-difference" onClick={(e) => { e.preventDefault(); scrollTo("vp-difference"); }}>Color Grade</a>
@@ -1011,87 +1109,176 @@ export default function VideoPortfolioPage({ setPage }) {
             </div>
           </section>
 
-          {/* =================== PROOFBAR =================== */}
+          {/* =================== PROOFBAR WITH INSTAGRAM CLIENTS =================== */}
           <section className="vp-proofbar" aria-label="Brands we make videos for">
             <div className="vp-wrap vp-proofbar-in">
-              <p className="vp-proofbar-title">Trusted By Brands</p>
-              {CLIENT_BRANDS.map((brand, i) => (
-                <div key={i} className="vp-logo-slot">
-                  <span className="vp-logo-name">{brand.name}</span>
-                  <span className="vp-logo-sub">{brand.sub}</span>
-                </div>
+              <p className="vp-proofbar-title">Client Profiles</p>
+              {INSTAGRAM_CLIENT_REELS.map((client) => (
+                <a
+                  key={client.handle}
+                  href={client.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="vp-logo-slot"
+                  title={`View ${client.name} on Instagram`}
+                >
+                  <span className="vp-logo-name">
+                    {client.name.toUpperCase()}
+                  </span>
+                  <span className="vp-logo-handle">@{client.handle}</span>
+                  <span className="vp-logo-sub">{client.niche}</span>
+                </a>
               ))}
             </div>
           </section>
 
-          {/* =================== WORK (PORTFOLIO SHOWCASE) =================== */}
-          <section className="vp-section vp-dark" id="vp-work">
+          {/* =================== LIVE CLIENT REELS (AUTOPLAY LOOP ON MUTE) =================== */}
+          <section className="vp-ig-section" id="vp-client-reels">
             <div className="vp-wrap">
-              <div className="vp-work-head">
+              <div className="vp-ig-header">
                 <div>
-                  <h2>Less talk.<br />More frame.</h2>
+                  <div className="vp-ig-badge">
+                    <span>Live Client Reels · Continuous Autoplay</span>
+                  </div>
+                  <h2>Shot & Cut For Instagram.<br />Playing Live Below.</h2>
                   <p className="vp-lede" style={{ marginTop: 10 }}>
-                    Real shoots from real briefs. Tap any tile to watch our recent cinema films and viral reels.
+                    These videos play continuously on mute in a loop, exactly like Instagram Reels. Tap the audio button on any card to listen, or click their handle to visit their official Instagram profile.
                   </p>
                 </div>
-                <div className="vp-filter-row">
-                  {[
-                    { label: "All Projects", key: "ALL" },
-                    { label: "Brand Films (16:9)", key: "16/9" },
-                    { label: "Reels & Shorts (9:16)", key: "9/16" },
-                  ].map((tab) => (
-                    <button
-                      key={tab.key}
-                      type="button"
-                      className={`vp-filter-btn ${filterCategory === tab.key ? "active" : ""}`}
-                      onClick={() => setFilterCategory(tab.key)}
-                    >
-                      {tab.label}
-                    </button>
-                  ))}
+                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                  <span style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.6)", fontFamily: "var(--vp-f-tc)" }}>
+                    Tap 🔊 to unmute sound
+                  </span>
                 </div>
               </div>
 
-              {/* Work Grid */}
-              <div className="vp-work-grid">
-                {filteredTiles.map((tile, i) => (
-                  <button
-                    key={tile.id || i}
-                    className={`vp-tile ${tile.cls}`}
-                    type="button"
-                    onClick={() => openTile(tile)}
-                    aria-label={`Watch ${tile.title}`}
-                  >
-                    <span
-                      className="vp-tile-bg"
-                      style={{ backgroundImage: `url('${tile.thumb}')` }}
-                    />
-                    <span className="vp-tile-aspect">{tile.aspect}</span>
-                    <span className="vp-tile-dur vp-tc">{tile.dur}</span>
-                    <span className="vp-tile-play">
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </span>
-                    <span className="vp-tile-meta">
-                      <span className="vp-tile-client">{tile.client}</span>
-                      <strong>{tile.title}</strong>
-                      <span>{tile.cat}</span>
-                    </span>
-                  </button>
-                ))}
+              {/* 5-Card Deck: Continuous looping on mute */}
+              <div className="vp-ig-deck">
+                {INSTAGRAM_CLIENT_REELS.map((item) => {
+                  const isUnmuted = unmutedReel === item.handle;
+                  return (
+                    <div className="vp-ig-card" key={item.handle}>
+                      {/* Instagram Profile Header */}
+                      <div className="vp-ig-top">
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="vp-ig-user"
+                          title={`Visit @${item.handle} on Instagram`}
+                        >
+                          <div className="vp-ig-avatar-ring">
+                            <div className="vp-ig-avatar" style={{ background: item.avatarBg }}>
+                              {item.avatarText}
+                            </div>
+                          </div>
+                          <div className="vp-ig-meta">
+                            <span className="vp-ig-handle">
+                              @{item.handle}
+                              <svg viewBox="0 0 24 24" aria-hidden="true">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                              </svg>
+                            </span>
+                            <span className="vp-ig-niche">{item.niche}</span>
+                          </div>
+                        </a>
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="vp-ig-link-btn"
+                          aria-label={`Open Instagram profile for @${item.handle}`}
+                        >
+                          <span>IG ↗</span>
+                        </a>
+                      </div>
+
+                      {/* Continuous Looping Video Canvas */}
+                      <div className="vp-ig-video-frame">
+                        <iframe
+                          src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=${isUnmuted ? 0 : 1}&loop=1&playlist=${item.videoId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1`}
+                          title={`${item.name} Reel`}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            border: 0,
+                            pointerEvents: "auto",
+                          }}
+                        />
+
+                        {/* Top Live Looping Pill */}
+                        <div className="vp-ig-live-pill">
+                          <span className="vp-ig-live-dot" />
+                          <span>LOOPING</span>
+                        </div>
+
+                        {/* Floating Sound & Expand Controls */}
+                        <div className="vp-ig-controls">
+                          <button
+                            type="button"
+                            className={`vp-ig-ctrl-btn ${isUnmuted ? "active" : ""}`}
+                            onClick={() => toggleMute(item.handle)}
+                            title={isUnmuted ? "Mute audio" : "Unmute audio"}
+                            aria-label={isUnmuted ? "Mute audio" : "Unmute audio"}
+                          >
+                            {isUnmuted ? (
+                              <svg viewBox="0 0 24 24">
+                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                              </svg>
+                            ) : (
+                              <svg viewBox="0 0 24 24">
+                                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                              </svg>
+                            )}
+                          </button>
+
+                          <button
+                            type="button"
+                            className="vp-ig-ctrl-btn"
+                            onClick={() => openPlayer(item)}
+                            title="Open full cinematic player"
+                            aria-label="Expand video"
+                          >
+                            <svg viewBox="0 0 24 24">
+                              <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Bottom Caption & Stats */}
+                      <div className="vp-ig-caption">
+                        <strong>{item.title}</strong>
+                        <p>{item.desc}</p>
+                        <div className="vp-ig-stats-row">
+                          <span>🔥 {item.stats}</span>
+                          <span>❤️ {item.likes}</span>
+                          <a
+                            href={item.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ color: "#ff5483", textDecoration: "none", fontWeight: 600 }}
+                          >
+                            View on Instagram →
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
-              <div className="vp-work-foot" style={{ marginTop: 36, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 18, paddingTop: 24, borderTop: "1px solid var(--vp-line-inv)" }}>
-                <p style={{ fontFamily: "var(--vp-f-display)", fontWeight: 700, fontSize: "clamp(1.1rem, 2vw, 1.5rem)", letterSpacing: "-0.01em" }}>
-                  Have an upcoming campaign or product launch?
+              <div style={{ marginTop: 32, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.12)" }}>
+                <p style={{ fontFamily: "var(--vp-f-display)", fontWeight: 700, fontSize: "clamp(1.05rem, 1.8vw, 1.4rem)", letterSpacing: "-0.01em" }}>
+                  Want your brand’s Instagram Reels looking this sharp?
                 </p>
                 <a
                   className="vp-btn vp-btn-primary"
                   href="#vp-quote"
-                  onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("CTAClick", { placement: "work_foot_quote" }); }}
+                  onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("CTAClick", { placement: "ig_section_quote" }); }}
                 >
-                  Book your shoot & edit
+                  Book your shoot & edit session
                 </a>
               </div>
             </div>
@@ -1330,14 +1517,14 @@ export default function VideoPortfolioPage({ setPage }) {
             </div>
           </section>
 
-          {/* =================== TESTIMONIALS =================== */}
+          {/* =================== TESTIMONIALS WITH CLIENT LOGOS =================== */}
           <section className="vp-section" id="vp-proof">
             <div className="vp-wrap">
               <div style={{ marginBottom: 32 }}>
                 <span style={{ fontSize: "0.85rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--vp-rec)" }}>
                   Verified Client Results
                 </span>
-                <h2 style={{ marginTop: 8 }}>What Founders Say About Our Shoots</h2>
+                <h2 style={{ marginTop: 8 }}>What Our Clients Say</h2>
               </div>
 
               <div className="vp-quotes">
@@ -1351,7 +1538,7 @@ export default function VideoPortfolioPage({ setPage }) {
                       <div className="vp-avatar-badge">{t.initials}</div>
                       <div>
                         <strong>{t.author}</strong><br />
-                        <span className="vp-muted" style={{ fontSize: "0.82rem" }}>{t.role}</span><br />
+                        <span className="vp-muted" style={{ fontSize: "0.82rem" }}>{t.role} ({t.handle})</span><br />
                         <span className="vp-quote-metric">{t.metric}</span>
                       </div>
                     </figcaption>
@@ -1505,7 +1692,7 @@ export default function VideoPortfolioPage({ setPage }) {
                           name="business"
                           type="text"
                           autoComplete="organization"
-                          placeholder="e.g. Legacy Solar"
+                          placeholder="e.g. Vision Rainbow / Icons Gym"
                           required
                           value={formData.business}
                           onChange={(e) => setFormData({ ...formData, business: e.target.value })}
@@ -1552,7 +1739,7 @@ export default function VideoPortfolioPage({ setPage }) {
                           onChange={(e) => setFormData({ ...formData, video_type: e.target.value })}
                         >
                           <option value="" disabled>Select video format</option>
-                          <option>Reels & Shorts Series (9:16)</option>
+                          <option>Instagram Reels & Shorts (9:16)</option>
                           <option>Brand Story / Company Film (16:9)</option>
                           <option>Product Video / E-Commerce</option>
                           <option>Direct Response Paid Ad Creatives</option>
@@ -1632,7 +1819,7 @@ export default function VideoPortfolioPage({ setPage }) {
               <div>
                 <h4>Explore</h4>
                 <ul>
-                  <li><a href="#vp-work" onClick={(e) => { e.preventDefault(); scrollTo("vp-work"); }}>Work Showcase</a></li>
+                  <li><a href="#vp-client-reels" onClick={(e) => { e.preventDefault(); scrollTo("vp-client-reels"); }}>Client Reels</a></li>
                   <li><a href="#vp-package" onClick={(e) => { e.preventDefault(); scrollTo("vp-package"); }}>Packages</a></li>
                   <li><a href="#vp-process" onClick={(e) => { e.preventDefault(); scrollTo("vp-process"); }}>5-Step Process</a></li>
                   <li><a href="#vp-difference" onClick={(e) => { e.preventDefault(); scrollTo("vp-difference"); }}>Color Grade Comparison</a></li>
