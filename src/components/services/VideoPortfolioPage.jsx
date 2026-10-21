@@ -139,59 +139,83 @@ const PAGE_CSS = `
   display: grid; grid-template-columns: repeat(12, 1fr); gap: clamp(24px, 3.5vw, 48px) 24px;
   margin-top: clamp(24px, 4vw, 48px); align-items: center;
 }
-.vp-hero-copy { grid-column: 1 / span 5; display: grid; gap: 24px; align-self: center; }
+.vp-hero-copy { grid-column: 1 / span 6; display: grid; gap: 24px; align-self: center; }
 .vp-hero-copy .vp-btn-row { display: flex; flex-wrap: wrap; gap: 12px; }
 .vp-hero-points { display: grid; gap: 8px; font-size: 0.92rem; font-weight: 500; }
 .vp-hero-points li { display: flex; gap: 10px; align-items: baseline; padding-top: 8px; border-top: 1px solid var(--vp-line); }
 .vp-hero-points li::before { content: ""; width: 7px; height: 7px; margin-top: 0.4em; border-radius: 50%; background: var(--vp-rec); flex: none; }
-.vp-monitor { grid-column: 6 / span 7; margin: 0; }
-@media (max-width: 960px) { .vp-hero-copy, .vp-monitor { grid-column: 1 / -1; } }
 
-/* Camera Monitor Mockup */
-.vp-monitor-body {
-  background: #050608; border-radius: 12px; padding: clamp(8px, 1.2vw, 14px);
-  box-shadow: 0 40px 80px -30px rgba(15, 16, 19, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.08);
+/* Hero Vertical Reel Showcase (9:16 Format) */
+.vp-hero-reel-wrap {
+  grid-column: 7 / span 6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.vp-hero-reel-card {
   position: relative;
+  width: min(320px, 86vw);
+  aspect-ratio: 9 / 16;
+  background: #000;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(15, 16, 19, 0.15);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.vp-screen { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--vp-r); background: #000; color: #fff; }
-.vp-scene { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
-.vp-hero-poster {
-  position: absolute; inset: 0; cursor: pointer;
-  background-size: cover; background-position: center;
-  display: flex; align-items: center; justify-content: center;
-  transition: transform 0.4s ease;
+.vp-hero-reel-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 40px 95px rgba(225, 48, 108, 0.22);
 }
-.vp-hero-poster::before {
-  content: ""; position: absolute; inset: 0;
-  background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
+.vp-hero-reel-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  display: block;
 }
-.vp-hero-poster:hover .vp-hero-play-btn {
-  transform: scale(1.06); background: var(--vp-rec); border-color: var(--vp-rec);
+.vp-hero-click-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  cursor: pointer;
 }
-.vp-hero-play-btn {
-  position: relative; z-index: 3; display: inline-flex; align-items: center; gap: 10px;
-  padding: 12px 24px; background: rgba(15, 16, 19, 0.85); border: 1.5px solid rgba(255, 255, 255, 0.85);
-  border-radius: 99px; color: #fff; font-family: var(--vp-f-display); font-weight: 700;
-  font-size: clamp(0.8rem, 1.2vw, 0.95rem); letter-spacing: 0.06em;
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  transition: transform 0.25s, background-color 0.25s, border-color 0.25s;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+.vp-hero-sound-btn {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  z-index: 10;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  background: rgba(15, 16, 19, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  padding: 0;
 }
-.vp-hero-play-btn svg { width: 20px; height: 20px; flex: none; fill: currentColor; }
-
-/* Camera Viewfinder HUD */
-.vp-vf { position: absolute; inset: 0; z-index: 2; pointer-events: none; font-family: var(--vp-f-tc); font-size: clamp(0.65rem, 1vw, 0.8rem); text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-.vp-vf-corner { position: absolute; width: 4.5%; max-width: 26px; aspect-ratio: 1; border: 2px solid rgba(255,255,255,0.85); }
-.vp-vf-corner:nth-child(1) { top: 6%; left: 4%; border-right: 0; border-bottom: 0; }
-.vp-vf-corner:nth-child(2) { top: 6%; right: 4%; border-left: 0; border-bottom: 0; }
-.vp-vf-corner:nth-child(3) { bottom: 6%; left: 4%; border-right: 0; border-top: 0; }
-.vp-vf-corner:nth-child(4) { bottom: 6%; right: 4%; border-left: 0; border-top: 0; }
-.vp-vf-top, .vp-vf-bottom { position: absolute; left: 8%; right: 8%; display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.04em; }
-.vp-vf-top { top: 8%; }
-.vp-vf-bottom { bottom: 8%; gap: 10px; font-size: clamp(0.6rem, 0.9vw, 0.75rem); }
-.vp-rec-badge { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: #ff4d4f; }
-.vp-rec-badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #ff3b2f; animation: vp-blink 1.4s steps(1) infinite; }
-@keyframes vp-blink { 50% { opacity: 0.15; } }
+.vp-hero-sound-btn:hover {
+  background: rgba(15, 16, 19, 0.98);
+  border-color: #fff;
+  transform: scale(1.08);
+}
+.vp-hero-sound-btn.is-unmuted {
+  background: #10b981;
+  border-color: #10b981;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+}
+@media (max-width: 960px) {
+  .vp-hero-copy, .vp-hero-reel-wrap { grid-column: 1 / -1; }
+  .vp-hero-reel-wrap { margin-top: 16px; }
+}
 
 /* Proofbar - Clickable Client Profiles */
 .vp-proofbar { border-block: 1px solid var(--vp-line); background: rgba(0, 0, 0, 0.02); }
@@ -742,7 +766,7 @@ const TESTIMONIALS = [
 const FAQ_ITEMS = [
   {
     q: "How much does a video shoot and edit package cost?",
-    a: "It depends on shoot duration, crew size, and deliverables. Single video packages start at ₹30,000, while our most popular Content Month package (full-day shoot + 6 to 8 reels/ads) starts at ₹75,000. Send a brief and we'll reply with a transparent, fixed quote.",
+    a: "Our reel packages start at ₹10,000 for 4 reels, ₹15,000 for 6 reels, and ₹20,000 for 8 reels. Send a brief and we'll reply with a transparent, fixed quote.",
   },
   {
     q: "How fast is the turnaround from shoot day to final cut?",
@@ -782,7 +806,7 @@ const WAVE_BARS = Array.from({ length: 90 }, (_, i) => {
 export default function VideoPortfolioPage({ setPage }) {
   const [playerOpen, setPlayerOpen] = useState(false);
   const [playerVideo, setPlayerVideo] = useState(null);
-  const [heroPlaying, setHeroPlaying] = useState(false);
+  const [heroUnmuted, setHeroUnmuted] = useState(false);
   const [unmutedReel, setUnmutedReel] = useState(null);
   const [cmpPos, setCmpPos] = useState(50);
   const [openFaq, setOpenFaq] = useState(0);
@@ -790,8 +814,21 @@ export default function VideoPortfolioPage({ setPage }) {
   const [tlProgress, setTlProgress] = useState(0);
   const [timecode, setTimecode] = useState("01:00:00:00");
 
+  const heroVideoRef = useRef(null);
   const iframeRefs = useRef({});
   const videoRefs = useRef({});
+
+  const toggleHeroMute = () => {
+    if (heroVideoRef.current) {
+      const nextMuted = !heroVideoRef.current.muted;
+      heroVideoRef.current.muted = nextMuted;
+      if (!nextMuted) {
+        heroVideoRef.current.volume = 1.0;
+        heroVideoRef.current.play().catch(() => {});
+      }
+      setHeroUnmuted(!nextMuted);
+    }
+  };
 
   const [formData, setFormData] = useState({
     name: "",
@@ -1093,75 +1130,49 @@ export default function VideoPortfolioPage({ setPage }) {
                   </ul>
                 </div>
 
-                {/* Camera monitor mockup with REAL playable video preview */}
-                <figure className="vp-monitor">
-                  <div className="vp-monitor-body">
-                    <div className="vp-screen">
-                      <div className="vp-scene">
-                        {heroPlaying ? (
-                          <iframe
-                            src="https://www.youtube.com/embed/wDfOBIsFCUE?autoplay=1&mute=0&rel=0&modestbranding=1&playsinline=1"
-                            title="The Story Builder Showreel"
-                            allow="autoplay; fullscreen; picture-in-picture"
-                            style={{ width: "100%", height: "100%", border: 0 }}
-                          />
-                        ) : (
-                          <div
-                            className="vp-hero-poster"
-                            onClick={() => {
-                              setHeroPlaying(true);
-                              trackEvent("HeroPlay", { placement: "camera_monitor" });
-                            }}
-                            style={{
-                              backgroundImage: `url('https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1200&q=80')`,
-                            }}
-                            title="Click to play 2026 Showreel"
-                          >
-                            <div className="vp-hero-play-btn">
-                              <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M8 5v14l11-7z" />
-                              </svg>
-                              <span>WATCH 2026 SHOWREEL</span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
+                {/* Hero Featured Reel in Vertical 9:16 Format */}
+                <div className="vp-hero-reel-wrap">
+                  <div className="vp-hero-reel-card">
+                    <video
+                      ref={heroVideoRef}
+                      src="https://res.cloudinary.com/dvr5erobx/video/upload/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.mp4"
+                      autoPlay
+                      loop
+                      muted={!heroUnmuted}
+                      playsInline
+                      preload="auto"
+                    />
 
-                      {/* Viewfinder overlay */}
-                      {!heroPlaying && (
-                        <div className="vp-vf" aria-hidden="true">
-                          <span className="vp-vf-corner" />
-                          <span className="vp-vf-corner" />
-                          <span className="vp-vf-corner" />
-                          <span className="vp-vf-corner" />
-                          <div className="vp-vf-top">
-                            <span className="vp-rec-badge vp-tc">REC</span>
-                            <span className="vp-tc">{timecode}</span>
-                          </div>
-                          <div className="vp-vf-bottom">
-                            <span className="vp-tc">4K 24p Cinema</span>
-                            <span className="vp-tc">f/2.8</span>
-                            <span className="vp-tc">ISO 800</span>
-                            <span className="vp-tc">5600K</span>
-                            <span className="vp-tc">S-Log3</span>
-                          </div>
-                        </div>
+                    {/* Transparent Click Layer for Mute/Unmute */}
+                    <div
+                      className="vp-hero-click-layer"
+                      onClick={toggleHeroMute}
+                      title={heroUnmuted ? "Tap to mute audio" : "Tap to unmute audio"}
+                    />
+
+                    {/* Minimal Circular Sound Toggle Button */}
+                    <button
+                      type="button"
+                      className={`vp-hero-sound-btn ${heroUnmuted ? "is-unmuted" : ""}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleHeroMute();
+                      }}
+                      title={heroUnmuted ? "Mute audio" : "Unmute audio"}
+                      aria-label={heroUnmuted ? "Mute audio" : "Unmute audio"}
+                    >
+                      {heroUnmuted ? (
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                        </svg>
+                      ) : (
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                          <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                        </svg>
                       )}
-                    </div>
+                    </button>
                   </div>
-                  <figcaption style={{ marginTop: 10, fontSize: "0.82rem", color: "var(--vp-muted)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span>Sony FX Cinema line + Wireless Sound + S-Log3 Color Pipeline</span>
-                    {heroPlaying && (
-                      <button
-                        type="button"
-                        onClick={() => setHeroPlaying(false)}
-                        style={{ background: "transparent", border: "none", color: "var(--vp-rec)", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}
-                      >
-                        ✕ Close Video
-                      </button>
-                    )}
-                  </figcaption>
-                </figure>
+                </div>
               </div>
             </div>
           </section>
@@ -1368,48 +1379,48 @@ export default function VideoPortfolioPage({ setPage }) {
               {/* Pricing Tiers */}
               <div className="vp-tiers">
                 <article className="vp-tier">
-                  <h3>Single Video</h3>
-                  <p className="vp-price">₹30,000 <small>starting from</small></p>
+                  <h3>4 Reels</h3>
+                  <p className="vp-price">₹10,000 <small>all-inclusive</small></p>
                   <ul>
-                    <li>One half shoot day (up to 4 hours)</li>
-                    <li>One polished hero cut up to 60s</li>
-                    <li>Full cinema color grade & sound design</li>
-                    <li>Platform exports (16:9 & 9:16)</li>
+                    <li>4 short-form vertical reels (9:16)</li>
+                    <li>Hook scripting & retention pacing</li>
+                    <li>Motion graphics & dynamic captions</li>
+                    <li>Sound design & background score</li>
                     <li>Two revision rounds included</li>
                   </ul>
-                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "Single video" }); }}>
-                    Choose Single Video
+                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "4 Reels (₹10,000)" }); }}>
+                    Choose 4 Reels
                   </a>
                 </article>
 
                 <article className="vp-tier vp-tier-featured">
                   <span className="vp-tier-flag">Most Popular</span>
-                  <h3>Content Month</h3>
-                  <p className="vp-price">₹75,000 <small>starting from</small></p>
+                  <h3>6 Reels</h3>
+                  <p className="vp-price">₹15,000 <small>all-inclusive</small></p>
                   <ul>
-                    <li>One full production shoot day</li>
-                    <li>6 to 8 short-form videos for Reels & Ads</li>
-                    <li>Hook writing, subtitles & sound FX</li>
-                    <li>Cutdowns for Instagram, YouTube Shorts, LinkedIn</li>
+                    <li>6 short-form vertical reels (9:16)</li>
+                    <li>Hook scripting, viral pacing & dynamic B-roll</li>
+                    <li>Sound effects, motion graphics & color grade</li>
+                    <li>Optimized for Instagram Reels, Shorts & Ads</li>
                     <li>Two revision rounds per video</li>
                   </ul>
-                  <a className="vp-btn vp-btn-primary" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "Content month" }); }}>
-                    Choose Content Month
+                  <a className="vp-btn vp-btn-primary" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "6 Reels (₹15,000)" }); }}>
+                    Choose 6 Reels
                   </a>
                 </article>
 
                 <article className="vp-tier">
-                  <h3>Full Campaign</h3>
-                  <p className="vp-price">Custom Quote</p>
+                  <h3>8 Reels</h3>
+                  <p className="vp-price">₹20,000 <small>all-inclusive</small></p>
                   <ul>
-                    <li>Multi-day shoot across locations or sets</li>
-                    <li>Hero brand film + 12+ ad cutdowns</li>
-                    <li>Script, storyboard, actors & voiceover</li>
-                    <li>Dedicated executive producer</li>
-                    <li>Raw footage archive on request</li>
+                    <li>8 short-form vertical reels (9:16)</li>
+                    <li>Complete monthly content calendar coverage</li>
+                    <li>Scroll-stopping hooks, kinetic captions & SFX</li>
+                    <li>Multi-platform exports (Reels, TikTok, Shorts, Ads)</li>
+                    <li>Two revision rounds per video</li>
                   </ul>
-                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "Campaign" }); }}>
-                    Discuss Custom Project
+                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "8 Reels (₹20,000)" }); }}>
+                    Choose 8 Reels
                   </a>
                 </article>
               </div>
@@ -1764,10 +1775,10 @@ export default function VideoPortfolioPage({ setPage }) {
                           onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                         >
                           <option value="" disabled>Select budget range</option>
-                          <option>₹30,000 (Single Video)</option>
-                          <option>₹75,000 (Content Month Package)</option>
-                          <option>₹1,00,000 to ₹2,50,000 (Multi-Video Campaign)</option>
-                          <option>₹2,50,000+ (Full Commercial Production)</option>
+                          <option>₹10,000 (4 Reels Package)</option>
+                          <option>₹15,000 (6 Reels Package)</option>
+                          <option>₹20,000 (8 Reels Package)</option>
+                          <option>₹25,000+ (Custom Monthly Plan)</option>
                           <option>Let's discuss recommendations</option>
                         </select>
                       </div>
