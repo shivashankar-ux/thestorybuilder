@@ -258,7 +258,7 @@ const PAGE_CSS = `
 
 .vp-ig-card {
   position: relative;
-  background: #111318;
+  background: #000;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   overflow: hidden;
@@ -273,42 +273,6 @@ const PAGE_CSS = `
   box-shadow: 0 24px 60px rgba(225, 48, 108, 0.15);
 }
 
-/* Instagram Profile Header */
-.vp-ig-top {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 14px; background: rgba(17, 19, 24, 0.98);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  z-index: 5;
-}
-.vp-ig-user {
-  display: flex; align-items: center; gap: 10px; text-decoration: none; color: #fff;
-  min-width: 0;
-}
-.vp-ig-avatar-ring {
-  width: 34px; height: 34px; border-radius: 50%; padding: 2px;
-  background: var(--vp-ig-grad); display: flex; align-items: center; justify-content: center;
-  flex: none;
-}
-.vp-ig-avatar {
-  width: 100%; height: 100%; border-radius: 50%; background: #000;
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 0.72rem; color: #fff; letter-spacing: -0.02em;
-}
-.vp-ig-meta { min-width: 0; line-height: 1.2; }
-.vp-ig-handle {
-  display: flex; align-items: center; gap: 4px; font-weight: 700; font-size: 0.85rem;
-  color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
-.vp-ig-handle svg { width: 14px; height: 14px; fill: #3897f0; flex: none; }
-.vp-ig-niche { font-size: 0.68rem; color: rgba(255,255,255,0.6); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.vp-ig-link-btn {
-  font-size: 0.72rem; font-weight: 600; color: #ff5483; text-decoration: none;
-  padding: 4px 8px; border-radius: 6px; background: rgba(225, 48, 108, 0.1);
-  border: 1px solid rgba(225, 48, 108, 0.3); display: flex; align-items: center; gap: 4px;
-  flex: none; transition: background-color 0.2s;
-}
-.vp-ig-link-btn:hover { background: #e1306c; color: #fff; }
-
 /* Continuous Video Frame (9:16 Aspect) */
 .vp-ig-video-frame {
   position: relative;
@@ -321,49 +285,14 @@ const PAGE_CSS = `
   width: 100%; height: 100%; border: 0;
 }
 
-/* Floating Audio / Sound Button */
+/* Floating Audio / Sound Button (Compact Circle, Icon Only) */
 .vp-ig-sound-btn {
   position: absolute;
   bottom: 12px;
   right: 12px;
   z-index: 10;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  border-radius: 99px;
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
-  background: rgba(15, 16, 19, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: #fff;
-  font-family: var(--vp-f-tc);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-}
-.vp-ig-sound-btn:hover {
-  background: rgba(15, 16, 19, 0.95);
-  border-color: #fff;
-  transform: scale(1.05);
-}
-.vp-ig-sound-btn.is-unmuted {
-  background: #10b981;
-  border-color: #10b981;
-  color: #fff;
-  box-shadow: 0 0 18px rgba(16, 185, 129, 0.6);
-}
-
-.vp-ig-expand-btn {
-  position: absolute;
-  bottom: 12px;
-  left: 12px;
-  z-index: 10;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   border: 1.5px solid rgba(255, 255, 255, 0.35);
   background: rgba(15, 16, 19, 0.85);
@@ -375,11 +304,19 @@ const PAGE_CSS = `
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  padding: 0;
 }
-.vp-ig-expand-btn:hover {
-  background: var(--vp-rec);
-  border-color: var(--vp-rec);
+.vp-ig-sound-btn:hover {
+  background: rgba(15, 16, 19, 0.98);
+  border-color: #fff;
   transform: scale(1.08);
+}
+.vp-ig-sound-btn.is-unmuted {
+  background: #10b981;
+  border-color: #10b981;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
 }
 
 /* Package / Split */
@@ -671,7 +608,7 @@ const INSTAGRAM_CLIENT_REELS = [
     niche: "Yoga & Movement",
     avatarText: "MY",
     avatarBg: "linear-gradient(135deg, #11998e, #38ef7d)",
-    videoId: "VdsrsWmmhiw",
+    videoId: "k-bJd1yYk1A",
   },
   {
     handle: "jaya.daga.1",
@@ -1165,48 +1102,13 @@ export default function VideoPortfolioPage({ setPage }) {
                   const isUnmuted = unmutedReel === item.handle;
                   return (
                     <div className="vp-ig-card" key={item.handle}>
-                      {/* Clean Instagram Profile Header */}
-                      <div className="vp-ig-top">
-                        <a
-                          href={item.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="vp-ig-user"
-                          title={`Visit @${item.handle} on Instagram`}
-                        >
-                          <div className="vp-ig-avatar-ring">
-                            <div className="vp-ig-avatar" style={{ background: item.avatarBg }}>
-                              {item.avatarText}
-                            </div>
-                          </div>
-                          <div className="vp-ig-meta">
-                            <span className="vp-ig-handle">
-                              @{item.handle}
-                              <svg viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                              </svg>
-                            </span>
-                            <span className="vp-ig-niche">{item.niche}</span>
-                          </div>
-                        </a>
-                        <a
-                          href={item.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="vp-ig-link-btn"
-                          aria-label={`Open Instagram profile for @${item.handle}`}
-                        >
-                          <span>IG ↗</span>
-                        </a>
-                      </div>
-
                       {/* Continuous Looping Video Canvas (Playing on mute by default) */}
                       <div className="vp-ig-video-frame">
                         <iframe
                           ref={(el) => {
                             if (el) iframeRefs.current[item.handle] = el;
                           }}
-                          src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=1&loop=1&playlist=${item.videoId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1`}
+                          src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=1&loop=1&playlist=${item.videoId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&iv_load_policy=3&cc_load_policy=0`}
                           title={`${item.name} Reel`}
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           style={{
@@ -1217,20 +1119,7 @@ export default function VideoPortfolioPage({ setPage }) {
                           }}
                         />
 
-                        {/* Expand Button */}
-                        <button
-                          type="button"
-                          className="vp-ig-expand-btn"
-                          onClick={() => openPlayer(item)}
-                          title="Open full player"
-                          aria-label="Expand video"
-                        >
-                          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
-                          </svg>
-                        </button>
-
-                        {/* Prominent One-Tap UNMUTE / MUTE Toggle Button */}
+                        {/* Minimal One-Tap Mute / Unmute Symbol Only (No Text) */}
                         <button
                           type="button"
                           className={`vp-ig-sound-btn ${isUnmuted ? "is-unmuted" : ""}`}
@@ -1239,15 +1128,14 @@ export default function VideoPortfolioPage({ setPage }) {
                           aria-label={isUnmuted ? "Mute audio" : "Unmute audio"}
                         >
                           {isUnmuted ? (
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                               <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
                             </svg>
                           ) : (
-                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
                               <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
                             </svg>
                           )}
-                          <span>{isUnmuted ? "MUTE" : "UNMUTE"}</span>
                         </button>
                       </div>
                     </div>
