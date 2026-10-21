@@ -25,18 +25,19 @@ const waUrl = (msg) =>
 const PAGE_CSS = `
 /* ====== Video Portfolio Page Scoped Styles ====== */
 .vp-root {
-  --vp-paper: #eaebec;
-  --vp-paper-2: #dcdde0;
-  --vp-ink: #0f1013;
-  --vp-ink-2: #1b1d22;
-  --vp-ink-3: #2a2d34;
-  --vp-muted: #575b64;
+  --vp-paper: #F4F4F4;
+  --vp-paper-2: #EFECE6;
+  --vp-ink: #0F172A;
+  --vp-ink-2: #1E293B;
+  --vp-ink-3: #334155;
+  --vp-muted: #665843;
   --vp-muted-inv: rgba(236, 237, 239, 0.72);
-  --vp-line: rgba(15, 16, 19, 0.16);
+  --vp-line: rgba(120, 90, 40, 0.14);
   --vp-line-inv: rgba(255, 255, 255, 0.16);
-  --vp-rec: #d4281a;
-  --vp-rec-hi: #e8402f;
-  --vp-gold: #f59e0b;
+  --vp-rec: #D97706;
+  --vp-rec-hi: #F59E0B;
+  --vp-gold: #D97706;
+  --vp-gold-accent: #F59E0B;
   --vp-ig-pink: #e1306c;
   --vp-ig-grad: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
   --vp-clip-v: #5c7cfa;
@@ -99,8 +100,8 @@ const PAGE_CSS = `
 }
 .vp-btn svg { width: 18px; height: 18px; flex: none; }
 .vp-btn:active { transform: translateY(1px); }
-.vp-btn-primary { background: var(--vp-rec); color: #fff; }
-.vp-btn-primary:hover { background: var(--vp-rec-hi); }
+.vp-btn-primary { background: var(--vp-rec); color: #fff; border: 1.5px solid var(--vp-rec); border-radius: 100px; font-weight: 700; }
+.vp-btn-primary:hover { background: var(--vp-rec-hi); color: #0F172A; border-color: var(--vp-rec-hi); box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35); }
 .vp-btn-ghost { border-color: var(--vp-ink); color: var(--vp-ink); background: transparent; }
 .vp-btn-ghost:hover { background: var(--vp-ink); color: var(--vp-paper); }
 .vp-dark .vp-btn-ghost { border-color: rgba(255,255,255,0.45); color: #fff; }
@@ -111,27 +112,39 @@ const PAGE_CSS = `
 /* Nav */
 .vp-nav {
   position: sticky; top: 0; z-index: 60;
-  background: rgba(234, 235, 236, 0.92);
+  background: rgba(244, 244, 244, 0.94);
   -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--vp-line);
 }
 .vp-nav-in { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 20px; }
 .vp-brand {
-  display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
   font-family: var(--vp-f-display); font-stretch: 118%; font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em;
 }
-.vp-brand::before { content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--vp-rec); }
+.vp-brand::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--vp-rec); }
 .vp-nav-links { display: flex; gap: 28px; font-size: 0.92rem; font-weight: 500; }
 .vp-nav-links a { text-decoration: none; padding: 6px 0; color: var(--vp-ink); }
 .vp-nav-links a:hover { text-decoration: underline; color: var(--vp-rec); }
 .vp-nav .vp-btn { min-height: 40px; padding: 0 18px; font-size: 0.88rem; }
+.vp-nav .vp-btn-primary {
+  background: #0F172A;
+  color: #FFFFFF;
+  border: 1.5px solid #0F172A;
+  border-radius: 100px;
+}
+.vp-nav .vp-btn-primary:hover {
+  background: var(--vp-rec-hi);
+  color: #0F172A;
+  border-color: var(--vp-rec-hi);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+}
 @media (max-width: 860px) { .vp-nav-links { display: none; } }
 
 /* Hero */
 .vp-hero { padding-top: clamp(32px, 5vw, 64px); padding-bottom: clamp(40px, 6vw, 80px); }
 .vp-hero-badge {
   display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px;
-  background: rgba(212, 40, 26, 0.08); border: 1px solid rgba(212, 40, 26, 0.25);
+  background: rgba(217, 119, 6, 0.1); border: 1px solid rgba(217, 119, 6, 0.3);
   border-radius: 99px; font-size: 0.82rem; font-weight: 600; color: var(--vp-rec);
   margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.06em;
 }
@@ -215,28 +228,6 @@ const PAGE_CSS = `
 @media (max-width: 960px) {
   .vp-hero-copy, .vp-hero-reel-wrap { grid-column: 1 / -1; }
   .vp-hero-reel-wrap { margin-top: 16px; }
-}
-
-/* Proofbar - Clickable Client Profiles */
-.vp-proofbar { border-block: 1px solid var(--vp-line); background: rgba(0, 0, 0, 0.02); }
-.vp-proofbar-in { display: grid; grid-template-columns: minmax(130px, 0.7fr) repeat(5, 1fr); align-items: stretch; }
-.vp-proofbar-title { padding: 20px 16px 20px 0; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--vp-muted); display: flex; align-items: center; }
-.vp-logo-slot {
-  display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 3px;
-  padding: 16px 10px; border-left: 1px solid var(--vp-line); text-align: center; text-decoration: none;
-  transition: background-color 0.2s, transform 0.2s;
-}
-.vp-logo-slot:hover { background: rgba(0,0,0,0.04); }
-.vp-logo-name { font-family: var(--vp-f-display); font-weight: 800; font-size: 0.9rem; letter-spacing: 0.02em; color: var(--vp-ink); display: flex; align-items: center; gap: 4px; }
-.vp-logo-handle { font-size: 0.72rem; color: var(--vp-rec); font-family: var(--vp-f-tc); font-weight: 500; }
-.vp-logo-sub { font-size: 0.68rem; color: var(--vp-muted); text-transform: uppercase; letter-spacing: 0.04em; }
-@media (max-width: 960px) {
-  .vp-proofbar-in { grid-template-columns: repeat(3, 1fr); }
-  .vp-proofbar-title { grid-column: 1 / -1; padding-bottom: 8px; }
-  .vp-logo-slot { border-left: 0; border-top: 1px solid var(--vp-line); padding: 12px 6px; }
-}
-@media (max-width: 560px) {
-  .vp-proofbar-in { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ============================================================
@@ -396,7 +387,7 @@ const PAGE_CSS = `
 .vp-tier .vp-btn { margin-top: 6px; }
 .vp-tier-featured { background: var(--vp-ink); color: #eceef0; border-color: var(--vp-ink); transform: translateY(-10px); padding-block: 36px; box-shadow: 0 20px 40px rgba(0,0,0,0.18); }
 .vp-tier-featured .vp-price small { color: var(--vp-muted-inv); }
-.vp-tier-flag { position: absolute; top: -1px; right: 24px; transform: translateY(-50%); background: var(--vp-rec); color: #fff; padding: 4px 12px; font-size: 0.75rem; font-weight: 700; border-radius: var(--vp-r); text-transform: uppercase; letter-spacing: 0.05em; }
+.vp-tier-flag { position: absolute; top: -1px; right: 24px; transform: translateY(-50%); background: var(--vp-gold-accent); color: #0F172A; padding: 5px 14px; font-size: 0.75rem; font-weight: 800; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35); }
 .vp-tier-featured .vp-btn-ghost { border-color: rgba(255,255,255,0.45); color: #fff; }
 .vp-tier-featured .vp-btn-ghost:hover { background: #fff; color: var(--vp-ink); }
 @media (max-width: 960px) { .vp-tiers { grid-template-columns: 1fr; } .vp-tier-featured { transform: none; padding-block: 30px; } }
@@ -513,7 +504,7 @@ const PAGE_CSS = `
   display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.88rem; flex: none;
 }
 .vp-quote-metric {
-  display: inline-block; padding: 2px 8px; background: rgba(212,40,26,0.08); color: var(--vp-rec);
+  display: inline-block; padding: 2px 8px; background: rgba(217,119,6,0.1); color: var(--vp-rec);
   border-radius: 4px; font-size: 0.75rem; font-weight: 600; font-family: var(--vp-f-tc); margin-top: 4px;
 }
 @media (max-width: 960px) { .vp-quotes { grid-template-columns: 1fr; } }
@@ -541,7 +532,7 @@ const PAGE_CSS = `
 .vp-quote-copy { grid-column: 1 / span 5; display: grid; gap: 24px; }
 .vp-next-steps { display: grid; gap: 0; counter-reset: s; }
 .vp-next-steps li { counter-increment: s; display: grid; grid-template-columns: 32px 1fr; gap: 8px; padding: 14px 0; border-top: 1px solid var(--vp-line-inv); }
-.vp-next-steps li::before { content: counter(s); font-family: var(--vp-f-tc); color: #ff6a5c; font-weight: bold; }
+.vp-next-steps li::before { content: counter(s); font-family: var(--vp-f-tc); color: var(--vp-rec); font-weight: bold; }
 .vp-next-steps strong { display: block; font-weight: 600; margin-bottom: 2px; }
 .vp-next-steps span { color: var(--vp-muted-inv); font-size: 0.9rem; }
 .vp-contact-lines { display: grid; gap: 6px; font-size: 0.92rem; }
@@ -559,7 +550,7 @@ const PAGE_CSS = `
 }
 .vp-field textarea { min-height: 100px; resize: vertical; }
 .vp-field select { appearance: none; padding-right: 36px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%230f1013' stroke-width='2'%3E%3Cpath d='M1 1l5 5 5-5'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; }
-.vp-field input:focus, .vp-field select:focus, .vp-field textarea:focus { outline: none; border-color: var(--vp-rec); box-shadow: 0 0 0 3px rgba(212,40,26,0.18); }
+.vp-field input:focus, .vp-field select:focus, .vp-field textarea:focus { outline: none; border-color: var(--vp-rec); box-shadow: 0 0 0 3px rgba(217,119,6,0.22); }
 .vp-seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .vp-seg label { position: relative; font-weight: 500; font-size: 0.85rem; }
 .vp-seg input { position: absolute; opacity: 0; inset: 0; }
@@ -632,55 +623,6 @@ const PAGE_CSS = `
 .vp-sticky-bar .vp-btn { flex: 1; min-height: 46px; padding: 0 12px; font-size: 0.9rem; }
 @media (max-width: 760px) { .vp-sticky-bar { display: flex; } }
 `;
-
-/* 5 Official Client Instagram Profiles & Continuously Looping Videos */
-const INSTAGRAM_CLIENT_REELS = [
-  {
-    handle: "digitalmedhaadvertising",
-    name: "Digital Medha Advertising",
-    url: "https://www.instagram.com/digitalmedhaadvertising?stkn=NnJyZHl6c3p4eTYx",
-    niche: "Advertising & Ads",
-    avatarText: "DM",
-    avatarBg: "linear-gradient(135deg, #FF512F, #DD2476)",
-    videoId: "rVUkWK8lRmw",
-  },
-  {
-    handle: "vision.rainbow",
-    name: "Vision Rainbow",
-    url: "https://www.instagram.com/vision.rainbow?stkn=a2pndGI5b21wNm03",
-    niche: "Holistic Education",
-    avatarText: "VR",
-    avatarBg: "linear-gradient(135deg, #8E2DE2, #4A00E0)",
-    videoId: "_aVoaZbyXJQ",
-  },
-  {
-    handle: "madhurayoga_",
-    name: "Madhura Yoga",
-    url: "https://www.instagram.com/madhurayoga_?stkn=MThuOW93cWsxeDU4OA==",
-    niche: "Yoga & Movement",
-    avatarText: "MY",
-    avatarBg: "linear-gradient(135deg, #11998e, #38ef7d)",
-    videoId: "k-bJd1yYk1A",
-  },
-  {
-    handle: "jaya.daga.1",
-    name: "Jaya Daga",
-    url: "https://www.instagram.com/jaya.daga.1?stkn=MW91dDFlYXNyYTg4OA==",
-    niche: "Personal Brand",
-    avatarText: "JD",
-    avatarBg: "linear-gradient(135deg, #F2994A, #F2C94C)",
-    videoId: "VdsrsWmmhiw",
-  },
-  {
-    handle: "icons.gym",
-    name: "Icons Gym",
-    url: "https://www.instagram.com/icons.gym?stkn=eXR6OWI5ZDFpbmpx",
-    niche: "Commercial Fitness",
-    avatarText: "IG",
-    avatarBg: "linear-gradient(135deg, #EB3349, #F45C43)",
-    videoId: "1EwM31QxnKk",
-  },
-];
 
 /* Continuous Moving Strip Reels (Including Client Video Shoots & Cloudinary MP4s) */
 const PORTFOLIO_STRIP_REELS = [
@@ -1174,29 +1116,6 @@ export default function VideoPortfolioPage({ setPage }) {
                   </div>
                 </div>
               </div>
-            </div>
-          </section>
-
-          {/* =================== PROOFBAR WITH INSTAGRAM CLIENTS =================== */}
-          <section className="vp-proofbar" aria-label="Brands we make videos for">
-            <div className="vp-wrap vp-proofbar-in">
-              <p className="vp-proofbar-title">Client Profiles</p>
-              {INSTAGRAM_CLIENT_REELS.map((client) => (
-                <a
-                  key={client.handle}
-                  href={client.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="vp-logo-slot"
-                  title={`View ${client.name} on Instagram`}
-                >
-                  <span className="vp-logo-name">
-                    {client.name.toUpperCase()}
-                  </span>
-                  <span className="vp-logo-handle">@{client.handle}</span>
-                  <span className="vp-logo-sub">{client.niche}</span>
-                </a>
-              ))}
             </div>
           </section>
 
