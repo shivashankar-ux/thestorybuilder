@@ -1462,7 +1462,7 @@ export default function VideoPortfolioPage({ setPage }) {
                 <video
                   ref={cmpVideoRawRef}
                   className="vp-cmp-video vp-cmp-video-raw"
-                  src="https://res.cloudinary.com/dvr5erobx/video/upload/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.mp4"
+                  src="https://res.cloudinary.com/demo/video/upload/q_auto,w_1280/samples/cld-sample-video.mp4"
                   autoPlay
                   loop
                   muted
@@ -1475,7 +1475,7 @@ export default function VideoPortfolioPage({ setPage }) {
                   <video
                     ref={cmpVideoGradedRef}
                     className="vp-cmp-video vp-cmp-video-graded"
-                    src="https://res.cloudinary.com/dvr5erobx/video/upload/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.mp4"
+                    src="https://res.cloudinary.com/demo/video/upload/q_auto,w_1280/samples/cld-sample-video.mp4"
                     autoPlay
                     loop
                     muted={!cmpUnmuted}
