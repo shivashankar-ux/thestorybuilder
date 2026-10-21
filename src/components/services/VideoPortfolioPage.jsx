@@ -56,6 +56,10 @@ const PAGE_CSS = `
   font: 400 1.0625rem/1.6 var(--vp-f-body);
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
 }
 .vp-root *, .vp-root *::before, .vp-root *::after { box-sizing: border-box; }
 .vp-root a { color: inherit; }
@@ -250,8 +254,9 @@ const PAGE_CSS = `
 /* Continuous Reels Marquee Strip (Left-to-Right Gentle Glide) */
 .vp-marquee-wrap {
   position: relative;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
   overflow: hidden;
   padding: 12px 0 24px;
 }
@@ -574,7 +579,7 @@ const PAGE_CSS = `
 .vp-seg span { display: grid; place-items: center; min-height: 46px; padding: 6px 10px; text-align: center; font-size: 0.85rem; line-height: 1.2; border: 1px solid rgba(15,16,19,0.25); border-radius: var(--vp-r); background: #fff; cursor: pointer; transition: background-color 0.2s, color 0.2s, border-color 0.2s; }
 .vp-seg input:checked + span { background: var(--vp-ink); color: #fff; border-color: var(--vp-ink); font-weight: 600; }
 @media (max-width: 560px) { .vp-form-grid { grid-template-columns: 1fr; } .vp-field { grid-column: 1 / -1; } .vp-seg { grid-template-columns: 1fr; } }
-.vp-hp { position: absolute; left: -9999px; }
+.vp-hp { position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; overflow: hidden; margin: 0; padding: 0; }
 .vp-form-foot { display: grid; gap: 12px; margin-top: 14px; }
 .vp-form-msg-err { padding: 12px 14px; border-radius: var(--vp-r); font-size: 0.9rem; background: #f8dcd8; color: #7a1a10; }
 .vp-form-done { text-align: left; display: grid; gap: 16px; padding: 12px 0; }
@@ -1524,83 +1529,85 @@ export default function VideoPortfolioPage({ setPage }) {
                   <h2>Client Reels</h2>
                 </div>
               </div>
+            </div>
 
-              {/* Infinite gentle scrolling marquee strip (Moving left to right at very low speed) */}
-              <div className="vp-marquee-wrap">
-                <div className="vp-marquee-track">
-                  {[...PORTFOLIO_STRIP_REELS, ...PORTFOLIO_STRIP_REELS].map((item, idx) => {
-                    const isUnmuted = unmutedReel === item.handle;
-                    return (
-                      <div className="vp-ig-card" key={`${item.handle}_${idx}`}>
-                        <div className="vp-ig-video-frame">
-                          {item.type === "mp4" ? (
-                            <video
-                              ref={(el) => {
-                                if (el) {
-                                  if (!videoRefs.current[item.handle]) videoRefs.current[item.handle] = [];
-                                  if (!videoRefs.current[item.handle].includes(el)) {
-                                    videoRefs.current[item.handle].push(el);
-                                  }
+            {/* Infinite gentle scrolling marquee strip (Moving left to right at very low speed) */}
+            <div className="vp-marquee-wrap">
+              <div className="vp-marquee-track">
+                {[...PORTFOLIO_STRIP_REELS, ...PORTFOLIO_STRIP_REELS].map((item, idx) => {
+                  const isUnmuted = unmutedReel === item.handle;
+                  return (
+                    <div className="vp-ig-card" key={`${item.handle}_${idx}`}>
+                      <div className="vp-ig-video-frame">
+                        {item.type === "mp4" ? (
+                          <video
+                            ref={(el) => {
+                              if (el) {
+                                if (!videoRefs.current[item.handle]) videoRefs.current[item.handle] = [];
+                                if (!videoRefs.current[item.handle].includes(el)) {
+                                  videoRefs.current[item.handle].push(el);
                                 }
-                              }}
-                              src={item.videoSrc}
-                              autoPlay
-                              loop
-                              muted={!isUnmuted}
-                              playsInline
-                              preload="metadata"
-                            />
-                          ) : (
-                            <iframe
-                              ref={(el) => {
-                                if (el) {
-                                  if (!iframeRefs.current[item.handle]) iframeRefs.current[item.handle] = [];
-                                  if (!iframeRefs.current[item.handle].includes(el)) {
-                                    iframeRefs.current[item.handle].push(el);
-                                  }
-                                }
-                              }}
-                              src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=1&loop=1&playlist=${item.videoId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&iv_load_policy=3&cc_load_policy=0&disablekb=1&fs=0`}
-                              title={`${item.name} Reel`}
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            />
-                          )}
-
-                          {/* Transparent click layer for toggling sound without triggering YouTube UI */}
-                          <div
-                            className="vp-ig-click-layer"
-                            onClick={() => toggleMute(item.handle)}
-                            title={isUnmuted ? "Tap to mute" : "Tap to unmute"}
-                          />
-
-                          {/* Minimal One-Tap Mute / Unmute Symbol Only (No Text) */}
-                          <button
-                            type="button"
-                            className={`vp-ig-sound-btn ${isUnmuted ? "is-unmuted" : ""}`}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleMute(item.handle);
+                              }
                             }}
-                            title={isUnmuted ? "Mute audio" : "Unmute audio"}
-                            aria-label={isUnmuted ? "Mute audio" : "Unmute audio"}
-                          >
-                            {isUnmuted ? (
-                              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
-                              </svg>
-                            ) : (
-                              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
-                              </svg>
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+                            src={item.videoSrc}
+                            autoPlay
+                            loop
+                            muted={!isUnmuted}
+                            playsInline
+                            preload="metadata"
+                          />
+                        ) : (
+                          <iframe
+                            ref={(el) => {
+                              if (el) {
+                                if (!iframeRefs.current[item.handle]) iframeRefs.current[item.handle] = [];
+                                if (!iframeRefs.current[item.handle].includes(el)) {
+                                  iframeRefs.current[item.handle].push(el);
+                                }
+                              }
+                            }}
+                            src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=1&loop=1&playlist=${item.videoId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&iv_load_policy=3&cc_load_policy=0&disablekb=1&fs=0`}
+                            title={`${item.name} Reel`}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          />
+                        )}
 
+                        {/* Transparent click layer for toggling sound without triggering YouTube UI */}
+                        <div
+                          className="vp-ig-click-layer"
+                          onClick={() => toggleMute(item.handle)}
+                          title={isUnmuted ? "Tap to mute" : "Tap to unmute"}
+                        />
+
+                        {/* Minimal One-Tap Mute / Unmute Symbol Only (No Text) */}
+                        <button
+                          type="button"
+                          className={`vp-ig-sound-btn ${isUnmuted ? "is-unmuted" : ""}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleMute(item.handle);
+                          }}
+                          title={isUnmuted ? "Mute audio" : "Unmute audio"}
+                          aria-label={isUnmuted ? "Mute audio" : "Unmute audio"}
+                        >
+                          {isUnmuted ? (
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                            </svg>
+                          ) : (
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                              <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                            </svg>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="vp-wrap">
               <div style={{ marginTop: 28, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16, paddingTop: 18, borderTop: "1px solid rgba(255,255,255,0.12)" }}>
                 <p style={{ fontFamily: "var(--vp-f-display)", fontWeight: 700, fontSize: "clamp(1.05rem, 1.8vw, 1.4rem)", letterSpacing: "-0.01em" }}>
                   Want your brand’s Reels shot & edited by our crew?
