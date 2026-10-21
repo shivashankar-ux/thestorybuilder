@@ -34,10 +34,10 @@ const PAGE_CSS = `
   --vp-muted-inv: rgba(236, 237, 239, 0.72);
   --vp-line: rgba(120, 90, 40, 0.14);
   --vp-line-inv: rgba(255, 255, 255, 0.16);
-  --vp-rec: #D97706;
-  --vp-rec-hi: #F59E0B;
-  --vp-gold: #D97706;
-  --vp-gold-accent: #F59E0B;
+  --vp-rec: #F59E0B;
+  --vp-rec-hi: #FACC15;
+  --vp-gold: #F59E0B;
+  --vp-gold-accent: #FACC15;
   --vp-ig-pink: #e1306c;
   --vp-ig-grad: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
   --vp-clip-v: #5c7cfa;
@@ -100,8 +100,8 @@ const PAGE_CSS = `
 }
 .vp-btn svg { width: 18px; height: 18px; flex: none; }
 .vp-btn:active { transform: translateY(1px); }
-.vp-btn-primary { background: var(--vp-rec); color: #fff; border: 1.5px solid var(--vp-rec); border-radius: 100px; font-weight: 700; }
-.vp-btn-primary:hover { background: var(--vp-rec-hi); color: #0F172A; border-color: var(--vp-rec-hi); box-shadow: 0 6px 20px rgba(217, 119, 6, 0.35); }
+.vp-btn-primary { background: #F59E0B; color: #0F172A; border: 1.5px solid #F59E0B; border-radius: 100px; font-weight: 700; }
+.vp-btn-primary:hover { background: #FFFFFF; color: #0F172A; border-color: #FFFFFF; box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45); }
 .vp-btn-ghost { border-color: var(--vp-ink); color: var(--vp-ink); background: transparent; }
 .vp-btn-ghost:hover { background: var(--vp-ink); color: var(--vp-paper); }
 .vp-dark .vp-btn-ghost { border-color: rgba(255,255,255,0.45); color: #fff; }
@@ -120,23 +120,25 @@ const PAGE_CSS = `
 .vp-brand {
   display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
   font-family: var(--vp-f-display); font-stretch: 118%; font-weight: 800; font-size: 1.15rem; letter-spacing: -0.02em;
+  color: var(--vp-ink);
 }
-.vp-brand::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--vp-rec); }
+.vp-brand::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: #F59E0B; }
 .vp-nav-links { display: flex; gap: 28px; font-size: 0.92rem; font-weight: 500; }
 .vp-nav-links a { text-decoration: none; padding: 6px 0; color: var(--vp-ink); }
-.vp-nav-links a:hover { text-decoration: underline; color: var(--vp-rec); }
+.vp-nav-links a:hover { text-decoration: underline; color: #F59E0B; }
 .vp-nav .vp-btn { min-height: 40px; padding: 0 18px; font-size: 0.88rem; }
 .vp-nav .vp-btn-primary {
-  background: #0F172A;
-  color: #FFFFFF;
-  border: 1.5px solid #0F172A;
+  background: #F59E0B;
+  color: #0F172A !important;
+  border: 1.5px solid #F59E0B;
   border-radius: 100px;
+  font-weight: 700;
 }
 .vp-nav .vp-btn-primary:hover {
-  background: var(--vp-rec-hi);
-  color: #0F172A;
-  border-color: var(--vp-rec-hi);
-  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+  background: #FFFFFF;
+  color: #0F172A !important;
+  border-color: #FFFFFF;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
 }
 @media (max-width: 860px) { .vp-nav-links { display: none; } }
 
@@ -429,44 +431,47 @@ const PAGE_CSS = `
 @media (max-width: 860px) { .vp-diff-head h2, .vp-diff-head p { grid-column: 1 / -1; } }
 
 .vp-cmp {
-  --pos: 50%; position: relative; aspect-ratio: 16 / 9; overflow: hidden;
-  border-radius: var(--vp-r); background: var(--vp-ink-2); touch-action: pan-y;
-  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+  --pos: 50%; position: relative; aspect-ratio: 16 / 9; max-width: 1040px; margin-inline: auto;
+  overflow: hidden; border-radius: 12px; background: #000; touch-action: pan-y;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.12);
 }
-.vp-cmp-raw, .vp-cmp-graded {
-  position: absolute; inset: 0; background-size: cover; background-position: center 35%;
+.vp-cmp-video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none;
 }
-.vp-cmp-raw {
-  background-image: url("https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1600&q=80");
-  filter: grayscale(0.55) contrast(0.68) brightness(1.15) saturate(0.65);
+.vp-cmp-video-raw {
+  filter: grayscale(0.55) contrast(0.68) brightness(1.18) saturate(0.62);
 }
-.vp-cmp-graded {
-  background-image: url("https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1600&q=80");
-  filter: contrast(1.25) saturate(1.35) brightness(0.96);
-  clip-path: inset(0 0 0 var(--pos));
+.vp-cmp-graded-wrap {
+  position: absolute; inset: 0; clip-path: inset(0 0 0 var(--pos)); pointer-events: none;
 }
-.vp-cmp-graded::after {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(20, 80, 110, 0.26) 0%, rgba(220, 100, 30, 0.18) 100%);
-  mix-blend-mode: soft-light;
+.vp-cmp-video-graded {
+  filter: contrast(1.28) saturate(1.38) brightness(1.02);
+}
+.vp-cmp-graded-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(20, 80, 110, 0.22) 0%, rgba(245, 158, 11, 0.16) 100%);
+  mix-blend-mode: soft-light; pointer-events: none;
 }
 .vp-cmp-tag {
-  position: absolute; z-index: 3; top: 16px; padding: 6px 12px;
-  background: rgba(15,16,19,0.85); backdrop-filter: blur(6px); border-radius: 2px;
-  font-size: 0.78rem; font-family: var(--vp-f-tc); font-weight: 500; color: #fff;
-  border: 1px solid rgba(255,255,255,0.15);
+  position: absolute; z-index: 3; top: 16px; padding: 6px 14px;
+  background: rgba(15,16,19,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-radius: 99px; font-size: 0.78rem; font-family: var(--vp-f-tc); font-weight: 600; color: #fff;
+  border: 1px solid rgba(255,255,255,0.18); display: flex; align-items: center; gap: 6px;
 }
 .vp-cmp-tag.l { left: 16px; }
 .vp-cmp-tag.r { right: 16px; }
+.vp-cmp-tag-dot { width: 8px; height: 8px; border-radius: 50%; }
+.vp-cmp-tag-dot.raw { background: #94a3b8; }
+.vp-cmp-tag-dot.graded { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
 .vp-cmp-handle {
   position: absolute; z-index: 3; top: 0; bottom: 0; left: var(--pos); width: 2px;
   background: #fff; pointer-events: none;
 }
 .vp-cmp-handle::after {
   content: "↔";
-  position: absolute; top: 50%; left: 50%; width: 40px; height: 40px;
-  transform: translate(-50%, -50%); border-radius: 50%; background: #fff;
-  color: var(--vp-ink); font-weight: 800; font-size: 15px;
+  position: absolute; top: 50%; left: 50%; width: 42px; height: 42px;
+  transform: translate(-50%, -50%); border-radius: 50%; background: #f59e0b;
+  color: #0f1013; font-weight: 800; font-size: 16px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.6);
   display: flex; align-items: center; justify-content: center;
 }
@@ -474,14 +479,26 @@ const PAGE_CSS = `
   position: absolute; z-index: 4; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize;
   touch-action: none;
 }
-.vp-cmp-presets { display: flex; justify-content: center; gap: 8px; margin-top: 14px; }
+.vp-cmp-sound-btn {
+  position: absolute; bottom: 16px; right: 16px; z-index: 5;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 14px; border-radius: 99px;
+  background: rgba(15, 16, 19, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border: 1.5px solid rgba(255, 255, 255, 0.25); color: #fff;
+  font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
+}
+.vp-cmp-sound-btn:hover { background: rgba(15, 16, 19, 0.95); border-color: #f59e0b; }
+.vp-cmp-sound-btn.is-unmuted {
+  background: #10b981; border-color: #10b981; color: #fff; box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+}
+.vp-cmp-presets { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
 .vp-preset-btn {
-  padding: 6px 14px; border-radius: 99px; border: 1px solid rgba(255, 255, 255, 0.2);
-  background: transparent; color: #fff; font-size: 0.8rem; font-family: var(--vp-f-tc); cursor: pointer;
+  padding: 7px 16px; border-radius: 99px; border: 1px solid rgba(255, 255, 255, 0.2);
+  background: transparent; color: #fff; font-size: 0.82rem; font-family: var(--vp-f-tc); cursor: pointer;
   transition: all 0.2s;
 }
-.vp-preset-btn:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
-.vp-preset-btn.active { background: #fff; color: var(--vp-ink); font-weight: 600; }
+.vp-preset-btn:hover { background: rgba(255,255,255,0.1); border-color: #f59e0b; color: #f59e0b; }
+.vp-preset-btn.active { background: #f59e0b; color: #0f1013; border-color: #f59e0b; font-weight: 700; }
 
 .vp-pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
 .vp-pillars > div { padding-top: 20px; border-top: 1px solid var(--vp-line-inv); display: grid; gap: 8px; align-content: start; }
@@ -751,12 +768,15 @@ export default function VideoPortfolioPage({ setPage }) {
   const [heroUnmuted, setHeroUnmuted] = useState(false);
   const [unmutedReel, setUnmutedReel] = useState(null);
   const [cmpPos, setCmpPos] = useState(50);
+  const [cmpUnmuted, setCmpUnmuted] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
   const [stickyVisible, setStickyVisible] = useState(false);
   const [tlProgress, setTlProgress] = useState(0);
   const [timecode, setTimecode] = useState("01:00:00:00");
 
   const heroVideoRef = useRef(null);
+  const cmpVideoRawRef = useRef(null);
+  const cmpVideoGradedRef = useRef(null);
   const iframeRefs = useRef({});
   const videoRefs = useRef({});
 
@@ -771,6 +791,35 @@ export default function VideoPortfolioPage({ setPage }) {
       setHeroUnmuted(!nextMuted);
     }
   };
+
+  const toggleCmpMute = () => {
+    if (cmpVideoGradedRef.current) {
+      const next = !cmpUnmuted;
+      cmpVideoGradedRef.current.muted = !next;
+      setCmpUnmuted(next);
+      if (next) {
+        cmpVideoGradedRef.current.volume = 1.0;
+        cmpVideoGradedRef.current.play().catch(() => {});
+      }
+    }
+  };
+
+  // Synchronize the Before & After raw and graded video playback in real time
+  useEffect(() => {
+    const rawEl = cmpVideoRawRef.current;
+    const gradedEl = cmpVideoGradedRef.current;
+    if (!rawEl || !gradedEl) return;
+
+    const handleSync = () => {
+      if (Math.abs(gradedEl.currentTime - rawEl.currentTime) > 0.08) {
+        gradedEl.currentTime = rawEl.currentTime;
+      }
+    };
+    rawEl.addEventListener("timeupdate", handleSync);
+    return () => {
+      rawEl.removeEventListener("timeupdate", handleSync);
+    };
+  }, []);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -1011,7 +1060,7 @@ export default function VideoPortfolioPage({ setPage }) {
         <header className="vp-nav">
           <div className="vp-wrap vp-nav-in">
             <a className="vp-brand" href="#vp-top" aria-label="The Story Builder home">
-              The Story Builder
+              <span style={{ color: "#F59E0B" }}>The </span>Story Builder
             </a>
             <nav className="vp-nav-links" aria-label="Primary">
               <a href="#vp-client-reels" onClick={(e) => { e.preventDefault(); scrollTo("vp-client-reels"); }}>Client Reels</a>
@@ -1398,21 +1447,51 @@ export default function VideoPortfolioPage({ setPage }) {
             </div>
           </section>
 
-          {/* =================== BEFORE & AFTER COLOR GRADE =================== */}
+          {/* =================== BEFORE & AFTER COLOR GRADE (LIVE VIDEO DEMO) =================== */}
           <section className="vp-section vp-dark" id="vp-difference">
             <div className="vp-wrap">
               <div className="vp-diff-head">
                 <h2>Raw footage gets attention.<br />Cinematic color keeps it.</h2>
                 <p className="vp-lede">
-                  Slide left and right to inspect the difference between flat camera log profile (Sony S-Log3) and our finished Hollywood film color grade.
+                  Watch the live video in action. Drag the slider to compare unedited flat camera log profile (Sony S-Log3) with our finished cinematic film grade.
                 </p>
               </div>
 
               <div className="vp-cmp" style={{ "--pos": cmpPos + "%" }}>
-                <div className="vp-cmp-raw" />
-                <div className="vp-cmp-graded" />
-                <span className="vp-cmp-tag l">Raw S-Log3 Profile</span>
-                <span className="vp-cmp-tag r">Kodak Film LUT Grade</span>
+                {/* 1. Raw Flat Camera Video (Layer 0) */}
+                <video
+                  ref={cmpVideoRawRef}
+                  className="vp-cmp-video vp-cmp-video-raw"
+                  src="https://res.cloudinary.com/dvr5erobx/video/upload/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                />
+
+                {/* 2. Finished Graded Master Video (Layer 1, clipped) */}
+                <div className="vp-cmp-graded-wrap">
+                  <video
+                    ref={cmpVideoGradedRef}
+                    className="vp-cmp-video vp-cmp-video-graded"
+                    src="https://res.cloudinary.com/dvr5erobx/video/upload/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.mp4"
+                    autoPlay
+                    loop
+                    muted={!cmpUnmuted}
+                    playsInline
+                    preload="auto"
+                  />
+                  <div className="vp-cmp-graded-overlay" />
+                </div>
+
+                <span className="vp-cmp-tag l">
+                  <span className="vp-cmp-tag-dot raw" /> BEFORE: Raw S-Log3 Camera
+                </span>
+                <span className="vp-cmp-tag r">
+                  <span className="vp-cmp-tag-dot graded" /> AFTER: Cinematic Master Grade
+                </span>
+
                 <div className="vp-cmp-handle" aria-hidden="true" />
                 <label className="vp-sr-only" htmlFor="vp-cmpRange">Compare raw log footage and graded master edit</label>
                 <input
@@ -1423,6 +1502,29 @@ export default function VideoPortfolioPage({ setPage }) {
                   value={cmpPos}
                   onChange={(e) => setCmpPos(Number(e.target.value))}
                 />
+
+                {/* Sound toggle button */}
+                <button
+                  type="button"
+                  className={`vp-cmp-sound-btn ${cmpUnmuted ? "is-unmuted" : ""}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleCmpMute();
+                  }}
+                  title={cmpUnmuted ? "Mute audio" : "Unmute audio"}
+                  aria-label={cmpUnmuted ? "Mute audio" : "Unmute audio"}
+                >
+                  {cmpUnmuted ? (
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                    </svg>
+                  )}
+                  <span>{cmpUnmuted ? "Sound On" : "Sound Off"}</span>
+                </button>
               </div>
 
               <div className="vp-cmp-presets">
