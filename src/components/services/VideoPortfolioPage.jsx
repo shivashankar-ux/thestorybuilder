@@ -216,28 +216,19 @@ const PAGE_CSS = `
 }
 
 /* ============================================================
-   INSTAGRAM CLIENT REELS SHOWCASE (CONTINUOUS LOOPING AUTOPLAY)
+   CLIENT REELS SHOWCASE (MINIMALIST, ZERO JARGON, CONTINUOUS LOOP)
    ============================================================ */
 .vp-ig-section {
-  padding-block: clamp(60px, 8vw, 110px);
+  padding-block: clamp(50px, 7vw, 100px);
   background: #090a0d;
   color: #fff;
   position: relative;
   overflow: hidden;
   border-top: 1px solid rgba(255,255,255,0.08);
 }
-.vp-ig-badge {
-  display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px;
-  background: rgba(225, 48, 108, 0.12); border: 1px solid rgba(225, 48, 108, 0.35);
-  border-radius: 99px; font-size: 0.82rem; font-weight: 600; color: #ff5483;
-  margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.06em;
-}
-.vp-ig-badge::before {
-  content: "•"; color: #ff5483; font-size: 1.4rem; line-height: 0; animation: vp-blink 1.2s infinite;
-}
 .vp-ig-header {
-  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 20px;
-  margin-bottom: 32px;
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px;
+  margin-bottom: 28px;
 }
 .vp-ig-deck {
   display: grid;
@@ -254,13 +245,13 @@ const PAGE_CSS = `
     -webkit-overflow-scrolling: touch;
   }
   .vp-ig-card {
-    flex: 0 0 290px;
+    flex: 0 0 280px;
     scroll-snap-align: start;
   }
 }
 @media (max-width: 600px) {
   .vp-ig-card {
-    flex: 0 0 84vw;
+    flex: 0 0 82vw;
     max-width: 320px;
   }
 }
@@ -278,14 +269,14 @@ const PAGE_CSS = `
 }
 .vp-ig-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(225, 48, 108, 0.5);
+  border-color: rgba(225, 48, 108, 0.45);
   box-shadow: 0 24px 60px rgba(225, 48, 108, 0.15);
 }
 
 /* Instagram Profile Header */
 .vp-ig-top {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 14px; background: rgba(17, 19, 24, 0.95);
+  padding: 10px 14px; background: rgba(17, 19, 24, 0.98);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   z-index: 5;
 }
@@ -294,22 +285,22 @@ const PAGE_CSS = `
   min-width: 0;
 }
 .vp-ig-avatar-ring {
-  width: 36px; height: 36px; border-radius: 50%; padding: 2px;
+  width: 34px; height: 34px; border-radius: 50%; padding: 2px;
   background: var(--vp-ig-grad); display: flex; align-items: center; justify-content: center;
   flex: none;
 }
 .vp-ig-avatar {
   width: 100%; height: 100%; border-radius: 50%; background: #000;
   display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 0.75rem; color: #fff; letter-spacing: -0.02em;
+  font-weight: 800; font-size: 0.72rem; color: #fff; letter-spacing: -0.02em;
 }
-.vp-ig-meta { min-width: 0; line-height: 1.25; }
+.vp-ig-meta { min-width: 0; line-height: 1.2; }
 .vp-ig-handle {
   display: flex; align-items: center; gap: 4px; font-weight: 700; font-size: 0.85rem;
   color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .vp-ig-handle svg { width: 14px; height: 14px; fill: #3897f0; flex: none; }
-.vp-ig-niche { font-size: 0.68rem; color: rgba(255,255,255,0.65); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vp-ig-niche { font-size: 0.68rem; color: rgba(255,255,255,0.6); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vp-ig-link-btn {
   font-size: 0.72rem; font-weight: 600; color: #ff5483; text-decoration: none;
   padding: 4px 8px; border-radius: 6px; background: rgba(225, 48, 108, 0.1);
@@ -330,41 +321,65 @@ const PAGE_CSS = `
   width: 100%; height: 100%; border: 0;
 }
 
-/* Floating Audio / Fullscreen Controls */
-.vp-ig-controls {
-  position: absolute; bottom: 12px; right: 12px; z-index: 6;
-  display: flex; flex-direction: column; gap: 8px;
-}
-.vp-ig-ctrl-btn {
-  width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.3);
-  background: rgba(15, 16, 19, 0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-  color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
-}
-.vp-ig-ctrl-btn:hover { transform: scale(1.1); background: var(--vp-rec); border-color: var(--vp-rec); }
-.vp-ig-ctrl-btn svg { width: 18px; height: 18px; fill: currentColor; }
-.vp-ig-ctrl-btn.active { background: #10b981; border-color: #10b981; }
-
-.vp-ig-live-pill {
-  position: absolute; top: 12px; left: 12px; z-index: 6;
-  display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px;
-  background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); border-radius: 99px;
-  font-size: 0.72rem; font-family: var(--vp-f-tc); font-weight: 600; color: #fff;
-  border: 1px solid rgba(255,255,255,0.15); pointer-events: none;
-}
-.vp-ig-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: vp-blink 1s infinite; }
-
-/* Bottom Caption / Social Stats */
-.vp-ig-caption {
-  padding: 12px 14px; background: #111318; border-top: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 0.8rem; line-height: 1.35; display: grid; gap: 8px;
-}
-.vp-ig-caption strong { font-size: 0.85rem; color: #fff; font-family: var(--vp-f-display); }
-.vp-ig-caption p { color: rgba(255,255,255,0.75); font-size: 0.78rem; margin: 0; }
-.vp-ig-stats-row {
-  display: flex; justify-content: space-between; align-items: center; padding-top: 6px;
-  border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.72rem; color: rgba(255,255,255,0.6);
+/* Floating Audio / Sound Button */
+.vp-ig-sound-btn {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 99px;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  background: rgba(15, 16, 19, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
   font-family: var(--vp-f-tc);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+}
+.vp-ig-sound-btn:hover {
+  background: rgba(15, 16, 19, 0.95);
+  border-color: #fff;
+  transform: scale(1.05);
+}
+.vp-ig-sound-btn.is-unmuted {
+  background: #10b981;
+  border-color: #10b981;
+  color: #fff;
+  box-shadow: 0 0 18px rgba(16, 185, 129, 0.6);
+}
+
+.vp-ig-expand-btn {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  z-index: 10;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  background: rgba(15, 16, 19, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.vp-ig-expand-btn:hover {
+  background: var(--vp-rec);
+  border-color: var(--vp-rec);
+  transform: scale(1.08);
 }
 
 /* Package / Split */
@@ -635,66 +650,46 @@ const INSTAGRAM_CLIENT_REELS = [
     handle: "digitalmedhaadvertising",
     name: "Digital Medha Advertising",
     url: "https://www.instagram.com/digitalmedhaadvertising?stkn=NnJyZHl6c3p4eTYx",
-    niche: "Advertising & Performance Ads",
+    niche: "Advertising & Ads",
     avatarText: "DM",
     avatarBg: "linear-gradient(135deg, #FF512F, #DD2476)",
     videoId: "rVUkWK8lRmw",
-    title: "High-ROAS Direct Response Ad Campaign",
-    desc: "Kinetic hooks, dynamic motion graphics & brand messaging built for Meta & Instagram Ads.",
-    stats: "240K Views",
-    likes: "18.4K",
   },
   {
     handle: "vision.rainbow",
     name: "Vision Rainbow",
     url: "https://www.instagram.com/vision.rainbow?stkn=a2pndGI5b21wNm03",
-    niche: "Holistic Learning & Child Education",
+    niche: "Holistic Education",
     avatarText: "VR",
     avatarBg: "linear-gradient(135deg, #8E2DE2, #4A00E0)",
     videoId: "_aVoaZbyXJQ",
-    title: "Heart-Centered Education Experience",
-    desc: "Emotional student spotlight, organic classroom warmth & storytelling that builds trust.",
-    stats: "195K Views",
-    likes: "14.2K",
   },
   {
     handle: "madhurayoga_",
     name: "Madhura Yoga",
     url: "https://www.instagram.com/madhurayoga_?stkn=MThuOW93cWsxeDU4OA==",
-    niche: "Yoga, Wellness & Movement Studio",
+    niche: "Yoga & Movement",
     avatarText: "MY",
     avatarBg: "linear-gradient(135deg, #11998e, #38ef7d)",
     videoId: "VdsrsWmmhiw",
-    title: "Movement Flow & Studio Ambience",
-    desc: "Ethereal natural light filming, peaceful pacing, and aesthetic visual composition.",
-    stats: "320K Views",
-    likes: "26.8K",
   },
   {
     handle: "jaya.daga.1",
     name: "Jaya Daga",
     url: "https://www.instagram.com/jaya.daga.1?stkn=MW91dDFlYXNyYTg4OA==",
-    niche: "Author, Speaker & Personal Brand",
+    niche: "Personal Brand",
     avatarText: "JD",
     avatarBg: "linear-gradient(135deg, #F2994A, #F2C94C)",
     videoId: "QAL6E6fy1f0",
-    title: "Authority Founder & Keynote Spotlight",
-    desc: "Multi-camera punch-ins, retention captions & authority sound design for high engagement.",
-    stats: "410K Views",
-    likes: "33.5K",
   },
   {
     handle: "icons.gym",
     name: "Icons Gym",
     url: "https://www.instagram.com/icons.gym?stkn=eXR6OWI5ZDFpbmpx",
-    niche: "Elite Strength & Commercial Fitness",
+    niche: "Commercial Fitness",
     avatarText: "IG",
     avatarBg: "linear-gradient(135deg, #EB3349, #F45C43)",
     videoId: "1EwM31QxnKk",
-    title: "High-Energy Training & Facility Tour",
-    desc: "Ronin gimbal tracking, aggressive speed-ramps, and hype audio design that drives memberships.",
-    stats: "580K Views",
-    likes: "48.2K",
   },
 ];
 
@@ -777,6 +772,8 @@ export default function VideoPortfolioPage({ setPage }) {
   const [stickyVisible, setStickyVisible] = useState(false);
   const [tlProgress, setTlProgress] = useState(0);
   const [timecode, setTimecode] = useState("01:00:00:00");
+
+  const iframeRefs = useRef({});
 
   const [formData, setFormData] = useState({
     name: "",
@@ -872,8 +869,8 @@ export default function VideoPortfolioPage({ setPage }) {
   const openPlayer = (item) => {
     setPlayerVideo({
       id: item.videoId,
-      title: item.title,
-      client: `${item.name} (@${item.handle})`,
+      title: item.name,
+      client: `@${item.handle}`,
       aspect: "9/16",
       embed: `https://www.youtube.com/embed/${item.videoId}`,
     });
@@ -886,13 +883,34 @@ export default function VideoPortfolioPage({ setPage }) {
     setPlayerVideo(null);
   };
 
+  // Instant seamless unmute/mute via YouTube iframe postMessage API without reloading
   const toggleMute = (handle) => {
-    if (unmutedReel === handle) {
-      setUnmutedReel(null);
-    } else {
-      setUnmutedReel(handle);
-      trackEvent("AudioUnmute", { handle });
-    }
+    const isCurrentlyUnmuted = unmutedReel === handle;
+    const nextUnmuted = isCurrentlyUnmuted ? null : handle;
+    setUnmutedReel(nextUnmuted);
+
+    Object.keys(iframeRefs.current).forEach((h) => {
+      const iframe = iframeRefs.current[h];
+      if (iframe && iframe.contentWindow) {
+        if (h === handle && !isCurrentlyUnmuted) {
+          iframe.contentWindow.postMessage(
+            JSON.stringify({ event: "command", func: "unMute", args: "" }),
+            "*"
+          );
+          iframe.contentWindow.postMessage(
+            JSON.stringify({ event: "command", func: "setVolume", args: [100] }),
+            "*"
+          );
+        } else {
+          iframe.contentWindow.postMessage(
+            JSON.stringify({ event: "command", func: "mute", args: "" }),
+            "*"
+          );
+        }
+      }
+    });
+
+    trackEvent("AudioToggle", { handle, unmuted: !isCurrentlyUnmuted });
   };
 
   const handleSubmit = async (e) => {
@@ -978,7 +996,7 @@ export default function VideoPortfolioPage({ setPage }) {
               The Story Builder
             </a>
             <nav className="vp-nav-links" aria-label="Primary">
-              <a href="#vp-client-reels" onClick={(e) => { e.preventDefault(); scrollTo("vp-client-reels"); }}>Live Client Reels</a>
+              <a href="#vp-client-reels" onClick={(e) => { e.preventDefault(); scrollTo("vp-client-reels"); }}>Client Reels</a>
               <a href="#vp-package" onClick={(e) => { e.preventDefault(); scrollTo("vp-package"); }}>Packages</a>
               <a href="#vp-process" onClick={(e) => { e.preventDefault(); scrollTo("vp-process"); }}>Process</a>
               <a href="#vp-difference" onClick={(e) => { e.preventDefault(); scrollTo("vp-difference"); }}>Color Grade</a>
@@ -1132,33 +1150,22 @@ export default function VideoPortfolioPage({ setPage }) {
             </div>
           </section>
 
-          {/* =================== LIVE CLIENT REELS (AUTOPLAY LOOP ON MUTE) =================== */}
+          {/* =================== CLIENT REELS (CLEAN, CONTINUOUSLY PLAYING ON MUTE, TAP TO UNMUTE) =================== */}
           <section className="vp-ig-section" id="vp-client-reels">
             <div className="vp-wrap">
               <div className="vp-ig-header">
                 <div>
-                  <div className="vp-ig-badge">
-                    <span>Live Client Reels · Continuous Autoplay</span>
-                  </div>
-                  <h2>Shot & Cut For Instagram.<br />Playing Live Below.</h2>
-                  <p className="vp-lede" style={{ marginTop: 10 }}>
-                    These videos play continuously on mute in a loop, exactly like Instagram Reels. Tap the audio button on any card to listen, or click their handle to visit their official Instagram profile.
-                  </p>
-                </div>
-                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-                  <span style={{ fontSize: "0.82rem", color: "rgba(255,255,255,0.6)", fontFamily: "var(--vp-f-tc)" }}>
-                    Tap 🔊 to unmute sound
-                  </span>
+                  <h2>Client Reels</h2>
                 </div>
               </div>
 
-              {/* 5-Card Deck: Continuous looping on mute */}
+              {/* 5-Card Deck: Continuous looping on mute, zero jargon */}
               <div className="vp-ig-deck">
                 {INSTAGRAM_CLIENT_REELS.map((item) => {
                   const isUnmuted = unmutedReel === item.handle;
                   return (
                     <div className="vp-ig-card" key={item.handle}>
-                      {/* Instagram Profile Header */}
+                      {/* Clean Instagram Profile Header */}
                       <div className="vp-ig-top">
                         <a
                           href={item.url}
@@ -1193,10 +1200,13 @@ export default function VideoPortfolioPage({ setPage }) {
                         </a>
                       </div>
 
-                      {/* Continuous Looping Video Canvas */}
+                      {/* Continuous Looping Video Canvas (Playing on mute by default) */}
                       <div className="vp-ig-video-frame">
                         <iframe
-                          src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=${isUnmuted ? 0 : 1}&loop=1&playlist=${item.videoId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1`}
+                          ref={(el) => {
+                            if (el) iframeRefs.current[item.handle] = el;
+                          }}
+                          src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=1&loop=1&playlist=${item.videoId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1`}
                           title={`${item.name} Reel`}
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           style={{
@@ -1207,71 +1217,47 @@ export default function VideoPortfolioPage({ setPage }) {
                           }}
                         />
 
-                        {/* Top Live Looping Pill */}
-                        <div className="vp-ig-live-pill">
-                          <span className="vp-ig-live-dot" />
-                          <span>LOOPING</span>
-                        </div>
+                        {/* Expand Button */}
+                        <button
+                          type="button"
+                          className="vp-ig-expand-btn"
+                          onClick={() => openPlayer(item)}
+                          title="Open full player"
+                          aria-label="Expand video"
+                        >
+                          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+                          </svg>
+                        </button>
 
-                        {/* Floating Sound & Expand Controls */}
-                        <div className="vp-ig-controls">
-                          <button
-                            type="button"
-                            className={`vp-ig-ctrl-btn ${isUnmuted ? "active" : ""}`}
-                            onClick={() => toggleMute(item.handle)}
-                            title={isUnmuted ? "Mute audio" : "Unmute audio"}
-                            aria-label={isUnmuted ? "Mute audio" : "Unmute audio"}
-                          >
-                            {isUnmuted ? (
-                              <svg viewBox="0 0 24 24">
-                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
-                              </svg>
-                            ) : (
-                              <svg viewBox="0 0 24 24">
-                                <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
-                              </svg>
-                            )}
-                          </button>
-
-                          <button
-                            type="button"
-                            className="vp-ig-ctrl-btn"
-                            onClick={() => openPlayer(item)}
-                            title="Open full cinematic player"
-                            aria-label="Expand video"
-                          >
-                            <svg viewBox="0 0 24 24">
-                              <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z" />
+                        {/* Prominent One-Tap UNMUTE / MUTE Toggle Button */}
+                        <button
+                          type="button"
+                          className={`vp-ig-sound-btn ${isUnmuted ? "is-unmuted" : ""}`}
+                          onClick={() => toggleMute(item.handle)}
+                          title={isUnmuted ? "Mute audio" : "Unmute audio"}
+                          aria-label={isUnmuted ? "Mute audio" : "Unmute audio"}
+                        >
+                          {isUnmuted ? (
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
                             </svg>
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Bottom Caption & Stats */}
-                      <div className="vp-ig-caption">
-                        <strong>{item.title}</strong>
-                        <p>{item.desc}</p>
-                        <div className="vp-ig-stats-row">
-                          <span>🔥 {item.stats}</span>
-                          <span>❤️ {item.likes}</span>
-                          <a
-                            href={item.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ color: "#ff5483", textDecoration: "none", fontWeight: 600 }}
-                          >
-                            View on Instagram →
-                          </a>
-                        </div>
+                          ) : (
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                              <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                            </svg>
+                          )}
+                          <span>{isUnmuted ? "MUTE" : "UNMUTE"}</span>
+                        </button>
                       </div>
                     </div>
                   );
                 })}
               </div>
 
-              <div style={{ marginTop: 32, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16, paddingTop: 20, borderTop: "1px solid rgba(255,255,255,0.12)" }}>
+              <div style={{ marginTop: 28, display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16, paddingTop: 18, borderTop: "1px solid rgba(255,255,255,0.12)" }}>
                 <p style={{ fontFamily: "var(--vp-f-display)", fontWeight: 700, fontSize: "clamp(1.05rem, 1.8vw, 1.4rem)", letterSpacing: "-0.01em" }}>
-                  Want your brand’s Instagram Reels looking this sharp?
+                  Want your brand’s Reels shot & edited by our crew?
                 </p>
                 <a
                   className="vp-btn vp-btn-primary"
