@@ -639,6 +639,354 @@ const PAGE_CSS = `
 .vp-sticky-bar.show { transform: none; }
 .vp-sticky-bar .vp-btn { flex: 1; min-height: 46px; padding: 0 12px; font-size: 0.9rem; }
 @media (max-width: 760px) { .vp-sticky-bar { display: flex; } }
+
+/* ============================================================
+   MOBILE OPTIMIZATIONS (BALANCED RATIOS, ERGONOMIC TOUCH TARGETS)
+   ============================================================ */
+@media (max-width: 640px) {
+  .vp-root {
+    --vp-gut: 16px;
+    --vp-sec: clamp(34px, 5.5vw, 56px);
+  }
+
+  /* Typography scaled for mobile comfort */
+  .vp-root h1 {
+    font-size: clamp(1.8rem, 7vw, 2.35rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+  .vp-root h2 {
+    font-size: clamp(1.45rem, 5.8vw, 1.95rem);
+    line-height: 1.12;
+  }
+  .vp-root h3 {
+    font-size: 1.15rem;
+  }
+  .vp-lede {
+    font-size: 0.94rem;
+    line-height: 1.5;
+  }
+
+  /* Nav */
+  .vp-nav-in {
+    height: 56px;
+    gap: 12px;
+  }
+  .vp-brand {
+    font-size: 1.02rem;
+  }
+  .vp-nav .vp-btn {
+    min-height: 36px;
+    padding: 0 14px;
+    font-size: 0.8rem;
+  }
+
+  /* Hero */
+  .vp-hero {
+    padding-top: 20px;
+    padding-bottom: 28px;
+  }
+  .vp-hero-badge {
+    margin-bottom: 12px;
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    line-height: 1.3;
+  }
+  .vp-hero-grid {
+    margin-top: 18px;
+    gap: 20px;
+  }
+  .vp-hero-copy {
+    gap: 16px;
+  }
+  .vp-hero-copy .vp-btn-row {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+  .vp-hero-copy .vp-btn {
+    width: 100%;
+    min-height: 48px;
+  }
+  .vp-hero-points {
+    font-size: 0.85rem;
+    gap: 6px;
+  }
+  .vp-hero-points li {
+    padding-top: 6px;
+  }
+  .vp-hero-reel-wrap {
+    margin-top: 12px;
+  }
+
+  /* Hero Vertical 9:16 Reel Card (Proper smartphone ratio without taking 100% of viewport) */
+  .vp-hero-reel-card {
+    width: min(210px, 58vw);
+    border-radius: 18px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32);
+  }
+  .vp-hero-sound-btn {
+    width: 32px;
+    height: 32px;
+    bottom: 10px;
+    right: 10px;
+  }
+  .vp-hero-sound-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  /* Continuous Marquee Reels Strip (Proportional 9:16 peek cards) */
+  .vp-ig-section {
+    padding-block: 32px;
+  }
+  .vp-ig-header {
+    margin-bottom: 16px;
+  }
+  .vp-marquee-wrap {
+    padding: 4px 0 14px;
+  }
+  .vp-marquee-track {
+    gap: 12px;
+    animation-duration: 50s;
+  }
+  .vp-ig-card {
+    flex: 0 0 142px;
+    width: 142px;
+    border-radius: 12px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+  }
+  .vp-ig-video-frame {
+    border-radius: 12px;
+  }
+  .vp-ig-sound-btn {
+    width: 28px;
+    height: 28px;
+    bottom: 8px;
+    right: 8px;
+  }
+  .vp-ig-sound-btn svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  /* Color Grading Before & After Comparison Slider */
+  .vp-diff-head {
+    margin-bottom: 18px;
+    gap: 10px;
+  }
+  .vp-cmp {
+    border-radius: 10px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+  }
+  .vp-cmp-tag {
+    top: 8px;
+    padding: 3px 8px;
+    font-size: 0.65rem;
+    gap: 4px;
+  }
+  .vp-cmp-tag.l { left: 8px; }
+  .vp-cmp-tag.r { right: 8px; }
+  .vp-cmp-tag-dot { width: 5px; height: 5px; }
+  .vp-cmp-handle::after {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+  .vp-cmp-sound-btn {
+    bottom: 8px;
+    right: 8px;
+    padding: 4px 9px;
+    font-size: 0.68rem;
+    gap: 5px;
+  }
+  .vp-cmp-sound-btn svg {
+    width: 13px;
+    height: 13px;
+  }
+  .vp-cmp-presets {
+    gap: 6px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .vp-preset-btn {
+    padding: 5px 12px;
+    font-size: 0.72rem;
+  }
+  .vp-pillars {
+    margin-top: 24px;
+    gap: 16px;
+  }
+  .vp-pillars > div {
+    padding-top: 14px;
+    gap: 6px;
+  }
+  .vp-pillars h3 {
+    font-size: 1.05rem;
+  }
+  .vp-pillars p {
+    font-size: 0.86rem;
+  }
+
+  /* Scope / Package */
+  .vp-ledger > div {
+    padding: 16px 0;
+    gap: 8px;
+  }
+  .vp-ledger h3 {
+    font-size: 1.05rem;
+  }
+  .vp-chips {
+    margin-top: 8px;
+    gap: 6px;
+  }
+  .vp-chips li {
+    padding: 3px 9px;
+    font-size: 0.76rem;
+  }
+
+  /* Pricing Tiers */
+  .vp-tiers {
+    margin-top: 22px;
+    gap: 16px;
+  }
+  .vp-tier {
+    padding: 22px 18px;
+    gap: 14px;
+  }
+  .vp-tier h3 {
+    font-size: 1.2rem;
+  }
+  .vp-tier .vp-price {
+    font-size: 1.65rem;
+  }
+  .vp-tier ul {
+    gap: 8px;
+    font-size: 0.86rem;
+  }
+  .vp-tier-flag {
+    right: 14px;
+    font-size: 0.68rem;
+    padding: 4px 10px;
+  }
+  .vp-tier .vp-btn {
+    min-height: 44px;
+    font-size: 0.88rem;
+  }
+
+  /* Process Timeline */
+  .vp-tl { margin-top: 18px; }
+  .vp-step {
+    padding: 10px 0 10px 14px;
+  }
+  .vp-step h3 {
+    font-size: 1rem;
+    margin-bottom: 4px;
+  }
+  .vp-step p {
+    font-size: 0.86rem;
+  }
+
+  /* Testimonials */
+  .vp-quotes {
+    gap: 14px;
+  }
+  .vp-quote {
+    padding: 18px 16px;
+    gap: 12px;
+  }
+  .vp-quote blockquote {
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+  .vp-quote figcaption {
+    padding-top: 10px;
+    gap: 10px;
+  }
+  .vp-avatar-badge {
+    width: 36px;
+    height: 36px;
+    font-size: 0.8rem;
+  }
+
+  /* FAQ */
+  .vp-faq-summary {
+    padding: 16px 20px 16px 0;
+    font-size: 1rem;
+  }
+  .vp-faq-body {
+    padding: 0 16px 16px 0;
+    font-size: 0.88rem;
+  }
+
+  /* Quote Form */
+  .vp-quote-wrap {
+    gap: 28px;
+  }
+  .vp-form-card {
+    padding: 18px 16px;
+  }
+  .vp-form-grid {
+    gap: 12px;
+  }
+  .vp-field label {
+    font-size: 0.82rem;
+  }
+  .vp-field input, .vp-field select, .vp-field textarea {
+    min-height: 44px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+  .vp-field textarea {
+    min-height: 80px;
+  }
+  .vp-next-steps li {
+    padding: 10px 0;
+  }
+  .vp-next-steps span {
+    font-size: 0.84rem;
+  }
+
+  /* Modal Video Player */
+  .vp-player-box.is-vertical {
+    width: min(340px, 94vw);
+  }
+  .vp-player-header {
+    padding: 10px 14px;
+  }
+  .vp-player-header h4 {
+    font-size: 0.88rem;
+  }
+
+  /* Sticky Bar */
+  .vp-sticky-bar {
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+  }
+  .vp-sticky-bar .vp-btn {
+    min-height: 42px;
+    font-size: 0.84rem;
+    padding: 0 10px;
+  }
+
+  /* Footer */
+  .vp-footer {
+    padding-block: 32px 24px;
+  }
+  .vp-footer-in {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .vp-footer-base {
+    margin-top: 24px;
+    padding-top: 16px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 960px) {
+  .vp-hero-reel-card {
+    width: min(260px, 45vw);
+  }
+}
 `;
 
 /* Continuous Moving Strip Reels (Including Client Video Shoots & Cloudinary MP4s) */
