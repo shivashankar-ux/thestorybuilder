@@ -273,16 +273,29 @@ const PAGE_CSS = `
   box-shadow: 0 24px 60px rgba(225, 48, 108, 0.15);
 }
 
-/* Continuous Video Frame (9:16 Aspect) */
+/* Continuous Video Frame (9:16 Aspect) - Cropped to Pure Video */
 .vp-ig-video-frame {
   position: relative;
   width: 100%;
   aspect-ratio: 9 / 16;
   background: #000;
   overflow: hidden;
+  border-radius: 16px;
 }
 .vp-ig-video-frame iframe {
-  width: 100%; height: 100%; border: 0;
+  position: absolute;
+  top: -14%;
+  left: -14%;
+  width: 128%;
+  height: 128%;
+  border: 0;
+  pointer-events: none;
+}
+.vp-ig-click-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  cursor: pointer;
 }
 
 /* Floating Audio / Sound Button (Compact Circle, Icon Only) */
@@ -617,7 +630,7 @@ const INSTAGRAM_CLIENT_REELS = [
     niche: "Personal Brand",
     avatarText: "JD",
     avatarBg: "linear-gradient(135deg, #F2994A, #F2C94C)",
-    videoId: "QAL6E6fy1f0",
+    videoId: "VdsrsWmmhiw",
   },
   {
     handle: "icons.gym",
@@ -1108,22 +1121,26 @@ export default function VideoPortfolioPage({ setPage }) {
                           ref={(el) => {
                             if (el) iframeRefs.current[item.handle] = el;
                           }}
-                          src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=1&loop=1&playlist=${item.videoId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&iv_load_policy=3&cc_load_policy=0`}
+                          src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=1&loop=1&playlist=${item.videoId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&iv_load_policy=3&cc_load_policy=0&disablekb=1&fs=0`}
                           title={`${item.name} Reel`}
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            border: 0,
-                            pointerEvents: "auto",
-                          }}
+                        />
+
+                        {/* Transparent click layer for toggling sound without triggering YouTube UI */}
+                        <div
+                          className="vp-ig-click-layer"
+                          onClick={() => toggleMute(item.handle)}
+                          title={isUnmuted ? "Tap to mute" : "Tap to unmute"}
                         />
 
                         {/* Minimal One-Tap Mute / Unmute Symbol Only (No Text) */}
                         <button
                           type="button"
                           className={`vp-ig-sound-btn ${isUnmuted ? "is-unmuted" : ""}`}
-                          onClick={() => toggleMute(item.handle)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleMute(item.handle);
+                          }}
                           title={isUnmuted ? "Mute audio" : "Unmute audio"}
                           aria-label={isUnmuted ? "Mute audio" : "Unmute audio"}
                         >
