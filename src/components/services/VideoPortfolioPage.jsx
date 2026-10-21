@@ -1035,7 +1035,7 @@ export default function VideoPortfolioPage({ setPage }) {
           <section className="vp-hero">
             <div className="vp-wrap">
               <div className="vp-hero-badge">
-                <span>🔴 Hyderabad & Pan-India Production</span>
+                <span>Video Shoot & Edit • Hyderabad & Pan-India</span>
               </div>
               <h1>Shot by one crew.<br />Cut by the same team.</h1>
               <div className="vp-hero-grid">
@@ -1299,12 +1299,12 @@ export default function VideoPortfolioPage({ setPage }) {
               <div className="vp-tiers">
                 <article className="vp-tier">
                   <h3>4 Reels</h3>
-                  <p className="vp-price">₹10,000 <small>all-inclusive</small></p>
+                  <p className="vp-price">₹10,000 <small>shoot & edit</small></p>
                   <ul>
+                    <li>On-location video shoot</li>
                     <li>4 short-form vertical reels (9:16)</li>
                     <li>Hook scripting & retention pacing</li>
-                    <li>Motion graphics & dynamic captions</li>
-                    <li>Sound design & background score</li>
+                    <li>Cinematic color grade & sound design</li>
                     <li>Two revision rounds included</li>
                   </ul>
                   <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "4 Reels (₹10,000)" }); }}>
@@ -1315,12 +1315,12 @@ export default function VideoPortfolioPage({ setPage }) {
                 <article className="vp-tier vp-tier-featured">
                   <span className="vp-tier-flag">Most Popular</span>
                   <h3>6 Reels</h3>
-                  <p className="vp-price">₹15,000 <small>all-inclusive</small></p>
+                  <p className="vp-price">₹15,000 <small>shoot & edit</small></p>
                   <ul>
+                    <li>Full on-location video shoot</li>
                     <li>6 short-form vertical reels (9:16)</li>
                     <li>Hook scripting, viral pacing & dynamic B-roll</li>
                     <li>Sound effects, motion graphics & color grade</li>
-                    <li>Optimized for Instagram Reels, Shorts & Ads</li>
                     <li>Two revision rounds per video</li>
                   </ul>
                   <a className="vp-btn vp-btn-primary" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "6 Reels (₹15,000)" }); }}>
@@ -1330,12 +1330,12 @@ export default function VideoPortfolioPage({ setPage }) {
 
                 <article className="vp-tier">
                   <h3>8 Reels</h3>
-                  <p className="vp-price">₹20,000 <small>all-inclusive</small></p>
+                  <p className="vp-price">₹20,000 <small>shoot & edit</small></p>
                   <ul>
+                    <li>Extended on-location video shoot</li>
                     <li>8 short-form vertical reels (9:16)</li>
                     <li>Complete monthly content calendar coverage</li>
                     <li>Scroll-stopping hooks, kinetic captions & SFX</li>
-                    <li>Multi-platform exports (Reels, TikTok, Shorts, Ads)</li>
                     <li>Two revision rounds per video</li>
                   </ul>
                   <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "8 Reels (₹20,000)" }); }}>
