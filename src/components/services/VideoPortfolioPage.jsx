@@ -1416,10 +1416,10 @@ export default function VideoPortfolioPage({ setPage }) {
               <span style={{ color: "#F59E0B" }}>The </span>Story Builder
             </a>
             <nav className="vp-nav-links" aria-label="Primary">
-              <a href="#vp-client-reels" onClick={(e) => { e.preventDefault(); scrollTo("vp-client-reels"); }}>Client Reels</a>
               <a href="#vp-package" onClick={(e) => { e.preventDefault(); scrollTo("vp-package"); }}>Packages</a>
-              <a href="#vp-process" onClick={(e) => { e.preventDefault(); scrollTo("vp-process"); }}>Process</a>
               <a href="#vp-difference" onClick={(e) => { e.preventDefault(); scrollTo("vp-difference"); }}>Color Grade</a>
+              <a href="#vp-client-reels" onClick={(e) => { e.preventDefault(); scrollTo("vp-client-reels"); }}>Client Reels</a>
+              <a href="#vp-process" onClick={(e) => { e.preventDefault(); scrollTo("vp-process"); }}>Process</a>
               <a href="#vp-faq" onClick={(e) => { e.preventDefault(); scrollTo("vp-faq"); }}>FAQ</a>
             </nav>
             <a
@@ -1517,6 +1517,213 @@ export default function VideoPortfolioPage({ setPage }) {
                     </button>
                   </div>
                 </div>
+              </div>
+            </div>
+          </section>
+
+          {/* =================== PACKAGE / SPLIT =================== */}
+          <section className="vp-section" id="vp-package" style={{ borderTop: "1px solid var(--vp-line)" }}>
+            <div className="vp-wrap">
+              <div className="vp-split">
+                <div className="vp-split-head">
+                  <h2>One brief. One crew. Finished videos.</h2>
+                  <p className="vp-lede">
+                    No hiring a videographer, then hunting for an editor, then chasing both.
+                    We plan it, shoot it, and edit it so the footage is shot specifically with the final cut in mind.
+                  </p>
+                </div>
+                <div className="vp-split-body">
+                  <dl className="vp-ledger">
+                    {[
+                      {
+                        title: "1. Pre-Production & Planning",
+                        desc: "We align on your shoot agenda, talking points, and shot list so shoot day runs on clockwork (dedicated content strategy and scripting available as a separate service).",
+                        chips: ["Shoot prep call", "Shot list & agenda", "Schedule & call sheet", "Content strategy (separate)"],
+                      },
+                      {
+                        title: "2. Shoot Day On-Location",
+                        desc: "Crew shooting on Sony Alpha and the latest flagship iPhone with wireless lapel audio and portable lighting at your Hyderabad location.",
+                        chips: ["Sony Alpha & iPhone", "Portable lighting", "Clean lav audio", "Product B-roll", "Director on set"],
+                      },
+                      {
+                        title: "3. Post-Production & Color",
+                        desc: "Every cut is paced for platform retention, enhanced with sound design, kinetic captions, and cinematic color grading.",
+                        chips: ["Retention pacing", "Film LUT grade", "Sound FX & mixing", "Animated subtitles", "Motion graphics"],
+                      },
+                      {
+                        title: "4. Multi-Platform Delivery",
+                        desc: "Finished assets exported in every format your social channels and ad managers demand, with revision rounds included.",
+                        chips: ["Reels/Shorts 9:16", "YouTube 16:9", "Feed 4:5 & 1:1", "Two revision rounds", "Cloud archive"],
+                      },
+                    ].map((item) => (
+                      <div key={item.title}>
+                        <dt><h3>{item.title}</h3></dt>
+                        <dd>
+                          <p>{item.desc}</p>
+                          <ul className="vp-chips">
+                            {item.chips.map((c) => <li key={c}>{c}</li>)}
+                          </ul>
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              </div>
+
+              {/* Pricing Tiers */}
+              <div className="vp-tiers">
+                <article className="vp-tier">
+                  <h3>4 Reels</h3>
+                  <p className="vp-price">₹10,000 <small>shoot & edit</small></p>
+                  <ul>
+                    <li>On-location shoot in Hyderabad</li>
+                    <li>4 short-form vertical reels (9:16)</li>
+                    <li>Shot on Sony Alpha & latest iPhone</li>
+                    <li>Cinematic color grade & sound design</li>
+                    <li>Two revision rounds included</li>
+                  </ul>
+                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "4 Reels (₹10,000)" }); }}>
+                    Choose 4 Reels
+                  </a>
+                </article>
+
+                <article className="vp-tier vp-tier-featured">
+                  <span className="vp-tier-flag">Most Popular</span>
+                  <h3>6 Reels</h3>
+                  <p className="vp-price">₹15,000 <small>shoot & edit</small></p>
+                  <ul>
+                    <li>Full on-location shoot in Hyderabad</li>
+                    <li>6 short-form vertical reels (9:16)</li>
+                    <li>Shot on Sony Alpha & latest iPhone</li>
+                    <li>Sound effects, motion graphics & color grade</li>
+                    <li>Two revision rounds per video</li>
+                  </ul>
+                  <a className="vp-btn vp-btn-primary" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "6 Reels (₹15,000)" }); }}>
+                    Choose 6 Reels
+                  </a>
+                </article>
+
+                <article className="vp-tier">
+                  <h3>8 Reels</h3>
+                  <p className="vp-price">₹20,000 <small>shoot & edit</small></p>
+                  <ul>
+                    <li>Extended on-location shoot in Hyderabad</li>
+                    <li>8 short-form vertical reels (9:16)</li>
+                    <li>Batch shoot for your monthly social presence</li>
+                    <li>Scroll-stopping hooks, kinetic captions & SFX</li>
+                    <li>Two revision rounds per video</li>
+                  </ul>
+                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "8 Reels (₹20,000)" }); }}>
+                    Choose 8 Reels
+                  </a>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          {/* =================== BEFORE & AFTER COLOR GRADE (LIVE VIDEO DEMO) =================== */}
+          <section className="vp-section vp-dark" id="vp-difference">
+            <div className="vp-wrap">
+              <div className="vp-diff-head">
+                <h2>Raw footage gets attention.<br />Cinematic color keeps it.</h2>
+                <p className="vp-lede">
+                  Watch the live video in action. Drag the slider to compare unedited flat camera log profile (Sony S-Log3) with our finished cinematic film grade.
+                </p>
+              </div>
+
+              <div className="vp-cmp" style={{ "--pos": cmpPos + "%" }}>
+                {/* 1. Raw Flat Camera Video (Layer 0) */}
+                <video
+                  ref={cmpVideoRawRef}
+                  className="vp-cmp-video vp-cmp-video-raw"
+                  src="https://res.cloudinary.com/demo/video/upload/q_auto,w_1280/samples/cld-sample-video.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                />
+
+                {/* 2. Finished Graded Master Video (Layer 1, clipped) */}
+                <div className="vp-cmp-graded-wrap">
+                  <video
+                    ref={cmpVideoGradedRef}
+                    className="vp-cmp-video vp-cmp-video-graded"
+                    src="https://res.cloudinary.com/demo/video/upload/q_auto,w_1280/samples/cld-sample-video.mp4"
+                    autoPlay
+                    loop
+                    muted={!cmpUnmuted}
+                    playsInline
+                    preload="auto"
+                  />
+                  <div className="vp-cmp-graded-overlay" />
+                </div>
+
+                <span className="vp-cmp-tag l">
+                  <span className="vp-cmp-tag-dot raw" /> BEFORE: Raw S-Log3 Camera
+                </span>
+                <span className="vp-cmp-tag r">
+                  <span className="vp-cmp-tag-dot graded" /> AFTER: Cinematic Master Grade
+                </span>
+
+                <div className="vp-cmp-handle" aria-hidden="true" />
+                <label className="vp-sr-only" htmlFor="vp-cmpRange">Compare raw log footage and graded master edit</label>
+                <input
+                  id="vp-cmpRange"
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={cmpPos}
+                  onChange={(e) => setCmpPos(Number(e.target.value))}
+                />
+
+                {/* Sound toggle button */}
+                <button
+                  type="button"
+                  className={`vp-cmp-sound-btn ${cmpUnmuted ? "is-unmuted" : ""}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleCmpMute();
+                  }}
+                  title={cmpUnmuted ? "Mute audio" : "Unmute audio"}
+                  aria-label={cmpUnmuted ? "Mute audio" : "Unmute audio"}
+                >
+                  {cmpUnmuted ? (
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                    </svg>
+                  )}
+                  <span>{cmpUnmuted ? "Sound On" : "Sound Off"}</span>
+                </button>
+              </div>
+
+              <div className="vp-cmp-presets">
+                <button type="button" className={`vp-preset-btn ${cmpPos === 15 ? "active" : ""}`} onClick={() => setCmpPos(15)}>
+                  Show Raw S-Log3
+                </button>
+                <button type="button" className={`vp-preset-btn ${cmpPos === 50 ? "active" : ""}`} onClick={() => setCmpPos(50)}>
+                  50 / 50 Split
+                </button>
+                <button type="button" className={`vp-preset-btn ${cmpPos === 85 ? "active" : ""}`} onClick={() => setCmpPos(85)}>
+                  Show Master Grade
+                </button>
+              </div>
+
+              <div className="vp-pillars">
+                {[
+                  { title: "Intentional Directing", body: "Every shot is planned against the script. We never spray and pray on location, saving hours in post." },
+                  { title: "Sound Architecture", body: "Great video is 50% audio. We record crisp multi-channel lavalier audio and build rich sound FX beds." },
+                  { title: "Engineered for Reach", body: "Hook pacing and motion graphics tailored specifically for the platform algorithms where your viewers live." },
+                ].map((p) => (
+                  <div key={p.title}>
+                    <h3>{p.title}</h3>
+                    <p>{p.body}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
@@ -1650,106 +1857,6 @@ export default function VideoPortfolioPage({ setPage }) {
             </div>
           )}
 
-          {/* =================== PACKAGE / SPLIT =================== */}
-          <section className="vp-section" id="vp-package">
-            <div className="vp-wrap">
-              <div className="vp-split">
-                <div className="vp-split-head">
-                  <h2>One brief. One crew. Finished videos.</h2>
-                  <p className="vp-lede">
-                    No hiring a videographer, then hunting for an editor, then chasing both.
-                    We plan it, shoot it, and edit it so the footage is shot specifically with the final cut in mind.
-                  </p>
-                </div>
-                <div className="vp-split-body">
-                  <dl className="vp-ledger">
-                    {[
-                      {
-                        title: "1. Pre-Production & Planning",
-                        desc: "We align on your shoot agenda, talking points, and shot list so shoot day runs on clockwork (dedicated content strategy and scripting available as a separate service).",
-                        chips: ["Shoot prep call", "Shot list & agenda", "Schedule & call sheet", "Content strategy (separate)"],
-                      },
-                      {
-                        title: "2. Shoot Day On-Location",
-                        desc: "Crew shooting on Sony Alpha and the latest flagship iPhone with wireless lapel audio and portable lighting at your Hyderabad location.",
-                        chips: ["Sony Alpha & iPhone", "Portable lighting", "Clean lav audio", "Product B-roll", "Director on set"],
-                      },
-                      {
-                        title: "3. Post-Production & Color",
-                        desc: "Every cut is paced for platform retention, enhanced with sound design, kinetic captions, and cinematic color grading.",
-                        chips: ["Retention pacing", "Film LUT grade", "Sound FX & mixing", "Animated subtitles", "Motion graphics"],
-                      },
-                      {
-                        title: "4. Multi-Platform Delivery",
-                        desc: "Finished assets exported in every format your social channels and ad managers demand, with revision rounds included.",
-                        chips: ["Reels/Shorts 9:16", "YouTube 16:9", "Feed 4:5 & 1:1", "Two revision rounds", "Cloud archive"],
-                      },
-                    ].map((item) => (
-                      <div key={item.title}>
-                        <dt><h3>{item.title}</h3></dt>
-                        <dd>
-                          <p>{item.desc}</p>
-                          <ul className="vp-chips">
-                            {item.chips.map((c) => <li key={c}>{c}</li>)}
-                          </ul>
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              </div>
-
-              {/* Pricing Tiers */}
-              <div className="vp-tiers">
-                <article className="vp-tier">
-                  <h3>4 Reels</h3>
-                  <p className="vp-price">₹10,000 <small>shoot & edit</small></p>
-                  <ul>
-                    <li>On-location shoot in Hyderabad</li>
-                    <li>4 short-form vertical reels (9:16)</li>
-                    <li>Shot on Sony Alpha & latest iPhone</li>
-                    <li>Cinematic color grade & sound design</li>
-                    <li>Two revision rounds included</li>
-                  </ul>
-                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "4 Reels (₹10,000)" }); }}>
-                    Choose 4 Reels
-                  </a>
-                </article>
-
-                <article className="vp-tier vp-tier-featured">
-                  <span className="vp-tier-flag">Most Popular</span>
-                  <h3>6 Reels</h3>
-                  <p className="vp-price">₹15,000 <small>shoot & edit</small></p>
-                  <ul>
-                    <li>Full on-location shoot in Hyderabad</li>
-                    <li>6 short-form vertical reels (9:16)</li>
-                    <li>Shot on Sony Alpha & latest iPhone</li>
-                    <li>Sound effects, motion graphics & color grade</li>
-                    <li>Two revision rounds per video</li>
-                  </ul>
-                  <a className="vp-btn vp-btn-primary" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "6 Reels (₹15,000)" }); }}>
-                    Choose 6 Reels
-                  </a>
-                </article>
-
-                <article className="vp-tier">
-                  <h3>8 Reels</h3>
-                  <p className="vp-price">₹20,000 <small>shoot & edit</small></p>
-                  <ul>
-                    <li>Extended on-location shoot in Hyderabad</li>
-                    <li>8 short-form vertical reels (9:16)</li>
-                    <li>Batch shoot for your monthly social presence</li>
-                    <li>Scroll-stopping hooks, kinetic captions & SFX</li>
-                    <li>Two revision rounds per video</li>
-                  </ul>
-                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "8 Reels (₹20,000)" }); }}>
-                    Choose 8 Reels
-                  </a>
-                </article>
-              </div>
-            </div>
-          </section>
-
           {/* =================== PROCESS =================== */}
           <section className="vp-section" id="vp-process">
             <div className="vp-wrap">
@@ -1798,113 +1905,6 @@ export default function VideoPortfolioPage({ setPage }) {
                     </li>
                   ))}
                 </ol>
-              </div>
-            </div>
-          </section>
-
-          {/* =================== BEFORE & AFTER COLOR GRADE (LIVE VIDEO DEMO) =================== */}
-          <section className="vp-section vp-dark" id="vp-difference">
-            <div className="vp-wrap">
-              <div className="vp-diff-head">
-                <h2>Raw footage gets attention.<br />Cinematic color keeps it.</h2>
-                <p className="vp-lede">
-                  Watch the live video in action. Drag the slider to compare unedited flat camera log profile (Sony S-Log3) with our finished cinematic film grade.
-                </p>
-              </div>
-
-              <div className="vp-cmp" style={{ "--pos": cmpPos + "%" }}>
-                {/* 1. Raw Flat Camera Video (Layer 0) */}
-                <video
-                  ref={cmpVideoRawRef}
-                  className="vp-cmp-video vp-cmp-video-raw"
-                  src="https://res.cloudinary.com/demo/video/upload/q_auto,w_1280/samples/cld-sample-video.mp4"
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="auto"
-                />
-
-                {/* 2. Finished Graded Master Video (Layer 1, clipped) */}
-                <div className="vp-cmp-graded-wrap">
-                  <video
-                    ref={cmpVideoGradedRef}
-                    className="vp-cmp-video vp-cmp-video-graded"
-                    src="https://res.cloudinary.com/demo/video/upload/q_auto,w_1280/samples/cld-sample-video.mp4"
-                    autoPlay
-                    loop
-                    muted={!cmpUnmuted}
-                    playsInline
-                    preload="auto"
-                  />
-                  <div className="vp-cmp-graded-overlay" />
-                </div>
-
-                <span className="vp-cmp-tag l">
-                  <span className="vp-cmp-tag-dot raw" /> BEFORE: Raw S-Log3 Camera
-                </span>
-                <span className="vp-cmp-tag r">
-                  <span className="vp-cmp-tag-dot graded" /> AFTER: Cinematic Master Grade
-                </span>
-
-                <div className="vp-cmp-handle" aria-hidden="true" />
-                <label className="vp-sr-only" htmlFor="vp-cmpRange">Compare raw log footage and graded master edit</label>
-                <input
-                  id="vp-cmpRange"
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={cmpPos}
-                  onChange={(e) => setCmpPos(Number(e.target.value))}
-                />
-
-                {/* Sound toggle button */}
-                <button
-                  type="button"
-                  className={`vp-cmp-sound-btn ${cmpUnmuted ? "is-unmuted" : ""}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleCmpMute();
-                  }}
-                  title={cmpUnmuted ? "Mute audio" : "Unmute audio"}
-                  aria-label={cmpUnmuted ? "Mute audio" : "Unmute audio"}
-                >
-                  {cmpUnmuted ? (
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
-                    </svg>
-                  ) : (
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                      <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
-                    </svg>
-                  )}
-                  <span>{cmpUnmuted ? "Sound On" : "Sound Off"}</span>
-                </button>
-              </div>
-
-              <div className="vp-cmp-presets">
-                <button type="button" className={`vp-preset-btn ${cmpPos === 15 ? "active" : ""}`} onClick={() => setCmpPos(15)}>
-                  Show Raw S-Log3
-                </button>
-                <button type="button" className={`vp-preset-btn ${cmpPos === 50 ? "active" : ""}`} onClick={() => setCmpPos(50)}>
-                  50 / 50 Split
-                </button>
-                <button type="button" className={`vp-preset-btn ${cmpPos === 85 ? "active" : ""}`} onClick={() => setCmpPos(85)}>
-                  Show Master Grade
-                </button>
-              </div>
-
-              <div className="vp-pillars">
-                {[
-                  { title: "Intentional Directing", body: "Every shot is planned against the script. We never spray and pray on location, saving hours in post." },
-                  { title: "Sound Architecture", body: "Great video is 50% audio. We record crisp multi-channel lavalier audio and build rich sound FX beds." },
-                  { title: "Engineered for Reach", body: "Hook pacing and motion graphics tailored specifically for the platform algorithms where your viewers live." },
-                ].map((p) => (
-                  <div key={p.title}>
-                    <h3>{p.title}</h3>
-                    <p>{p.body}</p>
-                  </div>
-                ))}
               </div>
             </div>
           </section>
