@@ -43,9 +43,9 @@ const PAGE_CSS = `
   --vp-clip-v: #5c7cfa;
   --vp-clip-a: #3fb68b;
   --vp-clip-t: #e0a53a;
-  --vp-f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --vp-f-body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --vp-f-tc: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --vp-f-display: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --vp-f-body: "Inter", "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --vp-f-tc: "SF Mono", "IBM Plex Mono", Menlo, monospace;
   --vp-wrap: 1240px;
   --vp-gut: clamp(16px, 4vw, 48px);
   --vp-sec: clamp(60px, 8vw, 120px);
@@ -53,8 +53,12 @@ const PAGE_CSS = `
   box-sizing: border-box;
   background: var(--vp-paper);
   color: var(--vp-ink);
-  font: 400 1.0625rem/1.6 var(--vp-f-body);
+  font: 400 1.0625rem/1.65 var(--vp-f-body);
+  letter-spacing: -0.011em;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   min-height: 100vh;
   width: 100%;
   max-width: 100%;
@@ -82,13 +86,13 @@ const PAGE_CSS = `
 
 /* Type */
 .vp-root h1, .vp-root h2 {
-  font-family: var(--vp-f-display); font-stretch: 118%; font-weight: 800;
-  letter-spacing: -0.025em; line-height: 1.02;
+  font-family: var(--vp-f-display); font-weight: 800;
+  letter-spacing: -0.03em; line-height: 1.08;
 }
 .vp-root h1 { font-size: clamp(2.2rem, 5.2vw, 4.8rem); }
-.vp-root h2 { font-size: clamp(1.8rem, 3.8vw, 3.2rem); font-stretch: 112%; }
-.vp-root h3 { font-family: var(--vp-f-display); font-stretch: 105%; font-weight: 700; font-size: 1.25rem; letter-spacing: -0.01em; line-height: 1.2; }
-.vp-lede { font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.55; color: var(--vp-muted); max-width: 48ch; }
+.vp-root h2 { font-size: clamp(1.8rem, 3.8vw, 3.2rem); }
+.vp-root h3 { font-family: var(--vp-f-display); font-weight: 700; font-size: 1.25rem; letter-spacing: -0.015em; line-height: 1.25; }
+.vp-lede { font-size: clamp(1rem, 1.4vw, 1.2rem); line-height: 1.6; color: var(--vp-muted); max-width: 48ch; }
 .vp-dark .vp-lede, .vp-dark .vp-muted { color: var(--vp-muted-inv); }
 .vp-muted { color: var(--vp-muted); }
 .vp-tc { font-family: var(--vp-f-tc); font-variant-numeric: tabular-nums; }
@@ -201,46 +205,80 @@ const PAGE_CSS = `
 }
 .vp-hero-sound-btn {
   position: absolute;
-  bottom: 14px;
-  right: 14px;
+  bottom: 16px;
+  right: 16px;
   z-index: 10;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
-  background: rgba(15, 16, 19, 0.85);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 100px;
+  border: 2px solid #F59E0B;
+  background: rgba(255, 255, 255, 0.96);
+  color: #0F172A;
+  font-family: var(--vp-f-body);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(245, 158, 11, 0.45);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-  padding: 0;
 }
 .vp-hero-sound-btn:hover {
-  background: rgba(15, 16, 19, 0.98);
-  border-color: #fff;
-  transform: scale(1.08);
+  background: #FFFFFF;
+  transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 24px rgba(245, 158, 11, 0.65);
 }
 .vp-hero-sound-btn.is-unmuted {
-  background: #10b981;
-  border-color: #10b981;
-  color: #fff;
-  box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+  background: #10B981;
+  border-color: #34D399;
+  color: #FFFFFF;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.45), 0 0 20px rgba(16, 185, 129, 0.55);
 }
+.vp-hero-sound-btn.is-muted .vp-hero-sound-pulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: 100px;
+  border: 2px solid rgba(245, 158, 11, 0.7);
+  animation: vpHeroPulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+@keyframes vpHeroPulse {
+  0% { transform: scale(0.96); opacity: 1; }
+  70%, 100% { transform: scale(1.15); opacity: 0; }
+}
+.vp-hero-sound-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+}
+.vp-hero-sound-bars span {
+  width: 2.5px;
+  background: #FFFFFF;
+  border-radius: 1px;
+  animation: vpAudioBar 0.9s ease-in-out infinite alternate;
+}
+.vp-hero-sound-bars span:nth-child(1) { height: 5px; animation-delay: 0.1s; }
+.vp-hero-sound-bars span:nth-child(2) { height: 14px; animation-delay: 0.3s; }
+.vp-hero-sound-bars span:nth-child(3) { height: 8px; animation-delay: 0.5s; }
+@keyframes vpAudioBar {
+  0% { height: 4px; }
+  100% { height: 14px; }
+}
+
 @media (max-width: 960px) {
   .vp-hero-copy, .vp-hero-reel-wrap { grid-column: 1 / -1; }
   .vp-hero-reel-wrap { margin-top: 16px; }
 }
 
 /* ============================================================
-   CLIENT REELS SHOWCASE (MINIMALIST, ZERO JARGON, CONTINUOUS LOOP)
+   CLIENT REELS SHOWCASE (HUMAN TOUCH SCROLLABLE & DRAGGABLE)
    ============================================================ */
 .vp-ig-section {
-  padding-block: clamp(50px, 7vw, 100px);
+  padding-block: clamp(50px, 7vw, 90px);
   background: #090a0d;
   color: #fff;
   position: relative;
@@ -249,47 +287,63 @@ const PAGE_CSS = `
 }
 .vp-ig-header {
   display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
-/* Continuous Reels Marquee Strip (Left-to-Right Gentle Glide) */
-.vp-marquee-wrap {
+.vp-strip-hint-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #F59E0B;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* Touch & Mouse Drag Scrollable Strip Wrapper */
+.vp-strip-wrapper {
   position: relative;
   width: 100%;
   max-width: 100%;
   margin: 0;
-  overflow: hidden;
-  padding: 12px 0 24px;
+  overflow: visible;
+  padding: 10px 0 20px;
 }
-.vp-marquee-track {
+.vp-strip-track {
   display: flex;
-  gap: 18px;
-  width: max-content;
-  animation: vp-marquee-ltr 70s linear infinite;
-  will-change: transform;
+  gap: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px clamp(16px, 4vw, 48px) 24px;
+  scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-x pan-y;
 }
-.vp-marquee-wrap:hover .vp-marquee-track {
-  animation-play-state: paused;
+.vp-strip-track::-webkit-scrollbar {
+  display: none;
 }
-@keyframes vp-marquee-ltr {
-  0% {
-    transform: translateX(-50%);
-  }
-  100% {
-    transform: translateX(0%);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .vp-marquee-track { animation: none; overflow-x: auto; width: 100%; }
+.vp-strip-track.is-dragging {
+  cursor: grabbing;
+  scroll-behavior: auto;
+  scroll-snap-type: none;
 }
 
 .vp-ig-card {
   position: relative;
-  flex: 0 0 clamp(220px, 18vw, 260px);
-  width: clamp(220px, 18vw, 260px);
+  scroll-snap-align: start;
+  flex: 0 0 clamp(230px, 20vw, 275px);
+  width: clamp(230px, 20vw, 275px);
   aspect-ratio: 9 / 16;
   background: #000;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
   overflow: hidden;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
   display: flex;
@@ -298,11 +352,11 @@ const PAGE_CSS = `
 }
 .vp-ig-card:hover {
   transform: translateY(-4px) scale(1.02);
-  border-color: rgba(225, 48, 108, 0.6);
-  box-shadow: 0 24px 60px rgba(225, 48, 108, 0.2);
+  border-color: rgba(245, 158, 11, 0.7);
+  box-shadow: 0 24px 60px rgba(245, 158, 11, 0.2);
 }
 
-/* Continuous Video Frame (9:16 Aspect) - Cropped to Pure Video */
+/* Continuous Video Frame (9:16 Aspect) */
 .vp-ig-video-frame {
   position: relative;
   width: 100%;
@@ -310,7 +364,7 @@ const PAGE_CSS = `
   aspect-ratio: 9 / 16;
   background: #000;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 18px;
 }
 .vp-ig-video-frame video {
   width: 100%;
@@ -335,39 +389,84 @@ const PAGE_CSS = `
   cursor: pointer;
 }
 
-/* Floating Audio / Sound Button (Compact Circle, Icon Only) */
+/* Floating Audio / Sound Button (Prominent & High-Contrast) */
 .vp-ig-sound-btn {
   position: absolute;
-  bottom: 12px;
-  right: 12px;
+  bottom: 14px;
+  right: 14px;
   z-index: 10;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
-  background: rgba(15, 16, 19, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: #fff;
-  cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.25s ease;
   box-shadow: 0 6px 20px rgba(0,0,0,0.6);
   padding: 0;
 }
 .vp-ig-sound-btn:hover {
-  background: rgba(15, 16, 19, 0.98);
-  border-color: #fff;
-  transform: scale(1.08);
+  background: #F59E0B;
+  border-color: #F59E0B;
+  color: #0F172A;
+  transform: scale(1.12);
 }
 .vp-ig-sound-btn.is-unmuted {
-  background: #10b981;
-  border-color: #10b981;
+  background: #10B981;
+  border-color: #34D399;
   color: #fff;
-  box-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.7);
 }
+
+/* Navigation Arrow Buttons for Strip */
+.vp-strip-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 25;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(245, 158, 11, 0.5);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  transition: all 0.2s ease;
+}
+.vp-strip-nav-btn:hover:not(.is-disabled) {
+  background: #F59E0B;
+  color: #0F172A;
+  border-color: #F59E0B;
+  transform: translateY(-50%) scale(1.08);
+}
+.vp-strip-nav-btn.prev {
+  left: clamp(8px, 2vw, 24px);
+}
+.vp-strip-nav-btn.next {
+  right: clamp(8px, 2vw, 24px);
+}
+.vp-strip-nav-btn.is-disabled {
+  opacity: 0;
+  pointer-events: none;
+}
+@media (max-width: 640px) {
+  .vp-strip-nav-btn {
+    display: none;
+  }
+}
+
 
 /* Package / Split */
 .vp-split { display: grid; grid-template-columns: repeat(12, 1fr); gap: 36px 24px; }
@@ -731,34 +830,36 @@ const PAGE_CSS = `
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32);
   }
   .vp-hero-sound-btn {
-    width: 32px;
-    height: 32px;
-    bottom: 10px;
-    right: 10px;
+    bottom: 12px;
+    right: 12px;
+    padding: 6px 12px;
+    font-size: 0.74rem;
+    gap: 6px;
   }
   .vp-hero-sound-btn svg {
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
   }
 
-  /* Continuous Marquee Reels Strip (Proportional 9:16 peek cards) */
+  /* Client Reels Strip (Touch-Swipeable on Mobile) */
   .vp-ig-section {
-    padding-block: 32px;
+    padding-block: 36px;
   }
   .vp-ig-header {
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
-  .vp-marquee-wrap {
+  .vp-strip-wrapper {
     padding: 4px 0 14px;
   }
-  .vp-marquee-track {
-    gap: 12px;
-    animation-duration: 50s;
+  .vp-strip-track {
+    gap: 14px;
+    padding: 8px 16px 18px;
   }
   .vp-ig-card {
-    flex: 0 0 142px;
-    width: 142px;
-    border-radius: 12px;
+    flex: 0 0 165px;
+    width: 165px;
+    border-radius: 14px;
+  }
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
   }
   .vp-ig-video-frame {
@@ -994,13 +1095,13 @@ const PAGE_CSS = `
 }
 `;
 
-/* Continuous Moving Strip Reels (Including Client Video Shoots & Cloudinary MP4s) */
+/* Client Reels Data (Optimized streaming bandwidth & formats) */
 const PORTFOLIO_STRIP_REELS = [
   {
     handle: "farhaan_edit_1",
     name: "Commercial Brand Video",
     type: "mp4",
-    videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.mp4",
+    videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.mp4",
   },
   {
     handle: "digitalmedhaadvertising",
@@ -1012,7 +1113,7 @@ const PORTFOLIO_STRIP_REELS = [
     handle: "farhaan_edit_2",
     name: "High-Retention Reel",
     type: "mp4",
-    videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.mp4",
+    videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.mp4",
   },
   {
     handle: "vision.rainbow",
@@ -1024,7 +1125,7 @@ const PORTFOLIO_STRIP_REELS = [
     handle: "farhaan_edit_3",
     name: "Cinematic Movement Story",
     type: "mp4",
-    videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.36_PM_vtlfsv.mp4",
+    videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.36_PM_vtlfsv.mp4",
   },
   {
     handle: "madhurayoga_",
@@ -1132,6 +1233,67 @@ export default function VideoPortfolioPage({ setPage }) {
   const cmpVideoGradedRef = useRef(null);
   const iframeRefs = useRef({});
   const videoRefs = useRef({});
+
+  // Client Reels Strip Touch & Drag Scrolling State
+  const stripRef = useRef(null);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+  const hasDraggedRef = useRef(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScrollButtons = () => {
+    if (!stripRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = stripRef.current;
+    setCanScrollLeft(scrollLeft > 12);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 12);
+  };
+
+  useEffect(() => {
+    checkScrollButtons();
+    const handleResize = () => checkScrollButtons();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const handleStripMouseDown = (e) => {
+    if (!stripRef.current) return;
+    isDraggingRef.current = true;
+    hasDraggedRef.current = false;
+    setIsDragging(true);
+    startXRef.current = e.pageX - stripRef.current.offsetLeft;
+    scrollLeftRef.current = stripRef.current.scrollLeft;
+  };
+
+  const handleStripMouseMove = (e) => {
+    if (!isDraggingRef.current || !stripRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - stripRef.current.offsetLeft;
+    const walk = (x - startXRef.current) * 1.5;
+    if (Math.abs(walk) > 5) {
+      hasDraggedRef.current = true;
+    }
+    stripRef.current.scrollLeft = scrollLeftRef.current - walk;
+    checkScrollButtons();
+  };
+
+  const handleStripMouseUpOrLeave = () => {
+    isDraggingRef.current = false;
+    setIsDragging(false);
+  };
+
+  const scrollStrip = (direction) => {
+    if (!stripRef.current) return;
+    const card = stripRef.current.querySelector(".vp-ig-card");
+    const step = card ? card.clientWidth + 20 : 280;
+    stripRef.current.scrollBy({
+      left: direction === "left" ? -step * 1.3 : step * 1.3,
+      behavior: "smooth",
+    });
+    setTimeout(checkScrollButtons, 350);
+  };
 
   const toggleHeroMute = () => {
     if (heroVideoRef.current) {
@@ -1479,12 +1641,12 @@ export default function VideoPortfolioPage({ setPage }) {
                   <div className="vp-hero-reel-card">
                     <video
                       ref={heroVideoRef}
-                      src="https://res.cloudinary.com/dvr5erobx/video/upload/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.mp4"
+                      src="https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,vc_h264/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.mp4"
                       autoPlay
                       loop
                       muted={!heroUnmuted}
                       playsInline
-                      preload="auto"
+                      preload="metadata"
                     />
 
                     {/* Transparent Click Layer for Mute/Unmute */}
@@ -1494,25 +1656,35 @@ export default function VideoPortfolioPage({ setPage }) {
                       title={heroUnmuted ? "Tap to mute audio" : "Tap to unmute audio"}
                     />
 
-                    {/* Minimal Circular Sound Toggle Button */}
+                    {/* High-Visibility Hero Sound Toggle Button (Properly Visible & Tactile) */}
                     <button
                       type="button"
-                      className={`vp-hero-sound-btn ${heroUnmuted ? "is-unmuted" : ""}`}
+                      className={`vp-hero-sound-btn ${heroUnmuted ? "is-unmuted" : "is-muted"}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleHeroMute();
                       }}
-                      title={heroUnmuted ? "Mute audio" : "Unmute audio"}
-                      aria-label={heroUnmuted ? "Mute audio" : "Unmute audio"}
+                      title={heroUnmuted ? "Mute audio" : "Tap for audio"}
+                      aria-label={heroUnmuted ? "Mute audio" : "Tap for audio"}
                     >
+                      <span className="vp-hero-sound-icon" aria-hidden="true" style={{ display: "inline-flex", alignItems: "center" }}>
+                        {heroUnmuted ? (
+                          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                          </svg>
+                        ) : (
+                          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                          </svg>
+                        )}
+                      </span>
+                      <span>{heroUnmuted ? "Sound On" : "Tap for Sound"}</span>
                       {heroUnmuted ? (
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
-                        </svg>
+                        <span className="vp-hero-sound-bars" aria-hidden="true">
+                          <span /><span /><span />
+                        </span>
                       ) : (
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                          <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
-                        </svg>
+                        <span className="vp-hero-sound-pulse" aria-hidden="true" />
                       )}
                     </button>
                   </div>
@@ -1641,7 +1813,7 @@ export default function VideoPortfolioPage({ setPage }) {
                   loop
                   muted
                   playsInline
-                  preload="auto"
+                  preload="metadata"
                 />
 
                 {/* 2. Finished Graded Master Video (Layer 1, clipped) */}
@@ -1654,7 +1826,7 @@ export default function VideoPortfolioPage({ setPage }) {
                     loop
                     muted={!cmpUnmuted}
                     playsInline
-                    preload="auto"
+                    preload="metadata"
                   />
                   <div className="vp-cmp-graded-overlay" />
                 </div>
@@ -1728,20 +1900,50 @@ export default function VideoPortfolioPage({ setPage }) {
             </div>
           </section>
 
-          {/* =================== CLIENT REELS (CLEAN, CONTINUOUSLY PLAYING ON MUTE, TAP TO UNMUTE) =================== */}
+          {/* =================== CLIENT REELS (HUMAN TOUCH SCROLLABLE & DRAGGABLE) =================== */}
           <section className="vp-ig-section" id="vp-client-reels">
             <div className="vp-wrap">
               <div className="vp-ig-header">
                 <div>
                   <h2>Client Reels</h2>
+                  <p className="vp-note" style={{ color: "rgba(255,255,255,0.65)", marginTop: 4 }}>
+                    Recent vertical shoots and retention edits produced for our clients in Hyderabad.
+                  </p>
+                </div>
+                <div className="vp-strip-hint">
+                  <span className="vp-strip-hint-pill">
+                    👈 Swipe or drag horizontally to explore reels 👉
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Infinite gentle scrolling marquee strip (Moving left to right at very low speed) */}
-            <div className="vp-marquee-wrap">
-              <div className="vp-marquee-track">
-                {[...PORTFOLIO_STRIP_REELS, ...PORTFOLIO_STRIP_REELS].map((item, idx) => {
+            {/* Touch-swipeable and mouse-draggable reels carousel */}
+            <div className="vp-strip-wrapper">
+              {/* Previous / Left Navigation Arrow */}
+              <button
+                type="button"
+                className={`vp-strip-nav-btn prev ${!canScrollLeft ? "is-disabled" : ""}`}
+                onClick={() => scrollStrip("left")}
+                aria-label="Scroll left"
+                title="Scroll left"
+              >
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15 18l-6-6 6-6" />
+                </svg>
+              </button>
+
+              {/* Scrollable Track with Natural Touch Inertia & Mouse Drag */}
+              <div
+                ref={stripRef}
+                className={`vp-strip-track ${isDragging ? "is-dragging" : ""}`}
+                onMouseDown={handleStripMouseDown}
+                onMouseMove={handleStripMouseMove}
+                onMouseUp={handleStripMouseUpOrLeave}
+                onMouseLeave={handleStripMouseUpOrLeave}
+                onScroll={checkScrollButtons}
+              >
+                {PORTFOLIO_STRIP_REELS.map((item, idx) => {
                   const isUnmuted = unmutedReel === item.handle;
                   return (
                     <div className="vp-ig-card" key={`${item.handle}_${idx}`}>
@@ -1773,20 +1975,25 @@ export default function VideoPortfolioPage({ setPage }) {
                                 }
                               }
                             }}
+                            loading="lazy"
                             src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=1&loop=1&playlist=${item.videoId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&iv_load_policy=3&cc_load_policy=0&disablekb=1&fs=0`}
                             title={`${item.name} Reel`}
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           />
                         )}
 
-                        {/* Transparent click layer for toggling sound without triggering YouTube UI */}
+                        {/* Transparent click layer for toggling sound without triggering drag */}
                         <div
                           className="vp-ig-click-layer"
-                          onClick={() => toggleMute(item.handle)}
+                          onClick={() => {
+                            if (!hasDraggedRef.current) {
+                              toggleMute(item.handle);
+                            }
+                          }}
                           title={isUnmuted ? "Tap to mute" : "Tap to unmute"}
                         />
 
-                        {/* Minimal One-Tap Mute / Unmute Symbol Only (No Text) */}
+                        {/* Minimal One-Tap Mute / Unmute Button */}
                         <button
                           type="button"
                           className={`vp-ig-sound-btn ${isUnmuted ? "is-unmuted" : ""}`}
@@ -1812,6 +2019,19 @@ export default function VideoPortfolioPage({ setPage }) {
                   );
                 })}
               </div>
+
+              {/* Next / Right Navigation Arrow */}
+              <button
+                type="button"
+                className={`vp-strip-nav-btn next ${!canScrollRight ? "is-disabled" : ""}`}
+                onClick={() => scrollStrip("right")}
+                aria-label="Scroll right"
+                title="Scroll right"
+              >
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
+              </button>
             </div>
 
             <div className="vp-wrap">
