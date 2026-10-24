@@ -205,68 +205,36 @@ const PAGE_CSS = `
 }
 .vp-hero-sound-btn {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
+  bottom: 12px;
+  right: 12px;
   z-index: 10;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 100px;
-  border: 2px solid #F59E0B;
-  background: rgba(255, 255, 255, 0.96);
-  color: #0F172A;
-  font-family: var(--vp-f-body);
-  font-size: 0.84rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(245, 158, 11, 0.45);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  padding: 0;
 }
 .vp-hero-sound-btn:hover {
-  background: #FFFFFF;
-  transform: scale(1.05);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 24px rgba(245, 158, 11, 0.65);
+  background: rgba(15, 23, 42, 0.95);
+  border-color: #F59E0B;
+  color: #F59E0B;
+  transform: scale(1.08);
 }
 .vp-hero-sound-btn.is-unmuted {
   background: #10B981;
   border-color: #34D399;
-  color: #FFFFFF;
-  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.45), 0 0 20px rgba(16, 185, 129, 0.55);
-}
-.vp-hero-sound-btn.is-muted .vp-hero-sound-pulse {
-  position: absolute;
-  inset: -4px;
-  border-radius: 100px;
-  border: 2px solid rgba(245, 158, 11, 0.7);
-  animation: vpHeroPulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-  pointer-events: none;
-}
-@keyframes vpHeroPulse {
-  0% { transform: scale(0.96); opacity: 1; }
-  70%, 100% { transform: scale(1.15); opacity: 0; }
-}
-.vp-hero-sound-bars {
-  display: inline-flex;
-  align-items: flex-end;
-  gap: 2px;
-  height: 14px;
-}
-.vp-hero-sound-bars span {
-  width: 2.5px;
-  background: #FFFFFF;
-  border-radius: 1px;
-  animation: vpAudioBar 0.9s ease-in-out infinite alternate;
-}
-.vp-hero-sound-bars span:nth-child(1) { height: 5px; animation-delay: 0.1s; }
-.vp-hero-sound-bars span:nth-child(2) { height: 14px; animation-delay: 0.3s; }
-.vp-hero-sound-bars span:nth-child(3) { height: 8px; animation-delay: 0.5s; }
-@keyframes vpAudioBar {
-  0% { height: 4px; }
-  100% { height: 14px; }
+  color: #fff;
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
 }
 
 @media (max-width: 960px) {
@@ -275,10 +243,10 @@ const PAGE_CSS = `
 }
 
 /* ============================================================
-   CLIENT REELS SHOWCASE (HUMAN TOUCH SCROLLABLE & DRAGGABLE)
+   CLIENT REELS SHOWCASE (AUTO-LOOPING & HUMAN TOUCH SCROLLABLE)
    ============================================================ */
 .vp-ig-section {
-  padding-block: clamp(50px, 7vw, 90px);
+  padding-block: clamp(48px, 6vw, 84px);
   background: #090a0d;
   color: #fff;
   position: relative;
@@ -286,21 +254,10 @@ const PAGE_CSS = `
   border-top: 1px solid rgba(255,255,255,0.08);
 }
 .vp-ig-header {
-  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px;
-  margin-bottom: 20px;
-}
-.vp-strip-hint-pill {
-  display: inline-flex;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 8px;
-  padding: 6px 14px;
-  border-radius: 100px;
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  color: #F59E0B;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  margin-bottom: 20px;
 }
 
 /* Touch & Mouse Drag Scrollable Strip Wrapper */
@@ -309,30 +266,27 @@ const PAGE_CSS = `
   width: 100%;
   max-width: 100%;
   margin: 0;
-  overflow: visible;
-  padding: 10px 0 20px;
+  overflow: hidden;
+  padding: 8px 0 18px;
 }
 .vp-strip-track {
   display: flex;
-  gap: 20px;
+  gap: 18px;
   overflow-x: auto;
   overflow-y: hidden;
-  scroll-behavior: smooth;
-  scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
-  padding: 12px clamp(16px, 4vw, 48px) 24px;
+  padding: 10px clamp(16px, 4vw, 48px) 20px;
   scrollbar-width: none;
   cursor: grab;
   user-select: none;
   touch-action: pan-x pan-y;
+  will-change: scroll-position;
 }
 .vp-strip-track::-webkit-scrollbar {
   display: none;
 }
 .vp-strip-track.is-dragging {
   cursor: grabbing;
-  scroll-behavior: auto;
-  scroll-snap-type: none;
 }
 
 .vp-ig-card {
@@ -830,15 +784,15 @@ const PAGE_CSS = `
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.32);
   }
   .vp-hero-sound-btn {
-    bottom: 12px;
-    right: 12px;
-    padding: 6px 12px;
-    font-size: 0.74rem;
-    gap: 6px;
+    width: 32px;
+    height: 32px;
+    bottom: 10px;
+    right: 10px;
+    padding: 0;
   }
   .vp-hero-sound-btn svg {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
   }
 
   /* Client Reels Strip (Touch-Swipeable on Mobile) */
@@ -853,13 +807,12 @@ const PAGE_CSS = `
   }
   .vp-strip-track {
     gap: 14px;
-    padding: 8px 16px 18px;
+    padding: 8px 16px 16px;
   }
   .vp-ig-card {
     flex: 0 0 165px;
     width: 165px;
     border-radius: 14px;
-  }
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
   }
   .vp-ig-video-frame {
@@ -1234,33 +1187,56 @@ export default function VideoPortfolioPage({ setPage }) {
   const iframeRefs = useRef({});
   const videoRefs = useRef({});
 
-  // Client Reels Strip Touch & Drag Scrolling State
+  // Client Reels Strip Infinite Auto-Loop + Human Touch/Drag State
   const stripRef = useRef(null);
   const isDraggingRef = useRef(false);
+  const isInteractingRef = useRef(false);
+  const interactionTimeoutRef = useRef(null);
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);
   const hasDraggedRef = useRef(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
 
-  const checkScrollButtons = () => {
-    if (!stripRef.current) return;
-    const { scrollLeft, scrollWidth, clientWidth } = stripRef.current;
-    setCanScrollLeft(scrollLeft > 12);
-    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 12);
+  const pauseAutoScrollTemporarily = () => {
+    isInteractingRef.current = true;
+    if (interactionTimeoutRef.current) {
+      clearTimeout(interactionTimeoutRef.current);
+    }
+    interactionTimeoutRef.current = setTimeout(() => {
+      isInteractingRef.current = false;
+    }, 1800);
   };
 
+  // Continuous auto-glide loop with seamless wrap
   useEffect(() => {
-    checkScrollButtons();
-    const handleResize = () => checkScrollButtons();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+    const container = stripRef.current;
+    if (!container) return;
+
+    let animId;
+    const speed = 0.65; // Silk-smooth slow glide
+
+    const loop = () => {
+      if (!isInteractingRef.current && !isDraggingRef.current && container) {
+        container.scrollLeft += speed;
+        const half = container.scrollWidth / 2;
+        if (half > 0 && container.scrollLeft >= half) {
+          container.scrollLeft -= half;
+        }
+      }
+      animId = requestAnimationFrame(loop);
+    };
+
+    animId = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(animId);
+      if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
+    };
   }, []);
 
   const handleStripMouseDown = (e) => {
     if (!stripRef.current) return;
     isDraggingRef.current = true;
+    isInteractingRef.current = true;
     hasDraggedRef.current = false;
     setIsDragging(true);
     startXRef.current = e.pageX - stripRef.current.offsetLeft;
@@ -1276,23 +1252,39 @@ export default function VideoPortfolioPage({ setPage }) {
       hasDraggedRef.current = true;
     }
     stripRef.current.scrollLeft = scrollLeftRef.current - walk;
-    checkScrollButtons();
+    handleInfiniteScrollBounds();
   };
 
   const handleStripMouseUpOrLeave = () => {
-    isDraggingRef.current = false;
-    setIsDragging(false);
+    if (isDraggingRef.current) {
+      isDraggingRef.current = false;
+      setIsDragging(false);
+      pauseAutoScrollTemporarily();
+    }
+  };
+
+  const handleInfiniteScrollBounds = () => {
+    const container = stripRef.current;
+    if (!container) return;
+    const half = container.scrollWidth / 2;
+    if (half > 0) {
+      if (container.scrollLeft >= half) {
+        container.scrollLeft -= half;
+      } else if (container.scrollLeft <= 0) {
+        container.scrollLeft += half;
+      }
+    }
   };
 
   const scrollStrip = (direction) => {
     if (!stripRef.current) return;
+    pauseAutoScrollTemporarily();
     const card = stripRef.current.querySelector(".vp-ig-card");
-    const step = card ? card.clientWidth + 20 : 280;
+    const step = card ? card.clientWidth + 18 : 280;
     stripRef.current.scrollBy({
       left: direction === "left" ? -step * 1.3 : step * 1.3,
       behavior: "smooth",
     });
-    setTimeout(checkScrollButtons, 350);
   };
 
   const toggleHeroMute = () => {
@@ -1656,35 +1648,25 @@ export default function VideoPortfolioPage({ setPage }) {
                       title={heroUnmuted ? "Tap to mute audio" : "Tap to unmute audio"}
                     />
 
-                    {/* High-Visibility Hero Sound Toggle Button (Properly Visible & Tactile) */}
+                    {/* Small Corner Sound Toggle Button */}
                     <button
                       type="button"
-                      className={`vp-hero-sound-btn ${heroUnmuted ? "is-unmuted" : "is-muted"}`}
+                      className={`vp-hero-sound-btn ${heroUnmuted ? "is-unmuted" : ""}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         toggleHeroMute();
                       }}
-                      title={heroUnmuted ? "Mute audio" : "Tap for audio"}
-                      aria-label={heroUnmuted ? "Mute audio" : "Tap for audio"}
+                      title={heroUnmuted ? "Mute audio" : "Unmute audio"}
+                      aria-label={heroUnmuted ? "Mute audio" : "Unmute audio"}
                     >
-                      <span className="vp-hero-sound-icon" aria-hidden="true" style={{ display: "inline-flex", alignItems: "center" }}>
-                        {heroUnmuted ? (
-                          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
-                          </svg>
-                        ) : (
-                          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                            <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
-                          </svg>
-                        )}
-                      </span>
-                      <span>{heroUnmuted ? "Sound On" : "Tap for Sound"}</span>
                       {heroUnmuted ? (
-                        <span className="vp-hero-sound-bars" aria-hidden="true">
-                          <span /><span /><span />
-                        </span>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
+                        </svg>
                       ) : (
-                        <span className="vp-hero-sound-pulse" aria-hidden="true" />
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                          <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
+                        </svg>
                       )}
                     </button>
                   </div>
@@ -1900,30 +1882,22 @@ export default function VideoPortfolioPage({ setPage }) {
             </div>
           </section>
 
-          {/* =================== CLIENT REELS (HUMAN TOUCH SCROLLABLE & DRAGGABLE) =================== */}
+          {/* =================== CLIENT REELS (AUTO-LOOPING & HUMAN TOUCH SCROLLABLE) =================== */}
           <section className="vp-ig-section" id="vp-client-reels">
             <div className="vp-wrap">
               <div className="vp-ig-header">
                 <div>
                   <h2>Client Reels</h2>
-                  <p className="vp-note" style={{ color: "rgba(255,255,255,0.65)", marginTop: 4 }}>
-                    Recent vertical shoots and retention edits produced for our clients in Hyderabad.
-                  </p>
-                </div>
-                <div className="vp-strip-hint">
-                  <span className="vp-strip-hint-pill">
-                    👈 Swipe or drag horizontally to explore reels 👉
-                  </span>
                 </div>
               </div>
             </div>
 
-            {/* Touch-swipeable and mouse-draggable reels carousel */}
+            {/* Touch-swipeable, draggable, and auto-gliding reels carousel */}
             <div className="vp-strip-wrapper">
               {/* Previous / Left Navigation Arrow */}
               <button
                 type="button"
-                className={`vp-strip-nav-btn prev ${!canScrollLeft ? "is-disabled" : ""}`}
+                className="vp-strip-nav-btn prev"
                 onClick={() => scrollStrip("left")}
                 aria-label="Scroll left"
                 title="Scroll left"
@@ -1933,7 +1907,7 @@ export default function VideoPortfolioPage({ setPage }) {
                 </svg>
               </button>
 
-              {/* Scrollable Track with Natural Touch Inertia & Mouse Drag */}
+              {/* Scrollable Track with Continuous Auto-Glide & Full Touch Control */}
               <div
                 ref={stripRef}
                 className={`vp-strip-track ${isDragging ? "is-dragging" : ""}`}
@@ -1941,9 +1915,12 @@ export default function VideoPortfolioPage({ setPage }) {
                 onMouseMove={handleStripMouseMove}
                 onMouseUp={handleStripMouseUpOrLeave}
                 onMouseLeave={handleStripMouseUpOrLeave}
-                onScroll={checkScrollButtons}
+                onTouchStart={pauseAutoScrollTemporarily}
+                onTouchEnd={pauseAutoScrollTemporarily}
+                onMouseEnter={() => { isInteractingRef.current = true; }}
+                onScroll={handleInfiniteScrollBounds}
               >
-                {PORTFOLIO_STRIP_REELS.map((item, idx) => {
+                {[...PORTFOLIO_STRIP_REELS, ...PORTFOLIO_STRIP_REELS].map((item, idx) => {
                   const isUnmuted = unmutedReel === item.handle;
                   return (
                     <div className="vp-ig-card" key={`${item.handle}_${idx}`}>
@@ -2023,7 +2000,7 @@ export default function VideoPortfolioPage({ setPage }) {
               {/* Next / Right Navigation Arrow */}
               <button
                 type="button"
-                className={`vp-strip-nav-btn next ${!canScrollRight ? "is-disabled" : ""}`}
+                className="vp-strip-nav-btn next"
                 onClick={() => scrollStrip("right")}
                 aria-label="Scroll right"
                 title="Scroll right"
