@@ -1081,6 +1081,12 @@ const PORTFOLIO_STRIP_REELS = [
     videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.36_PM_vtlfsv.mp4",
   },
   {
+    handle: "vision_rainbow_pre_primary",
+    name: "Vision Rainbow Pre-Primary",
+    type: "mp4",
+    videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1793010466/portfolio%20video%20for%20editing%20services/vision%20rainbow/Vision_Rainbow_pre-primary_reel_2_aezhph.mp4",
+  },
+  {
     handle: "madhurayoga_",
     name: "Madhura Yoga",
     type: "youtube",
