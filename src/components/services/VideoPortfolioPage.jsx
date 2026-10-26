@@ -9,10 +9,10 @@ import { getUTMParams } from "../../utils/utm";
 
 const CONFIG = {
   brand: "The Story Builder",
-  whatsapp: "919553233063",
-  phone: "+91 95532 33063",
+  whatsapp: "918341928526",
+  phone: "+91 83419 28526",
   email: "hello@thestorybuilder.in",
-  waMessage: "Hi Story Builder team, I'd like a quote for a video shoot and edit.",
+  waMessage: "Hi Story Builder team, I'd like to discuss a video shoot and edit package.",
 };
 
 const waUrl = (msg) =>
@@ -281,6 +281,7 @@ const PAGE_CSS = `
   user-select: none;
   touch-action: pan-x pan-y;
   will-change: scroll-position;
+  scroll-snap-type: none !important;
 }
 .vp-strip-track::-webkit-scrollbar {
   display: none;
@@ -291,7 +292,7 @@ const PAGE_CSS = `
 
 .vp-ig-card {
   position: relative;
-  scroll-snap-align: start;
+  scroll-snap-align: none !important;
   flex: 0 0 clamp(230px, 20vw, 275px);
   width: clamp(230px, 20vw, 275px);
   aspect-ratio: 9 / 16;
@@ -329,10 +330,11 @@ const PAGE_CSS = `
 }
 .vp-ig-video-frame iframe {
   position: absolute;
-  top: -14%;
-  left: -14%;
-  width: 128%;
-  height: 128%;
+  top: 50%;
+  left: 50%;
+  width: 175%;
+  height: 175%;
+  transform: translate(-50%, -50%);
   border: 0;
   pointer-events: none;
 }
@@ -435,18 +437,17 @@ const PAGE_CSS = `
 .vp-chips li { padding: 4px 11px; border: 1px solid var(--vp-line); border-radius: 99px; font-size: 0.82rem; font-weight: 500; }
 @media (max-width: 560px) { .vp-ledger > div { grid-template-columns: 1fr; } }
 
-/* Pricing Tiers */
+/* Package Tiers */
 .vp-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: clamp(40px, 6vw, 72px); align-items: stretch; }
 .vp-tier { display: grid; align-content: start; gap: 16px; padding: 30px 24px; border: 1.5px solid var(--vp-ink); border-radius: var(--vp-r); background: transparent; position: relative; }
 .vp-tier h3 { font-size: 1.35rem; font-family: var(--vp-f-display); }
-.vp-tier .vp-price { font-family: var(--vp-f-display); font-stretch: 112%; font-weight: 800; font-size: 1.9rem; letter-spacing: -0.03em; }
-.vp-tier .vp-price small { font-family: var(--vp-f-body); font-stretch: 100%; font-weight: 500; font-size: 0.82rem; letter-spacing: 0; color: var(--vp-muted); margin-left: 6px; }
+.vp-tier .vp-tier-tagline { font-family: var(--vp-f-body); font-weight: 600; font-size: 0.94rem; color: var(--vp-rec); margin-bottom: 2px; }
 .vp-tier ul { display: grid; gap: 10px; font-size: 0.92rem; }
 .vp-tier li { display: flex; gap: 10px; align-items: baseline; }
 .vp-tier li::before { content: "✓"; flex: none; color: var(--vp-rec); font-weight: bold; }
 .vp-tier .vp-btn { margin-top: 6px; }
 .vp-tier-featured { background: var(--vp-ink); color: #eceef0; border-color: var(--vp-ink); transform: translateY(-10px); padding-block: 36px; box-shadow: 0 20px 40px rgba(0,0,0,0.18); }
-.vp-tier-featured .vp-price small { color: var(--vp-muted-inv); }
+.vp-tier-featured .vp-tier-tagline { color: var(--vp-gold-accent); }
 .vp-tier-flag { position: absolute; top: -1px; right: 24px; transform: translateY(-50%); background: var(--vp-gold-accent); color: #0F172A; padding: 5px 14px; font-size: 0.75rem; font-weight: 800; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35); }
 .vp-tier-featured .vp-btn-ghost { border-color: rgba(255,255,255,0.45); color: #fff; }
 .vp-tier-featured .vp-btn-ghost:hover { background: #fff; color: var(--vp-ink); }
@@ -567,21 +568,13 @@ const PAGE_CSS = `
 /* Testimonials */
 .vp-quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .vp-quote {
-  display: grid; gap: 18px; align-content: space-between; padding: 28px 24px;
+  display: grid; gap: 16px; align-content: space-between; padding: 26px 22px;
   background: #fff; border: 1px solid var(--vp-line); border-radius: var(--vp-r);
   box-shadow: 0 4px 16px rgba(0,0,0,0.03);
 }
-.vp-quote-stars { color: #f59e0b; font-size: 1rem; letter-spacing: 2px; }
-.vp-quote blockquote { font-family: var(--vp-f-body); font-weight: 500; font-size: 0.98rem; line-height: 1.55; color: var(--vp-ink); }
-.vp-quote figcaption { display: flex; gap: 12px; align-items: center; border-top: 1px solid var(--vp-line); padding-top: 14px; }
-.vp-avatar-badge {
-  width: 42px; height: 42px; border-radius: 50%; background: var(--vp-ink); color: #fff;
-  display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.88rem; flex: none;
-}
-.vp-quote-metric {
-  display: inline-block; padding: 2px 8px; background: rgba(217,119,6,0.1); color: var(--vp-rec);
-  border-radius: 4px; font-size: 0.75rem; font-weight: 600; font-family: var(--vp-f-tc); margin-top: 4px;
-}
+.vp-quote blockquote { font-family: var(--vp-f-body); font-weight: 500; font-size: 0.98rem; line-height: 1.6; color: var(--vp-ink); margin: 0; }
+.vp-quote figcaption { border-top: 1px solid var(--vp-line); padding-top: 14px; }
+.vp-quote figcaption strong { font-family: var(--vp-f-display); font-size: 1.05rem; color: var(--vp-ink); font-weight: 700; }
 @media (max-width: 960px) { .vp-quotes { grid-template-columns: 1fr; } }
 
 /* FAQ */
@@ -808,11 +801,13 @@ const PAGE_CSS = `
   .vp-strip-track {
     gap: 14px;
     padding: 8px 16px 16px;
+    scroll-snap-type: none !important;
   }
   .vp-ig-card {
     flex: 0 0 165px;
     width: 165px;
     border-radius: 14px;
+    scroll-snap-align: none !important;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
   }
   .vp-ig-video-frame {
@@ -1106,39 +1101,27 @@ const PORTFOLIO_STRIP_REELS = [
   },
 ];
 
-/* Real Testimonials Aligned With Clients */
+/* Client Reviews */
 const TESTIMONIALS = [
   {
-    quote: "Working with The Story Builder on our personal brand series was transformative. They directed the shoot, kept pacing razor-sharp, and the video quality was indistinguishable from an international film.",
-    author: "Jaya Daga",
-    role: "Author & Keynote Speaker",
-    handle: "@jaya.daga.1",
-    initials: "JD",
-    metric: "410K+ Reel Reach",
+    brand: "Jaya Daga",
+    message: "Working with The Story Builder on our personal brand series was transformative. They directed the shoot, kept pacing razor-sharp, and the video quality was indistinguishable from an international film.",
   },
   {
-    quote: "The gym walkthrough and dynamic member workout reels they produced drove insane traction on Instagram. Filled our membership quota in two weeks flat.",
-    author: "Icons Gym Team",
-    role: "Commercial Fitness Studio",
-    handle: "@icons.gym",
-    initials: "IG",
-    metric: "580K+ Views on Instagram",
+    brand: "Icons Gym",
+    message: "The gym walkthrough and dynamic member workout reels they produced drove insane traction on Instagram. Filled our membership quota in two weeks flat.",
   },
   {
-    quote: "They captured the true soul and warmth of our learning environment with sensitivity and cinematic grace. The feedback from parents has been phenomenal.",
-    author: "Vision Rainbow",
-    role: "Holistic Education Center",
-    handle: "@vision.rainbow",
-    initials: "VR",
-    metric: "195K+ Organic Impressions",
+    brand: "Vision Rainbow",
+    message: "They captured the true soul and warmth of our learning environment with sensitivity and cinematic grace. The feedback from parents has been phenomenal.",
   },
 ];
 
 /* FAQ Items */
 const FAQ_ITEMS = [
   {
-    q: "How much does a video shoot and edit package cost?",
-    a: "Our reel packages start at ₹10,000 for 4 reels, ₹15,000 for 6 reels, and ₹20,000 for 8 reels. Send a brief and we'll reply with a transparent, fixed quote.",
+    q: "How are the video shoot and edit packages priced?",
+    a: "Every project is scoped based on your deliverables, shoot requirements, and timeline. Contact us directly on WhatsApp or call +91 83419 28526 and we will discuss your requirements and pitch the best package for you.",
   },
   {
     q: "How fast is the turnaround from shoot day to final cut?",
@@ -1195,6 +1178,7 @@ export default function VideoPortfolioPage({ setPage }) {
 
   // Client Reels Strip Infinite Auto-Loop + Human Touch/Drag State
   const stripRef = useRef(null);
+  const scrollPosRef = useRef(0);
   const isDraggingRef = useRef(false);
   const isInteractingRef = useRef(false);
   const interactionTimeoutRef = useRef(null);
@@ -1210,24 +1194,28 @@ export default function VideoPortfolioPage({ setPage }) {
     }
     interactionTimeoutRef.current = setTimeout(() => {
       isInteractingRef.current = false;
-    }, 1800);
+    }, 1200);
   };
 
-  // Continuous auto-glide loop with seamless wrap
+  // Continuous auto-glide loop with seamless wrap (both mobile & desktop)
   useEffect(() => {
     const container = stripRef.current;
     if (!container) return;
 
     let animId;
     const speed = 0.65; // Silk-smooth slow glide
+    scrollPosRef.current = container.scrollLeft;
 
     const loop = () => {
       if (!isInteractingRef.current && !isDraggingRef.current && container) {
-        container.scrollLeft += speed;
+        scrollPosRef.current += speed;
         const half = container.scrollWidth / 2;
-        if (half > 0 && container.scrollLeft >= half) {
-          container.scrollLeft -= half;
+        if (half > 0 && scrollPosRef.current >= half) {
+          scrollPosRef.current -= half;
         }
+        container.scrollLeft = scrollPosRef.current;
+      } else if (container) {
+        scrollPosRef.current = container.scrollLeft;
       }
       animId = requestAnimationFrame(loop);
     };
@@ -1238,6 +1226,53 @@ export default function VideoPortfolioPage({ setPage }) {
       if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
     };
   }, []);
+
+  // Ensure all videos (HTML5 & YouTube) start on mobile as soon as the user touches/scrolls
+  useEffect(() => {
+    const startAllMedia = () => {
+      // 1. Play all HTML5 videos
+      Object.values(videoRefs.current).flat().forEach((v) => {
+        if (v) {
+          v.muted = true;
+          v.play().catch(() => {});
+        }
+      });
+
+      // 2. Play all YouTube iframes
+      Object.values(iframeRefs.current).flat().forEach((iframe) => {
+        if (iframe && iframe.contentWindow) {
+          try {
+            iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "mute", args: "" }), "*");
+            iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "playVideo", args: "" }), "*");
+          } catch (err) {}
+        }
+      });
+    };
+
+    window.addEventListener("touchstart", startAllMedia, { passive: true });
+    window.addEventListener("click", startAllMedia, { once: true });
+    window.addEventListener("scroll", startAllMedia, { passive: true, once: true });
+
+    return () => {
+      window.removeEventListener("touchstart", startAllMedia);
+      window.removeEventListener("click", startAllMedia);
+      window.removeEventListener("scroll", startAllMedia);
+    };
+  }, []);
+
+  const handleTouchStart = () => {
+    isInteractingRef.current = true;
+    if (interactionTimeoutRef.current) clearTimeout(interactionTimeoutRef.current);
+  };
+
+  const handleTouchEnd = () => {
+    if (stripRef.current) {
+      scrollPosRef.current = stripRef.current.scrollLeft;
+    }
+    interactionTimeoutRef.current = setTimeout(() => {
+      isInteractingRef.current = false;
+    }, 1200);
+  };
 
   const handleStripMouseDown = (e) => {
     if (!stripRef.current) return;
@@ -1258,6 +1293,7 @@ export default function VideoPortfolioPage({ setPage }) {
       hasDraggedRef.current = true;
     }
     stripRef.current.scrollLeft = scrollLeftRef.current - walk;
+    scrollPosRef.current = stripRef.current.scrollLeft;
     handleInfiniteScrollBounds();
   };
 
@@ -1265,6 +1301,9 @@ export default function VideoPortfolioPage({ setPage }) {
     if (isDraggingRef.current) {
       isDraggingRef.current = false;
       setIsDragging(false);
+      if (stripRef.current) {
+        scrollPosRef.current = stripRef.current.scrollLeft;
+      }
       pauseAutoScrollTemporarily();
     }
   };
@@ -1276,8 +1315,10 @@ export default function VideoPortfolioPage({ setPage }) {
     if (half > 0) {
       if (container.scrollLeft >= half) {
         container.scrollLeft -= half;
+        scrollPosRef.current = container.scrollLeft;
       } else if (container.scrollLeft <= 0) {
         container.scrollLeft += half;
+        scrollPosRef.current = container.scrollLeft;
       }
     }
   };
@@ -1731,10 +1772,11 @@ export default function VideoPortfolioPage({ setPage }) {
               </div>
 
               {/* Pricing Tiers */}
+              {/* Deliverable Packages */}
               <div className="vp-tiers">
                 <article className="vp-tier">
-                  <h3>4 Reels</h3>
-                  <p className="vp-price">₹10,000 <small>shoot & edit</small></p>
+                  <h3>4 Reels Package</h3>
+                  <p className="vp-tier-tagline">Starter shoot & edit series</p>
                   <ul>
                     <li>On-location shoot in Hyderabad</li>
                     <li>4 short-form vertical reels (9:16)</li>
@@ -1742,15 +1784,15 @@ export default function VideoPortfolioPage({ setPage }) {
                     <li>Cinematic color grade & sound design</li>
                     <li>Two revision rounds included</li>
                   </ul>
-                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "4 Reels (₹10,000)" }); }}>
-                    Choose 4 Reels
+                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "4 Reels" }); }}>
+                    Inquire for 4 Reels
                   </a>
                 </article>
 
                 <article className="vp-tier vp-tier-featured">
                   <span className="vp-tier-flag">Most Popular</span>
-                  <h3>6 Reels</h3>
-                  <p className="vp-price">₹15,000 <small>shoot & edit</small></p>
+                  <h3>6 Reels Package</h3>
+                  <p className="vp-tier-tagline">Growth brand series</p>
                   <ul>
                     <li>Full on-location shoot in Hyderabad</li>
                     <li>6 short-form vertical reels (9:16)</li>
@@ -1758,14 +1800,14 @@ export default function VideoPortfolioPage({ setPage }) {
                     <li>Sound effects, motion graphics & color grade</li>
                     <li>Two revision rounds per video</li>
                   </ul>
-                  <a className="vp-btn vp-btn-primary" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "6 Reels (₹15,000)" }); }}>
-                    Choose 6 Reels
+                  <a className="vp-btn vp-btn-primary" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "6 Reels" }); }}>
+                    Inquire for 6 Reels
                   </a>
                 </article>
 
                 <article className="vp-tier">
-                  <h3>8 Reels</h3>
-                  <p className="vp-price">₹20,000 <small>shoot & edit</small></p>
+                  <h3>8 Reels Package</h3>
+                  <p className="vp-tier-tagline">Complete monthly content batch</p>
                   <ul>
                     <li>Extended on-location shoot in Hyderabad</li>
                     <li>8 short-form vertical reels (9:16)</li>
@@ -1773,8 +1815,8 @@ export default function VideoPortfolioPage({ setPage }) {
                     <li>Scroll-stopping hooks, kinetic captions & SFX</li>
                     <li>Two revision rounds per video</li>
                   </ul>
-                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "8 Reels (₹20,000)" }); }}>
-                    Choose 8 Reels
+                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "8 Reels" }); }}>
+                    Inquire for 8 Reels
                   </a>
                 </article>
               </div>
@@ -1921,8 +1963,8 @@ export default function VideoPortfolioPage({ setPage }) {
                 onMouseMove={handleStripMouseMove}
                 onMouseUp={handleStripMouseUpOrLeave}
                 onMouseLeave={handleStripMouseUpOrLeave}
-                onTouchStart={pauseAutoScrollTemporarily}
-                onTouchEnd={pauseAutoScrollTemporarily}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
                 onMouseEnter={() => { isInteractingRef.current = true; }}
                 onScroll={handleInfiniteScrollBounds}
               >
@@ -1939,14 +1981,22 @@ export default function VideoPortfolioPage({ setPage }) {
                                 if (!videoRefs.current[item.handle].includes(el)) {
                                   videoRefs.current[item.handle].push(el);
                                 }
+                                el.muted = !isUnmuted;
+                                el.defaultMuted = true;
+                                el.playsInline = true;
+                                el.setAttribute("playsinline", "true");
+                                el.setAttribute("webkit-playsinline", "true");
+                                if (!isUnmuted) el.setAttribute("muted", "true");
+                                el.play().catch(() => {});
                               }
                             }}
                             src={item.videoSrc}
                             autoPlay
                             loop
                             muted={!isUnmuted}
+                            defaultMuted
                             playsInline
-                            preload="metadata"
+                            preload="auto"
                           />
                         ) : (
                           <iframe
@@ -1958,10 +2008,22 @@ export default function VideoPortfolioPage({ setPage }) {
                                 }
                               }
                             }}
-                            loading="lazy"
                             src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=1&loop=1&playlist=${item.videoId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&iv_load_policy=3&cc_load_policy=0&disablekb=1&fs=0`}
                             title={`${item.name} Reel`}
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            tabIndex="-1"
+                            onLoad={(e) => {
+                              try {
+                                e.target.contentWindow?.postMessage(
+                                  JSON.stringify({ event: "command", func: "mute", args: "" }),
+                                  "*"
+                                );
+                                e.target.contentWindow?.postMessage(
+                                  JSON.stringify({ event: "command", func: "playVideo", args: "" }),
+                                  "*"
+                                );
+                              } catch (err) {}
+                            }}
                           />
                         )}
 
@@ -2112,30 +2174,22 @@ export default function VideoPortfolioPage({ setPage }) {
             </div>
           </section>
 
-          {/* =================== TESTIMONIALS WITH CLIENT LOGOS =================== */}
+          {/* =================== CLIENT REVIEWS =================== */}
           <section className="vp-section" id="vp-proof">
             <div className="vp-wrap">
               <div style={{ marginBottom: 32 }}>
                 <span style={{ fontSize: "0.85rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--vp-rec)" }}>
-                  Verified Client Results
+                  Client Feedback
                 </span>
-                <h2 style={{ marginTop: 8 }}>What Our Clients Say</h2>
+                <h2 style={{ marginTop: 8 }}>What Clients Say</h2>
               </div>
 
               <div className="vp-quotes">
                 {TESTIMONIALS.map((t, idx) => (
                   <figure className="vp-quote" key={idx}>
-                    <div>
-                      <div className="vp-quote-stars">★★★★★</div>
-                      <blockquote style={{ marginTop: 12 }}>"{t.quote}"</blockquote>
-                    </div>
+                    <blockquote>"{t.message}"</blockquote>
                     <figcaption>
-                      <div className="vp-avatar-badge">{t.initials}</div>
-                      <div>
-                        <strong>{t.author}</strong><br />
-                        <span className="vp-muted" style={{ fontSize: "0.82rem" }}>{t.role} ({t.handle})</span><br />
-                        <span className="vp-quote-metric">{t.metric}</span>
-                      </div>
+                      <strong>{t.brand}</strong>
                     </figcaption>
                   </figure>
                 ))}
@@ -2345,7 +2399,7 @@ export default function VideoPortfolioPage({ setPage }) {
                       </div>
 
                       <div className="vp-field">
-                        <label htmlFor="vp-budget">Approximate Budget *</label>
+                        <label htmlFor="vp-budget">Project Scope *</label>
                         <select
                           id="vp-budget"
                           name="budget"
@@ -2353,12 +2407,13 @@ export default function VideoPortfolioPage({ setPage }) {
                           value={formData.budget}
                           onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                         >
-                          <option value="" disabled>Select budget range</option>
-                          <option>₹10,000 (4 Reels Package)</option>
-                          <option>₹15,000 (6 Reels Package)</option>
-                          <option>₹20,000 (8 Reels Package)</option>
-                          <option>₹25,000+ (Custom Monthly Plan)</option>
-                          <option>Let's discuss recommendations</option>
+                          <option value="" disabled>Select package scope</option>
+                          <option>4 Reels Package</option>
+                          <option>6 Reels Package</option>
+                          <option>8 Reels Package</option>
+                          <option>Custom Brand Video / Film</option>
+                          <option>Monthly Content Retainer</option>
+                          <option>Direct Consultation (Pitch & Discuss)</option>
                         </select>
                       </div>
 
