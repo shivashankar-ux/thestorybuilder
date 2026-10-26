@@ -1073,6 +1073,12 @@ const PORTFOLIO_STRIP_REELS = [
     type: "mp4",
     videoSrc: "/videos/1EwM31QxnKk.mp4",
   },
+  {
+    handle: "veto_gym_showcase",
+    name: "Veto Gym Showcase",
+    type: "mp4",
+    videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.mp4",
+  },
 ];
 
 /* Client Reviews */
