@@ -425,33 +425,7 @@ const PAGE_CSS = `
 
 
 /* Package / Split */
-.vp-split { display: grid; grid-template-columns: repeat(12, 1fr); gap: 36px 24px; }
-.vp-split-head { grid-column: 1 / span 4; align-self: start; position: sticky; top: 96px; display: grid; gap: 16px; }
-.vp-split-body { grid-column: 6 / span 7; }
-@media (max-width: 960px) { .vp-split-head, .vp-split-body { grid-column: 1 / -1; position: static; } }
-.vp-ledger > div { display: grid; grid-template-columns: minmax(130px, 0.8fr) 2fr; gap: 12px 28px; padding: 24px 0; border-top: 1px solid var(--vp-ink); }
-.vp-ledger > div:last-child { border-bottom: 1px solid var(--vp-ink); }
-.vp-ledger h3 { font-size: 1.15rem; }
-.vp-ledger p { color: var(--vp-muted); }
-.vp-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.vp-chips li { padding: 4px 11px; border: 1px solid var(--vp-line); border-radius: 99px; font-size: 0.82rem; font-weight: 500; }
-@media (max-width: 560px) { .vp-ledger > div { grid-template-columns: 1fr; } }
 
-/* Package Tiers */
-.vp-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: clamp(40px, 6vw, 72px); align-items: stretch; }
-.vp-tier { display: grid; align-content: start; gap: 16px; padding: 30px 24px; border: 1.5px solid var(--vp-ink); border-radius: var(--vp-r); background: transparent; position: relative; }
-.vp-tier h3 { font-size: 1.35rem; font-family: var(--vp-f-display); }
-.vp-tier .vp-tier-tagline { font-family: var(--vp-f-body); font-weight: 600; font-size: 0.94rem; color: var(--vp-rec); margin-bottom: 2px; }
-.vp-tier ul { display: grid; gap: 10px; font-size: 0.92rem; }
-.vp-tier li { display: flex; gap: 10px; align-items: baseline; }
-.vp-tier li::before { content: "✓"; flex: none; color: var(--vp-rec); font-weight: bold; }
-.vp-tier .vp-btn { margin-top: 6px; }
-.vp-tier-featured { background: var(--vp-ink); color: #eceef0; border-color: var(--vp-ink); transform: translateY(-10px); padding-block: 36px; box-shadow: 0 20px 40px rgba(0,0,0,0.18); }
-.vp-tier-featured .vp-tier-tagline { color: var(--vp-gold-accent); }
-.vp-tier-flag { position: absolute; top: -1px; right: 24px; transform: translateY(-50%); background: var(--vp-gold-accent); color: #0F172A; padding: 5px 14px; font-size: 0.75rem; font-weight: 800; border-radius: 99px; text-transform: uppercase; letter-spacing: 0.05em; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35); }
-.vp-tier-featured .vp-btn-ghost { border-color: rgba(255,255,255,0.45); color: #fff; }
-.vp-tier-featured .vp-btn-ghost:hover { background: #fff; color: var(--vp-ink); }
-@media (max-width: 960px) { .vp-tiers { grid-template-columns: 1fr; } .vp-tier-featured { transform: none; padding-block: 30px; } }
 
 /* Process Timeline */
 .vp-process-head { display: grid; gap: 16px; max-width: 760px; }
@@ -1054,8 +1028,8 @@ const PORTFOLIO_STRIP_REELS = [
   {
     handle: "digitalmedhaadvertising",
     name: "Digital Medha Advertising",
-    type: "youtube",
-    videoId: "rVUkWK8lRmw",
+    type: "mp4",
+    videoSrc: "/videos/rVUkWK8lRmw.mp4",
   },
   {
     handle: "farhaan_edit_2",
@@ -1066,8 +1040,8 @@ const PORTFOLIO_STRIP_REELS = [
   {
     handle: "vision.rainbow",
     name: "Vision Rainbow",
-    type: "youtube",
-    videoId: "_aVoaZbyXJQ",
+    type: "mp4",
+    videoSrc: "/videos/_aVoaZbyXJQ.mp4",
   },
   {
     handle: "farhaan_edit_3",
@@ -1084,20 +1058,20 @@ const PORTFOLIO_STRIP_REELS = [
   {
     handle: "madhurayoga_",
     name: "Madhura Yoga",
-    type: "youtube",
-    videoId: "k-bJd1yYk1A",
+    type: "mp4",
+    videoSrc: "/videos/k-bJd1yYk1A.mp4",
   },
   {
     handle: "jaya.daga.1",
     name: "Jaya Daga",
-    type: "youtube",
-    videoId: "VdsrsWmmhiw",
+    type: "mp4",
+    videoSrc: "/videos/VdsrsWmmhiw.mp4",
   },
   {
     handle: "icons.gym",
     name: "Icons Gym",
-    type: "youtube",
-    videoId: "1EwM31QxnKk",
+    type: "mp4",
+    videoSrc: "/videos/1EwM31QxnKk.mp4",
   },
 ];
 
@@ -1227,24 +1201,13 @@ export default function VideoPortfolioPage({ setPage }) {
     };
   }, []);
 
-  // Ensure all videos (HTML5 & YouTube) start on mobile as soon as the user touches/scrolls
+  // Ensure all videos start immediately on mobile as soon as the user touches/scrolls
   useEffect(() => {
     const startAllMedia = () => {
-      // 1. Play all HTML5 videos
       Object.values(videoRefs.current).flat().forEach((v) => {
         if (v) {
           v.muted = true;
           v.play().catch(() => {});
-        }
-      });
-
-      // 2. Play all YouTube iframes
-      Object.values(iframeRefs.current).flat().forEach((iframe) => {
-        if (iframe && iframe.contentWindow) {
-          try {
-            iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "mute", args: "" }), "*");
-            iframe.contentWindow.postMessage(JSON.stringify({ event: "command", func: "playVideo", args: "" }), "*");
-          } catch (err) {}
         }
       });
     };
@@ -1483,13 +1446,13 @@ export default function VideoPortfolioPage({ setPage }) {
     setPlayerVideo(null);
   };
 
-  // Instant seamless unmute/mute for both HTML5 MP4 videos and YouTube iframes
+  // Instant seamless unmute/mute for HTML5 MP4 videos
   const toggleMute = (handle) => {
     const isCurrentlyUnmuted = unmutedReel === handle;
     const nextUnmuted = isCurrentlyUnmuted ? null : handle;
     setUnmutedReel(nextUnmuted);
 
-    // 1. Native HTML5 videos (Cloudinary MP4s)
+    // Native HTML5 videos
     Object.keys(videoRefs.current).forEach((h) => {
       const vList = videoRefs.current[h];
       const list = Array.isArray(vList) ? vList : [vList];
@@ -1501,31 +1464,6 @@ export default function VideoPortfolioPage({ setPage }) {
             v.play().catch(() => {});
           } else {
             v.muted = true;
-          }
-        }
-      });
-    });
-
-    // 2. YouTube iframes
-    Object.keys(iframeRefs.current).forEach((h) => {
-      const iframes = iframeRefs.current[h];
-      const list = Array.isArray(iframes) ? iframes : [iframes];
-      list.forEach((iframe) => {
-        if (iframe && iframe.contentWindow) {
-          if (h === handle && !isCurrentlyUnmuted) {
-            iframe.contentWindow.postMessage(
-              JSON.stringify({ event: "command", func: "unMute", args: "" }),
-              "*"
-            );
-            iframe.contentWindow.postMessage(
-              JSON.stringify({ event: "command", func: "setVolume", args: [100] }),
-              "*"
-            );
-          } else {
-            iframe.contentWindow.postMessage(
-              JSON.stringify({ event: "command", func: "mute", args: "" }),
-              "*"
-            );
           }
         }
       });
@@ -1617,7 +1555,6 @@ export default function VideoPortfolioPage({ setPage }) {
               <span style={{ color: "#F59E0B" }}>The </span>Story Builder
             </a>
             <nav className="vp-nav-links" aria-label="Primary">
-              <a href="#vp-package" onClick={(e) => { e.preventDefault(); scrollTo("vp-package"); }}>Packages</a>
               <a href="#vp-difference" onClick={(e) => { e.preventDefault(); scrollTo("vp-difference"); }}>Color Grade</a>
               <a href="#vp-client-reels" onClick={(e) => { e.preventDefault(); scrollTo("vp-client-reels"); }}>Client Reels</a>
               <a href="#vp-process" onClick={(e) => { e.preventDefault(); scrollTo("vp-process"); }}>Process</a>
@@ -1722,106 +1659,7 @@ export default function VideoPortfolioPage({ setPage }) {
             </div>
           </section>
 
-          {/* =================== PACKAGE / SPLIT =================== */}
-          <section className="vp-section" id="vp-package" style={{ borderTop: "1px solid var(--vp-line)" }}>
-            <div className="vp-wrap">
-              <div className="vp-split">
-                <div className="vp-split-head">
-                  <h2>One brief. One crew. Finished videos.</h2>
-                  <p className="vp-lede">
-                    No hiring a videographer, then hunting for an editor, then chasing both.
-                    We plan it, shoot it, and edit it so the footage is shot specifically with the final cut in mind.
-                  </p>
-                </div>
-                <div className="vp-split-body">
-                  <dl className="vp-ledger">
-                    {[
-                      {
-                        title: "1. Pre-Production & Planning",
-                        desc: "We align on your shoot agenda, talking points, and shot list so shoot day runs on clockwork (dedicated content strategy and scripting available as a separate service).",
-                        chips: ["Shoot prep call", "Shot list & agenda", "Schedule & call sheet", "Content strategy (separate)"],
-                      },
-                      {
-                        title: "2. Shoot Day On-Location",
-                        desc: "Crew shooting on Sony Alpha and the latest flagship iPhone with wireless lapel audio and portable lighting at your Hyderabad location.",
-                        chips: ["Sony Alpha & iPhone", "Portable lighting", "Clean lav audio", "Product B-roll", "Director on set"],
-                      },
-                      {
-                        title: "3. Post-Production & Color",
-                        desc: "Every cut is paced for platform retention, enhanced with sound design, kinetic captions, and cinematic color grading.",
-                        chips: ["Retention pacing", "Film LUT grade", "Sound FX & mixing", "Animated subtitles", "Motion graphics"],
-                      },
-                      {
-                        title: "4. Multi-Platform Delivery",
-                        desc: "Finished assets exported in every format your social channels and ad managers demand, with revision rounds included.",
-                        chips: ["Reels/Shorts 9:16", "YouTube 16:9", "Feed 4:5 & 1:1", "Two revision rounds", "Cloud archive"],
-                      },
-                    ].map((item) => (
-                      <div key={item.title}>
-                        <dt><h3>{item.title}</h3></dt>
-                        <dd>
-                          <p>{item.desc}</p>
-                          <ul className="vp-chips">
-                            {item.chips.map((c) => <li key={c}>{c}</li>)}
-                          </ul>
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              </div>
 
-              {/* Pricing Tiers */}
-              {/* Deliverable Packages */}
-              <div className="vp-tiers">
-                <article className="vp-tier">
-                  <h3>4 Reels Package</h3>
-                  <p className="vp-tier-tagline">Starter shoot & edit series</p>
-                  <ul>
-                    <li>On-location shoot in Hyderabad</li>
-                    <li>4 short-form vertical reels (9:16)</li>
-                    <li>Shot on Sony Alpha & latest iPhone</li>
-                    <li>Cinematic color grade & sound design</li>
-                    <li>Two revision rounds included</li>
-                  </ul>
-                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "4 Reels" }); }}>
-                    Inquire for 4 Reels
-                  </a>
-                </article>
-
-                <article className="vp-tier vp-tier-featured">
-                  <span className="vp-tier-flag">Most Popular</span>
-                  <h3>6 Reels Package</h3>
-                  <p className="vp-tier-tagline">Growth brand series</p>
-                  <ul>
-                    <li>Full on-location shoot in Hyderabad</li>
-                    <li>6 short-form vertical reels (9:16)</li>
-                    <li>Shot on Sony Alpha & latest iPhone</li>
-                    <li>Sound effects, motion graphics & color grade</li>
-                    <li>Two revision rounds per video</li>
-                  </ul>
-                  <a className="vp-btn vp-btn-primary" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "6 Reels" }); }}>
-                    Inquire for 6 Reels
-                  </a>
-                </article>
-
-                <article className="vp-tier">
-                  <h3>8 Reels Package</h3>
-                  <p className="vp-tier-tagline">Complete monthly content batch</p>
-                  <ul>
-                    <li>Extended on-location shoot in Hyderabad</li>
-                    <li>8 short-form vertical reels (9:16)</li>
-                    <li>Batch shoot for your monthly social presence</li>
-                    <li>Scroll-stopping hooks, kinetic captions & SFX</li>
-                    <li>Two revision rounds per video</li>
-                  </ul>
-                  <a className="vp-btn vp-btn-ghost" href="#vp-quote" onClick={(e) => { e.preventDefault(); scrollTo("vp-quote"); trackEvent("PackageSelect", { package: "8 Reels" }); }}>
-                    Inquire for 8 Reels
-                  </a>
-                </article>
-              </div>
-            </div>
-          </section>
 
           {/* =================== BEFORE & AFTER COLOR GRADE (LIVE VIDEO DEMO) =================== */}
           <section className="vp-section vp-dark" id="vp-difference">
@@ -1973,59 +1811,30 @@ export default function VideoPortfolioPage({ setPage }) {
                   return (
                     <div className="vp-ig-card" key={`${item.handle}_${idx}`}>
                       <div className="vp-ig-video-frame">
-                        {item.type === "mp4" ? (
-                          <video
-                            ref={(el) => {
-                              if (el) {
-                                if (!videoRefs.current[item.handle]) videoRefs.current[item.handle] = [];
-                                if (!videoRefs.current[item.handle].includes(el)) {
-                                  videoRefs.current[item.handle].push(el);
-                                }
-                                el.muted = !isUnmuted;
-                                el.defaultMuted = true;
-                                el.playsInline = true;
-                                el.setAttribute("playsinline", "true");
-                                el.setAttribute("webkit-playsinline", "true");
-                                if (!isUnmuted) el.setAttribute("muted", "true");
-                                el.play().catch(() => {});
+                        <video
+                          ref={(el) => {
+                            if (el) {
+                              if (!videoRefs.current[item.handle]) videoRefs.current[item.handle] = [];
+                              if (!videoRefs.current[item.handle].includes(el)) {
+                                videoRefs.current[item.handle].push(el);
                               }
-                            }}
-                            src={item.videoSrc}
-                            autoPlay
-                            loop
-                            muted={!isUnmuted}
-                            defaultMuted
-                            playsInline
-                            preload="auto"
-                          />
-                        ) : (
-                          <iframe
-                            ref={(el) => {
-                              if (el) {
-                                if (!iframeRefs.current[item.handle]) iframeRefs.current[item.handle] = [];
-                                if (!iframeRefs.current[item.handle].includes(el)) {
-                                  iframeRefs.current[item.handle].push(el);
-                                }
-                              }
-                            }}
-                            src={`https://www.youtube.com/embed/${item.videoId}?autoplay=1&mute=1&loop=1&playlist=${item.videoId}&controls=0&modestbranding=1&rel=0&playsinline=1&enablejsapi=1&iv_load_policy=3&cc_load_policy=0&disablekb=1&fs=0`}
-                            title={`${item.name} Reel`}
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            tabIndex="-1"
-                            onLoad={(e) => {
-                              try {
-                                e.target.contentWindow?.postMessage(
-                                  JSON.stringify({ event: "command", func: "mute", args: "" }),
-                                  "*"
-                                );
-                                e.target.contentWindow?.postMessage(
-                                  JSON.stringify({ event: "command", func: "playVideo", args: "" }),
-                                  "*"
-                                );
-                              } catch (err) {}
-                            }}
-                          />
-                        )}
+                              el.muted = !isUnmuted;
+                              el.defaultMuted = true;
+                              el.playsInline = true;
+                              el.setAttribute("playsinline", "true");
+                              el.setAttribute("webkit-playsinline", "true");
+                              if (!isUnmuted) el.setAttribute("muted", "true");
+                              el.play().catch(() => {});
+                            }
+                          }}
+                          src={item.videoSrc}
+                          autoPlay
+                          loop
+                          muted={!isUnmuted}
+                          defaultMuted
+                          playsInline
+                          preload="auto"
+                        />
 
                         {/* Transparent click layer for toggling sound without triggering drag */}
                         <div
@@ -2470,7 +2279,6 @@ export default function VideoPortfolioPage({ setPage }) {
                 <h4>Explore</h4>
                 <ul>
                   <li><a href="#vp-client-reels" onClick={(e) => { e.preventDefault(); scrollTo("vp-client-reels"); }}>Client Reels</a></li>
-                  <li><a href="#vp-package" onClick={(e) => { e.preventDefault(); scrollTo("vp-package"); }}>Packages</a></li>
                   <li><a href="#vp-process" onClick={(e) => { e.preventDefault(); scrollTo("vp-process"); }}>5-Step Process</a></li>
                   <li><a href="#vp-difference" onClick={(e) => { e.preventDefault(); scrollTo("vp-difference"); }}>Color Grade Comparison</a></li>
                   <li><a href="#vp-faq" onClick={(e) => { e.preventDefault(); scrollTo("vp-faq"); }}>FAQ</a></li>
