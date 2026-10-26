@@ -267,8 +267,27 @@ const PAGE_CSS = `
   max-width: 100%;
   margin: 0;
   overflow: hidden;
-  padding: 8px 0 18px;
+  padding: 8px 0 20px;
 }
+.vp-strip-wrapper::before,
+.vp-strip-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(20px, 4vw, 56px);
+  z-index: 20;
+  pointer-events: none;
+}
+.vp-strip-wrapper::before {
+  left: 0;
+  background: linear-gradient(90deg, #090a0d 0%, transparent 100%);
+}
+.vp-strip-wrapper::after {
+  right: 0;
+  background: linear-gradient(270deg, #090a0d 0%, transparent 100%);
+}
+
 .vp-strip-track {
   display: flex;
   gap: 18px;
@@ -300,15 +319,16 @@ const PAGE_CSS = `
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65);
   display: flex;
   flex-direction: column;
-  transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s, box-shadow 0.25s;
+  transform: translateZ(0);
 }
 .vp-ig-card:hover {
   transform: translateY(-4px) scale(1.02);
-  border-color: rgba(245, 158, 11, 0.7);
-  box-shadow: 0 24px 60px rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.75);
+  box-shadow: 0 24px 60px rgba(245, 158, 11, 0.25);
 }
 
 /* Continuous Video Frame (9:16 Aspect) */
@@ -320,6 +340,14 @@ const PAGE_CSS = `
   background: #000;
   overflow: hidden;
   border-radius: 18px;
+}
+.vp-ig-video-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, transparent 22%, transparent 70%, rgba(0,0,0,0.72) 100%);
+  pointer-events: none;
+  z-index: 2;
 }
 .vp-ig-video-frame video {
   width: 100%;
@@ -343,6 +371,42 @@ const PAGE_CSS = `
   inset: 0;
   z-index: 5;
   cursor: pointer;
+}
+
+/* Elegant Frosted Brand / Client Name Badge */
+.vp-ig-badge {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 100px;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #fff;
+  font-family: var(--vp-f-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  pointer-events: none;
+  max-width: calc(100% - 68px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+}
+.vp-ig-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #F59E0B;
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.9);
 }
 
 /* Floating Audio / Sound Button (Prominent & High-Contrast) */
@@ -417,7 +481,34 @@ const PAGE_CSS = `
   opacity: 0;
   pointer-events: none;
 }
+
 @media (max-width: 640px) {
+  .vp-strip-track {
+    gap: 12px;
+    padding: 6px 14px 16px;
+  }
+  .vp-ig-card {
+    flex: 0 0 clamp(180px, 48vw, 215px);
+    width: clamp(180px, 48vw, 215px);
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.75);
+  }
+  .vp-ig-video-frame {
+    border-radius: 16px;
+  }
+  .vp-ig-badge {
+    bottom: 10px;
+    left: 10px;
+    font-size: 0.72rem;
+    padding: 4px 9px;
+    max-width: calc(100% - 56px);
+  }
+  .vp-ig-sound-btn {
+    bottom: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+  }
   .vp-strip-nav-btn {
     display: none;
   }
@@ -1077,7 +1168,7 @@ const PORTFOLIO_STRIP_REELS = [
     handle: "veto_gym_showcase",
     name: "Veto Gym Showcase",
     type: "mp4",
-    videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.mp4",
+    videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.mp4",
   },
 ];
 
@@ -1183,7 +1274,7 @@ export default function VideoPortfolioPage({ setPage }) {
     if (!container) return;
 
     let animId;
-    const speed = 0.65; // Silk-smooth slow glide
+    const speed = 1.15; // Fast, continuous dynamic glide
     scrollPosRef.current = container.scrollLeft;
 
     const loop = () => {
@@ -1839,7 +1930,7 @@ export default function VideoPortfolioPage({ setPage }) {
                           muted={!isUnmuted}
                           defaultMuted
                           playsInline
-                          preload="auto"
+                          preload="metadata"
                         />
 
                         {/* Transparent click layer for toggling sound without triggering drag */}
@@ -1852,6 +1943,12 @@ export default function VideoPortfolioPage({ setPage }) {
                           }}
                           title={isUnmuted ? "Tap to mute" : "Tap to unmute"}
                         />
+
+                        {/* Elegant Frosted Brand / Client Name Badge */}
+                        <div className="vp-ig-badge">
+                          <span className="vp-ig-badge-dot" />
+                          <span>{item.name}</span>
+                        </div>
 
                         {/* Minimal One-Tap Mute / Unmute Button */}
                         <button
