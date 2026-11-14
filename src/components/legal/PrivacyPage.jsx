@@ -26,9 +26,37 @@ export default function PrivacyPage({ setPage }) {
       <h1 style={{ fontSize: "clamp(2.2rem, 5vw, 3.2rem)", fontFamily: "var(--fd)", fontWeight: 800, color: "var(--text, #1A1208)", marginBottom: 16, lineHeight: 1.15 }}>
         Privacy Policy
       </h1>
-      <p style={{ color: "var(--muted, #665843)", fontSize: 14, marginBottom: 40, fontWeight: 500 }}>
+      <p style={{ color: "var(--muted, #665843)", fontSize: 14, marginBottom: 24, fontWeight: 500 }}>
         Last updated: August 25, 2026 | Effective Date: August 25, 2026
       </p>
+
+      {/* AI AUTOMATION NOTICE */}
+      <div
+        style={{
+          background: "rgba(217, 119, 6, 0.08)",
+          border: "1px solid rgba(217, 119, 6, 0.3)",
+          borderRadius: 10,
+          padding: "16px 20px",
+          marginBottom: 36,
+          fontSize: 14,
+          lineHeight: 1.6,
+        }}
+      >
+        <strong style={{ color: "var(--text, #1A1208)" }}>🤖 Looking for our AI Automation Policy?</strong>
+        <p style={{ margin: "4px 0 0", color: "var(--muted, #4a4031)" }}>
+          For inquiries collected via Meta Lead Ads ("Automation Solution Inquiry Form") and specific terms regarding WhatsApp AI Assistants, AI Voice Receptionists, and Lead Management, view our dedicated{" "}
+          <a
+            href="/privacy-ai-automation"
+            onClick={(e) => {
+              e.preventDefault();
+              setPage && setPage("ai-automation-privacy");
+            }}
+            style={{ color: "var(--gold, #D97706)", fontWeight: 700, textDecoration: "underline" }}
+          >
+            AI Automation Solutions Privacy Policy & Service Terms →
+          </a>
+        </p>
+      </div>
 
       <div className="legal-content" style={{ lineHeight: 1.8, fontSize: 16, color: "var(--text, #1A1208)" }}>
         <section style={{ marginBottom: 36 }}>

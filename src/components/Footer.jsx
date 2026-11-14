@@ -77,6 +77,7 @@ export default function Footer({ setPage }) {
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 14, marginBottom: 20 }}>
               <li><a href="/privacy" onClick={(e) => { e.preventDefault(); navTo("privacy"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Privacy Policy</a></li>
+              <li><a href="/privacy-ai-automation" onClick={(e) => { e.preventDefault(); navTo("ai-automation-privacy"); }} style={{ color: "#facc15", textDecoration: "none", fontWeight: 600 }}>AI Automation Policy</a></li>
               <li><a href="/terms" onClick={(e) => { e.preventDefault(); navTo("terms"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Terms & Conditions</a></li>
               <li><a href="/shipping-policy" onClick={(e) => { e.preventDefault(); navTo("shipping"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Shipping & Delivery Policy</a></li>
               <li><a href="/refund-cancellation" onClick={(e) => { e.preventDefault(); navTo("refund"); }} style={{ color: "#94a3b8", textDecoration: "none" }}>Refund & Cancellation</a></li>

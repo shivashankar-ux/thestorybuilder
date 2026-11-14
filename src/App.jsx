@@ -26,6 +26,7 @@ import PricingPage from "./components/PricingPage";
 
 // New Route Components
 import PrivacyPage from "./components/legal/PrivacyPage";
+import AIAutomationPolicyPage from "./components/legal/AIAutomationPolicyPage";
 import TermsPage from "./components/legal/TermsPage";
 import CookiesPage from "./components/legal/CookiesPage";
 import DisclaimerPage from "./components/legal/DisclaimerPage";
@@ -90,6 +91,7 @@ function getRouteFromPath(pathStr) {
   // if (p === "/pricing") return { page: "pricing", slug: null };
   if (p === "/contact") return { page: "contact", slug: null };
   if (p === "/faq") return { page: "faq", slug: null };
+  if (p === "/privacy-ai-automation" || p === "/ai-automation-privacy" || p === "/privacy/ai-automation" || p === "/ai-automation-policy") return { page: "ai-automation-privacy", slug: null };
   if (p === "/privacy") return { page: "privacy", slug: null };
   if (p === "/terms") return { page: "terms", slug: null };
   if (p === "/cookies") return { page: "cookies", slug: null };
@@ -128,6 +130,7 @@ function getPathFromRoute(page, slug) {
   if (page === "pricing") return "/pricing";
   if (page === "contact") return "/contact";
   if (page === "faq") return "/faq";
+  if (page === "ai-automation-privacy") return "/privacy-ai-automation";
   if (page === "privacy") return "/privacy";
   if (page === "terms") return "/terms";
   if (page === "cookies") return "/cookies";
@@ -216,6 +219,10 @@ const pageMetadata = {
   faq: {
     title: "Frequently Asked Questions — Web Development & Marketing | The Story Builder",
     desc: "Got questions about project timelines, pricing, ad spend, or website ownership? Read our transparent FAQ breakdown.",
+  },
+  "ai-automation-privacy": {
+    title: "AI Automation Solutions Privacy Policy & Service Terms | The Story Builder",
+    desc: "Privacy Policy and Service Governance for Meta Lead Ads, AI Voice Receptionists, WhatsApp AI Assistants, and Automation Inquiries at The Story Builder.",
   },
   privacy: {
     title: "Privacy Policy | The Story Builder",
@@ -429,6 +436,12 @@ export default function App() {
         {page === "faq" && (
           <motion.div key="faq" {...pageTransition}>
             <FAQPage setPage={navigate} />
+          </motion.div>
+        )}
+
+        {page === "ai-automation-privacy" && (
+          <motion.div key="ai-automation-privacy" {...pageTransition}>
+            <AIAutomationPolicyPage setPage={navigate} />
           </motion.div>
         )}
 
