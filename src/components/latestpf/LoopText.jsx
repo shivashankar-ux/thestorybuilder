@@ -25,14 +25,14 @@ function buildPath(vertical) {
 }
 
 export default function LoopText({
-  text = "Shot by One Crew ✦ Cut by the Same Team ✦ High-Retention Reels & Ads ✦ Hyderabad & Worldwide ✦ hello@thestorybuilder.in ✦ ",
+  text = "Let’s twist something new ✦ hello@thestorybuilder.in ✦ One Crew One Brief ✦ ",
   href = "",
-  bandColor = "#F59E0B",
-  textColor = "#0B0D12",
-  fontFamily = "Space Grotesk, sans-serif",
+  bandColor = "#FF4D1A",
+  textColor = "#111111",
+  fontFamily = '"Bricolage Grotesque", sans-serif',
   fontWeight = 700,
-  fontSize = 32,
-  bandWidth = 64,
+  fontSize = 34,
+  bandWidth = 66,
   speed = 60,
   hoverBoost = 3,
   scrollBoost = 1,

@@ -276,12 +276,12 @@ const easeInOut = (x) => {
 
 export default function TwistRibbon({
   images = [],
-  wordmark = "STORY BUILDER",
-  fontFamily = "Space Grotesk",
+  wordmark = "kringle",
+  fontFamily = "Bricolage Grotesque",
   fontWeight = 700,
-  wordmarkColor = "#F59E0B",
-  wordmarkSize = 0.55,
-  background = "#0B0D12",
+  wordmarkColor = "#111111",
+  wordmarkSize = 0.62,
+  background = "#F3EFEA",
   ribbonWidth = 0.95,
   cardShape = 0.75,
   gap = 0.06,
@@ -291,9 +291,9 @@ export default function TwistRibbon({
   speed = 0.35,
   twistDrift = 0.25,
   backFace = "image",
-  backColor = "#111827",
-  shading = 0.45,
-  fog = 0.35,
+  backColor = "#111111",
+  shading = 0.35,
+  fog = 0.3,
   tilt = 1,
   drag = true,
   scrollBoost = 1,
@@ -406,8 +406,8 @@ export default function TwistRibbon({
     let textReady = false;
     const drawText = async () => {
       const p = propsRef.current;
-      const word = p.wordmark || "STORY BUILDER";
-      const fam = p.fontFamily || "Space Grotesk";
+      const word = p.wordmark || "kringle";
+      const fam = p.fontFamily || "Bricolage Grotesque";
       const w = p.fontWeight || 700;
       try {
         await document.fonts?.load?.(`${w} 200px "${fam}"`);
@@ -426,7 +426,7 @@ export default function TwistRibbon({
       c.width = Math.ceil(left + right + pad * 2);
       c.height = Math.ceil(asc + desc + pad * 2);
       ctx.font = `${w} ${fs}px "${fam}", sans-serif`;
-      ctx.fillStyle = p.wordmarkColor || "#F59E0B";
+      ctx.fillStyle = p.wordmarkColor || "#111111";
       ctx.textBaseline = "alphabetic";
       ctx.fillText(word, pad + left, pad + asc);
       textAspect = c.width / c.height;

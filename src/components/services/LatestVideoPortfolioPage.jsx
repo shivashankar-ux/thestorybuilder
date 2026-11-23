@@ -8,21 +8,22 @@ import { trackPageView, trackEvent } from "../../utils/tracking";
 
 /* ============================================================
    LATEST VIDEO PORTFOLIO — /latestpf
-   Modern Framer Aesthetic + The Story Builder Production Suite
+   Pixel-Accurate Recreation of the Framer Design Template
+   Warm Ivory Canvas (#F3EFEA) · Colored Project Cards · Black Footer
    ============================================================ */
 
 const CONFIG = {
-  brand: "The Story Builder",
+  brand: "the story builder",
   whatsapp: "918341928526",
   phone: "+91 83419 28526",
   email: "hello@thestorybuilder.in",
-  waMessage: "Hi Story Builder team, I saw your latest video portfolio and I'd like to discuss a shoot & edit project.",
+  waMessage: "Hi Story Builder team, I saw your latest video portfolio and I'd like to discuss a project.",
 };
 
 const waUrl = (msg) =>
   `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg || CONFIG.waMessage)}`;
 
-// Curated cinematography & client project visual cards for 3D ribbon & image trail
+// Curated high-res imagery for 3D Twist Ribbon & cursor Image Trail
 const TRAIL_IMAGES = [
   "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=640&q=80",
   "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=640&q=80",
@@ -38,1244 +39,1501 @@ const TRAIL_IMAGES = [
   "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=640&q=80",
 ];
 
-// Actual Story Builder Client Videos
-const CLIENT_REELS = [
+// The 4 Signature Showcase Cards (Exact Color Hierarchy from Template Screenshot)
+const SHOWCASE_CARDS = [
   {
-    id: "reel-1",
-    handle: "commercial_brand",
-    name: "Commercial Brand Film",
-    tag: "Brand Film",
-    stats: "450K+ Views",
-    videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.mp4",
+    id: "card-1",
+    num: "01",
+    cat: "01 / Film",
+    title: "Neon Hours",
+    subtitle: "Farhaan Commercial Brand Film",
+    desc: "A high-fashion 4K cinematic commercial shot on Sony cinema rigs with anamorphic lighting flares, rhythmic sound foley, and luxury film color grading.",
+    tags: ["Brand Film", "4K S-Log3", "Commercial"],
+    bgColor: "#CEF237", // Electric Lime from Screenshot
+    borderColor: "#B8DC29",
+    inkColor: "#111111",
+    btnBg: "#111111",
+    btnInk: "#FFFFFF",
+    badgeBg: "rgba(17, 17, 17, 0.08)",
+    videoSrc:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,vc_h264/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.mp4",
+    poster: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80",
+    miniThumb: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+    stats: "450K+ Views · 4.8x Retention",
   },
   {
-    id: "reel-2",
-    handle: "digitalmedha",
-    name: "Digital Medha Advertising",
-    tag: "Meta Ad Creative",
-    stats: "890K+ Views",
+    id: "card-2",
+    num: "02",
+    cat: "02 / Ads",
+    title: "Maison Vermeil",
+    subtitle: "Digital Medha Performance Ads",
+    desc: "Direct-response ad creative generating 890K+ views and 4.2x ROAS across Meta and YouTube feeds with thumb-stopping retention pacing.",
+    tags: ["Meta Ads", "890K+ Views", "ROAS 4.2x"],
+    bgColor: "#F9C0C4", // Dusty Salmon Pink from Screenshot
+    borderColor: "#EFA9AE",
+    inkColor: "#111111",
+    btnBg: "#111111",
+    btnInk: "#FFFFFF",
+    badgeBg: "rgba(17, 17, 17, 0.08)",
     videoSrc: "/videos/rVUkWK8lRmw.mp4",
+    poster: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=800&q=80",
+    miniThumb: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=200&q=80",
+    stats: "890K+ Views · 4.2x ROAS",
   },
   {
-    id: "reel-3",
-    handle: "high_retention",
-    name: "High-Retention Reel",
-    tag: "9:16 Short-Form",
-    stats: "320K+ Views",
-    videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.mp4",
+    id: "card-3",
+    num: "03",
+    cat: "03 / Motion",
+    title: "Femme Moto",
+    subtitle: "Veto & Icons Gym Cinematic",
+    desc: "High-octane fitness commercial with speed ramps, high-energy member action cuts, and explosive bass foley synchronized to every beat.",
+    tags: ["Gym Commercial", "Speed Ramps", "Bass Foley"],
+    bgColor: "#FF4A1C", // Vibrant Vermilion Orange from Screenshot
+    borderColor: "#E73E12",
+    inkColor: "#111111",
+    btnBg: "#111111",
+    btnInk: "#FFFFFF",
+    badgeBg: "rgba(17, 17, 17, 0.12)",
+    videoSrc:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,vc_h264/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.mp4",
+    poster: "https://images.unsplash.com/photo-1518173946687-a4c8a383392e?auto=format&fit=crop&w=800&q=80",
+    miniThumb: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=200&q=80",
+    stats: "420K+ Views · Viral Audio",
   },
   {
-    id: "reel-4",
-    handle: "vision_rainbow",
-    name: "Vision Rainbow Learning",
-    tag: "Educational Story",
-    stats: "115K+ Views",
-    videoSrc: "/videos/_aVoaZbyXJQ.mp4",
-  },
-  {
-    id: "reel-5",
-    handle: "jaya_daga",
-    name: "Jaya Daga Personal Brand",
-    tag: "Authority Coaching",
-    stats: "310K+ Views",
+    id: "card-4",
+    num: "04",
+    cat: "04 / Brand",
+    title: "Lumen & Co",
+    subtitle: "Jaya Daga Authority Series",
+    desc: "Personal brand documentary reel establishing category authority, founder trust, and generating consistent inbound executive coaching leads.",
+    tags: ["Founder Series", "Kinetic Captions", "Authority Reel"],
+    bgColor: "#2B47FC", // Electric Cobalt Blue from Screenshot
+    borderColor: "#1E3AE8",
+    inkColor: "#FFFFFF",
+    btnBg: "#FFFFFF",
+    btnInk: "#111111",
+    badgeBg: "rgba(255, 255, 255, 0.16)",
     videoSrc: "/videos/VdsrsWmmhiw.mp4",
-  },
-  {
-    id: "reel-6",
-    handle: "icons_gym",
-    name: "Icons Gym Walkthrough",
-    tag: "Gym & Fitness",
-    stats: "420K+ Views",
-    videoSrc: "/videos/1EwM31QxnKk.mp4",
-  },
-  {
-    id: "reel-7",
-    handle: "veto_gym",
-    name: "Veto Gym Commercial",
-    tag: "Cinematic Showcase",
-    stats: "260K+ Views",
-    videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.mp4",
-  },
-  {
-    id: "reel-8",
-    handle: "madhura_yoga",
-    name: "Madhura Yoga Breakdown",
-    tag: "Wellness & Lifestyle",
-    stats: "210K+ Views",
-    videoSrc: "/videos/k-bJd1yYk1A.mp4",
+    poster: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+    miniThumb: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+    stats: "310K+ Views · 3x Inbound",
   },
 ];
 
-// Production Deliverables Pillars
-const PILLARS = [
+// Things We Do Capabilities (Matching the 4 pastel tiles in screenshot)
+const CAPABILITIES = [
   {
     num: "01",
-    phase: "Before the Shoot",
-    title: "Strategy & Shot Planning",
-    desc: "We learn your business goal, write viral hooks, lock the shot list, and plan lighting so shoot day runs on razor-sharp schedule.",
-    chips: ["Brief call", "Concept & Script", "Shot list & Pacing", "Location check"],
+    tag: "01 / Strategy & Cinema",
+    title: "Brand Films & Commercials",
+    desc: "From concept boards and scripts to on-location cinema cameras and lighting direction. Full-scale production for brands ready to own their category.",
+    bgColor: "#EBE6DD",
+    borderColor: "#DFDACF",
+    pills: ["Pre-production", "Cinema Rig", "Lighting Direction", "On-location Shoot"],
   },
   {
     num: "02",
-    phase: "On Shoot Day",
-    title: "Cinema Rig & Sound Direction",
-    desc: "Trained on-location crew with Sony Alpha 4K cinema cameras, wireless lapel audio, and portable lighting. We direct the frame while you focus on your business.",
-    chips: ["On-location 4K filming", "Founder interviews", "Product close-ups", "Wireless clean audio"],
+    tag: "02 / Short-Form",
+    title: "High-Retention Reels",
+    desc: "Hook research, kinetic animated captions, zoom transitions, sound design, and viral pacing engineered to capture attention and stop the scroll.",
+    bgColor: "#E7E3F8",
+    borderColor: "#DDD7F3",
+    pills: ["3s Viral Hook", "Kinetic Subtitles", "Sound Foley", "9:16 Aspect"],
   },
   {
     num: "03",
-    phase: "In the Edit",
-    title: "Retention Pacing & Color Craft",
-    desc: "Every cut is paced for social retention, color graded for maximum pop, sound-designed with punchy SFX, and layered with animated kinetic captions.",
-    chips: ["Retention hooks", "Cinematic S-Log3 grading", "Sound design & Foley", "Kinetic subtitles"],
+    tag: "03 / Performance",
+    title: "Performance Ad Creatives",
+    desc: "Scroll-stopping ad creatives built for Meta and YouTube Ads. Multi-angle variations, clear offer framing, and ROAS-focused narrative pacing.",
+    bgColor: "#FFE7DB",
+    borderColor: "#F7DACB",
+    pills: ["Hook Testing", "Ad Variants", "CTA Overlays", "4.2x ROAS Avg"],
   },
   {
     num: "04",
-    phase: "At Delivery",
-    title: "Multi-Platform Master Exports",
-    desc: "Exported in native platform aspect ratios with revision rounds included. Ready to publish to Instagram Reels, YouTube Shorts, Meta Ads, and web.",
-    chips: ["9:16 Vertical Reel/Short", "16:9 YouTube master", "4:5 / 1:1 Feed cuts", "2 Revision rounds"],
-  },
-];
-
-// Transparent Pricing Tiers
-const PRICING_TIERS = [
-  {
-    name: "Single High-Impact Video",
-    tag: "Starter Shoot & Cut",
-    price: "Custom Quote",
-    period: "per deliverable",
-    desc: "Ideal for a signature brand film, founder spotlight, or flagship commercial reel.",
-    features: [
-      "Up to 4 hours on-location shoot in Hyderabad",
-      "1 master edited video (up to 60s)",
-      "Cinematic color grading & audio sweetening",
-      "Dynamic kinetic subtitles & sound design",
-      "2 comprehensive revision rounds",
-      "100% commercial usage rights",
-    ],
-    cta: "Ask About Single Video",
-    featured: false,
-  },
-  {
-    name: "Content Month (Growth Pack)",
-    tag: "Most Popular Retainer",
-    price: "Best Value",
-    period: "monthly batch production",
-    desc: "A full month of high-converting social media videos shot in one batch day.",
-    features: [
-      "1 full-day batch shoot session (up to 8 hours)",
-      "8 to 12 edited short-form Reels / Shorts",
-      "Hook scripting assistance & prompt direction",
-      "Custom branded subtitle styling & motion titles",
-      "48-hour revision turnaround",
-      "Priority scheduling & ongoing content calendar",
-    ],
-    cta: "Lock Your Content Month",
-    featured: true,
-  },
-  {
-    name: "Commercial Ad Campaign",
-    tag: "Enterprise / Agency Scale",
-    price: "Bespoke Scope",
-    period: "full ad production",
-    desc: "End-to-end commercial ad creative shoot, hero films, and direct-response paid ad cutdowns.",
-    features: [
-      "Multi-day filming with dedicated production crew",
-      "Hero brand film + 6 ad variations (testing hooks)",
-      "Scriptwriting, storyboard, and actor direction",
-      "Advanced motion graphics & visual sound design",
-      "Multi-ratio platform delivery (9:16, 16:9, 1:1)",
-      "Direct consultation with performance marketers",
-    ],
-    cta: "Discuss Campaign Scope",
-    featured: false,
-  },
-];
-
-// FAQs
-const FAQ_ITEMS = [
-  {
-    q: "How are video shoot and edit packages priced?",
-    a: "Every project is scoped based on your exact deliverables, shoot days, and timeline. Contact us directly on WhatsApp or submit the brief form below and we will discuss your requirements and pitch the best package for you.",
-  },
-  {
-    q: "How fast is the turnaround from shoot day to final cut?",
-    a: "Most projects shoot within 4 to 7 days of confirmation. Your first cut is delivered in 5 to 7 working days post-shoot, with quick 24-48 hour turnaround on revision notes.",
-  },
-  {
-    q: "Do I need a script or concept ready before booking?",
-    a: "No! If you have your concepts or reference reels ready, we execute them immediately. If not, we guide the hook ideation, talking points, and on-set direction.",
-  },
-  {
-    q: "Can you shoot outside Hyderabad?",
-    a: "Our camera crew is based in Hyderabad for on-location filming, but we accept remote video editing projects globally from clients anywhere in India and worldwide.",
-  },
-  {
-    q: "What camera gear and production equipment do you bring?",
-    a: "We shoot primarily on flagship Sony Alpha 4K cinema-line cameras with fast prime lenses, wireless DJI/Rode lapel microphones, and professional portable lighting kits.",
-  },
-  {
-    q: "Can you edit footage I have already shot myself?",
-    a: "Yes! Choose 'Editing Only' in the project brief form. Upload your raw footage via Google Drive or Dropbox, and we will color grade, clean audio, pace, and sound design the entire sequence.",
-  },
-  {
-    q: "Who owns the copyright to the final delivered videos?",
-    a: "You do. Once the project invoice is cleared, you receive 100% full commercial rights across YouTube, Instagram, Meta Ads, TV, and web.",
+    tag: "04 / Post-Production",
+    title: "Color Craft & Master Exports",
+    desc: "DaVinci Resolve S-Log3 film grading, custom sound mixing, vocal enhancement, and multi-platform aspect ratio masters ready to publish.",
+    bgColor: "#E0EDE3",
+    borderColor: "#D2E2D6",
+    pills: ["S-Log3 Grading", "Foley SFX", "Vocal Polish", "4K Masters"],
   },
 ];
 
 export default function LatestVideoPortfolioPage({ setPage }) {
-  const [unmutedReel, setUnmutedReel] = useState(null);
-  const [playerOpen, setPlayerOpen] = useState(false);
-  const [selectedVideo, setSelectedVideo] = useState(null);
-  const [cmpPos, setCmpPos] = useState(50);
-  const [openFaq, setOpenFaq] = useState(0);
-  const videoRefs = useRef({});
+  const [activeVideo, setActiveVideo] = useState(null);
+  const [sliderPos, setSliderPos] = useState(50);
+  const [isDraggingSlider, setIsDraggingSlider] = useState(false);
+  const sliderRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    trackPageView("/latestpf");
+    trackPageView("/latestpf", "Latest Video Portfolio — The Story Builder");
   }, []);
 
-  const toggleSound = (id) => {
-    const isUnmuted = unmutedReel === id;
-    const next = isUnmuted ? null : id;
-    setUnmutedReel(next);
-
-    Object.keys(videoRefs.current).forEach((k) => {
-      const v = videoRefs.current[k];
-      if (v) {
-        if (k === id && !isUnmuted) {
-          v.muted = false;
-          v.volume = 1.0;
-          v.play().catch(() => {});
-        } else {
-          v.muted = true;
-        }
-      }
-    });
-    trackEvent("ReelSoundToggle", { reelId: id, unmuted: !isUnmuted });
+  // Split-screen Before/After Slider Interaction
+  const handleSliderMove = (e) => {
+    if (!sliderRef.current) return;
+    const rect = sliderRef.current.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+    setSliderPos(Math.round((x / rect.width) * 100));
   };
 
-  const openVideoModal = (reel) => {
-    setSelectedVideo(reel);
-    setPlayerOpen(true);
-    trackEvent("VideoModalOpen", { name: reel.name });
-  };
-
-  const closeVideoModal = () => {
-    setPlayerOpen(false);
-    setSelectedVideo(null);
-  };
+  useEffect(() => {
+    const onUp = () => setIsDraggingSlider(false);
+    const onMove = (e) => {
+      if (isDraggingSlider) handleSliderMove(e);
+    };
+    window.addEventListener("mouseup", onUp);
+    window.addEventListener("touchend", onUp);
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("touchmove", onMove);
+    return () => {
+      window.removeEventListener("mouseup", onUp);
+      window.removeEventListener("touchend", onUp);
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("touchmove", onMove);
+    };
+  }, [isDraggingSlider]);
 
   return (
     <div
       style={{
-        background: "#090B0E",
-        color: "#F3F4F6",
+        background: "#F3EFEA",
+        color: "#111111",
         minHeight: "100vh",
-        position: "relative",
-        fontFamily: "'Plus Jakarta Sans', -apple-system, sans-serif",
+        fontFamily: '"Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         overflowX: "hidden",
+        position: "relative",
       }}
     >
-      {/* 1. CURSOR IMAGE TRAIL (Drifts cinema cards on mouse movement) */}
-      <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 1 }}>
-        <ImageTrail images={TRAIL_IMAGES} size={190} spacing={85} lifetime={1.1} />
-      </div>
-
-      {/* 2. STICKY TOP NAVIGATION */}
-      <nav
+      {/* 1. TOP NAVIGATION BAR */}
+      <header
         style={{
           position: "sticky",
           top: 0,
+          left: 0,
+          right: 0,
           zIndex: 80,
-          background: "rgba(9, 11, 14, 0.88)",
-          backdropFilter: "blur(16px)",
-          WebkitBackdropFilter: "blur(16px)",
-          borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-          height: 68,
+          background: "rgba(243, 239, 234, 0.88)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          borderBottom: "1px solid rgba(17, 17, 17, 0.06)",
+          padding: "16px 28px",
           display: "flex",
           alignItems: "center",
+          justifyContent: "space-between",
+          transition: "background 0.3s ease",
         }}
       >
-        <div
+        {/* Brand / Logo */}
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
+            setPage ? setPage("home") : (window.location.href = "/");
+          }}
           style={{
-            width: "min(100% - 32px, 1200px)",
-            marginInline: "auto",
+            textDecoration: "none",
+            color: "#111111",
+            fontWeight: 800,
+            fontSize: "clamp(18px, 2.5vw, 22px)",
+            letterSpacing: "-0.04em",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 4,
+          }}
+        >
+          {CONFIG.brand}
+          <span style={{ color: "#FF4D1A", fontSize: "16px", lineHeight: 1 }}>✦</span>
+        </a>
+
+        {/* Center Nav Links */}
+        <nav
+          style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "space-between",
+            gap: "clamp(16px, 3vw, 36px)",
           }}
         >
           <a
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-              setPage ? setPage("home") : (window.location.href = "/");
-            }}
+            href="#work"
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
               textDecoration: "none",
-              color: "#fff",
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontWeight: 800,
-              fontSize: "1.2rem",
+              color: "#111111",
+              fontSize: 14,
+              fontWeight: 600,
+              letterSpacing: "-0.01em",
+              opacity: 0.8,
             }}
           >
-            <span
-              style={{
-                width: 10,
-                height: 10,
-                borderRadius: "50%",
-                background: "#F59E0B",
-                boxShadow: "0 0 12px #F59E0B",
-              }}
-            />
-            <span>The Story Builder</span>
-            <span
-              style={{
-                fontSize: 11,
-                background: "rgba(245, 158, 11, 0.15)",
-                color: "#F59E0B",
-                padding: "2px 8px",
-                borderRadius: 99,
-                fontWeight: 700,
-                letterSpacing: 0.5,
-              }}
-            >
-              LATEST PF
-            </span>
+            Work
           </a>
+          <a
+            href="#services"
+            style={{
+              textDecoration: "none",
+              color: "#111111",
+              fontSize: 14,
+              fontWeight: 600,
+              letterSpacing: "-0.01em",
+              opacity: 0.8,
+            }}
+          >
+            Services
+          </a>
+          <a
+            href="#testimonials"
+            style={{
+              textDecoration: "none",
+              color: "#111111",
+              fontSize: 14,
+              fontWeight: 600,
+              letterSpacing: "-0.01em",
+              opacity: 0.8,
+            }}
+          >
+            About
+          </a>
+          <a
+            href="#brief"
+            style={{
+              textDecoration: "none",
+              color: "#111111",
+              fontSize: 14,
+              fontWeight: 600,
+              letterSpacing: "-0.01em",
+              opacity: 0.8,
+            }}
+          >
+            Contact
+          </a>
+        </nav>
 
-          <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
-            <div style={{ display: "flex", gap: 20, fontSize: 14, fontWeight: 600 }}>
-              <a href="#work" style={{ color: "#9CA3AF", textDecoration: "none" }} onMouseEnter={(e) => (e.target.style.color = "#fff")} onMouseLeave={(e) => (e.target.style.color = "#9CA3AF")}>
-                Work
-              </a>
-              <a href="#colorgrade" style={{ color: "#9CA3AF", textDecoration: "none" }} onMouseEnter={(e) => (e.target.style.color = "#fff")} onMouseLeave={(e) => (e.target.style.color = "#9CA3AF")}>
-                Color Grade
-              </a>
-              <a href="#process" style={{ color: "#9CA3AF", textDecoration: "none" }} onMouseEnter={(e) => (e.target.style.color = "#fff")} onMouseLeave={(e) => (e.target.style.color = "#9CA3AF")}>
-                Process
-              </a>
-              <a href="#pricing" style={{ color: "#9CA3AF", textDecoration: "none" }} onMouseEnter={(e) => (e.target.style.color = "#fff")} onMouseLeave={(e) => (e.target.style.color = "#9CA3AF")}>
-                Packages
-              </a>
-              <a href="#brief" style={{ color: "#9CA3AF", textDecoration: "none" }} onMouseEnter={(e) => (e.target.style.color = "#fff")} onMouseLeave={(e) => (e.target.style.color = "#9CA3AF")}>
-                Brief Form
-              </a>
-            </div>
+        {/* Start a project Pill CTA */}
+        <a
+          href="#brief"
+          style={{
+            background: "#111111",
+            color: "#FFFFFF",
+            textDecoration: "none",
+            fontSize: 13,
+            fontWeight: 700,
+            padding: "10px 20px",
+            borderRadius: 999,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            letterSpacing: "-0.01em",
+            boxShadow: "0 4px 14px rgba(17, 17, 17, 0.12)",
+          }}
+        >
+          Start a project <span style={{ fontSize: 14 }}>↗</span>
+        </a>
+      </header>
 
-            <a
-              href="#brief"
-              style={{
-                background: "#F59E0B",
-                color: "#0B0D12",
-                fontWeight: 700,
-                padding: "8px 18px",
-                borderRadius: 999,
-                fontSize: 13,
-                textDecoration: "none",
-                transition: "all 0.2s",
-                boxShadow: "0 4px 14px rgba(245, 158, 11, 0.3)",
-              }}
-            >
-              Get a Quote
-            </a>
-          </div>
+      {/* 2. HERO SECTION WITH IMAGE TRAIL & 3D TWIST RIBBON */}
+      <section
+        style={{
+          position: "relative",
+          width: "100%",
+          minHeight: "84vh",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: "30px 24px 40px",
+          overflow: "hidden",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* Floating cursor trail on the warm light canvas */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        >
+          <ImageTrail
+            images={TRAIL_IMAGES}
+            size={220}
+            spacing={85}
+            lifetime={1.1}
+            rotation={12}
+            radius={16}
+          />
         </div>
-      </nav>
 
-      {/* 3. HERO WITH WEBGL2 3D TWIST RIBBON */}
-      <header style={{ position: "relative", zIndex: 10, padding: "40px 0 30px" }}>
-        <div style={{ width: "min(100% - 32px, 1200px)", marginInline: "auto", textAlign: "center" }}>
+        {/* 3D WebGL2 Twist Ribbon threading through wordmark */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 2,
+            width: "100%",
+            height: "clamp(460px, 60vh, 660px)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <TwistRibbon
+            images={TRAIL_IMAGES}
+            wordmark="the story builder"
+            fontFamily="Bricolage Grotesque"
+            fontWeight={800}
+            wordmarkColor="#111111"
+            wordmarkSize={0.62}
+            background="#F3EFEA"
+            ribbonWidth={0.96}
+            cardShape={0.75}
+            gap={0.06}
+            corners={0.08}
+            twists={2}
+            depth={1.18}
+            speed={0.32}
+            tilt={1}
+            shading={0.35}
+            fog={0.28}
+          />
+        </div>
+
+        {/* Hero Bottom 3-Part Micro-Content */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 3,
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "flex-end",
+            justifyContent: "space-between",
+            gap: 20,
+            maxWidth: 1280,
+            width: "100%",
+            margin: "0 auto",
+            paddingTop: 20,
+          }}
+        >
+          <p
+            style={{
+              margin: 0,
+              fontSize: "clamp(13px, 1.4vw, 15px)",
+              lineHeight: 1.45,
+              fontWeight: 500,
+              color: "rgba(17, 17, 17, 0.72)",
+              maxWidth: 300,
+              letterSpacing: "-0.01em",
+            }}
+          >
+            Shaping authentic stories for brands that dare to be bold.
+          </p>
+
           <div
             style={{
               display: "inline-flex",
               alignItems: "center",
               gap: 8,
-              padding: "6px 16px",
-              borderRadius: 999,
-              background: "rgba(245, 158, 11, 0.12)",
-              border: "1px solid rgba(245, 158, 11, 0.3)",
-              color: "#F59E0B",
               fontSize: 13,
               fontWeight: 700,
+              letterSpacing: "0.06em",
               textTransform: "uppercase",
-              letterSpacing: 0.8,
-              marginBottom: 20,
+              color: "#111111",
+              background: "rgba(17, 17, 17, 0.05)",
+              border: "1px solid rgba(17, 17, 17, 0.08)",
+              padding: "8px 18px",
+              borderRadius: 999,
             }}
           >
-            <span
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: "50%",
-                background: "#F59E0B",
-                boxShadow: "0 0 10px #F59E0B",
-              }}
-            />
-            Video Production & High-Retention Editing
+            <span>✦</span> ONE CREW · ONE BRIEF <span>✦</span>
           </div>
 
-          <h1
+          <a
+            href="#work"
             style={{
-              fontFamily: "'Space Grotesk', sans-serif",
-              fontSize: "clamp(2.4rem, 6vw, 4.8rem)",
-              fontWeight: 800,
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
-              color: "#fff",
-              marginBottom: 18,
+              margin: 0,
+              fontSize: 13,
+              fontWeight: 600,
+              color: "rgba(17, 17, 17, 0.55)",
+              textDecoration: "none",
+              letterSpacing: "-0.01em",
             }}
           >
-            Shot by One Crew.<br />
-            <span style={{ color: "#F59E0B" }}>Cut by the Same Team.</span>
-          </h1>
+            (scroll to explore ↓)
+          </a>
+        </div>
+      </section>
 
-          <p
-            style={{
-              fontSize: "clamp(1.05rem, 1.4vw, 1.25rem)",
-              color: "#9CA3AF",
-              maxWidth: 680,
-              margin: "0 auto 30px",
-              lineHeight: 1.6,
-            }}
-          >
-            Video shoots and editing in one seamless package. You don’t hire a videographer, then hunt for an editor, then chase both. We plan it, shoot it, and edit it for Reels, YouTube, and high-ROAS ads.
-          </p>
+      {/* 3. BIG TYPOGRAPHIC MANIFESTO STATEMENT */}
+      <section
+        style={{
+          padding: "clamp(60px, 8vw, 110px) 24px",
+          maxWidth: 1280,
+          margin: "0 auto",
+          boxSizing: "border-box",
+        }}
+      >
+        <h2
+          style={{
+            margin: 0,
+            fontSize: "clamp(34px, 5.5vw, 68px)",
+            fontWeight: 800,
+            lineHeight: 1.08,
+            letterSpacing: "-0.04em",
+            color: "#111111",
+            maxWidth: 1100,
+          }}
+        >
+          <span>We shoot, edit, and scale visual stories</span>{" "}
+          <span style={{ color: "rgba(17, 17, 17, 0.38)" }}>
+            that move audiences, drive retention, and turn attention into revenue.
+          </span>
+        </h2>
+      </section>
 
-          <div style={{ display: "flex", justifyContent: "center", gap: 14, flexWrap: "wrap", marginBottom: 30 }}>
-            <a
-              href="#brief"
+      {/* 4. SELECTED WORK ("Sel...") SECTION — 4 SIGNATURE SHOWCASE CARDS */}
+      <section
+        id="work"
+        style={{
+          padding: "0 24px clamp(60px, 8vw, 110px)",
+          maxWidth: 1280,
+          margin: "0 auto",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* Section Header: "Sel..." typographic watermark + Subtitle */}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "flex-end",
+            justifyContent: "space-between",
+            gap: 20,
+            marginBottom: "clamp(36px, 5vw, 60px)",
+            borderBottom: "1px solid rgba(17, 17, 17, 0.12)",
+            paddingBottom: 24,
+          }}
+        >
+          <div>
+            <h3
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                background: "#F59E0B",
-                color: "#0B0D12",
-                fontWeight: 700,
-                fontSize: 15,
-                padding: "14px 28px",
-                borderRadius: 10,
-                textDecoration: "none",
-                boxShadow: "0 8px 24px rgba(245, 158, 11, 0.35)",
+                margin: 0,
+                fontSize: "clamp(56px, 10vw, 110px)",
+                fontWeight: 800,
+                lineHeight: 0.9,
+                letterSpacing: "-0.05em",
+                color: "#111111",
               }}
             >
-              Start Your Video Brief →
-            </a>
-            <a
-              href={waUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                background: "rgba(255, 255, 255, 0.05)",
-                color: "#fff",
-                border: "1px solid rgba(255, 255, 255, 0.15)",
-                fontWeight: 600,
-                fontSize: 15,
-                padding: "14px 26px",
-                borderRadius: 10,
-                textDecoration: "none",
-              }}
-            >
-              💬 WhatsApp Us Directly
-            </a>
+              Sel<span style={{ color: "rgba(17, 17, 17, 0.2)" }}>ected</span>
+            </h3>
           </div>
 
           <div
             style={{
               display: "flex",
-              justifyContent: "center",
-              gap: 24,
-              flexWrap: "wrap",
-              fontSize: 13,
-              color: "#D1D5DB",
-              fontFamily: "'JetBrains Mono', monospace",
+              alignItems: "center",
+              gap: 16,
+              maxWidth: 420,
             }}
           >
-            <span>🎥 4K 24p Cinema Gear</span>
-            <span>⚡ 5 to 7 Day Turnaround</span>
-            <span>📍 Hyderabad & Remote</span>
-            <span>🔄 2 Revision Rounds</span>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "clamp(14px, 1.4vw, 16px)",
+                lineHeight: 1.45,
+                color: "rgba(17, 17, 17, 0.65)",
+                fontWeight: 500,
+              }}
+            >
+              A curated selection of films, commercials, and high-retention video stories.
+            </p>
+            <span
+              style={{
+                fontSize: 16,
+                fontWeight: 700,
+                color: "#111111",
+                fontVariantNumeric: "tabular-nums",
+                background: "rgba(17, 17, 17, 0.08)",
+                padding: "6px 12px",
+                borderRadius: 999,
+              }}
+            >
+              04
+            </span>
           </div>
         </div>
 
-        {/* 3D WebGL2 Twist Ribbon Interactive Canvas */}
-        <div style={{ width: "100%", height: "clamp(340px, 48vh, 520px)", margin: "20px auto 0", position: "relative" }}>
-          <TwistRibbon
-            images={TRAIL_IMAGES}
-            wordmark="STORY BUILDER"
-            fontFamily="Space Grotesk"
-            wordmarkColor="#F59E0B"
-            wordmarkSize={0.58}
-            background="#090B0E"
-            speed={0.4}
-            ribbonWidth={0.92}
-            twists={2}
-          />
-        </div>
-      </header>
+        {/* 4 Showcase Cards Stack */}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "clamp(28px, 4vw, 44px)",
+          }}
+        >
+          {SHOWCASE_CARDS.map((card) => (
+            <div
+              key={card.id}
+              style={{
+                background: card.bgColor,
+                color: card.inkColor,
+                borderRadius: 36,
+                border: `3px solid ${card.borderColor}`,
+                padding: "clamp(20px, 3.2vw, 36px)",
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 380px), 1fr))",
+                gap: "clamp(24px, 3.5vw, 44px)",
+                alignItems: "center",
+                boxShadow: "0 24px 60px -20px rgba(17, 17, 17, 0.15)",
+                position: "relative",
+                overflow: "hidden",
+                transition: "transform 0.35s ease, box-shadow 0.35s ease",
+              }}
+            >
+              {/* Left Column: Big Video / Media Player */}
+              <div
+                onClick={() => {
+                  setActiveVideo(card);
+                  trackEvent("video_play", "portfolio_reel", card.title);
+                }}
+                style={{
+                  position: "relative",
+                  borderRadius: 22,
+                  overflow: "hidden",
+                  aspectRatio: "16 / 10",
+                  background: "#000000",
+                  cursor: "pointer",
+                  boxShadow: "0 18px 36px -12px rgba(17, 17, 17, 0.28)",
+                }}
+              >
+                {/* Media Image / Video Poster */}
+                <img
+                  src={card.poster}
+                  alt={card.title}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                    transition: "transform 0.5s ease",
+                  }}
+                />
 
-      {/* 4. LOOPTEXT SVG MARQUEE BANNER */}
-      <section style={{ position: "relative", zIndex: 10, padding: "20px 0 40px", overflow: "hidden" }}>
-        <div style={{ width: "min(100% - 24px, 1100px)", height: 260, margin: "0 auto" }}>
-          <LoopText
-            text="Shot by One Crew ✦ Cut by the Same Team ✦ High-Retention Reels & Ads ✦ Hyderabad & Worldwide ✦ hello@thestorybuilder.in ✦ "
-            bandColor="#F59E0B"
-            textColor="#0B0D12"
-            fontSize={30}
-            bandWidth={62}
-            speed={65}
-          />
+                {/* Top-Left Category Pill */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 14,
+                    left: 14,
+                    background: "rgba(255, 255, 255, 0.94)",
+                    color: "#111111",
+                    fontSize: 11,
+                    fontWeight: 800,
+                    letterSpacing: "0.06em",
+                    textTransform: "uppercase",
+                    padding: "6px 14px",
+                    borderRadius: 999,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.14)",
+                    zIndex: 2,
+                  }}
+                >
+                  {card.cat}
+                </div>
+
+                {/* Center Pulsing Play Overlay Button */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    background: "rgba(0, 0, 0, 0.22)",
+                    transition: "background 0.3s ease",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 64,
+                      height: 64,
+                      borderRadius: 999,
+                      background: "rgba(255, 255, 255, 0.95)",
+                      color: "#111111",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontSize: 22,
+                      boxShadow: "0 12px 28px rgba(0, 0, 0, 0.35)",
+                      paddingLeft: 4,
+                    }}
+                  >
+                    ▶
+                  </div>
+                </div>
+
+                {/* Bottom stats pill */}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: 12,
+                    right: 12,
+                    background: "rgba(0, 0, 0, 0.65)",
+                    backdropFilter: "blur(6px)",
+                    color: "#FFFFFF",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    padding: "4px 10px",
+                    borderRadius: 6,
+                  }}
+                >
+                  {card.stats}
+                </div>
+              </div>
+
+              {/* Right Column: Content, Floating Mini-Thumbnail & Round Action Button */}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  minHeight: "100%",
+                  gap: 20,
+                  position: "relative",
+                }}
+              >
+                {/* Floating Polaroid-Style Mini Thumbnail in Top Right (Exact Detail from Screenshot!) */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: -4,
+                    right: 0,
+                    width: 58,
+                    height: 58,
+                    borderRadius: 14,
+                    overflow: "hidden",
+                    border: "2px solid rgba(255, 255, 255, 0.4)",
+                    boxShadow: "0 10px 20px rgba(0,0,0,0.18)",
+                  }}
+                >
+                  <img
+                    src={card.miniThumb}
+                    alt=""
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                </div>
+
+                <div>
+                  <span
+                    style={{
+                      display: "block",
+                      fontSize: 14,
+                      fontWeight: 700,
+                      opacity: 0.7,
+                      marginBottom: 8,
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    {card.subtitle}
+                  </span>
+
+                  <h4
+                    style={{
+                      margin: "0 0 14px",
+                      fontSize: "clamp(32px, 4.2vw, 52px)",
+                      fontWeight: 800,
+                      lineHeight: 1.05,
+                      letterSpacing: "-0.035em",
+                      color: card.inkColor,
+                    }}
+                  >
+                    {card.title}
+                  </h4>
+
+                  <p
+                    style={{
+                      margin: "0 0 24px",
+                      fontSize: "clamp(14px, 1.4vw, 17px)",
+                      lineHeight: 1.5,
+                      opacity: 0.88,
+                      fontWeight: 500,
+                      maxWidth: 440,
+                    }}
+                  >
+                    {card.desc}
+                  </p>
+
+                  {/* Tag Pills */}
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                    {card.tags.map((tag, i) => (
+                      <span
+                        key={i}
+                        style={{
+                          background: card.badgeBg,
+                          color: card.inkColor,
+                          fontSize: 12,
+                          fontWeight: 700,
+                          padding: "6px 14px",
+                          borderRadius: 999,
+                          letterSpacing: "-0.01em",
+                        }}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Bottom Row: Actions */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    paddingTop: 16,
+                  }}
+                >
+                  <button
+                    onClick={() => {
+                      setActiveVideo(card);
+                      trackEvent("video_play", "portfolio_reel", card.title);
+                    }}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: card.inkColor,
+                      fontSize: 14,
+                      fontWeight: 700,
+                      padding: 0,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 6,
+                      textDecoration: "underline",
+                      textUnderlineOffset: 4,
+                    }}
+                  >
+                    Watch Full Master ↗
+                  </button>
+
+                  {/* Circular Button Matching Screenshot (Black/White with Arrow) */}
+                  <button
+                    onClick={() => {
+                      setActiveVideo(card);
+                      trackEvent("video_play", "portfolio_reel", card.title);
+                    }}
+                    aria-label={`Watch ${card.title}`}
+                    style={{
+                      width: 52,
+                      height: 52,
+                      borderRadius: 999,
+                      background: card.btnBg,
+                      color: card.btnInk,
+                      border: "none",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      boxShadow: "0 8px 18px rgba(0,0,0,0.18)",
+                      transition: "transform 0.2s ease",
+                    }}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path
+                        d="M4 10h12M11 4.5l5.5 5.5-5.5 5.5"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* 5. CLIENT REELS SHOWCASE WITH INTERACTIVE AUDIO & POPUP */}
-      <section id="work" style={{ position: "relative", zIndex: 10, padding: "60px 0 80px" }}>
-        <div style={{ width: "min(100% - 32px, 1200px)", marginInline: "auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 44 }}>
-            <div
+      {/* 5. THINGS WE DO ("Thin...") SECTION — 4 PASTEL TILES */}
+      <section
+        id="services"
+        style={{
+          padding: "0 24px clamp(60px, 8vw, 110px)",
+          maxWidth: 1280,
+          margin: "0 auto",
+          boxSizing: "border-box",
+        }}
+      >
+        {/* Section Header */}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "flex-end",
+            justifyContent: "space-between",
+            gap: 20,
+            marginBottom: "clamp(36px, 5vw, 60px)",
+            borderBottom: "1px solid rgba(17, 17, 17, 0.12)",
+            paddingBottom: 24,
+          }}
+        >
+          <div>
+            <h3
               style={{
-                display: "inline-block",
-                padding: "4px 12px",
-                background: "rgba(245, 158, 11, 0.12)",
-                color: "#F59E0B",
-                borderRadius: 99,
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: 0.5,
-                textTransform: "uppercase",
-                marginBottom: 12,
+                margin: 0,
+                fontSize: "clamp(56px, 10vw, 110px)",
+                fontWeight: 800,
+                lineHeight: 0.9,
+                letterSpacing: "-0.05em",
+                color: "#111111",
               }}
             >
-              Proven Social & Brand Traction
+              Thin<span style={{ color: "rgba(17, 17, 17, 0.2)" }}>gs we do</span>
+            </h3>
+          </div>
+
+          <div style={{ maxWidth: 420 }}>
+            <p
+              style={{
+                margin: 0,
+                fontSize: "clamp(14px, 1.4vw, 16px)",
+                lineHeight: 1.45,
+                color: "rgba(17, 17, 17, 0.65)",
+                fontWeight: 500,
+              }}
+            >
+              From first concept to multi-platform master delivery, we handle the entire video pipeline under one roof.
+            </p>
+          </div>
+        </div>
+
+        {/* 4 Pastel Tiles Grid */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+            gap: 20,
+          }}
+        >
+          {CAPABILITIES.map((cap, i) => (
+            <div
+              key={i}
+              style={{
+                background: cap.bgColor,
+                border: `2px solid ${cap.borderColor}`,
+                borderRadius: 28,
+                padding: "32px 28px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                minHeight: 320,
+                boxShadow: "0 12px 28px -10px rgba(17, 17, 17, 0.08)",
+                transition: "transform 0.3s ease",
+              }}
+            >
+              <div>
+                <span
+                  style={{
+                    display: "inline-block",
+                    fontSize: 12,
+                    fontWeight: 800,
+                    letterSpacing: "0.06em",
+                    textTransform: "uppercase",
+                    color: "rgba(17, 17, 17, 0.6)",
+                    marginBottom: 16,
+                  }}
+                >
+                  {cap.tag}
+                </span>
+
+                <h4
+                  style={{
+                    margin: "0 0 14px",
+                    fontSize: "clamp(22px, 2.2vw, 26px)",
+                    fontWeight: 800,
+                    lineHeight: 1.15,
+                    letterSpacing: "-0.03em",
+                    color: "#111111",
+                  }}
+                >
+                  {cap.title}
+                </h4>
+
+                <p
+                  style={{
+                    margin: "0 0 24px",
+                    fontSize: 14,
+                    lineHeight: 1.5,
+                    color: "rgba(17, 17, 17, 0.75)",
+                    fontWeight: 500,
+                  }}
+                >
+                  {cap.desc}
+                </p>
+              </div>
+
+              {/* Pills */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                {cap.pills.map((pill, idx) => (
+                  <span
+                    key={idx}
+                    style={{
+                      background: "rgba(17, 17, 17, 0.08)",
+                      color: "#111111",
+                      fontSize: 11,
+                      fontWeight: 700,
+                      padding: "4px 10px",
+                      borderRadius: 999,
+                    }}
+                  >
+                    {pill}
+                  </span>
+                ))}
+              </div>
             </div>
-            <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 800, margin: 0 }}>
-              Recent Client Video Work
-            </h2>
-            <p style={{ color: "#9CA3AF", fontSize: 16, marginTop: 8 }}>
-              Click any video to toggle sound or tap to watch in full-screen theatre mode.
+          ))}
+        </div>
+      </section>
+
+      {/* 6. INTERACTIVE BEFORE / AFTER S-LOG3 COLOR GRADING STUDIO */}
+      <section
+        style={{
+          padding: "0 24px clamp(60px, 8vw, 110px)",
+          maxWidth: 1280,
+          margin: "0 auto",
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          style={{
+            background: "#FFFFFF",
+            borderRadius: 36,
+            border: "2px solid rgba(17, 17, 17, 0.08)",
+            padding: "clamp(24px, 4vw, 44px)",
+            boxShadow: "0 20px 50px -15px rgba(17, 17, 17, 0.08)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "flex-end",
+              justifyContent: "space-between",
+              gap: 20,
+              marginBottom: 28,
+            }}
+          >
+            <div>
+              <span
+                style={{
+                  fontSize: 12,
+                  fontWeight: 800,
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  color: "#FF4D1A",
+                  display: "block",
+                  marginBottom: 6,
+                }}
+              >
+                DaVinci Resolve Color Science
+              </span>
+              <h3
+                style={{
+                  margin: 0,
+                  fontSize: "clamp(26px, 3.5vw, 38px)",
+                  fontWeight: 800,
+                  letterSpacing: "-0.03em",
+                }}
+              >
+                Flat S-Log3 RAW vs. Final Film Grade
+              </h3>
+            </div>
+            <p
+              style={{
+                margin: 0,
+                fontSize: 14,
+                color: "rgba(17, 17, 17, 0.65)",
+                maxWidth: 400,
+                lineHeight: 1.45,
+              }}
+            >
+              Drag the slider to inspect the contrast, skin-tone preservation, and saturation roll-off we grade into every frame.
             </p>
           </div>
 
-          {/* Grid of 8 Client Videos */}
+          {/* Comparison Slider Element */}
           <div
+            ref={sliderRef}
+            onMouseDown={() => setIsDraggingSlider(true)}
+            onTouchStart={() => setIsDraggingSlider(true)}
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-              gap: 20,
+              position: "relative",
+              width: "100%",
+              height: "clamp(280px, 46vw, 540px)",
+              borderRadius: 22,
+              overflow: "hidden",
+              cursor: "ew-resize",
+              userSelect: "none",
             }}
           >
-            {CLIENT_REELS.map((reel) => {
-              const isUnmuted = unmutedReel === reel.id;
-              return (
-                <div
-                  key={reel.id}
-                  style={{
-                    background: "#121620",
-                    borderRadius: 18,
-                    overflow: "hidden",
-                    border: "1px solid rgba(255, 255, 255, 0.08)",
-                    position: "relative",
-                    aspectRatio: "9 / 16",
-                    boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
-                    transition: "transform 0.25s, border-color 0.25s",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-6px)";
-                    e.currentTarget.style.borderColor = "rgba(245, 158, 11, 0.5)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "none";
-                    e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
-                  }}
-                >
-                  <video
-                    ref={(el) => (videoRefs.current[reel.id] = el)}
-                    src={reel.videoSrc}
-                    loop
-                    muted={!isUnmuted}
-                    playsInline
-                    autoPlay
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      display: "block",
-                      cursor: "pointer",
-                    }}
-                    onClick={() => openVideoModal(reel)}
-                  />
+            {/* Graded Image (Right / Base) */}
+            <img
+              src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1280&q=85"
+              alt="Graded Cinematic Master"
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                filter: "contrast(1.15) saturate(1.2)",
+              }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                bottom: 16,
+                right: 18,
+                background: "rgba(0,0,0,0.75)",
+                backdropFilter: "blur(6px)",
+                color: "#FFFFFF",
+                fontSize: 12,
+                fontWeight: 700,
+                padding: "6px 14px",
+                borderRadius: 999,
+              }}
+            >
+              Final Cinema Grade
+            </div>
 
-                  {/* Overlay Gradient */}
-                  <div
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      background: "linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 35%, rgba(0,0,0,0.85) 100%)",
-                      pointerEvents: "none",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "space-between",
-                      padding: 14,
-                    }}
-                  >
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                      <span
-                        style={{
-                          background: "rgba(0,0,0,0.65)",
-                          backdropFilter: "blur(8px)",
-                          border: "1px solid rgba(255,255,255,0.12)",
-                          padding: "4px 10px",
-                          borderRadius: 99,
-                          fontSize: 11,
-                          fontWeight: 700,
-                          color: "#F59E0B",
-                        }}
-                      >
-                        {reel.tag}
-                      </span>
+            {/* Flat Log Image (Left / Clipped Overlay) */}
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: `${sliderPos}%`,
+                overflow: "hidden",
+                borderRight: "3px solid #FFFFFF",
+                boxShadow: "4px 0 20px rgba(0,0,0,0.35)",
+              }}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1280&q=85"
+                alt="Flat S-Log3 Profile"
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  width: sliderRef.current?.offsetWidth || "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  filter: "contrast(0.68) saturate(0.3) brightness(1.2)",
+                }}
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 16,
+                  left: 18,
+                  background: "rgba(0,0,0,0.75)",
+                  backdropFilter: "blur(6px)",
+                  color: "#FFFFFF",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  padding: "6px 14px",
+                  borderRadius: 999,
+                }}
+              >
+                Raw S-Log3 Camera Output
+              </div>
+            </div>
 
-                      {/* Sound Toggle Button */}
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          toggleSound(reel.id);
-                        }}
-                        style={{
-                          pointerEvents: "auto",
-                          background: isUnmuted ? "#10B981" : "rgba(0,0,0,0.7)",
-                          color: "#fff",
-                          border: "1px solid rgba(255,255,255,0.25)",
-                          width: 34,
-                          height: 34,
-                          borderRadius: "50%",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          cursor: "pointer",
-                          fontSize: 14,
-                          transition: "all 0.2s",
-                        }}
-                        aria-label="Toggle sound"
-                      >
-                        {isUnmuted ? "🔊" : "🔇"}
-                      </button>
-                    </div>
-
-                    <div>
-                      <h3 style={{ fontSize: 16, fontWeight: 700, color: "#fff", margin: "0 0 4px" }}>
-                        {reel.name}
-                      </h3>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                          fontSize: 12,
-                          color: "#9CA3AF",
-                        }}
-                      >
-                        <span style={{ color: "#F59E0B", fontFamily: "'JetBrains Mono', monospace", fontWeight: 600 }}>
-                          🔥 {reel.stats}
-                        </span>
-                        <span
-                          onClick={() => openVideoModal(reel)}
-                          style={{
-                            pointerEvents: "auto",
-                            cursor: "pointer",
-                            textDecoration: "underline",
-                            color: "#E5E7EB",
-                          }}
-                        >
-                          Fullscreen ↗
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {/* Center Drag Handle */}
+            <div
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: `${sliderPos}%`,
+                transform: "translate(-50%, -50%)",
+                width: 48,
+                height: 48,
+                borderRadius: 999,
+                background: "#FFFFFF",
+                boxShadow: "0 6px 20px rgba(0,0,0,0.45)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#111111",
+                fontSize: 18,
+                pointerEvents: "none",
+              }}
+            >
+              ↔
+            </div>
           </div>
         </div>
       </section>
 
-      {/* 6. BEFORE & AFTER COLOR GRADING COMPARISON */}
-      <section id="colorgrade" style={{ position: "relative", zIndex: 10, padding: "70px 0", background: "rgba(255,255,255,0.015)", borderTop: "1px solid rgba(255,255,255,0.06)", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ width: "min(100% - 32px, 1200px)", marginInline: "auto", textAlign: "center" }}>
+      {/* 7. KIND WORDS, SAID LOUDLY (TESTIMONIALS / QUOTE DECK) */}
+      <section
+        id="testimonials"
+        style={{
+          padding: "clamp(60px, 8vw, 110px) 24px",
+          maxWidth: 1280,
+          margin: "0 auto",
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 360px), 1fr))",
+            gap: "clamp(36px, 5vw, 64px)",
+            alignItems: "center",
+          }}
+        >
+          {/* Left Column: Heading exactly as in template screenshot */}
+          <div>
+            <h3
+              style={{
+                margin: "0 0 20px",
+                fontSize: "clamp(44px, 6vw, 76px)",
+                fontWeight: 800,
+                lineHeight: 1.05,
+                letterSpacing: "-0.04em",
+                color: "#111111",
+              }}
+            >
+              Kind words,
+              <br />
+              said loudly.
+            </h3>
+
+            <p
+              style={{
+                margin: 0,
+                fontSize: "clamp(15px, 1.5vw, 18px)",
+                lineHeight: 1.5,
+                color: "rgba(17, 17, 17, 0.68)",
+                maxWidth: 420,
+                fontWeight: 500,
+              }}
+            >
+              What our clients say about our cinematography, rapid turnaround, and collaboration.
+            </p>
+
+            <div style={{ marginTop: 32, display: "flex", gap: 12 }}>
+              <a
+                href={waUrl("Hi Story Builder team, I'd like to book a shoot & edit package.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background: "#111111",
+                  color: "#FFFFFF",
+                  fontSize: 13,
+                  fontWeight: 700,
+                  padding: "12px 22px",
+                  borderRadius: 999,
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                }}
+              >
+                Work with our crew ↗
+              </a>
+            </div>
+          </div>
+
+          {/* Right Column: Exact QuoteDeck Component */}
+          <div style={{ width: "100%", minHeight: 460 }}>
+            <QuoteDeck
+              autoplay={6}
+              buttonColor="#FF4D1A"
+              buttonInk="#FFFFFF"
+              lineColor="rgba(17,17,17,0.18)"
+              counterColor="#111111"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* 8. INTERACTIVE MAD-LIB PROJECT BRIEF (ORDER FORM) */}
+      <section
+        id="brief"
+        style={{
+          padding: "clamp(60px, 8vw, 110px) 24px",
+          maxWidth: 1100,
+          margin: "0 auto",
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          style={{
+            background: "#FFFFFF",
+            borderRadius: 36,
+            border: "2px solid rgba(17, 17, 17, 0.08)",
+            padding: "clamp(28px, 5vw, 64px)",
+            boxShadow: "0 24px 60px -15px rgba(17, 17, 17, 0.08)",
+          }}
+        >
+          <div style={{ marginBottom: 36 }}>
+            <span
+              style={{
+                fontSize: 12,
+                fontWeight: 800,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: "#FF4D1A",
+                display: "block",
+                marginBottom: 8,
+              }}
+            >
+              ✦ Start a Project Brief
+            </span>
+            <h3
+              style={{
+                margin: "0 0 10px",
+                fontSize: "clamp(30px, 4vw, 48px)",
+                fontWeight: 800,
+                letterSpacing: "-0.035em",
+                color: "#111111",
+              }}
+            >
+              Let’s create something iconic.
+            </h3>
+            <p
+              style={{
+                margin: 0,
+                fontSize: 15,
+                color: "rgba(17, 17, 17, 0.65)",
+                lineHeight: 1.45,
+              }}
+            >
+              Fill in your details below. This generates an instant scoped brief directly to our team on WhatsApp.
+            </p>
+          </div>
+
+          <OrderForm
+            greeting="Hi Story Builder, I’m"
+            fromText="from"
+            needText="We need a hand with"
+            budgetText="and the budget is around"
+            reachText="You can reach me at"
+            namePlaceholder="your name"
+            companyPlaceholder="company / brand"
+            emailPlaceholder="name@company.com"
+            services={[
+              "a commercial brand film",
+              "monthly high-retention reels",
+              "performance meta ad creatives",
+              "a founder authority series",
+              "a full shoot & edit package",
+            ]}
+            budgets={[
+              "under ₹25,000",
+              "₹25,000 to ₹50,000",
+              "₹50,000 to ₹1,00,000",
+              "₹1,00,000 and above",
+            ]}
+            noteTitle="Oh, and one more thing…"
+            notePlaceholder="Deadlines, reference videos you love, number of videos needed, anything that helps."
+            totalLabel="Total due today"
+            totalText="₹0.00, the first creative call is on us"
+            buttonLabel="Place my order"
+            pendingLabel="Sending…"
+            successLabel="Order placed"
+            errorLabel="Try again"
+            recipient={CONFIG.email}
+            displayFont="Bricolage Grotesque"
+            bodyFont="Plus Jakarta Sans"
+            ink="#111111"
+            accent="#FF4D1A"
+            muted="rgba(17, 17, 17, 0.6)"
+            buttonText="#FFFFFF"
+          />
+        </div>
+      </section>
+
+      {/* 9. THE DEEP PITCH BLACK FOOTER WITH LOOP TEXT (EXACT TEMPLATE FINALE) */}
+      <footer
+        style={{
+          background: "#0E0E0E",
+          color: "#FFFFFF",
+          padding: "clamp(60px, 8vw, 100px) 24px 40px",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 1280,
+            margin: "0 auto",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          {/* Top Footer Navigation Bar */}
           <div
             style={{
-              display: "inline-block",
-              padding: "4px 12px",
-              background: "rgba(245, 158, 11, 0.12)",
-              color: "#F59E0B",
-              borderRadius: 99,
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: 0.5,
-              textTransform: "uppercase",
-              marginBottom: 12,
+              width: "100%",
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 20,
+              paddingBottom: 40,
+              borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
+              marginBottom: "clamp(40px, 6vw, 70px)",
             }}
           >
-            Post-Production Mastery
-          </div>
-          <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 800, margin: 0 }}>
-            Raw Flat S-Log3 vs. Graded Master
-          </h2>
-          <p style={{ color: "#9CA3AF", fontSize: 16, marginTop: 8, maxWidth: 640, marginInline: "auto" }}>
-            Drag the slider sideways to see the dynamic difference between unedited camera sensor LOG footage and our calibrated DaVinci color grading suite.
-          </p>
+            <div
+              style={{
+                fontSize: 22,
+                fontWeight: 800,
+                letterSpacing: "-0.04em",
+                color: "#FFFFFF",
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
+              {CONFIG.brand}
+              <span style={{ color: "#FF4D1A" }}>✦</span>
+            </div>
 
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "clamp(16px, 3vw, 32px)",
+                fontSize: 14,
+                fontWeight: 600,
+              }}
+            >
+              <a href="#work" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
+                Work
+              </a>
+              <a href="#services" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
+                Services
+              </a>
+              <a href="#testimonials" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
+                About
+              </a>
+              <a href="#brief" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
+                Contact
+              </a>
+              <a
+                href={waUrl()}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: "#FF4D1A", textDecoration: "none", fontWeight: 700 }}
+              >
+                WhatsApp ↗
+              </a>
+            </div>
+          </div>
+
+          {/* Centerpiece: The Figure-Eight Infinity LoopText with Center Round White Button */}
           <div
             style={{
               position: "relative",
               width: "100%",
               maxWidth: 960,
-              aspectRatio: "16 / 9",
-              borderRadius: 18,
-              overflow: "hidden",
-              margin: "36px auto 0",
-              border: "1px solid rgba(255,255,255,0.12)",
-              boxShadow: "0 30px 60px rgba(0,0,0,0.6)",
-              userSelect: "none",
+              height: "clamp(260px, 40vw, 480px)",
+              margin: "0 auto",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            {/* Raw Footage Layer (desaturated & low contrast simulation) */}
-            <img
-              src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1400&q=80"
-              alt="Raw S-Log3 Uncut Camera Footage"
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                filter: "saturate(0.3) contrast(0.85) brightness(1.1)",
-              }}
+            <LoopText
+              text="✦ LET’S TWIST SOMETHING NEW ✦ HELLO@THESTORYBUILDER.IN ✦ ONE CREW ONE BRIEF ✦ "
+              bandColor="#FF4D1A"
+              textColor="#111111"
+              fontSize={32}
+              bandWidth={66}
+              speed={55}
+              hoverBoost={3}
             />
 
-            {/* Finished Graded Master Layer */}
-            <img
-              src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1400&q=80"
-              alt="Finished Color Graded Video"
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                clipPath: `polygon(0 0, ${cmpPos}% 0, ${cmpPos}% 100%, 0 100%)`,
-              }}
-            />
-
-            {/* Split Divider Bar */}
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                bottom: 0,
-                left: `${cmpPos}%`,
-                width: 2,
-                background: "#fff",
-                boxShadow: "0 0 14px rgba(0,0,0,0.7)",
-                pointerEvents: "none",
-              }}
-            />
-
-            {/* Handle Dial */}
-            <div
+            {/* Central White Circular Button in the Center of Infinity Loop (Signature Framer Detail!) */}
+            <a
+              href="#brief"
               style={{
                 position: "absolute",
                 top: "50%",
-                left: `${cmpPos}%`,
+                left: "50%",
                 transform: "translate(-50%, -50%)",
-                width: 44,
-                height: 44,
-                borderRadius: "50%",
-                background: "#F59E0B",
-                color: "#0B0D12",
+                width: "clamp(88px, 12vw, 130px)",
+                height: "clamp(88px, 12vw, 130px)",
+                borderRadius: 999,
+                background: "#FFFFFF",
+                color: "#111111",
                 fontWeight: 800,
-                fontSize: 16,
+                fontSize: "clamp(12px, 1.4vw, 14px)",
+                letterSpacing: "-0.02em",
+                textDecoration: "none",
                 display: "flex",
+                flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 4px 16px rgba(0,0,0,0.5)",
-                pointerEvents: "none",
+                textAlign: "center",
+                padding: 10,
+                boxShadow: "0 14px 40px rgba(0,0,0,0.6)",
+                zIndex: 10,
+                lineHeight: 1.2,
+                transition: "transform 0.3s ease",
               }}
             >
-              ⇄
-            </div>
-
-            {/* Badges */}
-            <span
-              style={{
-                position: "absolute",
-                top: 14,
-                left: 14,
-                background: "rgba(0,0,0,0.75)",
-                backdropFilter: "blur(6px)",
-                padding: "6px 14px",
-                borderRadius: 6,
-                fontSize: 12,
-                fontWeight: 700,
-                color: "#fff",
-                textTransform: "uppercase",
-                letterSpacing: 0.5,
-              }}
-            >
-              Raw Flat LOG
-            </span>
-            <span
-              style={{
-                position: "absolute",
-                top: 14,
-                right: 14,
-                background: "rgba(0,0,0,0.75)",
-                backdropFilter: "blur(6px)",
-                padding: "6px 14px",
-                borderRadius: 6,
-                fontSize: 12,
-                fontWeight: 700,
-                color: "#F59E0B",
-                textTransform: "uppercase",
-                letterSpacing: 0.5,
-              }}
-            >
-              Graded & Mastered
-            </span>
-
-            {/* Slider Range Input */}
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={cmpPos}
-              onChange={(e) => setCmpPos(e.target.value)}
-              style={{
-                position: "absolute",
-                inset: 0,
-                width: "100%",
-                height: "100%",
-                opacity: 0,
-                cursor: "ew-resize",
-                zIndex: 20,
-              }}
-              aria-label="Color grade comparison slider"
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* 7. ONE BRIEF. ONE CREW. FINISHED VIDEOS (THEORY & PROCESS) */}
-      <section id="process" style={{ position: "relative", zIndex: 10, padding: "80px 0" }}>
-        <div style={{ width: "min(100% - 32px, 1200px)", marginInline: "auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 50 }}>
-            <div
-              style={{
-                display: "inline-block",
-                padding: "4px 12px",
-                background: "rgba(245, 158, 11, 0.12)",
-                color: "#F59E0B",
-                borderRadius: 99,
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: 0.5,
-                textTransform: "uppercase",
-                marginBottom: 12,
-              }}
-            >
-              The Video Production Framework
-            </div>
-            <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 800, margin: 0 }}>
-              One Brief. One Crew. Finished Videos.
-            </h2>
-            <p style={{ color: "#9CA3AF", fontSize: 16, marginTop: 8, maxWidth: 640, marginInline: "auto" }}>
-              How we transform raw concepts into high-retention social content and commercial film assets.
-            </p>
+              <span>Start a</span>
+              <span>project ↗</span>
+            </a>
           </div>
 
+          {/* Bottom Copyright & Location Metadata */}
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-              gap: 20,
+              width: "100%",
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 16,
+              paddingTop: 40,
+              borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+              marginTop: "clamp(30px, 4vw, 60px)",
+              fontSize: 13,
+              color: "rgba(255, 255, 255, 0.5)",
             }}
           >
-            {PILLARS.map((p) => (
-              <div
-                key={p.num}
-                style={{
-                  background: "#121620",
-                  borderRadius: 16,
-                  padding: "32px 24px",
-                  border: "1px solid rgba(255, 255, 255, 0.08)",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  transition: "transform 0.2s, border-color 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-4px)";
-                  e.currentTarget.style.borderColor = "rgba(245, 158, 11, 0.4)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "none";
-                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
-                }}
+            <div>© 2026 The Story Builder · All Rights Reserved.</div>
+            <div>Shooting on-location across Hyderabad · Remote editing worldwide.</div>
+            <div>
+              <a
+                href={`mailto:${CONFIG.email}`}
+                style={{ color: "#FFFFFF", textDecoration: "none", fontWeight: 600 }}
               >
-                <div>
-                  <div
-                    style={{
-                      fontFamily: "'JetBrains Mono', monospace",
-                      fontSize: 13,
-                      fontWeight: 700,
-                      color: "#F59E0B",
-                      marginBottom: 8,
-                    }}
-                  >
-                    PHASE {p.num} · {p.phase}
-                  </div>
-                  <h3 style={{ fontSize: 20, fontWeight: 700, color: "#fff", marginBottom: 12 }}>
-                    {p.title}
-                  </h3>
-                  <p style={{ color: "#9CA3AF", fontSize: 14, lineHeight: 1.6, marginBottom: 20 }}>
-                    {p.desc}
-                  </p>
-                </div>
-
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                  {p.chips.map((chip, i) => (
-                    <span
-                      key={i}
-                      style={{
-                        background: "rgba(255, 255, 255, 0.04)",
-                        border: "1px solid rgba(255, 255, 255, 0.08)",
-                        padding: "4px 10px",
-                        borderRadius: 99,
-                        fontSize: 11,
-                        color: "#D1D5DB",
-                      }}
-                    >
-                      {chip}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 8. DRAGGABLE 3D QUOTE DECK (TESTIMONIALS) */}
-      <section style={{ position: "relative", zIndex: 10, padding: "60px 0 90px", background: "rgba(255,255,255,0.015)" }}>
-        <div style={{ width: "min(100% - 32px, 1200px)", marginInline: "auto", textAlign: "center" }}>
-          <div
-            style={{
-              display: "inline-block",
-              padding: "4px 12px",
-              background: "rgba(245, 158, 11, 0.12)",
-              color: "#F59E0B",
-              borderRadius: 99,
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: 0.5,
-              textTransform: "uppercase",
-              marginBottom: 12,
-            }}
-          >
-            Verified Client Reviews
-          </div>
-          <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 800, margin: "0 0 10px" }}>
-            What Founders & Directors Say
-          </h2>
-          <p style={{ color: "#9CA3AF", fontSize: 16, marginBottom: 40 }}>
-            Drag the cards sideways or tap the arrows to browse client results.
-          </p>
-
-          <QuoteDeck quoteSize={24} buttonColor="#F59E0B" buttonInk="#0B0D12" />
-        </div>
-      </section>
-
-      {/* 9. TRANSPARENT PACKAGES & PRICING */}
-      <section id="pricing" style={{ position: "relative", zIndex: 10, padding: "80px 0" }}>
-        <div style={{ width: "min(100% - 32px, 1200px)", marginInline: "auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 50 }}>
-            <div
-              style={{
-                display: "inline-block",
-                padding: "4px 12px",
-                background: "rgba(245, 158, 11, 0.12)",
-                color: "#F59E0B",
-                borderRadius: 99,
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: 0.5,
-                textTransform: "uppercase",
-                marginBottom: 12,
-              }}
-            >
-              Clear & Predictable Investment
+                {CONFIG.email}
+              </a>
             </div>
-            <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 800, margin: 0 }}>
-              Video Shoot & Editing Packages
-            </h2>
-            <p style={{ color: "#9CA3AF", fontSize: 16, marginTop: 8 }}>
-              No surprise extras. All footage is backed up, color graded, and platform formatted.
-            </p>
-          </div>
-
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-              gap: 24,
-            }}
-          >
-            {PRICING_TIERS.map((tier, idx) => (
-              <div
-                key={idx}
-                style={{
-                  background: tier.featured ? "linear-gradient(180deg, #1A1F2C 0%, #121620 100%)" : "#121620",
-                  borderRadius: 20,
-                  padding: "36px 28px",
-                  border: tier.featured ? "2px solid #F59E0B" : "1px solid rgba(255, 255, 255, 0.08)",
-                  position: "relative",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  boxShadow: tier.featured ? "0 20px 50px rgba(245, 158, 11, 0.15)" : "none",
-                }}
-              >
-                {tier.featured && (
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: -12,
-                      right: 24,
-                      background: "#F59E0B",
-                      color: "#0B0D12",
-                      fontWeight: 800,
-                      fontSize: 11,
-                      textTransform: "uppercase",
-                      letterSpacing: 0.8,
-                      padding: "4px 12px",
-                      borderRadius: 999,
-                    }}
-                  >
-                    Recommended Retainer
-                  </span>
-                )}
-
-                <div>
-                  <span style={{ fontSize: 12, color: "#F59E0B", fontWeight: 700, textTransform: "uppercase", letterSpacing: 0.5 }}>
-                    {tier.tag}
-                  </span>
-                  <h3 style={{ fontSize: 22, fontWeight: 700, color: "#fff", margin: "8px 0 10px" }}>
-                    {tier.name}
-                  </h3>
-                  <p style={{ color: "#9CA3AF", fontSize: 14, marginBottom: 20, lineHeight: 1.5 }}>
-                    {tier.desc}
-                  </p>
-
-                  <div style={{ marginBottom: 24 }}>
-                    <span style={{ fontSize: 28, fontWeight: 800, fontFamily: "'Space Grotesk', sans-serif", color: "#fff" }}>
-                      {tier.price}
-                    </span>
-                    <span style={{ fontSize: 13, color: "#9CA3AF", marginLeft: 8 }}>
-                      / {tier.period}
-                    </span>
-                  </div>
-
-                  <ul style={{ display: "grid", gap: 10, padding: 0, margin: "0 0 30px", listStyle: "none" }}>
-                    {tier.features.map((f, fi) => (
-                      <li key={fi} style={{ display: "flex", gap: 10, fontSize: 14, color: "#D1D5DB", alignItems: "baseline" }}>
-                        <span style={{ color: "#F59E0B", fontWeight: 800 }}>✓</span>
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <a
-                  href="#brief"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    width: "100%",
-                    padding: "14px",
-                    borderRadius: 10,
-                    fontWeight: 700,
-                    fontSize: 14,
-                    textDecoration: "none",
-                    background: tier.featured ? "#F59E0B" : "rgba(255, 255, 255, 0.06)",
-                    color: tier.featured ? "#0B0D12" : "#fff",
-                    border: tier.featured ? "none" : "1px solid rgba(255, 255, 255, 0.15)",
-                    transition: "all 0.2s",
-                  }}
-                >
-                  {tier.cta} →
-                </a>
-              </div>
-            ))}
           </div>
         </div>
-      </section>
+      </footer>
 
-      {/* 10. INTERACTIVE MAD-LIB ORDER FORM */}
-      <section id="brief" style={{ position: "relative", zIndex: 10, padding: "80px 0 100px", background: "rgba(255,255,255,0.015)", borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div style={{ width: "min(100% - 32px, 1100px)", marginInline: "auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 44 }}>
-            <div
-              style={{
-                display: "inline-block",
-                padding: "4px 12px",
-                background: "rgba(245, 158, 11, 0.12)",
-                color: "#F59E0B",
-                borderRadius: 99,
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: 0.5,
-                textTransform: "uppercase",
-                marginBottom: 12,
-              }}
-            >
-              Interactive Brief Builder
-            </div>
-            <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(2rem, 4vw, 3.2rem)", fontWeight: 800, margin: 0 }}>
-              Tell Us What You're Making
-            </h2>
-            <p style={{ color: "#9CA3AF", fontSize: 16, marginTop: 8 }}>
-              Fill in the blanks below to generate your custom video scope. We reply within one working day.
-            </p>
-          </div>
-
-          <div
-            style={{
-              background: "#121620",
-              border: "1px solid rgba(255, 255, 255, 0.12)",
-              borderRadius: 24,
-              padding: "clamp(24px, 5vw, 48px)",
-              boxShadow: "0 30px 70px rgba(0,0,0,0.5)",
-            }}
-          >
-            <OrderForm />
-          </div>
-        </div>
-      </section>
-
-      {/* 11. FAQ ACCORDION */}
-      <section style={{ position: "relative", zIndex: 10, padding: "70px 0 90px" }}>
-        <div style={{ width: "min(100% - 32px, 860px)", marginInline: "auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 44 }}>
-            <div
-              style={{
-                display: "inline-block",
-                padding: "4px 12px",
-                background: "rgba(245, 158, 11, 0.12)",
-                color: "#F59E0B",
-                borderRadius: 99,
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: 0.5,
-                textTransform: "uppercase",
-                marginBottom: 12,
-              }}
-            >
-              Frequently Asked Questions
-            </div>
-            <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 800, margin: 0 }}>
-              Questions Before You Book
-            </h2>
-          </div>
-
-          <div style={{ display: "grid", gap: 12 }}>
-            {FAQ_ITEMS.map((item, i) => {
-              const isOpen = openFaq === i;
-              return (
-                <div
-                  key={i}
-                  style={{
-                    background: "#121620",
-                    border: "1px solid rgba(255, 255, 255, 0.08)",
-                    borderRadius: 14,
-                    overflow: "hidden",
-                    transition: "border-color 0.2s",
-                  }}
-                >
-                  <button
-                    type="button"
-                    onClick={() => setOpenFaq(isOpen ? -1 : i)}
-                    style={{
-                      width: "100%",
-                      padding: "20px 24px",
-                      background: "transparent",
-                      border: "none",
-                      color: "#fff",
-                      fontFamily: "'Space Grotesk', sans-serif",
-                      fontWeight: 700,
-                      fontSize: 17,
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      cursor: "pointer",
-                      textAlign: "left",
-                    }}
-                  >
-                    <span>{item.q}</span>
-                    <span
-                      style={{
-                        color: "#F59E0B",
-                        fontSize: 22,
-                        transform: isOpen ? "rotate(45deg)" : "none",
-                        transition: "transform 0.2s",
-                      }}
-                    >
-                      +
-                    </span>
-                  </button>
-
-                  {isOpen && (
-                    <div
-                      style={{
-                        padding: "0 24px 22px",
-                        color: "#9CA3AF",
-                        fontSize: 15,
-                        lineHeight: 1.65,
-                        borderTop: "1px solid rgba(255, 255, 255, 0.04)",
-                        paddingTop: 16,
-                      }}
-                    >
-                      {item.a}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* 12. FULLSCREEN VIDEO MODAL */}
-      {playerOpen && selectedVideo && (
+      {/* 10. CINEMATIC VIDEO MODAL */}
+      {activeVideo && (
         <div
-          onClick={closeVideoModal}
+          onClick={() => setActiveVideo(null)}
           style={{
             position: "fixed",
             inset: 0,
-            zIndex: 9999,
+            zIndex: 100,
             background: "rgba(0, 0, 0, 0.88)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
+            backdropFilter: "blur(18px)",
+            WebkitBackdropFilter: "blur(18px)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -1286,128 +1544,150 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             onClick={(e) => e.stopPropagation()}
             style={{
               position: "relative",
-              width: "min(400px, 94vw)",
-              aspectRatio: "9 / 16",
-              background: "#000",
-              borderRadius: 20,
+              maxWidth: 540,
+              width: "100%",
+              background: "#111111",
+              borderRadius: 28,
               overflow: "hidden",
-              border: "1px solid rgba(255, 255, 255, 0.2)",
-              boxShadow: "0 25px 70px rgba(0,0,0,0.8)",
+              border: "1px solid rgba(255, 255, 255, 0.15)",
+              boxShadow: "0 30px 80px rgba(0,0,0,0.8)",
             }}
           >
-            <video
-              src={selectedVideo.videoSrc}
-              controls
-              autoPlay
-              playsInline
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-            <button
-              type="button"
-              onClick={closeVideoModal}
+            {/* Modal Header */}
+            <div
               style={{
-                position: "absolute",
-                top: 14,
-                right: 14,
-                background: "rgba(0,0,0,0.7)",
-                color: "#fff",
-                border: "1px solid rgba(255,255,255,0.3)",
-                width: 36,
-                height: 36,
-                borderRadius: "50%",
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                fontSize: 18,
-                zIndex: 10,
+                justifyContent: "space-between",
+                padding: "16px 20px",
+                borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+                background: "rgba(255, 255, 255, 0.03)",
               }}
-              aria-label="Close video player"
             >
-              ✕
-            </button>
+              <div>
+                <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "#FFFFFF" }}>
+                  {activeVideo.title}
+                </p>
+                <p style={{ margin: 0, fontSize: 12, color: "rgba(255,255,255,0.6)" }}>
+                  {activeVideo.subtitle}
+                </p>
+              </div>
+
+              <button
+                onClick={() => setActiveVideo(null)}
+                style={{
+                  background: "rgba(255, 255, 255, 0.1)",
+                  border: "none",
+                  color: "#FFFFFF",
+                  width: 34,
+                  height: 34,
+                  borderRadius: 999,
+                  cursor: "pointer",
+                  fontSize: 16,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Video Player */}
+            <div style={{ position: "relative", width: "100%", aspectRatio: "9 / 16", background: "#000" }}>
+              <video
+                src={activeVideo.videoSrc}
+                controls
+                autoPlay
+                playsInline
+                style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+              />
+            </div>
+
+            {/* Modal Footer CTA */}
+            <div
+              style={{
+                padding: "16px 20px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                background: "rgba(255, 255, 255, 0.04)",
+                gap: 12,
+              }}
+            >
+              <span style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.7)" }}>
+                Want a video styled like this?
+              </span>
+
+              <a
+                href={waUrl(`Hi Story Builder, I love the "${activeVideo.title}" reel and want a quote for something similar.`)}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  background: "#FF4D1A",
+                  color: "#FFFFFF",
+                  fontWeight: 700,
+                  fontSize: 13,
+                  padding: "9px 18px",
+                  borderRadius: 999,
+                  textDecoration: "none",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                }}
+              >
+                Quote this style ↗
+              </a>
+            </div>
           </div>
         </div>
       )}
 
-      {/* 13. FOOTER */}
-      <footer
-        style={{
-          borderTop: "1px solid rgba(255, 255, 255, 0.08)",
-          padding: "40px 0 50px",
-          textAlign: "center",
-          fontSize: 14,
-          color: "#9CA3AF",
-          position: "relative",
-          zIndex: 10,
-        }}
-      >
-        <div style={{ width: "min(100% - 32px, 1200px)", marginInline: "auto" }}>
-          <p style={{ margin: "0 0 8px", color: "#E5E7EB", fontWeight: 600 }}>
-            The Story Builder — Video Shoot & Edit Production Suite
-          </p>
-          <p style={{ margin: "0 0 16px", fontSize: 13 }}>
-            Shooting on-location across Hyderabad, India · Post-production & remote editing worldwide.
-          </p>
-          <div style={{ display: "flex", justifyContent: "center", gap: 20, fontSize: 13 }}>
-            <a href="/" onClick={(e) => { e.preventDefault(); setPage && setPage("home"); }} style={{ color: "#F59E0B", textDecoration: "none" }}>
-              Main Homepage
-            </a>
-            <a href="/video-portfolio" onClick={(e) => { e.preventDefault(); setPage && setPage("video-portfolio"); }} style={{ color: "#9CA3AF", textDecoration: "none" }}>
-              Standard Portfolio
-            </a>
-            <a href="/privacy" onClick={(e) => { e.preventDefault(); setPage && setPage("privacy"); }} style={{ color: "#9CA3AF", textDecoration: "none" }}>
-              Privacy Policy
-            </a>
-          </div>
-        </div>
-      </footer>
-
-      {/* 14. MOBILE STICKY BOTTOM ACTION BAR */}
+      {/* 11. MOBILE STICKY BOTTOM ACTION BAR */}
       <div
         style={{
           position: "fixed",
           bottom: 0,
           left: 0,
           right: 0,
-          background: "rgba(9, 11, 14, 0.95)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          borderTop: "1px solid rgba(255, 255, 255, 0.12)",
-          padding: "10px 16px calc(10px + env(safe-area-inset-bottom))",
+          background: "rgba(243, 239, 234, 0.95)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          borderTop: "1px solid rgba(17, 17, 17, 0.08)",
+          padding: "10px 18px calc(10px + env(safe-area-inset-bottom))",
           display: "flex",
-          gap: 10,
-          zIndex: 90,
+          gap: 12,
+          zIndex: 75,
         }}
       >
         <a
           href="#brief"
           style={{
             flex: 1,
-            background: "#F59E0B",
-            color: "#0B0D12",
+            background: "#111111",
+            color: "#FFFFFF",
             fontWeight: 700,
             fontSize: 14,
             padding: "12px",
-            borderRadius: 8,
+            borderRadius: 999,
             textAlign: "center",
             textDecoration: "none",
+            boxShadow: "0 4px 14px rgba(17,17,17,0.15)",
           }}
         >
-          Get a Video Quote
+          Start a project ↗
         </a>
         <a
           href={waUrl()}
           target="_blank"
           rel="noopener noreferrer"
           style={{
-            background: "rgba(255, 255, 255, 0.08)",
-            color: "#fff",
-            border: "1px solid rgba(255, 255, 255, 0.2)",
-            fontWeight: 600,
+            background: "#FF4D1A",
+            color: "#FFFFFF",
+            fontWeight: 700,
             fontSize: 14,
-            padding: "12px 18px",
-            borderRadius: 8,
+            padding: "12px 20px",
+            borderRadius: 999,
             textDecoration: "none",
             display: "flex",
             alignItems: "center",
