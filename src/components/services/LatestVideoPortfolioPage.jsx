@@ -316,7 +316,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         color: "#111111",
         minHeight: "100vh",
         fontFamily: '"Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-        overflowX: "hidden",
+        overflowX: "clip",
         position: "relative",
       }}
     >
@@ -689,33 +689,41 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           </div>
         </div>
 
-        {/* 4 Showcase Cards Stack */}
+        {/* 4 Showcase Cards Sticky Stacking Deck on Scroll */}
         <div
           style={{
+            position: "relative",
             display: "flex",
             flexDirection: "column",
-            gap: "clamp(28px, 4vw, 44px)",
+            paddingBottom: "40px",
           }}
         >
-          {SHOWCASE_CARDS.map((card) => (
-            <div
-              key={card.id}
-              style={{
-                background: card.bgColor,
-                color: card.inkColor,
-                borderRadius: 36,
-                border: `3px solid ${card.borderColor}`,
-                padding: "clamp(20px, 3.2vw, 36px)",
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 380px), 1fr))",
-                gap: "clamp(24px, 3.5vw, 44px)",
-                alignItems: "center",
-                boxShadow: "0 24px 60px -20px rgba(17, 17, 17, 0.15)",
-                position: "relative",
-                overflow: "hidden",
-                transition: "transform 0.35s ease, box-shadow 0.35s ease",
-              }}
-            >
+          {SHOWCASE_CARDS.map((card, index) => {
+            const topOffset = `calc(78px + ${index * 26}px)`;
+            const isLast = index === SHOWCASE_CARDS.length - 1;
+            return (
+              <div
+                key={card.id}
+                style={{
+                  position: "sticky",
+                  top: topOffset,
+                  zIndex: 10 + index,
+                  background: card.bgColor,
+                  color: card.inkColor,
+                  borderRadius: 36,
+                  border: `3px solid ${card.borderColor}`,
+                  padding: "clamp(20px, 3.2vw, 36px)",
+                  marginBottom: isLast ? "0px" : "clamp(120px, 28vh, 260px)",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 380px), 1fr))",
+                  gap: "clamp(24px, 3.5vw, 44px)",
+                  alignItems: "center",
+                  boxShadow: `0 ${18 + index * 10}px ${45 + index * 15}px -15px rgba(17, 17, 17, ${0.18 + index * 0.05})`,
+                  overflow: "hidden",
+                  transition: "transform 0.35s ease, box-shadow 0.35s ease",
+                  transformOrigin: "top center",
+                }}
+              >
               {/* Left Column: Live Video Loop Preview inside Card! */}
               <div
                 onClick={() => {
@@ -980,7 +988,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 </div>
               </div>
             </div>
-          ))}
+          );
+        })}
         </div>
       </section>
 
