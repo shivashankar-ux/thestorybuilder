@@ -8,8 +8,8 @@ import { trackPageView, trackEvent } from "../../utils/tracking";
 
 /* ============================================================
    LATEST VIDEO PORTFOLIO — /latestpf
-   Pixel-Accurate Recreation of the Framer Design Template
-   Warm Ivory Canvas (#F3EFEA) · Colored Project Cards · Black Footer
+   100% The Story Builder Content, Real Client Videos & Imagery
+   Framer Signature Layout (Ivory #F3EFEA · Colored Cards · Black Footer)
    ============================================================ */
 
 const CONFIG = {
@@ -17,39 +17,39 @@ const CONFIG = {
   whatsapp: "918341928526",
   phone: "+91 83419 28526",
   email: "hello@thestorybuilder.in",
-  waMessage: "Hi Story Builder team, I saw your latest video portfolio and I'd like to discuss a project.",
+  waMessage: "Hi Story Builder team, I saw your latest video portfolio and I'd like to book a shoot & edit package.",
 };
 
 const waUrl = (msg) =>
   `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg || CONFIG.waMessage)}`;
 
-// Curated high-res imagery for 3D Twist Ribbon & cursor Image Trail
-const TRAIL_IMAGES = [
-  "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1518173946687-a4c8a383392e?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=640&q=80",
-  "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=640&q=80",
+// 100% Real Story Builder Client Video Stills & Founder Photography for Ribbon & Trail
+const STORYBUILDER_MEDIA = [
+  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_2/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.jpg",
+  "/shiva-landing.webp",
+  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_2/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.jpg",
+  "/shiva-about.webp",
+  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_2/v1793010466/portfolio%20video%20for%20editing%20services/vision%20rainbow/Vision_Rainbow_pre-primary_reel_2_aezhph.jpg",
+  "/shiva.webp",
+  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_1/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.jpg",
+  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_1/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.36_PM_vtlfsv.jpg",
+  "/shiva-landing.png",
+  "/shiva-about.png",
+  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_3/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.jpg",
+  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_4/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.jpg",
 ];
 
-// The 4 Signature Showcase Cards (Exact Color Hierarchy from Template Screenshot)
+// The 4 Signature Showcase Cards (The Story Builder's Actual Client Projects)
 const SHOWCASE_CARDS = [
   {
     id: "card-1",
     num: "01",
-    cat: "01 / Film",
-    title: "Neon Hours",
-    subtitle: "Farhaan Commercial Brand Film",
-    desc: "A high-fashion 4K cinematic commercial shot on Sony cinema rigs with anamorphic lighting flares, rhythmic sound foley, and luxury film color grading.",
-    tags: ["Brand Film", "4K S-Log3", "Commercial"],
-    bgColor: "#CEF237", // Electric Lime from Screenshot
+    cat: "01 / Brand Film",
+    title: "Farhaan Commercial",
+    subtitle: "Luxury Fashion & Commercial Campaign",
+    desc: "Shot on Sony cinema rigs with anamorphic lighting, rhythmic sound foley, and luxury film color grading. Directed on-location in Hyderabad for national campaign rollout.",
+    tags: ["Brand Film", "Sony Cinema Rig", "4K S-Log3", "On-Location"],
+    bgColor: "#CEF237", // Electric Lime from Template
     borderColor: "#B8DC29",
     inkColor: "#111111",
     btnBg: "#111111",
@@ -57,38 +57,40 @@ const SHOWCASE_CARDS = [
     badgeBg: "rgba(17, 17, 17, 0.08)",
     videoSrc:
       "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,vc_h264/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.mp4",
-    poster: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80",
-    miniThumb: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
-    stats: "450K+ Views · 4.8x Retention",
+    poster:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_800,so_2/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.jpg",
+    miniThumb:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_200,so_3/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.jpg",
+    stats: "450K+ Views · Commercial Master",
   },
   {
     id: "card-2",
     num: "02",
-    cat: "02 / Ads",
-    title: "Maison Vermeil",
-    subtitle: "Digital Medha Performance Ads",
-    desc: "Direct-response ad creative generating 890K+ views and 4.2x ROAS across Meta and YouTube feeds with thumb-stopping retention pacing.",
-    tags: ["Meta Ads", "890K+ Views", "ROAS 4.2x"],
-    bgColor: "#F9C0C4", // Dusty Salmon Pink from Screenshot
+    cat: "02 / Performance Ads",
+    title: "Digital Medha",
+    subtitle: "High-ROAS Meta & YouTube Ad Creatives",
+    desc: "Direct-response ad creative generating 890K+ views and 4.2x ROAS across Meta and YouTube feeds with thumb-stopping retention hooks and conversion-focused narrative pacing.",
+    tags: ["Performance Ads", "890K+ Views", "4.2x ROAS", "Retention Hook"],
+    bgColor: "#F9C0C4", // Dusty Salmon Pink from Template
     borderColor: "#EFA9AE",
     inkColor: "#111111",
     btnBg: "#111111",
     btnInk: "#FFFFFF",
     badgeBg: "rgba(17, 17, 17, 0.08)",
     videoSrc: "/videos/rVUkWK8lRmw.mp4",
-    poster: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=800&q=80",
-    miniThumb: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?auto=format&fit=crop&w=200&q=80",
+    poster: "/shiva-landing.webp",
+    miniThumb: "/shiva-landing.webp",
     stats: "890K+ Views · 4.2x ROAS",
   },
   {
     id: "card-3",
     num: "03",
-    cat: "03 / Motion",
-    title: "Femme Moto",
-    subtitle: "Veto & Icons Gym Cinematic",
-    desc: "High-octane fitness commercial with speed ramps, high-energy member action cuts, and explosive bass foley synchronized to every beat.",
-    tags: ["Gym Commercial", "Speed Ramps", "Bass Foley"],
-    bgColor: "#FF4A1C", // Vibrant Vermilion Orange from Screenshot
+    cat: "03 / Gym & Fitness",
+    title: "Icons & Veto Gym",
+    subtitle: "High-Octane Member Commercial",
+    desc: "Dynamic commercial filmed with speed ramps, member workout action cuts, and explosive bass foley synchronized to the rhythm of the gym. Filled new membership quotas in two weeks.",
+    tags: ["Gym Commercial", "Speed Ramps", "Bass Foley", "Action Edits"],
+    bgColor: "#FF4A1C", // Vibrant Vermilion Orange from Template
     borderColor: "#E73E12",
     inkColor: "#111111",
     btnBg: "#111111",
@@ -96,56 +98,129 @@ const SHOWCASE_CARDS = [
     badgeBg: "rgba(17, 17, 17, 0.12)",
     videoSrc:
       "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,vc_h264/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.mp4",
-    poster: "https://images.unsplash.com/photo-1518173946687-a4c8a383392e?auto=format&fit=crop&w=800&q=80",
-    miniThumb: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=200&q=80",
+    poster:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_800,so_2/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.jpg",
+    miniThumb:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_200,so_3/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.jpg",
     stats: "420K+ Views · Viral Audio",
   },
   {
     id: "card-4",
     num: "04",
-    cat: "04 / Brand",
-    title: "Lumen & Co",
-    subtitle: "Jaya Daga Authority Series",
-    desc: "Personal brand documentary reel establishing category authority, founder trust, and generating consistent inbound executive coaching leads.",
-    tags: ["Founder Series", "Kinetic Captions", "Authority Reel"],
-    bgColor: "#2B47FC", // Electric Cobalt Blue from Screenshot
+    cat: "04 / Founder Authority",
+    title: "Jaya Daga",
+    subtitle: "Executive Coaching & Personal Brand",
+    desc: "Founder documentary reel establishing authority, leadership trust, and driving consistent inbound coaching leads with editorial typography and cinematic color grading.",
+    tags: ["Founder Series", "Kinetic Captions", "Authority Reel", "Coaching Leads"],
+    bgColor: "#2B47FC", // Electric Cobalt Blue from Template
     borderColor: "#1E3AE8",
     inkColor: "#FFFFFF",
     btnBg: "#FFFFFF",
     btnInk: "#111111",
     badgeBg: "rgba(255, 255, 255, 0.16)",
     videoSrc: "/videos/VdsrsWmmhiw.mp4",
-    poster: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
-    miniThumb: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+    poster: "/shiva-about.webp",
+    miniThumb: "/shiva-about.webp",
     stats: "310K+ Views · 3x Inbound",
   },
 ];
 
-// Things We Do Capabilities (Matching the 4 pastel tiles in screenshot)
+// Additional Real Client Reels from The Story Builder Portfolio
+const ALL_CLIENT_REELS = [
+  {
+    id: "reel-1",
+    name: "Commercial Brand Film",
+    client: "Farhaan Campaign",
+    tag: "Brand Film",
+    stats: "450K+ Views",
+    videoSrc:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.mp4",
+  },
+  {
+    id: "reel-2",
+    name: "Digital Medha Ads",
+    client: "Performance Agency",
+    tag: "Meta Ad Creative",
+    stats: "890K+ Views",
+    videoSrc: "/videos/rVUkWK8lRmw.mp4",
+  },
+  {
+    id: "reel-3",
+    name: "Vision Rainbow",
+    client: "Learning & School Hub",
+    tag: "Educational Story",
+    stats: "115K+ Views",
+    videoSrc: "/videos/_aVoaZbyXJQ.mp4",
+  },
+  {
+    id: "reel-4",
+    name: "Jaya Daga Coaching",
+    client: "Executive Founder",
+    tag: "Authority Brand",
+    stats: "310K+ Views",
+    videoSrc: "/videos/VdsrsWmmhiw.mp4",
+  },
+  {
+    id: "reel-5",
+    name: "Icons Gym Walkthrough",
+    client: "Fitness Commercial",
+    tag: "Gym & Fitness",
+    stats: "420K+ Views",
+    videoSrc: "/videos/1EwM31QxnKk.mp4",
+  },
+  {
+    id: "reel-6",
+    name: "Veto Gym Commercial",
+    client: "Action Showcase",
+    tag: "Cinematic Showcase",
+    stats: "260K+ Views",
+    videoSrc:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.mp4",
+  },
+  {
+    id: "reel-7",
+    name: "Madhura Yoga Breakdown",
+    client: "Wellness Series",
+    tag: "Wellness & Lifestyle",
+    stats: "210K+ Views",
+    videoSrc: "/videos/k-bJd1yYk1A.mp4",
+  },
+  {
+    id: "reel-8",
+    name: "Pre-Primary Reel",
+    client: "Vision Rainbow",
+    tag: "School Commercial",
+    stats: "95K+ Views",
+    videoSrc:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1793010466/portfolio%20video%20for%20editing%20services/vision%20rainbow/Vision_Rainbow_pre-primary_reel_2_aezhph.mp4",
+  },
+];
+
+// The Story Builder 4 Production Capabilities (Pastel Tiles in Template)
 const CAPABILITIES = [
   {
     num: "01",
-    tag: "01 / Strategy & Cinema",
-    title: "Brand Films & Commercials",
-    desc: "From concept boards and scripts to on-location cinema cameras and lighting direction. Full-scale production for brands ready to own their category.",
+    tag: "01 / Video Shoot (Hyderabad)",
+    title: "On-Location Cinema Shoot",
+    desc: "Trained crew with Sony Alpha 4K cinema cameras, wireless lapel microphones, and portable lighting rigs. We direct on-location across Hyderabad while you focus on running your business.",
     bgColor: "#EBE6DD",
     borderColor: "#DFDACF",
-    pills: ["Pre-production", "Cinema Rig", "Lighting Direction", "On-location Shoot"],
+    pills: ["Sony Alpha 4K", "Wireless Lapels", "Portable Lights", "Hyderabad Shoot"],
   },
   {
     num: "02",
-    tag: "02 / Short-Form",
-    title: "High-Retention Reels",
-    desc: "Hook research, kinetic animated captions, zoom transitions, sound design, and viral pacing engineered to capture attention and stop the scroll.",
+    tag: "02 / Short-Form Reels",
+    title: "High-Retention Reels & Shorts",
+    desc: "Hook research, kinetic animated captions, pattern-interrupt zoom cuts, and punchy sound design engineered to capture attention and stop the scroll on Instagram and YouTube Shorts.",
     bgColor: "#E7E3F8",
     borderColor: "#DDD7F3",
-    pills: ["3s Viral Hook", "Kinetic Subtitles", "Sound Foley", "9:16 Aspect"],
+    pills: ["3s Viral Hook", "Kinetic Subtitles", "Sound Foley", "9:16 Format"],
   },
   {
     num: "03",
-    tag: "03 / Performance",
-    title: "Performance Ad Creatives",
-    desc: "Scroll-stopping ad creatives built for Meta and YouTube Ads. Multi-angle variations, clear offer framing, and ROAS-focused narrative pacing.",
+    tag: "03 / Paid Advertising",
+    title: "Direct-Response Meta Video Ads",
+    desc: "Paid ad creatives built to convert. Multi-angle variations, clear offer framing, and ROAS-focused narrative pacing proven to lower customer acquisition cost on Meta and YouTube.",
     bgColor: "#FFE7DB",
     borderColor: "#F7DACB",
     pills: ["Hook Testing", "Ad Variants", "CTA Overlays", "4.2x ROAS Avg"],
@@ -153,11 +228,47 @@ const CAPABILITIES = [
   {
     num: "04",
     tag: "04 / Post-Production",
-    title: "Color Craft & Master Exports",
-    desc: "DaVinci Resolve S-Log3 film grading, custom sound mixing, vocal enhancement, and multi-platform aspect ratio masters ready to publish.",
+    title: "DaVinci Color & Sound Mixing",
+    desc: "DaVinci Resolve S-Log3 film grading, vocal cleanup, cinematic bass foley, and multi-platform aspect ratio masters (9:16, 16:9, 4:5) ready to publish with 2 revision rounds included.",
     bgColor: "#E0EDE3",
     borderColor: "#D2E2D6",
-    pills: ["S-Log3 Grading", "Foley SFX", "Vocal Polish", "4K Masters"],
+    pills: ["S-Log3 Grading", "Foley SFX", "Vocal Polish", "2 Revisions"],
+  },
+];
+
+// Real Story Builder Client Testimonials for QuoteDeck
+const CLIENT_TESTIMONIALS = [
+  {
+    quote: "Working with The Story Builder on our personal brand series was transformative. They directed the shoot, kept pacing razor-sharp, and the video quality was indistinguishable from an international film. Inbound inquiries tripled in the first 30 days.",
+    name: "Jaya Daga",
+    role: "Founder & Author, Authority Coaching",
+    image: "/shiva-about.webp",
+    color: "#FFE27A", // Top Yellow Card
+    ink: "#111111",
+  },
+  {
+    quote: "The gym walkthrough and dynamic member workout reels they produced drove insane traction on Instagram. Filled our membership quota in two weeks flat. One crew, one brief.",
+    name: "Icons Gym",
+    role: "Management Team, Hyderabad",
+    image: "/shiva-landing.webp",
+    color: "#2D46F0", // Cobalt Card
+    ink: "#FFFFFF",
+  },
+  {
+    quote: "Their ad creatives outperformed every other video format we ran on Meta. The retention hooks and sound design made all the difference. Consistently generated 4.2x ROAS across campaigns.",
+    name: "Digital Medha",
+    role: "Growth Head, Performance Agency",
+    image: "/shiva.webp",
+    color: "#CFF26A", // Neon Lime Card
+    ink: "#111111",
+  },
+  {
+    quote: "They captured the true soul and warmth of our learning environment with sensitivity and cinematic grace. The storytelling is authentic and the feedback from parents has been phenomenal.",
+    name: "Vision Rainbow",
+    role: "Creative Director, School & Learning Hub",
+    image: "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_400,so_2/v1793010466/portfolio%20video%20for%20editing%20services/vision%20rainbow/Vision_Rainbow_pre-primary_reel_2_aezhph.jpg",
+    color: "#FF4D1A", // Orange Card
+    ink: "#FFFFFF",
   },
 ];
 
@@ -266,7 +377,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               fontSize: 14,
               fontWeight: 600,
               letterSpacing: "-0.01em",
-              opacity: 0.8,
+              opacity: 0.85,
             }}
           >
             Work
@@ -279,10 +390,23 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               fontSize: 14,
               fontWeight: 600,
               letterSpacing: "-0.01em",
-              opacity: 0.8,
+              opacity: 0.85,
             }}
           >
             Services
+          </a>
+          <a
+            href="#reels"
+            style={{
+              textDecoration: "none",
+              color: "#111111",
+              fontSize: 14,
+              fontWeight: 600,
+              letterSpacing: "-0.01em",
+              opacity: 0.85,
+            }}
+          >
+            All Reels
           </a>
           <a
             href="#testimonials"
@@ -292,10 +416,10 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               fontSize: 14,
               fontWeight: 600,
               letterSpacing: "-0.01em",
-              opacity: 0.8,
+              opacity: 0.85,
             }}
           >
-            About
+            Reviews
           </a>
           <a
             href="#brief"
@@ -305,10 +429,10 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               fontSize: 14,
               fontWeight: 600,
               letterSpacing: "-0.01em",
-              opacity: 0.8,
+              opacity: 0.85,
             }}
           >
-            Contact
+            Brief
           </a>
         </nav>
 
@@ -330,7 +454,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             boxShadow: "0 4px 14px rgba(17, 17, 17, 0.12)",
           }}
         >
-          Start a project <span style={{ fontSize: 14 }}>↗</span>
+          Book a Shoot ↗
         </a>
       </header>
 
@@ -348,7 +472,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           boxSizing: "border-box",
         }}
       >
-        {/* Floating cursor trail on the warm light canvas */}
+        {/* Floating cursor trail on the warm light canvas with real project stills */}
         <div
           style={{
             position: "absolute",
@@ -358,7 +482,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           }}
         >
           <ImageTrail
-            images={TRAIL_IMAGES}
+            images={STORYBUILDER_MEDIA}
             size={220}
             spacing={85}
             lifetime={1.1}
@@ -367,7 +491,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           />
         </div>
 
-        {/* 3D WebGL2 Twist Ribbon threading through wordmark */}
+        {/* 3D WebGL2 Twist Ribbon threading through wordmark "the story builder" */}
         <div
           style={{
             position: "relative",
@@ -380,7 +504,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           }}
         >
           <TwistRibbon
-            images={TRAIL_IMAGES}
+            images={STORYBUILDER_MEDIA}
             wordmark="the story builder"
             fontFamily="Bricolage Grotesque"
             fontWeight={800}
@@ -423,11 +547,11 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               lineHeight: 1.45,
               fontWeight: 500,
               color: "rgba(17, 17, 17, 0.72)",
-              maxWidth: 300,
+              maxWidth: 320,
               letterSpacing: "-0.01em",
             }}
           >
-            Shaping authentic stories for brands that dare to be bold.
+            Shot by one crew in Hyderabad. Cut by the same team. High-retention video production for modern brands.
           </p>
 
           <div
@@ -487,12 +611,12 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         >
           <span>We shoot, edit, and scale visual stories</span>{" "}
           <span style={{ color: "rgba(17, 17, 17, 0.38)" }}>
-            that move audiences, drive retention, and turn attention into revenue.
+            that move audiences, stop the scroll, and turn attention into high-ticket clients and customers.
           </span>
         </h2>
       </section>
 
-      {/* 4. SELECTED WORK ("Sel...") SECTION — 4 SIGNATURE SHOWCASE CARDS */}
+      {/* 4. SELECTED WORK ("Sel...") SECTION — 4 STORY BUILDER SHOWCASE CARDS */}
       <section
         id="work"
         style={{
@@ -535,7 +659,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               display: "flex",
               alignItems: "center",
               gap: 16,
-              maxWidth: 420,
+              maxWidth: 440,
             }}
           >
             <p
@@ -547,7 +671,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 fontWeight: 500,
               }}
             >
-              A curated selection of films, commercials, and high-retention video stories.
+              Real client deliverables produced in Hyderabad: commercial brand films, paid Meta ad creatives, and viral gym reels.
             </p>
             <span
               style={{
@@ -592,7 +716,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 transition: "transform 0.35s ease, box-shadow 0.35s ease",
               }}
             >
-              {/* Left Column: Big Video / Media Player */}
+              {/* Left Column: Live Video Loop Preview inside Card! */}
               <div
                 onClick={() => {
                   setActiveVideo(card);
@@ -608,16 +732,19 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   boxShadow: "0 18px 36px -12px rgba(17, 17, 17, 0.28)",
                 }}
               >
-                {/* Media Image / Video Poster */}
-                <img
-                  src={card.poster}
-                  alt={card.title}
+                {/* Playing Real Video Loop Preview */}
+                <video
+                  src={card.videoSrc}
+                  poster={card.poster}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
                   style={{
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
                     display: "block",
-                    transition: "transform 0.5s ease",
                   }}
                 />
 
@@ -650,23 +777,23 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    background: "rgba(0, 0, 0, 0.22)",
+                    background: "rgba(0, 0, 0, 0.2)",
                     transition: "background 0.3s ease",
                   }}
                 >
                   <div
                     style={{
-                      width: 64,
-                      height: 64,
+                      width: 60,
+                      height: 60,
                       borderRadius: 999,
                       background: "rgba(255, 255, 255, 0.95)",
                       color: "#111111",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontSize: 22,
+                      fontSize: 20,
                       boxShadow: "0 12px 28px rgba(0, 0, 0, 0.35)",
-                      paddingLeft: 4,
+                      paddingLeft: 3,
                     }}
                   >
                     ▶
@@ -679,7 +806,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                     position: "absolute",
                     bottom: 12,
                     right: 12,
-                    background: "rgba(0, 0, 0, 0.65)",
+                    background: "rgba(0, 0, 0, 0.72)",
                     backdropFilter: "blur(6px)",
                     color: "#FFFFFF",
                     fontSize: 11,
@@ -692,7 +819,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 </div>
               </div>
 
-              {/* Right Column: Content, Floating Mini-Thumbnail & Round Action Button */}
+              {/* Right Column: Content, Real Project Details & Action Button */}
               <div
                 style={{
                   display: "flex",
@@ -703,7 +830,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   position: "relative",
                 }}
               >
-                {/* Floating Polaroid-Style Mini Thumbnail in Top Right (Exact Detail from Screenshot!) */}
+                {/* Floating Thumbnail in Top Right (Real Project Still!) */}
                 <div
                   style={{
                     position: "absolute",
@@ -719,7 +846,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 >
                   <img
                     src={card.miniThumb}
-                    alt=""
+                    alt={card.title}
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 </div>
@@ -728,11 +855,12 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   <span
                     style={{
                       display: "block",
-                      fontSize: 14,
+                      fontSize: 13,
                       fontWeight: 700,
-                      opacity: 0.7,
+                      opacity: 0.75,
                       marginBottom: 8,
                       letterSpacing: "0.02em",
+                      textTransform: "uppercase",
                     }}
                   >
                     {card.subtitle}
@@ -741,7 +869,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   <h4
                     style={{
                       margin: "0 0 14px",
-                      fontSize: "clamp(32px, 4.2vw, 52px)",
+                      fontSize: "clamp(30px, 4vw, 48px)",
                       fontWeight: 800,
                       lineHeight: 1.05,
                       letterSpacing: "-0.035em",
@@ -754,9 +882,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   <p
                     style={{
                       margin: "0 0 24px",
-                      fontSize: "clamp(14px, 1.4vw, 17px)",
+                      fontSize: "clamp(14px, 1.4vw, 16px)",
                       lineHeight: 1.5,
-                      opacity: 0.88,
+                      opacity: 0.9,
                       fontWeight: 500,
                       maxWidth: 440,
                     }}
@@ -814,10 +942,10 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                       textUnderlineOffset: 4,
                     }}
                   >
-                    Watch Full Master ↗
+                    Watch Full Cut With Sound ↗
                   </button>
 
-                  {/* Circular Button Matching Screenshot (Black/White with Arrow) */}
+                  {/* Circular Button Matching Template (Black/White with Arrow) */}
                   <button
                     onClick={() => {
                       setActiveVideo(card);
@@ -856,7 +984,157 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       </section>
 
-      {/* 5. THINGS WE DO ("Thin...") SECTION — 4 PASTEL TILES */}
+      {/* 5. ADDITIONAL REAL CLIENT REELS STRIP (INSTAGRAM VERTICAL REELS) */}
+      <section
+        id="reels"
+        style={{
+          padding: "0 24px clamp(60px, 8vw, 100px)",
+          maxWidth: 1280,
+          margin: "0 auto",
+          boxSizing: "border-box",
+        }}
+      >
+        <div style={{ marginBottom: 28 }}>
+          <span
+            style={{
+              fontSize: 12,
+              fontWeight: 800,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              color: "#FF4D1A",
+              display: "block",
+              marginBottom: 6,
+            }}
+          >
+            ✦ Social Proof & Reel Showcase
+          </span>
+          <h3
+            style={{
+              margin: 0,
+              fontSize: "clamp(28px, 4vw, 44px)",
+              fontWeight: 800,
+              letterSpacing: "-0.035em",
+              color: "#111111",
+            }}
+          >
+            More Client Cuts Produced By Our Crew
+          </h3>
+        </div>
+
+        {/* 9:16 Vertical Reels Scrollable Grid */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 260px), 1fr))",
+            gap: 20,
+          }}
+        >
+          {ALL_CLIENT_REELS.map((reel) => (
+            <div
+              key={reel.id}
+              onClick={() => {
+                setActiveVideo({
+                  title: reel.name,
+                  subtitle: reel.client,
+                  videoSrc: reel.videoSrc,
+                });
+                trackEvent("video_play", "grid_reel", reel.name);
+              }}
+              style={{
+                position: "relative",
+                aspectRatio: "9 / 16",
+                borderRadius: 22,
+                overflow: "hidden",
+                background: "#000000",
+                cursor: "pointer",
+                border: "2px solid rgba(17, 17, 17, 0.08)",
+                boxShadow: "0 14px 34px -10px rgba(17, 17, 17, 0.15)",
+                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+              }}
+            >
+              <video
+                src={reel.videoSrc}
+                autoPlay
+                muted
+                loop
+                playsInline
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+
+              {/* Gradient Overlay */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, transparent 40%, rgba(0,0,0,0.85) 100%)",
+                  pointerEvents: "none",
+                }}
+              />
+
+              {/* Tag in Top Left */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: 12,
+                  left: 12,
+                  background: "rgba(255, 255, 255, 0.9)",
+                  color: "#111111",
+                  fontSize: 10,
+                  fontWeight: 800,
+                  textTransform: "uppercase",
+                  padding: "4px 10px",
+                  borderRadius: 999,
+                }}
+              >
+                {reel.tag}
+              </div>
+
+              {/* Bottom Information */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 14,
+                  left: 14,
+                  right: 14,
+                  color: "#FFFFFF",
+                }}
+              >
+                <p style={{ margin: 0, fontSize: 14, fontWeight: 700, lineHeight: 1.2 }}>
+                  {reel.name}
+                </p>
+                <p style={{ margin: "4px 0 0", fontSize: 12, opacity: 0.8 }}>
+                  {reel.client} · {reel.stats}
+                </p>
+              </div>
+
+              {/* Hover Play Button */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: 48,
+                  height: 48,
+                  borderRadius: 999,
+                  background: "rgba(255, 255, 255, 0.9)",
+                  color: "#111111",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 16,
+                  paddingLeft: 3,
+                  boxShadow: "0 8px 20px rgba(0,0,0,0.4)",
+                }}
+              >
+                ▶
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 6. THINGS WE DO ("Thin...") SECTION — 4 STORY BUILDER CAPABILITY TILES */}
       <section
         id="services"
         style={{
@@ -894,7 +1172,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             </h3>
           </div>
 
-          <div style={{ maxWidth: 420 }}>
+          <div style={{ maxWidth: 440 }}>
             <p
               style={{
                 margin: 0,
@@ -904,7 +1182,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 fontWeight: 500,
               }}
             >
-              From first concept to multi-platform master delivery, we handle the entire video pipeline under one roof.
+              From on-location 4K filming in Hyderabad to multi-platform master edits, we handle your entire video pipeline under one roof.
             </p>
           </div>
         </div>
@@ -997,7 +1275,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       </section>
 
-      {/* 6. INTERACTIVE BEFORE / AFTER S-LOG3 COLOR GRADING STUDIO */}
+      {/* 7. REAL VIDEO BEFORE / AFTER S-LOG3 COLOR SCIENCE STUDIO */}
       <section
         style={{
           padding: "0 24px clamp(60px, 8vw, 110px)",
@@ -1037,7 +1315,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   marginBottom: 6,
                 }}
               >
-                DaVinci Resolve Color Science
+                DaVinci Resolve Film Color Science
               </span>
               <h3
                 style={{
@@ -1047,7 +1325,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   letterSpacing: "-0.03em",
                 }}
               >
-                Flat S-Log3 RAW vs. Final Film Grade
+                Raw S-Log3 Camera Profile vs. Final Master Grade
               </h3>
             </div>
             <p
@@ -1055,15 +1333,15 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 margin: 0,
                 fontSize: 14,
                 color: "rgba(17, 17, 17, 0.65)",
-                maxWidth: 400,
+                maxWidth: 440,
                 lineHeight: 1.45,
               }}
             >
-              Drag the slider to inspect the contrast, skin-tone preservation, and saturation roll-off we grade into every frame.
+              Real Farhaan commercial footage shot in Hyderabad. Drag the slider to see flat S-Log3 transformed into rich contrast, accurate skin tones, and cinematic saturation.
             </p>
           </div>
 
-          {/* Comparison Slider Element */}
+          {/* Real Synchronized Video Comparison Slider */}
           <div
             ref={sliderRef}
             onMouseDown={() => setIsDraggingSlider(true)}
@@ -1076,19 +1354,23 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               overflow: "hidden",
               cursor: "ew-resize",
               userSelect: "none",
+              background: "#000",
             }}
           >
-            {/* Graded Image (Right / Base) */}
-            <img
-              src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1280&q=85"
-              alt="Graded Cinematic Master"
+            {/* Graded Video (Base / Full Width) */}
+            <video
+              src="https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,vc_h264/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
               style={{
                 position: "absolute",
                 inset: 0,
                 width: "100%",
                 height: "100%",
                 objectFit: "cover",
-                filter: "contrast(1.15) saturate(1.2)",
+                filter: "contrast(1.28) saturate(1.35) brightness(1.02)",
               }}
             />
             <div
@@ -1103,12 +1385,13 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 fontWeight: 700,
                 padding: "6px 14px",
                 borderRadius: 999,
+                zIndex: 3,
               }}
             >
               Final Cinema Grade
             </div>
 
-            {/* Flat Log Image (Left / Clipped Overlay) */}
+            {/* Flat S-Log3 Video (Left Clipped Overlay) */}
             <div
               style={{
                 position: "absolute",
@@ -1116,19 +1399,23 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 width: `${sliderPos}%`,
                 overflow: "hidden",
                 borderRight: "3px solid #FFFFFF",
-                boxShadow: "4px 0 20px rgba(0,0,0,0.35)",
+                boxShadow: "4px 0 20px rgba(0,0,0,0.4)",
+                zIndex: 2,
               }}
             >
-              <img
-                src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=1280&q=85"
-                alt="Flat S-Log3 Profile"
+              <video
+                src="https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,vc_h264/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
                 style={{
                   position: "absolute",
                   inset: 0,
                   width: sliderRef.current?.offsetWidth || "100%",
                   height: "100%",
                   objectFit: "cover",
-                  filter: "contrast(0.68) saturate(0.3) brightness(1.2)",
+                  filter: "grayscale(0.55) contrast(0.68) brightness(1.18) saturate(0.62)",
                 }}
               />
               <div
@@ -1167,6 +1454,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 color: "#111111",
                 fontSize: 18,
                 pointerEvents: "none",
+                zIndex: 5,
               }}
             >
               ↔
@@ -1175,7 +1463,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       </section>
 
-      {/* 7. KIND WORDS, SAID LOUDLY (TESTIMONIALS / QUOTE DECK) */}
+      {/* 8. KIND WORDS, SAID LOUDLY (REAL STORY BUILDER CLIENT REVIEWS) */}
       <section
         id="testimonials"
         style={{
@@ -1193,7 +1481,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             alignItems: "center",
           }}
         >
-          {/* Left Column: Heading exactly as in template screenshot */}
+          {/* Left Column: Heading */}
           <div>
             <h3
               style={{
@@ -1216,16 +1504,16 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 fontSize: "clamp(15px, 1.5vw, 18px)",
                 lineHeight: 1.5,
                 color: "rgba(17, 17, 17, 0.68)",
-                maxWidth: 420,
+                maxWidth: 440,
                 fontWeight: 500,
               }}
             >
-              What our clients say about our cinematography, rapid turnaround, and collaboration.
+              Real reviews from founders, coaches, and gym owners across Hyderabad who trust The Story Builder to shoot, cut, and scale their video presence.
             </p>
 
             <div style={{ marginTop: 32, display: "flex", gap: 12 }}>
               <a
-                href={waUrl("Hi Story Builder team, I'd like to book a shoot & edit package.")}
+                href={waUrl("Hi Story Builder team, I saw the client reviews on /latestpf and want to discuss a video project.")}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -1233,12 +1521,13 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   color: "#FFFFFF",
                   fontSize: 13,
                   fontWeight: 700,
-                  padding: "12px 22px",
+                  padding: "12px 24px",
                   borderRadius: 999,
                   textDecoration: "none",
                   display: "inline-flex",
                   alignItems: "center",
                   gap: 6,
+                  boxShadow: "0 4px 14px rgba(17,17,17,0.15)",
                 }}
               >
                 Work with our crew ↗
@@ -1246,9 +1535,10 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             </div>
           </div>
 
-          {/* Right Column: Exact QuoteDeck Component */}
+          {/* Right Column: QuoteDeck with Real Clients (Jaya Daga, Icons Gym, Digital Medha, Vision Rainbow) */}
           <div style={{ width: "100%", minHeight: 460 }}>
             <QuoteDeck
+              items={CLIENT_TESTIMONIALS}
               autoplay={6}
               buttonColor="#FF4D1A"
               buttonInk="#FFFFFF"
@@ -1259,7 +1549,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       </section>
 
-      {/* 8. INTERACTIVE MAD-LIB PROJECT BRIEF (ORDER FORM) */}
+      {/* 9. INTERACTIVE MAD-LIB PROJECT BRIEF (ORDER FORM) */}
       <section
         id="brief"
         style={{
@@ -1290,7 +1580,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 marginBottom: 8,
               }}
             >
-              ✦ Start a Project Brief
+              ✦ Start Your Project Brief
             </span>
             <h3
               style={{
@@ -1311,7 +1601,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 lineHeight: 1.45,
               }}
             >
-              Fill in your details below. This generates an instant scoped brief directly to our team on WhatsApp.
+              Fill in your project details below. This automatically crafts a scoped brief sent straight to our team on WhatsApp for an immediate quote.
             </p>
           </div>
 
@@ -1319,28 +1609,30 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             greeting="Hi Story Builder, I’m"
             fromText="from"
             needText="We need a hand with"
-            budgetText="and the budget is around"
+            budgetText="and our budget is around"
             reachText="You can reach me at"
             namePlaceholder="your name"
             companyPlaceholder="company / brand"
             emailPlaceholder="name@company.com"
             services={[
               "a commercial brand film",
-              "monthly high-retention reels",
-              "performance meta ad creatives",
+              "monthly reels growth pack (8-12 reels)",
+              "direct response paid video ads",
               "a founder authority series",
-              "a full shoot & edit package",
+              "a full shoot & edit package (Hyderabad)",
+              "editing only (footage already shot)",
             ]}
             budgets={[
               "under ₹25,000",
               "₹25,000 to ₹50,000",
               "₹50,000 to ₹1,00,000",
-              "₹1,00,000 and above",
+              "₹1,00,000 to ₹2,50,000",
+              "₹2,50,000 and above",
             ]}
             noteTitle="Oh, and one more thing…"
-            notePlaceholder="Deadlines, reference videos you love, number of videos needed, anything that helps."
+            notePlaceholder="Deadlines, reference videos you love, number of videos needed, anything that helps us scope."
             totalLabel="Total due today"
-            totalText="₹0.00, the first creative call is on us"
+            totalText="₹0.00, creative pitch consultation is on us"
             buttonLabel="Place my order"
             pendingLabel="Sending…"
             successLabel="Order placed"
@@ -1356,7 +1648,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       </section>
 
-      {/* 9. THE DEEP PITCH BLACK FOOTER WITH LOOP TEXT (EXACT TEMPLATE FINALE) */}
+      {/* 10. THE DEEP PITCH BLACK FOOTER WITH LOOP TEXT (EXACT TEMPLATE FINALE) */}
       <footer
         style={{
           background: "#0E0E0E",
@@ -1416,11 +1708,14 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               <a href="#work" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
                 Work
               </a>
+              <a href="#reels" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
+                All Reels
+              </a>
               <a href="#services" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
                 Services
               </a>
               <a href="#testimonials" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
-                About
+                Reviews
               </a>
               <a href="#brief" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
                 Contact
@@ -1450,7 +1745,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             }}
           >
             <LoopText
-              text="✦ LET’S TWIST SOMETHING NEW ✦ HELLO@THESTORYBUILDER.IN ✦ ONE CREW ONE BRIEF ✦ "
+              text="✦ SHOT BY ONE CREW · CUT BY THE SAME TEAM ✦ HELLO@THESTORYBUILDER.IN ✦ HYDERABAD & WORLDWIDE ✦ "
               bandColor="#FF4D1A"
               textColor="#111111"
               fontSize={32}
@@ -1488,8 +1783,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 transition: "transform 0.3s ease",
               }}
             >
-              <span>Start a</span>
-              <span>project ↗</span>
+              <span>Book a</span>
+              <span>Shoot ↗</span>
             </a>
           </div>
 
@@ -1509,8 +1804,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               color: "rgba(255, 255, 255, 0.5)",
             }}
           >
-            <div>© 2026 The Story Builder · All Rights Reserved.</div>
-            <div>Shooting on-location across Hyderabad · Remote editing worldwide.</div>
+            <div>© 2026 The Story Builder · Video Shoot & Edit Studio Hyderabad · All Rights Reserved.</div>
+            <div>Shooting on-location across Hyderabad · Post-production worldwide.</div>
             <div>
               <a
                 href={`mailto:${CONFIG.email}`}
@@ -1523,7 +1818,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       </footer>
 
-      {/* 10. CINEMATIC VIDEO MODAL */}
+      {/* 11. CINEMATIC VIDEO MODAL */}
       {activeVideo && (
         <div
           onClick={() => setActiveVideo(null)}
@@ -1616,7 +1911,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               }}
             >
               <span style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.7)" }}>
-                Want a video styled like this?
+                Want a video shoot & edit like this?
               </span>
 
               <a
@@ -1643,7 +1938,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       )}
 
-      {/* 11. MOBILE STICKY BOTTOM ACTION BAR */}
+      {/* 12. MOBILE STICKY BOTTOM ACTION BAR */}
       <div
         style={{
           position: "fixed",
@@ -1675,7 +1970,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             boxShadow: "0 4px 14px rgba(17,17,17,0.15)",
           }}
         >
-          Start a project ↗
+          Book a Shoot ↗
         </a>
         <a
           href={waUrl()}
