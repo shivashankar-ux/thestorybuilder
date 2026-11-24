@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ImageTrail from "../latestpf/ImageTrail";
 import TwistRibbon from "../latestpf/TwistRibbon";
 import LoopText from "../latestpf/LoopText";
 import QuoteDeck from "../latestpf/QuoteDeck";
 import OrderForm from "../latestpf/OrderForm";
 import { trackPageView, trackEvent } from "../../utils/tracking";
+
+gsap.registerPlugin(ScrollTrigger);
 
 /* ============================================================
    LATEST VIDEO PORTFOLIO — /latestpf
@@ -272,6 +276,14 @@ const CLIENT_TESTIMONIALS = [
   },
 ];
 
+const MANIFESTO_WORDS_PRIMARY = [
+  "We", "shoot,", "edit,", "and", "scale", "visual", "stories"
+];
+const MANIFESTO_WORDS_SECONDARY = [
+  "that", "move", "audiences,", "stop", "the", "scroll,", "and", "turn",
+  "attention", "into", "high-ticket", "clients", "and", "customers."
+];
+
 export default function LatestVideoPortfolioPage({ setPage }) {
   const [activeVideo, setActiveVideo] = useState(null);
   const [sliderPos, setSliderPos] = useState(50);
@@ -279,6 +291,10 @@ export default function LatestVideoPortfolioPage({ setPage }) {
   const [isMobile, setIsMobile] = useState(false);
   const [reelsView, setReelsView] = useState("strip"); // 'strip' | 'grid'
   const sliderRef = useRef(null);
+  const pageRef = useRef(null);
+  const manifestoRef = useRef(null);
+  const sliderSectionRef = useRef(null);
+  const sliderDemoAnimated = useRef(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -291,6 +307,227 @@ export default function LatestVideoPortfolioPage({ setPage }) {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // GSAP 3.15 + ScrollTrigger Context Setup
+  useEffect(() => {
+    if (!pageRef.current) return;
+    const prefersReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      // 1. Kinetic Manifesto Text-Scrub Highlight (Illuminates word by word on scroll)
+      const manifestoWords = gsap.utils.toArray(".latestpf-manifesto-word");
+      if (manifestoWords.length > 0) {
+        gsap.fromTo(
+          manifestoWords,
+          { opacity: 0.22, y: 5 },
+          {
+            opacity: 1,
+            y: 0,
+            stagger: 0.04,
+            ease: "none",
+            scrollTrigger: {
+              trigger: manifestoRef.current,
+              start: "top 78%",
+              end: "bottom 50%",
+              scrub: 0.8,
+            },
+          }
+        );
+      }
+
+      // 2. Editorial Watermarks Horizontal Drift Scrub ("Selected" and "Things we do")
+      gsap.to(".latestpf-watermark-1", {
+        x: -50,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#work",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.2,
+        },
+      });
+
+      gsap.to(".latestpf-watermark-2", {
+        x: -50,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "#services",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1.2,
+        },
+      });
+
+      // 3. Showcase Cards Entrance & Stacking Dimensional Depth
+      const cards = gsap.utils.toArray(".latestpf-showcase-card");
+      cards.forEach((card, i) => {
+        gsap.fromTo(
+          card,
+          { y: 45, opacity: 0.8 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 92%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+
+        // Subtly scale down underlying cards as the next card stacks above them
+        if (i < cards.length - 1) {
+          gsap.to(card, {
+            scale: 0.955,
+            filter: "brightness(0.92)",
+            ease: "none",
+            scrollTrigger: {
+              trigger: cards[i + 1],
+              start: "top 45%",
+              end: "top 18%",
+              scrub: 0.6,
+            },
+          });
+        }
+      });
+
+      // 4. All Reels Staggered Wave Entrance
+      const reelCards = gsap.utils.toArray(".latestpf-reel-card");
+      if (reelCards.length > 0) {
+        gsap.fromTo(
+          reelCards,
+          { y: 30, opacity: 0, scale: 0.96 },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            stagger: 0.05,
+            duration: 0.6,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: "#reels",
+              start: "top 82%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+
+      // 5. Capability Tiles ("Things We Do") Staggered Lift
+      const capCards = gsap.utils.toArray(".latestpf-capability-card");
+      if (capCards.length > 0) {
+        gsap.fromTo(
+          capCards,
+          { y: 35, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            stagger: 0.09,
+            duration: 0.7,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: "#services",
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+            },
+          }
+        );
+      }
+
+      // 6. Before/After S-Log3 Slider Preview Swipe Demo (Runs once on scroll)
+      ScrollTrigger.create({
+        trigger: sliderSectionRef.current,
+        start: "top 68%",
+        once: true,
+        onEnter: () => {
+          if (sliderDemoAnimated.current) return;
+          sliderDemoAnimated.current = true;
+          const proxy = { pos: 50 };
+          gsap
+            .timeline()
+            .to(proxy, {
+              pos: 70,
+              duration: 0.6,
+              ease: "power2.inOut",
+              onUpdate: () => setSliderPos(Math.round(proxy.pos)),
+            })
+            .to(proxy, {
+              pos: 30,
+              duration: 0.85,
+              ease: "power2.inOut",
+              onUpdate: () => setSliderPos(Math.round(proxy.pos)),
+            })
+            .to(proxy, {
+              pos: 50,
+              duration: 0.6,
+              ease: "power2.out",
+              onUpdate: () => setSliderPos(Math.round(proxy.pos)),
+            });
+        },
+      });
+
+      // 7. Ambient Breathing Pulse on Slider Handle
+      gsap.to(".latestpf-slider-handle", {
+        scale: 1.08,
+        repeat: -1,
+        yoyo: true,
+        duration: 1.2,
+        ease: "sine.inOut",
+      });
+
+      // 8. Testimonials Section Content Entrance
+      gsap.fromTo(
+        ".latestpf-testimonials-content",
+        { y: 30, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.75,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: "#testimonials",
+            start: "top 80%",
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    }, pageRef);
+
+    return () => {
+      ctx.revert();
+    };
+  }, [reelsView]);
+
+  // Desktop 3D Mouse Tilt on Showcase Cards
+  const onCardMouseMove = (e) => {
+    if (isMobile) return;
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    gsap.to(card, {
+      rotateY: (x / rect.width) * 4.5,
+      rotateX: (-y / rect.height) * 4.5,
+      transformPerspective: 1000,
+      duration: 0.35,
+      ease: "power1.out",
+    });
+  };
+
+  const onCardMouseLeave = (e) => {
+    if (isMobile) return;
+    gsap.to(e.currentTarget, {
+      rotateY: 0,
+      rotateX: 0,
+      duration: 0.5,
+      ease: "power2.out",
+    });
+  };
 
   // Split-screen Before/After Slider Interaction
   const handleSliderMove = (e) => {
@@ -320,6 +557,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
 
   return (
     <div
+      ref={pageRef}
       style={{
         background: "#F3EFEA",
         color: "#111111",
@@ -682,8 +920,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       </section>
 
-      {/* 3. BIG TYPOGRAPHIC MANIFESTO STATEMENT */}
+      {/* 3. BIG TYPOGRAPHIC MANIFESTO STATEMENT (GSAP SCROLLTRIGGER SCRUB HIGHLIGHT) */}
       <section
+        ref={manifestoRef}
         className="latestpf-manifesto-section"
         style={{
           padding: isMobile ? "32px 16px" : "clamp(60px, 8vw, 110px) 24px",
@@ -703,9 +942,37 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             maxWidth: 1100,
           }}
         >
-          <span>We shoot, edit, and scale visual stories</span>{" "}
-          <span style={{ color: "rgba(17, 17, 17, 0.38)" }}>
-            that move audiences, stop the scroll, and turn attention into high-ticket clients and customers.
+          <span>
+            {MANIFESTO_WORDS_PRIMARY.map((w, i) => (
+              <span
+                key={i}
+                className="latestpf-manifesto-word"
+                style={{
+                  display: "inline-block",
+                  marginRight: "0.28em",
+                  color: "#111111",
+                  willChange: "opacity, transform",
+                }}
+              >
+                {w}
+              </span>
+            ))}
+          </span>{" "}
+          <span>
+            {MANIFESTO_WORDS_SECONDARY.map((w, i) => (
+              <span
+                key={i}
+                className="latestpf-manifesto-word"
+                style={{
+                  display: "inline-block",
+                  marginRight: "0.28em",
+                  color: "rgba(17, 17, 17, 0.75)",
+                  willChange: "opacity, transform",
+                }}
+              >
+                {w}
+              </span>
+            ))}
           </span>
         </h2>
       </section>
@@ -736,6 +1003,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         >
           <div>
             <h3
+              className="latestpf-watermark-1"
               style={{
                 margin: 0,
                 fontSize: isMobile ? "clamp(38px, 9vw, 52px)" : "clamp(56px, 10vw, 110px)",
@@ -743,6 +1011,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 lineHeight: 0.9,
                 letterSpacing: "-0.05em",
                 color: "#111111",
+                display: "inline-block",
+                willChange: "transform",
               }}
             >
               Sel<span style={{ color: "rgba(17, 17, 17, 0.2)" }}>ected</span>
@@ -802,6 +1072,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             return (
               <div
                 key={card.id}
+                className="latestpf-showcase-card"
+                onMouseMove={onCardMouseMove}
+                onMouseLeave={onCardMouseLeave}
                 style={{
                   position: "sticky",
                   top: topOffset,
@@ -1259,6 +1532,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             return (
               <div
                 key={reel.id}
+                className="latestpf-reel-card"
                 onClick={() => {
                   setActiveVideo({
                     title: reel.name,
@@ -1281,6 +1555,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                     ? "0 8px 20px -6px rgba(17, 17, 17, 0.2)"
                     : "0 14px 34px -10px rgba(17, 17, 17, 0.15)",
                   transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                  willChange: "transform, opacity",
                 }}
               >
                 <video
@@ -1430,6 +1705,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         >
           <div>
             <h3
+              className="latestpf-watermark-2"
               style={{
                 margin: 0,
                 fontSize: isMobile ? "clamp(38px, 9vw, 52px)" : "clamp(56px, 10vw, 110px)",
@@ -1437,6 +1713,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 lineHeight: 0.9,
                 letterSpacing: "-0.05em",
                 color: "#111111",
+                display: "inline-block",
+                willChange: "transform",
               }}
             >
               Thin<span style={{ color: "rgba(17, 17, 17, 0.2)" }}>gs we do</span>
@@ -1471,6 +1749,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           {CAPABILITIES.map((cap, i) => (
             <div
               key={i}
+              className="latestpf-capability-card"
               style={{
                 background: cap.bgColor,
                 border: `2px solid ${cap.borderColor}`,
@@ -1482,6 +1761,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 minHeight: isMobile ? "auto" : 320,
                 boxShadow: "0 12px 28px -10px rgba(17, 17, 17, 0.08)",
                 transition: "transform 0.3s ease",
+                willChange: "transform, opacity",
               }}
             >
               <div>
@@ -1550,6 +1830,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
 
       {/* 7. REAL VIDEO BEFORE / AFTER S-LOG3 COLOR SCIENCE STUDIO */}
       <section
+        ref={sliderSectionRef}
         style={{
           padding: isMobile ? "0 16px 44px" : "0 24px clamp(60px, 8vw, 110px)",
           maxWidth: 1280,
@@ -1711,6 +1992,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
 
             {/* Center Drag Handle */}
             <div
+              className="latestpf-slider-handle"
               style={{
                 position: "absolute",
                 top: "50%",
@@ -1728,6 +2010,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 fontSize: isMobile ? 15 : 18,
                 pointerEvents: "none",
                 zIndex: 5,
+                willChange: "transform",
               }}
             >
               ↔
@@ -1748,6 +2031,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         }}
       >
         <div
+          className="latestpf-testimonials-content"
           style={{
             display: "grid",
             gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(min(100%, 360px), 1fr))",
