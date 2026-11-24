@@ -276,11 +276,20 @@ export default function LatestVideoPortfolioPage({ setPage }) {
   const [activeVideo, setActiveVideo] = useState(null);
   const [sliderPos, setSliderPos] = useState(50);
   const [isDraggingSlider, setIsDraggingSlider] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [reelsView, setReelsView] = useState("strip"); // 'strip' | 'grid'
   const sliderRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     trackPageView("/latestpf", "Latest Video Portfolio — The Story Builder");
+
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   // Split-screen Before/After Slider Interaction
@@ -318,17 +327,75 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         fontFamily: '"Bricolage Grotesque", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         overflowX: "clip",
         position: "relative",
+        paddingBottom: isMobile ? "80px" : "0px",
       }}
     >
+      {/* SCOPED RESPONSIVE STYLES FOR /latestpf */}
+      <style>{`
+        @media (max-width: 800px) {
+          .latestpf-desktop-nav {
+            display: none !important;
+          }
+          .latestpf-header {
+            padding: 12px 16px !important;
+          }
+          .latestpf-hero-ribbon {
+            height: 270px !important;
+            min-height: 270px !important;
+          }
+          .latestpf-hero-section {
+            min-height: auto !important;
+            padding: 20px 16px 28px !important;
+          }
+          .latestpf-manifesto-section {
+            padding: 34px 16px !important;
+          }
+          .latestpf-work-section {
+            padding: 0 16px 48px !important;
+          }
+          .latestpf-card-grid {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+          .latestpf-card-thumb {
+            display: none !important;
+          }
+          .latestpf-reels-section {
+            padding: 0 16px 50px !important;
+          }
+          .latestpf-services-section {
+            padding: 0 16px 50px !important;
+          }
+          .latestpf-testimonials-section {
+            padding: 36px 16px !important;
+          }
+          .latestpf-brief-section {
+            padding: 36px 16px !important;
+          }
+          .latestpf-footer {
+            padding: 44px 16px 96px !important;
+          }
+        }
+        @media (min-width: 801px) {
+          .latestpf-mobile-only {
+            display: none !important;
+          }
+          .latestpf-bottom-bar {
+            display: none !important;
+          }
+        }
+      `}</style>
+
       {/* 1. TOP NAVIGATION BAR */}
       <header
+        className="latestpf-header"
         style={{
           position: "sticky",
           top: 0,
           left: 0,
           right: 0,
           zIndex: 80,
-          background: "rgba(243, 239, 234, 0.88)",
+          background: "rgba(243, 239, 234, 0.92)",
           backdropFilter: "blur(14px)",
           WebkitBackdropFilter: "blur(14px)",
           borderBottom: "1px solid rgba(17, 17, 17, 0.06)",
@@ -361,8 +428,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           <span style={{ color: "#FF4D1A", fontSize: "16px", lineHeight: 1 }}>✦</span>
         </a>
 
-        {/* Center Nav Links */}
+        {/* Center Nav Links (Hidden on Mobile) */}
         <nav
+          className="latestpf-desktop-nav"
           style={{
             display: "flex",
             alignItems: "center",
@@ -436,38 +504,61 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           </a>
         </nav>
 
-        {/* Start a project Pill CTA */}
-        <a
-          href="#brief"
-          style={{
-            background: "#111111",
-            color: "#FFFFFF",
-            textDecoration: "none",
-            fontSize: 13,
-            fontWeight: 700,
-            padding: "10px 20px",
-            borderRadius: 999,
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            letterSpacing: "-0.01em",
-            boxShadow: "0 4px 14px rgba(17, 17, 17, 0.12)",
-          }}
-        >
-          Book a Shoot ↗
-        </a>
+        {/* Header CTA Pill */}
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <a
+            href={waUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="latestpf-mobile-only"
+            style={{
+              background: "#FF4D1A",
+              color: "#FFFFFF",
+              textDecoration: "none",
+              fontSize: 12,
+              fontWeight: 700,
+              padding: "7px 14px",
+              borderRadius: 999,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 4,
+            }}
+          >
+            WhatsApp ↗
+          </a>
+          <a
+            href="#brief"
+            style={{
+              background: "#111111",
+              color: "#FFFFFF",
+              textDecoration: "none",
+              fontSize: 13,
+              fontWeight: 700,
+              padding: "10px 20px",
+              borderRadius: 999,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              letterSpacing: "-0.01em",
+              boxShadow: "0 4px 14px rgba(17, 17, 17, 0.12)",
+            }}
+          >
+            Book a Shoot ↗
+          </a>
+        </div>
       </header>
 
       {/* 2. HERO SECTION WITH IMAGE TRAIL & 3D TWIST RIBBON */}
       <section
+        className="latestpf-hero-section"
         style={{
           position: "relative",
           width: "100%",
-          minHeight: "84vh",
+          minHeight: isMobile ? "auto" : "84vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          padding: "30px 24px 40px",
+          padding: isMobile ? "20px 16px 28px" : "30px 24px 40px",
           overflow: "hidden",
           boxSizing: "border-box",
         }}
@@ -483,8 +574,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         >
           <ImageTrail
             images={STORYBUILDER_MEDIA}
-            size={220}
-            spacing={85}
+            size={isMobile ? 140 : 220}
+            spacing={isMobile ? 60 : 85}
             lifetime={1.1}
             rotation={12}
             radius={16}
@@ -493,11 +584,13 @@ export default function LatestVideoPortfolioPage({ setPage }) {
 
         {/* 3D WebGL2 Twist Ribbon threading through wordmark "the story builder" */}
         <div
+          className="latestpf-hero-ribbon"
           style={{
             position: "relative",
             zIndex: 2,
             width: "100%",
-            height: "clamp(460px, 60vh, 660px)",
+            height: isMobile ? "270px" : "clamp(440px, 58vh, 640px)",
+            minHeight: isMobile ? "270px" : "auto",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -509,9 +602,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             fontFamily="Bricolage Grotesque"
             fontWeight={800}
             wordmarkColor="#111111"
-            wordmarkSize={0.62}
+            wordmarkSize={isMobile ? 0.44 : 0.62}
             background="#F3EFEA"
-            ribbonWidth={0.96}
+            ribbonWidth={isMobile ? 0.88 : 0.96}
             cardShape={0.75}
             gap={0.06}
             corners={0.08}
@@ -531,20 +624,20 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             zIndex: 3,
             display: "flex",
             flexWrap: "wrap",
-            alignItems: "flex-end",
+            alignItems: "center",
             justifyContent: "space-between",
-            gap: 20,
+            gap: isMobile ? 12 : 20,
             maxWidth: 1280,
             width: "100%",
             margin: "0 auto",
-            paddingTop: 20,
+            paddingTop: isMobile ? 14 : 20,
           }}
         >
           <p
             style={{
               margin: 0,
-              fontSize: "clamp(13px, 1.4vw, 15px)",
-              lineHeight: 1.45,
+              fontSize: isMobile ? "13px" : "clamp(13px, 1.4vw, 15px)",
+              lineHeight: 1.4,
               fontWeight: 500,
               color: "rgba(17, 17, 17, 0.72)",
               maxWidth: 320,
@@ -558,15 +651,15 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: 8,
-              fontSize: 13,
+              gap: 6,
+              fontSize: isMobile ? 11 : 13,
               fontWeight: 700,
               letterSpacing: "0.06em",
               textTransform: "uppercase",
               color: "#111111",
               background: "rgba(17, 17, 17, 0.05)",
               border: "1px solid rgba(17, 17, 17, 0.08)",
-              padding: "8px 18px",
+              padding: isMobile ? "6px 14px" : "8px 18px",
               borderRadius: 999,
             }}
           >
@@ -577,7 +670,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             href="#work"
             style={{
               margin: 0,
-              fontSize: 13,
+              fontSize: isMobile ? 12 : 13,
               fontWeight: 600,
               color: "rgba(17, 17, 17, 0.55)",
               textDecoration: "none",
@@ -591,8 +684,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
 
       {/* 3. BIG TYPOGRAPHIC MANIFESTO STATEMENT */}
       <section
+        className="latestpf-manifesto-section"
         style={{
-          padding: "clamp(60px, 8vw, 110px) 24px",
+          padding: isMobile ? "32px 16px" : "clamp(60px, 8vw, 110px) 24px",
           maxWidth: 1280,
           margin: "0 auto",
           boxSizing: "border-box",
@@ -601,10 +695,10 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         <h2
           style={{
             margin: 0,
-            fontSize: "clamp(34px, 5.5vw, 68px)",
+            fontSize: isMobile ? "clamp(22px, 5.2vw, 32px)" : "clamp(34px, 5.5vw, 68px)",
             fontWeight: 800,
-            lineHeight: 1.08,
-            letterSpacing: "-0.04em",
+            lineHeight: 1.15,
+            letterSpacing: "-0.035em",
             color: "#111111",
             maxWidth: 1100,
           }}
@@ -619,8 +713,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
       {/* 4. SELECTED WORK ("Sel...") SECTION — 4 STORY BUILDER SHOWCASE CARDS */}
       <section
         id="work"
+        className="latestpf-work-section"
         style={{
-          padding: "0 24px clamp(60px, 8vw, 110px)",
+          padding: isMobile ? "0 16px 44px" : "0 24px clamp(60px, 8vw, 110px)",
           maxWidth: 1280,
           margin: "0 auto",
           boxSizing: "border-box",
@@ -633,17 +728,17 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             flexWrap: "wrap",
             alignItems: "flex-end",
             justifyContent: "space-between",
-            gap: 20,
-            marginBottom: "clamp(36px, 5vw, 60px)",
+            gap: isMobile ? 12 : 20,
+            marginBottom: isMobile ? 24 : "clamp(36px, 5vw, 60px)",
             borderBottom: "1px solid rgba(17, 17, 17, 0.12)",
-            paddingBottom: 24,
+            paddingBottom: isMobile ? 16 : 24,
           }}
         >
           <div>
             <h3
               style={{
                 margin: 0,
-                fontSize: "clamp(56px, 10vw, 110px)",
+                fontSize: isMobile ? "clamp(38px, 9vw, 52px)" : "clamp(56px, 10vw, 110px)",
                 fontWeight: 800,
                 lineHeight: 0.9,
                 letterSpacing: "-0.05em",
@@ -658,15 +753,15 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             style={{
               display: "flex",
               alignItems: "center",
-              gap: 16,
+              gap: 12,
               maxWidth: 440,
             }}
           >
             <p
               style={{
                 margin: 0,
-                fontSize: "clamp(14px, 1.4vw, 16px)",
-                lineHeight: 1.45,
+                fontSize: isMobile ? 13 : "clamp(14px, 1.4vw, 16px)",
+                lineHeight: 1.4,
                 color: "rgba(17, 17, 17, 0.65)",
                 fontWeight: 500,
               }}
@@ -675,13 +770,14 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             </p>
             <span
               style={{
-                fontSize: 16,
+                fontSize: isMobile ? 13 : 16,
                 fontWeight: 700,
                 color: "#111111",
                 fontVariantNumeric: "tabular-nums",
                 background: "rgba(17, 17, 17, 0.08)",
-                padding: "6px 12px",
+                padding: isMobile ? "4px 10px" : "6px 12px",
                 borderRadius: 999,
+                flexShrink: 0,
               }}
             >
               04
@@ -695,11 +791,13 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             position: "relative",
             display: "flex",
             flexDirection: "column",
-            paddingBottom: "40px",
+            paddingBottom: isMobile ? "24px" : "40px",
           }}
         >
           {SHOWCASE_CARDS.map((card, index) => {
-            const topOffset = `calc(78px + ${index * 26}px)`;
+            const topOffset = isMobile
+              ? `calc(56px + ${index * 10}px)`
+              : `calc(78px + ${index * 26}px)`;
             const isLast = index === SHOWCASE_CARDS.length - 1;
             return (
               <div
@@ -710,21 +808,21 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   zIndex: 10 + index,
                   background: card.bgColor,
                   color: card.inkColor,
-                  borderRadius: 36,
-                  border: `3px solid ${card.borderColor}`,
-                  padding: "clamp(20px, 3.2vw, 36px)",
-                  marginBottom: isLast ? "0px" : "clamp(120px, 28vh, 260px)",
+                  borderRadius: isMobile ? 22 : 36,
+                  border: `${isMobile ? 2 : 3}px solid ${card.borderColor}`,
+                  padding: isMobile ? "14px 14px 16px" : "clamp(20px, 3.2vw, 36px)",
+                  marginBottom: isLast ? "0px" : isMobile ? "clamp(24px, 5vh, 44px)" : "clamp(120px, 28vh, 260px)",
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 380px), 1fr))",
-                  gap: "clamp(24px, 3.5vw, 44px)",
+                  gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(min(100%, 380px), 1fr))",
+                  gap: isMobile ? 16 : "clamp(24px, 3.5vw, 44px)",
                   alignItems: "center",
-                  boxShadow: `0 ${18 + index * 10}px ${45 + index * 15}px -15px rgba(17, 17, 17, ${0.18 + index * 0.05})`,
+                  boxShadow: `0 ${14 + index * 8}px ${36 + index * 12}px -12px rgba(17, 17, 17, ${0.16 + index * 0.04})`,
                   overflow: "hidden",
                   transition: "transform 0.35s ease, box-shadow 0.35s ease",
                   transformOrigin: "top center",
                 }}
               >
-              {/* Left Column: Live Video Loop Preview inside Card! */}
+              {/* Left Column: Live Video Loop Preview inside Card */}
               <div
                 onClick={() => {
                   setActiveVideo(card);
@@ -732,12 +830,12 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 }}
                 style={{
                   position: "relative",
-                  borderRadius: 22,
+                  borderRadius: isMobile ? 14 : 22,
                   overflow: "hidden",
-                  aspectRatio: "16 / 10",
+                  aspectRatio: isMobile ? "16 / 9" : "16 / 10",
                   background: "#000000",
                   cursor: "pointer",
-                  boxShadow: "0 18px 36px -12px rgba(17, 17, 17, 0.28)",
+                  boxShadow: "0 14px 30px -10px rgba(17, 17, 17, 0.25)",
                 }}
               >
                 {/* Playing Real Video Loop Preview */}
@@ -760,15 +858,15 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 <div
                   style={{
                     position: "absolute",
-                    top: 14,
-                    left: 14,
+                    top: isMobile ? 10 : 14,
+                    left: isMobile ? 10 : 14,
                     background: "rgba(255, 255, 255, 0.94)",
                     color: "#111111",
-                    fontSize: 11,
+                    fontSize: isMobile ? 10 : 11,
                     fontWeight: 800,
                     letterSpacing: "0.06em",
                     textTransform: "uppercase",
-                    padding: "6px 14px",
+                    padding: isMobile ? "4px 10px" : "6px 14px",
                     borderRadius: 999,
                     boxShadow: "0 4px 12px rgba(0,0,0,0.14)",
                     zIndex: 2,
@@ -791,16 +889,16 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 >
                   <div
                     style={{
-                      width: 60,
-                      height: 60,
+                      width: isMobile ? 48 : 60,
+                      height: isMobile ? 48 : 60,
                       borderRadius: 999,
                       background: "rgba(255, 255, 255, 0.95)",
                       color: "#111111",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
-                      fontSize: 20,
-                      boxShadow: "0 12px 28px rgba(0, 0, 0, 0.35)",
+                      fontSize: isMobile ? 16 : 20,
+                      boxShadow: "0 10px 24px rgba(0, 0, 0, 0.3)",
                       paddingLeft: 3,
                     }}
                   >
@@ -812,14 +910,14 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 <div
                   style={{
                     position: "absolute",
-                    bottom: 12,
-                    right: 12,
+                    bottom: isMobile ? 8 : 12,
+                    right: isMobile ? 8 : 12,
                     background: "rgba(0, 0, 0, 0.72)",
                     backdropFilter: "blur(6px)",
                     color: "#FFFFFF",
-                    fontSize: 11,
+                    fontSize: isMobile ? 10 : 11,
                     fontWeight: 600,
-                    padding: "4px 10px",
+                    padding: "3px 8px",
                     borderRadius: 6,
                   }}
                 >
@@ -834,39 +932,41 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   flexDirection: "column",
                   justifyContent: "space-between",
                   minHeight: "100%",
-                  gap: 20,
+                  gap: isMobile ? 12 : 20,
                   position: "relative",
                 }}
               >
-                {/* Floating Thumbnail in Top Right (Real Project Still!) */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: -4,
-                    right: 0,
-                    width: 58,
-                    height: 58,
-                    borderRadius: 14,
-                    overflow: "hidden",
-                    border: "2px solid rgba(255, 255, 255, 0.4)",
-                    boxShadow: "0 10px 20px rgba(0,0,0,0.18)",
-                  }}
-                >
-                  <img
-                    src={card.miniThumb}
-                    alt={card.title}
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
-                </div>
+                {/* Floating Thumbnail in Top Right (Real Project Still!) - Desktop only */}
+                {!isMobile && (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: -4,
+                      right: 0,
+                      width: 58,
+                      height: 58,
+                      borderRadius: 14,
+                      overflow: "hidden",
+                      border: "2px solid rgba(255, 255, 255, 0.4)",
+                      boxShadow: "0 10px 20px rgba(0,0,0,0.18)",
+                    }}
+                  >
+                    <img
+                      src={card.miniThumb}
+                      alt={card.title}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  </div>
+                )}
 
                 <div>
                   <span
                     style={{
                       display: "block",
-                      fontSize: 13,
+                      fontSize: isMobile ? 11 : 13,
                       fontWeight: 700,
                       opacity: 0.75,
-                      marginBottom: 8,
+                      marginBottom: isMobile ? 4 : 8,
                       letterSpacing: "0.02em",
                       textTransform: "uppercase",
                     }}
@@ -876,11 +976,11 @@ export default function LatestVideoPortfolioPage({ setPage }) {
 
                   <h4
                     style={{
-                      margin: "0 0 14px",
-                      fontSize: "clamp(30px, 4vw, 48px)",
+                      margin: isMobile ? "0 0 8px" : "0 0 14px",
+                      fontSize: isMobile ? "clamp(20px, 5vw, 24px)" : "clamp(30px, 4vw, 48px)",
                       fontWeight: 800,
-                      lineHeight: 1.05,
-                      letterSpacing: "-0.035em",
+                      lineHeight: 1.1,
+                      letterSpacing: "-0.03em",
                       color: card.inkColor,
                     }}
                   >
@@ -889,9 +989,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
 
                   <p
                     style={{
-                      margin: "0 0 24px",
-                      fontSize: "clamp(14px, 1.4vw, 16px)",
-                      lineHeight: 1.5,
+                      margin: isMobile ? "0 0 14px" : "0 0 24px",
+                      fontSize: isMobile ? 13 : "clamp(14px, 1.4vw, 16px)",
+                      lineHeight: 1.45,
                       opacity: 0.9,
                       fontWeight: 500,
                       maxWidth: 440,
@@ -901,16 +1001,16 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   </p>
 
                   {/* Tag Pills */}
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: isMobile ? 6 : 8 }}>
                     {card.tags.map((tag, i) => (
                       <span
                         key={i}
                         style={{
                           background: card.badgeBg,
                           color: card.inkColor,
-                          fontSize: 12,
+                          fontSize: isMobile ? 11 : 12,
                           fontWeight: 700,
-                          padding: "6px 14px",
+                          padding: isMobile ? "4px 10px" : "6px 14px",
                           borderRadius: 999,
                           letterSpacing: "-0.01em",
                         }}
@@ -927,7 +1027,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    paddingTop: 16,
+                    paddingTop: isMobile ? 10 : 16,
                   }}
                 >
                   <button
@@ -939,7 +1039,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                       background: "none",
                       border: "none",
                       color: card.inkColor,
-                      fontSize: 14,
+                      fontSize: isMobile ? 13 : 14,
                       fontWeight: 700,
                       padding: 0,
                       cursor: "pointer",
@@ -961,8 +1061,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                     }}
                     aria-label={`Watch ${card.title}`}
                     style={{
-                      width: 52,
-                      height: 52,
+                      width: isMobile ? 44 : 52,
+                      height: isMobile ? 44 : 52,
                       borderRadius: 999,
                       background: card.btnBg,
                       color: card.btnInk,
@@ -973,9 +1073,10 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                       cursor: "pointer",
                       boxShadow: "0 8px 18px rgba(0,0,0,0.18)",
                       transition: "transform 0.2s ease",
+                      flexShrink: 0,
                     }}
                   >
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <svg width={isMobile ? "18" : "20"} height={isMobile ? "18" : "20"} viewBox="0 0 20 20" fill="none">
                       <path
                         d="M4 10h12M11 4.5l5.5 5.5-5.5 5.5"
                         stroke="currentColor"
@@ -996,158 +1097,319 @@ export default function LatestVideoPortfolioPage({ setPage }) {
       {/* 5. ADDITIONAL REAL CLIENT REELS STRIP (INSTAGRAM VERTICAL REELS) */}
       <section
         id="reels"
+        className="latestpf-reels-section"
         style={{
-          padding: "0 24px clamp(60px, 8vw, 100px)",
+          padding: isMobile ? "0 16px 44px" : "0 24px clamp(60px, 8vw, 100px)",
           maxWidth: 1280,
           margin: "0 auto",
           boxSizing: "border-box",
         }}
       >
-        <div style={{ marginBottom: 28 }}>
-          <span
-            style={{
-              fontSize: 12,
-              fontWeight: 800,
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-              color: "#FF4D1A",
-              display: "block",
-              marginBottom: 6,
-            }}
-          >
-            ✦ Social Proof & Reel Showcase
-          </span>
-          <h3
-            style={{
-              margin: 0,
-              fontSize: "clamp(28px, 4vw, 44px)",
-              fontWeight: 800,
-              letterSpacing: "-0.035em",
-              color: "#111111",
-            }}
-          >
-            More Client Cuts Produced By Our Crew
-          </h3>
-        </div>
-
-        {/* 9:16 Vertical Reels Scrollable Grid */}
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 260px), 1fr))",
-            gap: 20,
+            marginBottom: isMobile ? 18 : 28,
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "flex-end",
+            justifyContent: "space-between",
+            gap: 12,
           }}
         >
-          {ALL_CLIENT_REELS.map((reel) => (
-            <div
-              key={reel.id}
-              onClick={() => {
-                setActiveVideo({
-                  title: reel.name,
-                  subtitle: reel.client,
-                  videoSrc: reel.videoSrc,
-                });
-                trackEvent("video_play", "grid_reel", reel.name);
-              }}
+          <div>
+            <span
               style={{
-                position: "relative",
-                aspectRatio: "9 / 16",
-                borderRadius: 22,
-                overflow: "hidden",
-                background: "#000000",
-                cursor: "pointer",
-                border: "2px solid rgba(17, 17, 17, 0.08)",
-                boxShadow: "0 14px 34px -10px rgba(17, 17, 17, 0.15)",
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                fontSize: isMobile ? 11 : 12,
+                fontWeight: 800,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: "#FF4D1A",
+                display: "block",
+                marginBottom: 4,
               }}
             >
-              <video
-                src={reel.videoSrc}
-                autoPlay
-                muted
-                loop
-                playsInline
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              />
+              ✦ Social Proof & Reel Showcase
+            </span>
+            <h3
+              style={{
+                margin: 0,
+                fontSize: isMobile ? "clamp(22px, 5.5vw, 28px)" : "clamp(28px, 4vw, 44px)",
+                fontWeight: 800,
+                letterSpacing: "-0.035em",
+                color: "#111111",
+              }}
+            >
+              More Client Cuts Produced By Our Crew
+            </h3>
+            <p
+              style={{
+                margin: "4px 0 0",
+                fontSize: isMobile ? 12 : 14,
+                color: "rgba(17, 17, 17, 0.6)",
+                fontWeight: 500,
+              }}
+            >
+              Tap any reel to play full cut with audio & sound design.
+            </p>
+          </div>
 
-              {/* Gradient Overlay */}
-              <div
+          {/* View Switcher for Mobile Screenings */}
+          {isMobile && (
+            <div
+              style={{
+                display: "inline-flex",
+                background: "rgba(17, 17, 17, 0.06)",
+                padding: 4,
+                borderRadius: 999,
+                gap: 4,
+              }}
+            >
+              <button
+                onClick={() => setReelsView("strip")}
                 style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, transparent 40%, rgba(0,0,0,0.85) 100%)",
-                  pointerEvents: "none",
-                }}
-              />
-
-              {/* Tag in Top Left */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: 12,
-                  left: 12,
-                  background: "rgba(255, 255, 255, 0.9)",
-                  color: "#111111",
-                  fontSize: 10,
-                  fontWeight: 800,
-                  textTransform: "uppercase",
-                  padding: "4px 10px",
+                  border: "none",
+                  background: reelsView === "strip" ? "#111111" : "transparent",
+                  color: reelsView === "strip" ? "#FFFFFF" : "#111111",
+                  padding: "6px 14px",
                   borderRadius: 999,
-                }}
-              >
-                {reel.tag}
-              </div>
-
-              {/* Bottom Information */}
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: 14,
-                  left: 14,
-                  right: 14,
-                  color: "#FFFFFF",
-                }}
-              >
-                <p style={{ margin: 0, fontSize: 14, fontWeight: 700, lineHeight: 1.2 }}>
-                  {reel.name}
-                </p>
-                <p style={{ margin: "4px 0 0", fontSize: 12, opacity: 0.8 }}>
-                  {reel.client} · {reel.stats}
-                </p>
-              </div>
-
-              {/* Hover Play Button */}
-              <div
-                style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: 48,
-                  height: 48,
-                  borderRadius: 999,
-                  background: "rgba(255, 255, 255, 0.9)",
-                  color: "#111111",
-                  display: "flex",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  display: "inline-flex",
                   alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 16,
-                  paddingLeft: 3,
-                  boxShadow: "0 8px 20px rgba(0,0,0,0.4)",
+                  gap: 5,
+                  transition: "background 0.2s ease",
                 }}
               >
-                ▶
-              </div>
+                <span>↔</span> Swipe Strip
+              </button>
+              <button
+                onClick={() => setReelsView("grid")}
+                style={{
+                  border: "none",
+                  background: reelsView === "grid" ? "#111111" : "transparent",
+                  color: reelsView === "grid" ? "#FFFFFF" : "#111111",
+                  padding: "6px 14px",
+                  borderRadius: 999,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 5,
+                  transition: "background 0.2s ease",
+                }}
+              >
+                <span>▦</span> 2-Col Grid
+              </button>
             </div>
-          ))}
+          )}
+        </div>
+
+        {/* Swipe Hint Indicator for Mobile Strip */}
+        {isMobile && reelsView === "strip" && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: 10,
+              fontSize: 11,
+              fontWeight: 700,
+              color: "rgba(17, 17, 17, 0.5)",
+              letterSpacing: "0.02em",
+              textTransform: "uppercase",
+            }}
+          >
+            <span>← Swipe left / right to browse →</span>
+            <span>8 Client Reels</span>
+          </div>
+        )}
+
+        {/* 9:16 Vertical Reels Container (Mobile Strip vs Mobile 2-Col Grid vs Desktop Grid) */}
+        <div
+          style={
+            isMobile && reelsView === "strip"
+              ? {
+                  display: "flex",
+                  overflowX: "auto",
+                  gap: 12,
+                  paddingBottom: 12,
+                  scrollSnapType: "x mandatory",
+                  WebkitOverflowScrolling: "touch",
+                  scrollbarWidth: "none",
+                  margin: "0 -4px",
+                  paddingLeft: 4,
+                  paddingRight: 4,
+                }
+              : isMobile && reelsView === "grid"
+              ? {
+                  display: "grid",
+                  gridTemplateColumns: "repeat(2, 1fr)",
+                  gap: 10,
+                }
+              : {
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 260px), 1fr))",
+                  gap: 20,
+                }
+          }
+        >
+          {ALL_CLIENT_REELS.map((reel) => {
+            const isStripItem = isMobile && reelsView === "strip";
+            return (
+              <div
+                key={reel.id}
+                onClick={() => {
+                  setActiveVideo({
+                    title: reel.name,
+                    subtitle: reel.client,
+                    videoSrc: reel.videoSrc,
+                  });
+                  trackEvent("video_play", "grid_reel", reel.name);
+                }}
+                style={{
+                  flex: isStripItem ? "0 0 210px" : "auto",
+                  scrollSnapAlign: isStripItem ? "start" : "none",
+                  position: "relative",
+                  aspectRatio: "9 / 16",
+                  borderRadius: isMobile ? 18 : 22,
+                  overflow: "hidden",
+                  background: "#000000",
+                  cursor: "pointer",
+                  border: "2px solid rgba(17, 17, 17, 0.08)",
+                  boxShadow: isMobile
+                    ? "0 8px 20px -6px rgba(17, 17, 17, 0.2)"
+                    : "0 14px 34px -10px rgba(17, 17, 17, 0.15)",
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                }}
+              >
+                <video
+                  src={reel.videoSrc}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+
+                {/* Gradient Overlay */}
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background:
+                      "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, transparent 40%, rgba(0,0,0,0.85) 100%)",
+                    pointerEvents: "none",
+                  }}
+                />
+
+                {/* Tag in Top Left */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: isMobile ? 8 : 12,
+                    left: isMobile ? 8 : 12,
+                    background: "rgba(255, 255, 255, 0.92)",
+                    color: "#111111",
+                    fontSize: isMobile ? 9 : 10,
+                    fontWeight: 800,
+                    textTransform: "uppercase",
+                    padding: isMobile ? "3px 8px" : "4px 10px",
+                    borderRadius: 999,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+                  }}
+                >
+                  {reel.tag}
+                </div>
+
+                {/* Top Right Sound Icon Indicator */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: isMobile ? 8 : 12,
+                    right: isMobile ? 8 : 12,
+                    background: "rgba(0, 0, 0, 0.65)",
+                    color: "#FFFFFF",
+                    fontSize: 10,
+                    padding: "3px 7px",
+                    borderRadius: 999,
+                    backdropFilter: "blur(4px)",
+                  }}
+                >
+                  🔊 Sound
+                </div>
+
+                {/* Bottom Information */}
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: isMobile ? 10 : 14,
+                    left: isMobile ? 10 : 14,
+                    right: isMobile ? 10 : 14,
+                    color: "#FFFFFF",
+                  }}
+                >
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: isMobile ? 12 : 14,
+                      fontWeight: 700,
+                      lineHeight: 1.2,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {reel.name}
+                  </p>
+                  <p
+                    style={{
+                      margin: "2px 0 0",
+                      fontSize: isMobile ? 10 : 12,
+                      opacity: 0.85,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {reel.client} · {reel.stats}
+                  </p>
+                </div>
+
+                {/* Center Pulsing Play Button */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: isMobile ? 40 : 48,
+                    height: isMobile ? 40 : 48,
+                    borderRadius: 999,
+                    background: "rgba(255, 255, 255, 0.92)",
+                    color: "#111111",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: isMobile ? 14 : 16,
+                    paddingLeft: 2,
+                    boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+                  }}
+                >
+                  ▶
+                </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
       {/* 6. THINGS WE DO ("Thin...") SECTION — 4 STORY BUILDER CAPABILITY TILES */}
       <section
         id="services"
+        className="latestpf-services-section"
         style={{
-          padding: "0 24px clamp(60px, 8vw, 110px)",
+          padding: isMobile ? "0 16px 44px" : "0 24px clamp(60px, 8vw, 110px)",
           maxWidth: 1280,
           margin: "0 auto",
           boxSizing: "border-box",
@@ -1160,17 +1422,17 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             flexWrap: "wrap",
             alignItems: "flex-end",
             justifyContent: "space-between",
-            gap: 20,
-            marginBottom: "clamp(36px, 5vw, 60px)",
+            gap: isMobile ? 12 : 20,
+            marginBottom: isMobile ? 24 : "clamp(36px, 5vw, 60px)",
             borderBottom: "1px solid rgba(17, 17, 17, 0.12)",
-            paddingBottom: 24,
+            paddingBottom: isMobile ? 16 : 24,
           }}
         >
           <div>
             <h3
               style={{
                 margin: 0,
-                fontSize: "clamp(56px, 10vw, 110px)",
+                fontSize: isMobile ? "clamp(38px, 9vw, 52px)" : "clamp(56px, 10vw, 110px)",
                 fontWeight: 800,
                 lineHeight: 0.9,
                 letterSpacing: "-0.05em",
@@ -1185,7 +1447,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             <p
               style={{
                 margin: 0,
-                fontSize: "clamp(14px, 1.4vw, 16px)",
+                fontSize: isMobile ? 13 : "clamp(14px, 1.4vw, 16px)",
                 lineHeight: 1.45,
                 color: "rgba(17, 17, 17, 0.65)",
                 fontWeight: 500,
@@ -1200,8 +1462,10 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
-            gap: 20,
+            gridTemplateColumns: isMobile
+              ? "1fr"
+              : "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+            gap: isMobile ? 14 : 20,
           }}
         >
           {CAPABILITIES.map((cap, i) => (
@@ -1210,12 +1474,12 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               style={{
                 background: cap.bgColor,
                 border: `2px solid ${cap.borderColor}`,
-                borderRadius: 28,
-                padding: "32px 28px",
+                borderRadius: isMobile ? 20 : 28,
+                padding: isMobile ? "20px 18px" : "32px 28px",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "space-between",
-                minHeight: 320,
+                minHeight: isMobile ? "auto" : 320,
                 boxShadow: "0 12px 28px -10px rgba(17, 17, 17, 0.08)",
                 transition: "transform 0.3s ease",
               }}
@@ -1224,12 +1488,12 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 <span
                   style={{
                     display: "inline-block",
-                    fontSize: 12,
+                    fontSize: isMobile ? 11 : 12,
                     fontWeight: 800,
                     letterSpacing: "0.06em",
                     textTransform: "uppercase",
                     color: "rgba(17, 17, 17, 0.6)",
-                    marginBottom: 16,
+                    marginBottom: isMobile ? 10 : 16,
                   }}
                 >
                   {cap.tag}
@@ -1237,8 +1501,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
 
                 <h4
                   style={{
-                    margin: "0 0 14px",
-                    fontSize: "clamp(22px, 2.2vw, 26px)",
+                    margin: isMobile ? "0 0 10px" : "0 0 14px",
+                    fontSize: isMobile ? "20px" : "clamp(22px, 2.2vw, 26px)",
                     fontWeight: 800,
                     lineHeight: 1.15,
                     letterSpacing: "-0.03em",
@@ -1250,9 +1514,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
 
                 <p
                   style={{
-                    margin: "0 0 24px",
-                    fontSize: 14,
-                    lineHeight: 1.5,
+                    margin: isMobile ? "0 0 18px" : "0 0 24px",
+                    fontSize: isMobile ? 13 : 14,
+                    lineHeight: 1.45,
                     color: "rgba(17, 17, 17, 0.75)",
                     fontWeight: 500,
                   }}
@@ -1269,7 +1533,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                     style={{
                       background: "rgba(17, 17, 17, 0.08)",
                       color: "#111111",
-                      fontSize: 11,
+                      fontSize: isMobile ? 10 : 11,
                       fontWeight: 700,
                       padding: "4px 10px",
                       borderRadius: 999,
@@ -1287,7 +1551,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
       {/* 7. REAL VIDEO BEFORE / AFTER S-LOG3 COLOR SCIENCE STUDIO */}
       <section
         style={{
-          padding: "0 24px clamp(60px, 8vw, 110px)",
+          padding: isMobile ? "0 16px 44px" : "0 24px clamp(60px, 8vw, 110px)",
           maxWidth: 1280,
           margin: "0 auto",
           boxSizing: "border-box",
@@ -1296,9 +1560,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         <div
           style={{
             background: "#FFFFFF",
-            borderRadius: 36,
+            borderRadius: isMobile ? 22 : 36,
             border: "2px solid rgba(17, 17, 17, 0.08)",
-            padding: "clamp(24px, 4vw, 44px)",
+            padding: isMobile ? "20px 16px" : "clamp(24px, 4vw, 44px)",
             boxShadow: "0 20px 50px -15px rgba(17, 17, 17, 0.08)",
           }}
         >
@@ -1308,20 +1572,20 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               flexWrap: "wrap",
               alignItems: "flex-end",
               justifyContent: "space-between",
-              gap: 20,
-              marginBottom: 28,
+              gap: 16,
+              marginBottom: isMobile ? 18 : 28,
             }}
           >
             <div>
               <span
                 style={{
-                  fontSize: 12,
+                  fontSize: isMobile ? 11 : 12,
                   fontWeight: 800,
                   letterSpacing: "0.06em",
                   textTransform: "uppercase",
                   color: "#FF4D1A",
                   display: "block",
-                  marginBottom: 6,
+                  marginBottom: 4,
                 }}
               >
                 DaVinci Resolve Film Color Science
@@ -1329,7 +1593,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               <h3
                 style={{
                   margin: 0,
-                  fontSize: "clamp(26px, 3.5vw, 38px)",
+                  fontSize: isMobile ? "clamp(20px, 5vw, 26px)" : "clamp(26px, 3.5vw, 38px)",
                   fontWeight: 800,
                   letterSpacing: "-0.03em",
                 }}
@@ -1340,7 +1604,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             <p
               style={{
                 margin: 0,
-                fontSize: 14,
+                fontSize: isMobile ? 12 : 14,
                 color: "rgba(17, 17, 17, 0.65)",
                 maxWidth: 440,
                 lineHeight: 1.45,
@@ -1358,8 +1622,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             style={{
               position: "relative",
               width: "100%",
-              height: "clamp(280px, 46vw, 540px)",
-              borderRadius: 22,
+              height: isMobile ? "240px" : "clamp(280px, 46vw, 540px)",
+              borderRadius: isMobile ? 16 : 22,
               overflow: "hidden",
               cursor: "ew-resize",
               userSelect: "none",
@@ -1385,14 +1649,14 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             <div
               style={{
                 position: "absolute",
-                bottom: 16,
-                right: 18,
+                bottom: isMobile ? 10 : 16,
+                right: isMobile ? 12 : 18,
                 background: "rgba(0,0,0,0.75)",
                 backdropFilter: "blur(6px)",
                 color: "#FFFFFF",
-                fontSize: 12,
+                fontSize: isMobile ? 10 : 12,
                 fontWeight: 700,
-                padding: "6px 14px",
+                padding: isMobile ? "4px 10px" : "6px 14px",
                 borderRadius: 999,
                 zIndex: 3,
               }}
@@ -1430,14 +1694,14 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               <div
                 style={{
                   position: "absolute",
-                  bottom: 16,
-                  left: 18,
+                  bottom: isMobile ? 10 : 16,
+                  left: isMobile ? 12 : 18,
                   background: "rgba(0,0,0,0.75)",
                   backdropFilter: "blur(6px)",
                   color: "#FFFFFF",
-                  fontSize: 12,
+                  fontSize: isMobile ? 10 : 12,
                   fontWeight: 700,
-                  padding: "6px 14px",
+                  padding: isMobile ? "4px 10px" : "6px 14px",
                   borderRadius: 999,
                 }}
               >
@@ -1452,8 +1716,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 top: "50%",
                 left: `${sliderPos}%`,
                 transform: "translate(-50%, -50%)",
-                width: 48,
-                height: 48,
+                width: isMobile ? 40 : 48,
+                height: isMobile ? 40 : 48,
                 borderRadius: 999,
                 background: "#FFFFFF",
                 boxShadow: "0 6px 20px rgba(0,0,0,0.45)",
@@ -1461,7 +1725,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 alignItems: "center",
                 justifyContent: "center",
                 color: "#111111",
-                fontSize: 18,
+                fontSize: isMobile ? 15 : 18,
                 pointerEvents: "none",
                 zIndex: 5,
               }}
@@ -1475,8 +1739,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
       {/* 8. KIND WORDS, SAID LOUDLY (REAL STORY BUILDER CLIENT REVIEWS) */}
       <section
         id="testimonials"
+        className="latestpf-testimonials-section"
         style={{
-          padding: "clamp(60px, 8vw, 110px) 24px",
+          padding: isMobile ? "36px 16px" : "clamp(60px, 8vw, 110px) 24px",
           maxWidth: 1280,
           margin: "0 auto",
           boxSizing: "border-box",
@@ -1485,8 +1750,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 360px), 1fr))",
-            gap: "clamp(36px, 5vw, 64px)",
+            gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(min(100%, 360px), 1fr))",
+            gap: isMobile ? 24 : "clamp(36px, 5vw, 64px)",
             alignItems: "center",
           }}
         >
@@ -1494,8 +1759,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           <div>
             <h3
               style={{
-                margin: "0 0 20px",
-                fontSize: "clamp(44px, 6vw, 76px)",
+                margin: isMobile ? "0 0 12px" : "0 0 20px",
+                fontSize: isMobile ? "clamp(32px, 7vw, 44px)" : "clamp(44px, 6vw, 76px)",
                 fontWeight: 800,
                 lineHeight: 1.05,
                 letterSpacing: "-0.04em",
@@ -1510,8 +1775,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             <p
               style={{
                 margin: 0,
-                fontSize: "clamp(15px, 1.5vw, 18px)",
-                lineHeight: 1.5,
+                fontSize: isMobile ? "13px" : "clamp(15px, 1.5vw, 18px)",
+                lineHeight: 1.45,
                 color: "rgba(17, 17, 17, 0.68)",
                 maxWidth: 440,
                 fontWeight: 500,
@@ -1520,7 +1785,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               Real reviews from founders, coaches, and gym owners across Hyderabad who trust The Story Builder to shoot, cut, and scale their video presence.
             </p>
 
-            <div style={{ marginTop: 32, display: "flex", gap: 12 }}>
+            <div style={{ marginTop: isMobile ? 18 : 32, display: "flex", gap: 12 }}>
               <a
                 href={waUrl("Hi Story Builder team, I saw the client reviews on /latestpf and want to discuss a video project.")}
                 target="_blank"
@@ -1528,9 +1793,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 style={{
                   background: "#111111",
                   color: "#FFFFFF",
-                  fontSize: 13,
+                  fontSize: isMobile ? 12 : 13,
                   fontWeight: 700,
-                  padding: "12px 24px",
+                  padding: isMobile ? "10px 20px" : "12px 24px",
                   borderRadius: 999,
                   textDecoration: "none",
                   display: "inline-flex",
@@ -1544,8 +1809,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             </div>
           </div>
 
-          {/* Right Column: QuoteDeck with Real Clients (Jaya Daga, Icons Gym, Digital Medha, Vision Rainbow) */}
-          <div style={{ width: "100%", minHeight: 460 }}>
+          {/* Right Column: QuoteDeck with Real Clients */}
+          <div style={{ width: "100%", minHeight: isMobile ? 320 : 460 }}>
             <QuoteDeck
               items={CLIENT_TESTIMONIALS}
               autoplay={6}
@@ -1561,8 +1826,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
       {/* 9. INTERACTIVE MAD-LIB PROJECT BRIEF (ORDER FORM) */}
       <section
         id="brief"
+        className="latestpf-brief-section"
         style={{
-          padding: "clamp(60px, 8vw, 110px) 24px",
+          padding: isMobile ? "36px 16px" : "clamp(60px, 8vw, 110px) 24px",
           maxWidth: 1100,
           margin: "0 auto",
           boxSizing: "border-box",
@@ -1571,30 +1837,30 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         <div
           style={{
             background: "#FFFFFF",
-            borderRadius: 36,
+            borderRadius: isMobile ? 22 : 36,
             border: "2px solid rgba(17, 17, 17, 0.08)",
-            padding: "clamp(28px, 5vw, 64px)",
+            padding: isMobile ? "24px 16px" : "clamp(28px, 5vw, 64px)",
             boxShadow: "0 24px 60px -15px rgba(17, 17, 17, 0.08)",
           }}
         >
-          <div style={{ marginBottom: 36 }}>
+          <div style={{ marginBottom: isMobile ? 20 : 36 }}>
             <span
               style={{
-                fontSize: 12,
+                fontSize: isMobile ? 11 : 12,
                 fontWeight: 800,
                 letterSpacing: "0.06em",
                 textTransform: "uppercase",
                 color: "#FF4D1A",
                 display: "block",
-                marginBottom: 8,
+                marginBottom: 6,
               }}
             >
               ✦ Start Your Project Brief
             </span>
             <h3
               style={{
-                margin: "0 0 10px",
-                fontSize: "clamp(30px, 4vw, 48px)",
+                margin: "0 0 8px",
+                fontSize: isMobile ? "clamp(24px, 5.5vw, 32px)" : "clamp(30px, 4vw, 48px)",
                 fontWeight: 800,
                 letterSpacing: "-0.035em",
                 color: "#111111",
@@ -1605,7 +1871,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             <p
               style={{
                 margin: 0,
-                fontSize: 15,
+                fontSize: isMobile ? 13 : 15,
                 color: "rgba(17, 17, 17, 0.65)",
                 lineHeight: 1.45,
               }}
@@ -1659,10 +1925,13 @@ export default function LatestVideoPortfolioPage({ setPage }) {
 
       {/* 10. THE DEEP PITCH BLACK FOOTER WITH LOOP TEXT (EXACT TEMPLATE FINALE) */}
       <footer
+        className="latestpf-footer"
         style={{
           background: "#0E0E0E",
           color: "#FFFFFF",
-          padding: "clamp(60px, 8vw, 100px) 24px 40px",
+          padding: isMobile
+            ? "44px 16px 96px"
+            : "clamp(60px, 8vw, 100px) 24px 40px",
           position: "relative",
           overflow: "hidden",
         }}
@@ -1684,15 +1953,15 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               flexWrap: "wrap",
               alignItems: "center",
               justifyContent: "space-between",
-              gap: 20,
-              paddingBottom: 40,
+              gap: 16,
+              paddingBottom: isMobile ? 24 : 40,
               borderBottom: "1px solid rgba(255, 255, 255, 0.12)",
-              marginBottom: "clamp(40px, 6vw, 70px)",
+              marginBottom: isMobile ? 24 : "clamp(40px, 6vw, 70px)",
             }}
           >
             <div
               style={{
-                fontSize: 22,
+                fontSize: isMobile ? 18 : 22,
                 fontWeight: 800,
                 letterSpacing: "-0.04em",
                 color: "#FFFFFF",
@@ -1708,9 +1977,10 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             <div
               style={{
                 display: "flex",
+                flexWrap: "wrap",
                 alignItems: "center",
-                gap: "clamp(16px, 3vw, 32px)",
-                fontSize: 14,
+                gap: isMobile ? "10px 18px" : "clamp(16px, 3vw, 32px)",
+                fontSize: isMobile ? 13 : 14,
                 fontWeight: 600,
               }}
             >
@@ -1746,7 +2016,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               position: "relative",
               width: "100%",
               maxWidth: 960,
-              height: "clamp(260px, 40vw, 480px)",
+              height: isMobile ? "220px" : "clamp(260px, 40vw, 480px)",
               margin: "0 auto",
               display: "flex",
               alignItems: "center",
@@ -1757,9 +2027,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               text="✦ SHOT BY ONE CREW · CUT BY THE SAME TEAM ✦ HELLO@THESTORYBUILDER.IN ✦ HYDERABAD & WORLDWIDE ✦ "
               bandColor="#FF4D1A"
               textColor="#111111"
-              fontSize={32}
-              bandWidth={66}
-              speed={55}
+              fontSize={isMobile ? 22 : 32}
+              bandWidth={isMobile ? 48 : 66}
+              speed={isMobile ? 40 : 55}
               hoverBoost={3}
             />
 
@@ -1771,13 +2041,13 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 top: "50%",
                 left: "50%",
                 transform: "translate(-50%, -50%)",
-                width: "clamp(88px, 12vw, 130px)",
-                height: "clamp(88px, 12vw, 130px)",
+                width: isMobile ? "92px" : "clamp(88px, 12vw, 130px)",
+                height: isMobile ? "92px" : "clamp(88px, 12vw, 130px)",
                 borderRadius: 999,
                 background: "#FFFFFF",
                 color: "#111111",
                 fontWeight: 800,
-                fontSize: "clamp(12px, 1.4vw, 14px)",
+                fontSize: isMobile ? "12px" : "clamp(12px, 1.4vw, 14px)",
                 letterSpacing: "-0.02em",
                 textDecoration: "none",
                 display: "flex",
@@ -1805,11 +2075,11 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               flexWrap: "wrap",
               alignItems: "center",
               justifyContent: "space-between",
-              gap: 16,
-              paddingTop: 40,
+              gap: 12,
+              paddingTop: isMobile ? 24 : 40,
               borderTop: "1px solid rgba(255, 255, 255, 0.08)",
-              marginTop: "clamp(30px, 4vw, 60px)",
-              fontSize: 13,
+              marginTop: isMobile ? 24 : "clamp(30px, 4vw, 60px)",
+              fontSize: isMobile ? 12 : 13,
               color: "rgba(255, 255, 255, 0.5)",
             }}
           >
@@ -1841,17 +2111,17 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            padding: 20,
+            padding: isMobile ? 12 : 20,
           }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
               position: "relative",
-              maxWidth: 540,
+              maxWidth: 520,
               width: "100%",
               background: "#111111",
-              borderRadius: 28,
+              borderRadius: isMobile ? 22 : 28,
               overflow: "hidden",
               border: "1px solid rgba(255, 255, 255, 0.15)",
               boxShadow: "0 30px 80px rgba(0,0,0,0.8)",
@@ -1863,16 +2133,16 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: "16px 20px",
+                padding: isMobile ? "12px 16px" : "16px 20px",
                 borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
                 background: "rgba(255, 255, 255, 0.03)",
               }}
             >
               <div>
-                <p style={{ margin: 0, fontSize: 15, fontWeight: 700, color: "#FFFFFF" }}>
+                <p style={{ margin: 0, fontSize: isMobile ? 14 : 15, fontWeight: 700, color: "#FFFFFF" }}>
                   {activeVideo.title}
                 </p>
-                <p style={{ margin: 0, fontSize: 12, color: "rgba(255,255,255,0.6)" }}>
+                <p style={{ margin: 0, fontSize: 11, color: "rgba(255,255,255,0.6)" }}>
                   {activeVideo.subtitle}
                 </p>
               </div>
@@ -1880,11 +2150,11 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               <button
                 onClick={() => setActiveVideo(null)}
                 style={{
-                  background: "rgba(255, 255, 255, 0.1)",
+                  background: "rgba(255, 255, 255, 0.12)",
                   border: "none",
                   color: "#FFFFFF",
-                  width: 34,
-                  height: 34,
+                  width: 32,
+                  height: 32,
                   borderRadius: 999,
                   cursor: "pointer",
                   fontSize: 16,
@@ -1911,16 +2181,16 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             {/* Modal Footer CTA */}
             <div
               style={{
-                padding: "16px 20px",
+                padding: isMobile ? "12px 16px" : "16px 20px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
                 background: "rgba(255, 255, 255, 0.04)",
-                gap: 12,
+                gap: 10,
               }}
             >
-              <span style={{ fontSize: 12, color: "rgba(255, 255, 255, 0.7)" }}>
-                Want a video shoot & edit like this?
+              <span style={{ fontSize: isMobile ? 11 : 12, color: "rgba(255, 255, 255, 0.7)" }}>
+                Want a video cut like this?
               </span>
 
               <a
@@ -1931,8 +2201,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   background: "#FF4D1A",
                   color: "#FFFFFF",
                   fontWeight: 700,
-                  fontSize: 13,
-                  padding: "9px 18px",
+                  fontSize: isMobile ? 12 : 13,
+                  padding: isMobile ? "8px 16px" : "9px 18px",
                   borderRadius: 999,
                   textDecoration: "none",
                   display: "inline-flex",
@@ -1947,8 +2217,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       )}
 
-      {/* 12. MOBILE STICKY BOTTOM ACTION BAR */}
+      {/* 12. MOBILE STICKY BOTTOM ACTION BAR (HIDDEN ON DESKTOP VIA CSS) */}
       <div
+        className="latestpf-bottom-bar"
         style={{
           position: "fixed",
           bottom: 0,
@@ -1958,9 +2229,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           backdropFilter: "blur(14px)",
           WebkitBackdropFilter: "blur(14px)",
           borderTop: "1px solid rgba(17, 17, 17, 0.08)",
-          padding: "10px 18px calc(10px + env(safe-area-inset-bottom))",
+          padding: "10px 14px calc(10px + env(safe-area-inset-bottom))",
           display: "flex",
-          gap: 12,
+          gap: 10,
           zIndex: 75,
         }}
       >
@@ -1971,8 +2242,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             background: "#111111",
             color: "#FFFFFF",
             fontWeight: 700,
-            fontSize: 14,
-            padding: "12px",
+            fontSize: 13,
+            padding: "11px",
             borderRadius: 999,
             textAlign: "center",
             textDecoration: "none",
@@ -1989,8 +2260,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             background: "#FF4D1A",
             color: "#FFFFFF",
             fontWeight: 700,
-            fontSize: 14,
-            padding: "12px 20px",
+            fontSize: 13,
+            padding: "11px 18px",
             borderRadius: 999,
             textDecoration: "none",
             display: "flex",

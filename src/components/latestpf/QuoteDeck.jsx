@@ -147,9 +147,9 @@ export default function QuoteDeck({
   };
 
   const compact = width < 560;
-  const cardW = compact ? Math.min(width - 24, 420) : Math.min(680, width - 28);
-  const cardH = compact ? 380 : 320;
-  const deckH = cardH + 70;
+  const cardW = compact ? Math.min(width - 20, 390) : Math.min(680, width - 28);
+  const cardH = compact ? 260 : 310;
+  const deckH = cardH + 54;
   const qFont = {
     fontFamily: quoteFont,
     fontWeight: 700,
@@ -159,7 +159,7 @@ export default function QuoteDeck({
     fontFamily: bodyFont,
     fontWeight: 500,
   };
-  const qSize = compact ? Math.max(16, Math.round(quoteSize * 0.78)) : quoteSize;
+  const qSize = compact ? 14 : quoteSize;
 
   const cardStyle = (idx) => {
     const depth = order.indexOf(idx);
@@ -190,15 +190,15 @@ export default function QuoteDeck({
       transition,
       opacity,
       zIndex: flying && flying.idx === idx ? 50 : n - depth,
-      borderRadius: 22,
+      borderRadius: compact ? 20 : 22,
       background: list[idx].color,
       color: list[idx].ink,
-      boxShadow: depth === 0 ? "0 30px 60px -20px rgba(0,0,0,0.6), 0 8px 18px -6px rgba(0,0,0,0.3)" : "0 14px 30px -14px rgba(0,0,0,0.4)",
+      boxShadow: depth === 0 ? "0 20px 45px -12px rgba(17,17,17,0.35)" : "0 10px 22px -10px rgba(17,17,17,0.2)",
       overflow: "hidden",
       display: "flex",
       flexDirection: compact ? "column" : "row",
-      padding: 18,
-      gap: compact ? 14 : 24,
+      padding: compact ? "14px 14px 12px" : 18,
+      gap: compact ? 10 : 24,
       boxSizing: "border-box",
       cursor: depth === 0 ? (dragging ? "grabbing" : "grab") : "default",
       touchAction: depth === 0 ? "pan-y" : "auto",
