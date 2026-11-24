@@ -318,6 +318,18 @@ export default function LatestVideoPortfolioPage({ setPage }) {
     if (prefersReducedMotion) return;
 
     const ctx = gsap.context(() => {
+      // 0. Top Cinematic Gradient Scroll Progress Bar Scrub
+      gsap.to(".latestpf-scroll-progress", {
+        scaleX: 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: pageRef.current,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 0.15,
+        },
+      });
+
       // 1. Kinetic Manifesto Text-Scrub Highlight (Illuminates word by word on scroll)
       const manifestoWords = gsap.utils.toArray(".latestpf-manifesto-word");
       if (manifestoWords.length > 0) {
@@ -497,6 +509,59 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           },
         }
       );
+
+      // 9. Agency Proof Numbers Count-Up Animation (Anime.js + GSAP ScrollTrigger)
+      ScrollTrigger.create({
+        trigger: ".latestpf-stats-ribbon",
+        start: "top 85%",
+        once: true,
+        onEnter: () => {
+          // Stat 1: 2.8M Views
+          const stat1 = { val: 0 };
+          animate(stat1, {
+            val: 2.8,
+            duration: 1600,
+            ease: "outExpo",
+            onUpdate: () => {
+              const el = document.getElementById("latestpf-stat-views");
+              if (el) el.innerText = stat1.val.toFixed(1) + "M+";
+            },
+          });
+          // Stat 2: 4.2x ROAS
+          const stat2 = { val: 0 };
+          animate(stat2, {
+            val: 4.2,
+            duration: 1700,
+            ease: "outExpo",
+            onUpdate: () => {
+              const el = document.getElementById("latestpf-stat-roas");
+              if (el) el.innerText = stat2.val.toFixed(1) + "x";
+            },
+          });
+          // Stat 3: 100% In-House Crew
+          const stat3 = { val: 0 };
+          animate(stat3, {
+            val: 100,
+            duration: 1500,
+            ease: "outExpo",
+            onUpdate: () => {
+              const el = document.getElementById("latestpf-stat-crew");
+              if (el) el.innerText = Math.round(stat3.val) + "%";
+            },
+          });
+          // Stat 4: 48h Turnaround
+          const stat4 = { val: 0 };
+          animate(stat4, {
+            val: 48,
+            duration: 1400,
+            ease: "outExpo",
+            onUpdate: () => {
+              const el = document.getElementById("latestpf-stat-time");
+              if (el) el.innerText = Math.round(stat4.val) + "h";
+            },
+          });
+        },
+      });
     }, pageRef);
 
     return () => {
@@ -556,10 +621,43 @@ export default function LatestVideoPortfolioPage({ setPage }) {
   const triggerButtonSpring = (e) => {
     animate(e.currentTarget, {
       scale: [1, 0.92, 1.05, 1],
-      duration: 400,
+      duration: 380,
       ease: "outElastic(1, .6)",
     });
   };
+
+  // Desktop Magnetic Pull for Primary Action Buttons (Award-winning agency feel)
+  const onMagneticMove = (e, strength = 0.3) => {
+    if (isMobile) return;
+    const btn = e.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const x = (e.clientX - (rect.left + rect.width / 2)) * strength;
+    const y = (e.clientY - (rect.top + rect.height / 2)) * strength;
+    gsap.to(btn, { x, y, duration: 0.22, ease: "power2.out" });
+  };
+
+  const onMagneticLeave = (e) => {
+    if (isMobile) return;
+    gsap.to(e.currentTarget, { x: 0, y: 0, duration: 0.55, ease: "elastic.out(1, 0.45)" });
+  };
+
+  // Cinematic Video Modal Animate In (Anime.js spring physics)
+  useEffect(() => {
+    if (activeVideo) {
+      animate(".latestpf-modal-backdrop", {
+        opacity: [0, 1],
+        duration: 240,
+        ease: "outQuad",
+      });
+      animate(".latestpf-modal-card", {
+        scale: [0.9, 1],
+        y: [28, 0],
+        opacity: [0, 1],
+        duration: 420,
+        ease: "outBack(1.3)",
+      });
+    }
+  }, [activeVideo]);
 
   // Desktop 3D Mouse Tilt on Showcase Cards
   const onCardMouseMove = (e) => {
@@ -626,6 +724,23 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         paddingBottom: isMobile ? "80px" : "0px",
       }}
     >
+      {/* 0. CINEMATIC GRADIENT SCROLL PROGRESS BAR (GSAP SCROLLTRIGGER SCRUB) */}
+      <div
+        className="latestpf-scroll-progress"
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 3,
+          background: "linear-gradient(90deg, #FF4D1A 0%, #FFE27A 40%, #2B47FC 75%, #CFF26A 100%)",
+          transformOrigin: "left center",
+          transform: "scaleX(0)",
+          zIndex: 999,
+          pointerEvents: "none",
+          willChange: "transform",
+        }}
+      />
       {/* SCOPED RESPONSIVE STYLES FOR /latestpf */}
       <style>{`
         @media (max-width: 800px) {
@@ -825,6 +940,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           <a
             href="#brief"
             onMouseDown={triggerButtonSpring}
+            onMouseMove={(e) => onMagneticMove(e, 0.32)}
+            onMouseLeave={onMagneticLeave}
             style={{
               background: "#111111",
               color: "#FFFFFF",
@@ -1039,6 +1156,102 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             ))}
           </span>
         </h2>
+      </section>
+
+      {/* 3.5. PERFORMANCE PROOF STAT RIBBON (ANIMATED STAT COUNTERS VIA ANIME.JS + GSAP) */}
+      <section
+        className="latestpf-stats-ribbon"
+        style={{
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: isMobile ? "0 16px 36px" : "0 24px 64px",
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          style={{
+            background: "#FFFFFF",
+            border: "2px solid rgba(17, 17, 17, 0.08)",
+            borderRadius: isMobile ? 20 : 30,
+            padding: isMobile ? "20px 14px" : "28px 36px",
+            display: "grid",
+            gridTemplateColumns: isMobile ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
+            gap: isMobile ? 16 : 24,
+            boxShadow: "0 14px 34px -10px rgba(17, 17, 17, 0.07)",
+          }}
+        >
+          <div style={{ textAlign: "center", borderRight: isMobile ? "none" : "1px solid rgba(17,17,17,0.08)" }}>
+            <div
+              id="latestpf-stat-views"
+              style={{
+                fontSize: isMobile ? "clamp(26px, 7vw, 34px)" : "clamp(34px, 3.5vw, 44px)",
+                fontWeight: 800,
+                color: "#111111",
+                letterSpacing: "-0.04em",
+                lineHeight: 1.1,
+              }}
+            >
+              2.8M+
+            </div>
+            <div style={{ fontSize: isMobile ? 11 : 12, fontWeight: 700, color: "#FF4D1A", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: 4 }}>
+              Reel Views Generated
+            </div>
+          </div>
+
+          <div style={{ textAlign: "center", borderRight: isMobile ? "none" : "1px solid rgba(17,17,17,0.08)" }}>
+            <div
+              id="latestpf-stat-roas"
+              style={{
+                fontSize: isMobile ? "clamp(26px, 7vw, 34px)" : "clamp(34px, 3.5vw, 44px)",
+                fontWeight: 800,
+                color: "#111111",
+                letterSpacing: "-0.04em",
+                lineHeight: 1.1,
+              }}
+            >
+              4.2x
+            </div>
+            <div style={{ fontSize: isMobile ? 11 : 12, fontWeight: 700, color: "#2B47FC", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: 4 }}>
+              Average Ad ROAS
+            </div>
+          </div>
+
+          <div style={{ textAlign: "center", borderRight: isMobile ? "none" : "1px solid rgba(17,17,17,0.08)" }}>
+            <div
+              id="latestpf-stat-crew"
+              style={{
+                fontSize: isMobile ? "clamp(26px, 7vw, 34px)" : "clamp(34px, 3.5vw, 44px)",
+                fontWeight: 800,
+                color: "#111111",
+                letterSpacing: "-0.04em",
+                lineHeight: 1.1,
+              }}
+            >
+              100%
+            </div>
+            <div style={{ fontSize: isMobile ? 11 : 12, fontWeight: 700, color: "#111111", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: 4 }}>
+              In-House Hyderabad Crew
+            </div>
+          </div>
+
+          <div style={{ textAlign: "center" }}>
+            <div
+              id="latestpf-stat-time"
+              style={{
+                fontSize: isMobile ? "clamp(26px, 7vw, 34px)" : "clamp(34px, 3.5vw, 44px)",
+                fontWeight: 800,
+                color: "#111111",
+                letterSpacing: "-0.04em",
+                lineHeight: 1.1,
+              }}
+            >
+              48h
+            </div>
+            <div style={{ fontSize: isMobile ? 11 : 12, fontWeight: 700, color: "#059669", textTransform: "uppercase", letterSpacing: "0.05em", marginTop: 4 }}>
+              First Cut Turnaround
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* 4. SELECTED WORK ("Sel...") SECTION — 4 STORY BUILDER SHOWCASE CARDS */}
@@ -1390,13 +1603,15 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                     Watch Full Cut With Sound ↗
                   </button>
 
-                  {/* Circular Button Matching Template (Black/White with Arrow) with Anime.js Spring */}
+                  {/* Circular Button Matching Template (Black/White with Arrow) with Anime.js Spring & GSAP Magnetic Pull */}
                   <button
                     onClick={() => {
                       setActiveVideo(card);
                       trackEvent("video_play", "portfolio_reel", card.title);
                     }}
                     onMouseDown={triggerButtonSpring}
+                    onMouseMove={(e) => onMagneticMove(e, 0.45)}
+                    onMouseLeave={onMagneticLeave}
                     aria-label={`Watch ${card.title}`}
                     style={{
                       width: isMobile ? 44 : 52,
@@ -1410,7 +1625,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                       justifyContent: "center",
                       cursor: "pointer",
                       boxShadow: "0 8px 18px rgba(0,0,0,0.18)",
-                      transition: "transform 0.2s ease",
+                      transition: "box-shadow 0.2s ease",
                       flexShrink: 0,
                       willChange: "transform",
                     }}
@@ -2192,6 +2407,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 href={waUrl("Hi Story Builder team, I saw the client reviews on /latestpf and want to discuss a video project.")}
                 target="_blank"
                 rel="noopener noreferrer"
+                onMouseDown={triggerButtonSpring}
+                onMouseMove={(e) => onMagneticMove(e, 0.32)}
+                onMouseLeave={onMagneticLeave}
                 style={{
                   background: "#111111",
                   color: "#FFFFFF",
@@ -2204,6 +2422,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   alignItems: "center",
                   gap: 6,
                   boxShadow: "0 4px 14px rgba(17,17,17,0.15)",
+                  cursor: "pointer",
+                  willChange: "transform",
                 }}
               >
                 Work with our crew ↗
@@ -2438,6 +2658,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             {/* Central White Circular Button in the Center of Infinity Loop (Signature Framer Detail!) */}
             <a
               href="#brief"
+              onMouseDown={triggerButtonSpring}
+              onMouseMove={(e) => onMagneticMove(e, 0.35)}
+              onMouseLeave={onMagneticLeave}
               style={{
                 position: "absolute",
                 top: "50%",
@@ -2461,7 +2684,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 boxShadow: "0 14px 40px rgba(0,0,0,0.6)",
                 zIndex: 10,
                 lineHeight: 1.2,
-                transition: "transform 0.3s ease",
+                cursor: "pointer",
+                willChange: "transform",
               }}
             >
               <span>Book a</span>
@@ -2502,6 +2726,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
       {/* 11. CINEMATIC VIDEO MODAL */}
       {activeVideo && (
         <div
+          className="latestpf-modal-backdrop"
           onClick={() => setActiveVideo(null)}
           style={{
             position: "fixed",
@@ -2514,9 +2739,11 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             alignItems: "center",
             justifyContent: "center",
             padding: isMobile ? 12 : 20,
+            willChange: "opacity",
           }}
         >
           <div
+            className="latestpf-modal-card"
             onClick={(e) => e.stopPropagation()}
             style={{
               position: "relative",
@@ -2527,6 +2754,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               overflow: "hidden",
               border: "1px solid rgba(255, 255, 255, 0.15)",
               boxShadow: "0 30px 80px rgba(0,0,0,0.8)",
+              willChange: "transform, opacity",
             }}
           >
             {/* Modal Header */}
