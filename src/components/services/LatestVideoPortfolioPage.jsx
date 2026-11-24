@@ -8,6 +8,7 @@ import TwistRibbon from "../latestpf/TwistRibbon";
 import LoopText from "../latestpf/LoopText";
 import QuoteDeck from "../latestpf/QuoteDeck";
 import OrderForm from "../latestpf/OrderForm";
+import PhoneStackCarousel from "../latestpf/PhoneStackCarousel";
 import { trackPageView, trackEvent } from "../../utils/tracking";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -286,219 +287,11 @@ const MANIFESTO_WORDS_SECONDARY = [
   "attention", "into", "high-ticket", "clients", "and", "customers."
 ];
 
-// Interactive Spring Reel Card using @react-spring/web physics
-function SpringReelCard({ reel, isMobile, reelsView, onSelect }) {
-  const isStripItem = isMobile && reelsView === "strip";
-  const [isHovered, setIsHovered] = useState(false);
-
-  // React Spring physics on hover (smooth mass & tension damping)
-  const springStyle = useSpring({
-    transform: isHovered && !isMobile ? "scale(1.035) translateY(-6px)" : "scale(1) translateY(0px)",
-    boxShadow: isHovered && !isMobile
-      ? "0 22px 45px -10px rgba(17, 17, 17, 0.35)"
-      : isMobile
-      ? "0 8px 20px -6px rgba(17, 17, 17, 0.2)"
-      : "0 14px 34px -10px rgba(17, 17, 17, 0.15)",
-    config: { tension: 300, friction: 22 },
-  });
-
-  return (
-    <animated.div
-      className="latestpf-reel-card"
-      onMouseEnter={() => !isMobile && setIsHovered(true)}
-      onMouseLeave={() => !isMobile && setIsHovered(false)}
-      onClick={onSelect}
-      style={{
-        flex: isStripItem ? "0 0 210px" : "auto",
-        scrollSnapAlign: isStripItem ? "start" : "none",
-        position: "relative",
-        aspectRatio: "9 / 16",
-        borderRadius: isMobile ? 18 : 22,
-        overflow: "hidden",
-        background: "#000000",
-        cursor: "pointer",
-        border: "2px solid rgba(17, 17, 17, 0.08)",
-        willChange: "transform, opacity",
-        ...springStyle,
-      }}
-    >
-      <video
-        src={reel.videoSrc}
-        autoPlay
-        muted
-        loop
-        playsInline
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-      />
-
-      {/* Gradient Overlay */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          background:
-            "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, transparent 40%, rgba(0,0,0,0.85) 100%)",
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* Tag in Top Left */}
-      <div
-        style={{
-          position: "absolute",
-          top: isMobile ? 8 : 12,
-          left: isMobile ? 8 : 12,
-          background: "rgba(255, 255, 255, 0.92)",
-          color: "#111111",
-          fontSize: isMobile ? 9 : 10,
-          fontWeight: 800,
-          textTransform: "uppercase",
-          padding: isMobile ? "3px 8px" : "4px 10px",
-          borderRadius: 999,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-        }}
-      >
-        {reel.tag}
-      </div>
-
-      {/* Top Right Sound Icon Indicator with Anime.js Dancing Equalizer */}
-      <div
-        style={{
-          position: "absolute",
-          top: isMobile ? 8 : 12,
-          right: isMobile ? 8 : 12,
-          background: "rgba(0, 0, 0, 0.75)",
-          color: "#FFFFFF",
-          fontSize: 10,
-          fontWeight: 700,
-          padding: isMobile ? "3px 8px" : "4px 10px",
-          borderRadius: 999,
-          backdropFilter: "blur(6px)",
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 5,
-          border: "1px solid rgba(255, 255, 255, 0.14)",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.35)",
-        }}
-      >
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "flex-end",
-            gap: 2,
-            height: 10,
-            paddingBottom: 1,
-          }}
-        >
-          <span
-            className="anime-eq-bar-1"
-            style={{
-              width: 2,
-              height: 10,
-              background: "#FF4D1A",
-              borderRadius: 1,
-              display: "inline-block",
-              transformOrigin: "bottom",
-              willChange: "transform",
-            }}
-          />
-          <span
-            className="anime-eq-bar-2"
-            style={{
-              width: 2,
-              height: 10,
-              background: "#FFFFFF",
-              borderRadius: 1,
-              display: "inline-block",
-              transformOrigin: "bottom",
-              willChange: "transform",
-            }}
-          />
-          <span
-            className="anime-eq-bar-3"
-            style={{
-              width: 2,
-              height: 10,
-              background: "#FF4D1A",
-              borderRadius: 1,
-              display: "inline-block",
-              transformOrigin: "bottom",
-              willChange: "transform",
-            }}
-          />
-        </div>
-        <span>Audio ON</span>
-      </div>
-
-      {/* Bottom Information */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: isMobile ? 10 : 14,
-          left: isMobile ? 10 : 14,
-          right: isMobile ? 10 : 14,
-          color: "#FFFFFF",
-        }}
-      >
-        <p
-          style={{
-            margin: 0,
-            fontSize: isMobile ? 12 : 14,
-            fontWeight: 700,
-            lineHeight: 1.2,
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {reel.name}
-        </p>
-        <p
-          style={{
-            margin: "2px 0 0",
-            fontSize: isMobile ? 10 : 12,
-            opacity: 0.85,
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-          }}
-        >
-          {reel.client} · {reel.stats}
-        </p>
-      </div>
-
-      {/* Center Pulsing Play Button */}
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: isMobile ? 40 : 48,
-          height: isMobile ? 40 : 48,
-          borderRadius: 999,
-          background: "rgba(255, 255, 255, 0.92)",
-          color: "#111111",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: isMobile ? 14 : 16,
-          paddingLeft: 2,
-          boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
-        }}
-      >
-        ▶
-      </div>
-    </animated.div>
-  );
-}
-
 export default function LatestVideoPortfolioPage({ setPage }) {
   const [activeVideo, setActiveVideo] = useState(null);
   const [sliderPos, setSliderPos] = useState(50);
   const [isDraggingSlider, setIsDraggingSlider] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [reelsView, setReelsView] = useState("strip"); // 'strip' | 'grid'
   const sliderRef = useRef(null);
   const pageRef = useRef(null);
   const manifestoRef = useRef(null);
@@ -775,7 +568,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
     return () => {
       ctx.revert();
     };
-  }, [reelsView]);
+  }, []);
 
   // Anime.js v4 Micro-Interactions (Dancing Equalizers, Spark Shimmer, Floating Badges)
   useEffect(() => {
@@ -823,7 +616,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
       remove(".anime-spark");
       remove(".anime-hero-badge");
     };
-  }, [reelsView]);
+  }, []);
 
   // Anime.js Elastic Spring Feedback on Button Press
   const triggerButtonSpring = (e) => {
@@ -1852,12 +1645,12 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       </section>
 
-      {/* 5. ADDITIONAL REAL CLIENT REELS STRIP (INSTAGRAM VERTICAL REELS) */}
+      {/* 5. PHONE STACK CAROUSEL — FRAMER MARKETPLACE INSPIRATION */}
       <section
         id="reels"
         className="latestpf-reels-section"
         style={{
-          padding: isMobile ? "0 16px 44px" : "0 24px clamp(60px, 8vw, 100px)",
+          padding: isMobile ? "0 16px 48px" : "0 24px clamp(60px, 8vw, 100px)",
           maxWidth: 1280,
           margin: "0 auto",
           boxSizing: "border-box",
@@ -1865,170 +1658,63 @@ export default function LatestVideoPortfolioPage({ setPage }) {
       >
         <div
           style={{
-            marginBottom: isMobile ? 18 : 28,
+            marginBottom: isMobile ? 12 : 20,
             display: "flex",
-            flexWrap: "wrap",
-            alignItems: "flex-end",
-            justifyContent: "space-between",
-            gap: 12,
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
           }}
         >
-          <div>
-            <span
-              style={{
-                fontSize: isMobile ? 11 : 12,
-                fontWeight: 800,
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                color: "#FF4D1A",
-                display: "block",
-                marginBottom: 4,
-              }}
-            >
-              ✦ Social Proof & Reel Showcase
-            </span>
-            <h3
-              style={{
-                margin: 0,
-                fontSize: isMobile ? "clamp(22px, 5.5vw, 28px)" : "clamp(28px, 4vw, 44px)",
-                fontWeight: 800,
-                letterSpacing: "-0.035em",
-                color: "#111111",
-              }}
-            >
-              More Client Cuts Produced By Our Crew
-            </h3>
-            <p
-              style={{
-                margin: "4px 0 0",
-                fontSize: isMobile ? 12 : 14,
-                color: "rgba(17, 17, 17, 0.6)",
-                fontWeight: 500,
-              }}
-            >
-              Tap any reel to play full cut with audio & sound design.
-            </p>
-          </div>
-
-          {/* View Switcher for Mobile Screenings */}
-          {isMobile && (
-            <div
-              style={{
-                display: "inline-flex",
-                background: "rgba(17, 17, 17, 0.06)",
-                padding: 4,
-                borderRadius: 999,
-                gap: 4,
-              }}
-            >
-              <button
-                onClick={() => setReelsView("strip")}
-                style={{
-                  border: "none",
-                  background: reelsView === "strip" ? "#111111" : "transparent",
-                  color: reelsView === "strip" ? "#FFFFFF" : "#111111",
-                  padding: "6px 14px",
-                  borderRadius: 999,
-                  fontSize: 12,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 5,
-                  transition: "background 0.2s ease",
-                }}
-              >
-                <span>↔</span> Swipe Strip
-              </button>
-              <button
-                onClick={() => setReelsView("grid")}
-                style={{
-                  border: "none",
-                  background: reelsView === "grid" ? "#111111" : "transparent",
-                  color: reelsView === "grid" ? "#FFFFFF" : "#111111",
-                  padding: "6px 14px",
-                  borderRadius: 999,
-                  fontSize: 12,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 5,
-                  transition: "background 0.2s ease",
-                }}
-              >
-                <span>▦</span> 2-Col Grid
-              </button>
-            </div>
-          )}
-        </div>
-
-        {/* Swipe Hint Indicator for Mobile Strip */}
-        {isMobile && reelsView === "strip" && (
-          <div
+          <span
             style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 10,
-              fontSize: 11,
-              fontWeight: 700,
-              color: "rgba(17, 17, 17, 0.5)",
-              letterSpacing: "0.02em",
+              fontSize: isMobile ? 11 : 12,
+              fontWeight: 800,
+              letterSpacing: "0.06em",
               textTransform: "uppercase",
+              color: "#FF4D1A",
+              display: "block",
+              marginBottom: 4,
             }}
           >
-            <span>← Swipe left / right to browse →</span>
-            <span>8 Client Reels</span>
-          </div>
-        )}
-
-        {/* 9:16 Vertical Reels Container (Mobile Strip vs Mobile 2-Col Grid vs Desktop Grid) */}
-        <div
-          style={
-            isMobile && reelsView === "strip"
-              ? {
-                  display: "flex",
-                  overflowX: "auto",
-                  gap: 12,
-                  paddingBottom: 12,
-                  scrollSnapType: "x mandatory",
-                  WebkitOverflowScrolling: "touch",
-                  scrollbarWidth: "none",
-                  margin: "0 -4px",
-                  paddingLeft: 4,
-                  paddingRight: 4,
-                }
-              : isMobile && reelsView === "grid"
-              ? {
-                  display: "grid",
-                  gridTemplateColumns: "repeat(2, 1fr)",
-                  gap: 10,
-                }
-              : {
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 260px), 1fr))",
-                  gap: 20,
-                }
-          }
-        >
-          {ALL_CLIENT_REELS.map((reel) => (
-            <SpringReelCard
-              key={reel.id}
-              reel={reel}
-              isMobile={isMobile}
-              reelsView={reelsView}
-              onSelect={() => {
-                setActiveVideo({
-                  title: reel.name,
-                  subtitle: reel.client,
-                  videoSrc: reel.videoSrc,
-                });
-                trackEvent("video_play", "grid_reel", reel.name);
-              }}
-            />
-          ))}
+            ✦ Social Proof & Reel Showcase
+          </span>
+          <h3
+            style={{
+              margin: "0 0 6px",
+              fontSize: isMobile ? "clamp(24px, 5.5vw, 30px)" : "clamp(30px, 4vw, 44px)",
+              fontWeight: 800,
+              letterSpacing: "-0.035em",
+              color: "#111111",
+            }}
+          >
+            Viral Client Reels in Action
+          </h3>
+          <p
+            style={{
+              margin: 0,
+              fontSize: isMobile ? 12 : 14,
+              color: "rgba(17, 17, 17, 0.6)",
+              fontWeight: 500,
+              maxWidth: 500,
+            }}
+          >
+            Click any side card or swipe to bring it into the center iPhone frame. Tap the screen to watch full cut.
+          </p>
         </div>
+
+        {/* The Smooth Phone Stack Carousel */}
+        <PhoneStackCarousel
+          reels={ALL_CLIENT_REELS}
+          onSelectReel={(reel) => {
+            setActiveVideo({
+              title: reel.name,
+              subtitle: reel.client,
+              videoSrc: reel.videoSrc,
+            });
+            trackEvent("video_play", "phone_stack", reel.name);
+          }}
+          isMobile={isMobile}
+        />
       </section>
 
       {/* 6. THINGS WE DO ("Thin...") SECTION — 4 STORY BUILDER CAPABILITY TILES */}
