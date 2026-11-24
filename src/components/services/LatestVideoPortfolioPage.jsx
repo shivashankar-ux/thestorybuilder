@@ -9,6 +9,7 @@ import LoopText from "../latestpf/LoopText";
 import QuoteDeck from "../latestpf/QuoteDeck";
 import OrderForm from "../latestpf/OrderForm";
 import PhoneStackCarousel from "../latestpf/PhoneStackCarousel";
+import NudgeFooter from "../latestpf/NudgeFooter";
 import { trackPageView, trackEvent } from "../../utils/tracking";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -2338,65 +2339,29 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             </div>
           </div>
 
-          {/* Centerpiece: The Figure-Eight Infinity LoopText with Center Round White Button */}
+          {/* Centerpiece: Framer NudgeFooter with Giant Interactive Wordmark & Repelling Stickers */}
           <div
             style={{
               position: "relative",
               width: "100%",
-              maxWidth: 960,
-              height: isMobile ? "220px" : "clamp(260px, 40vw, 480px)",
+              maxWidth: 1200,
               margin: "0 auto",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              padding: isMobile ? "10px 0 20px" : "20px 0 40px",
             }}
           >
-            <LoopText
-              text="✦ SHOT BY ONE CREW · CUT BY THE SAME TEAM ✦ HELLO@THESTORYBUILDER.IN ✦ HYDERABAD & WORLDWIDE ✦ "
-              bandColor="#FF4D1A"
-              textColor="#111111"
-              fontSize={isMobile ? 22 : 32}
-              bandWidth={isMobile ? 48 : 66}
-              speed={isMobile ? 40 : 55}
-              hoverBoost={3}
+            <NudgeFooter
+              wordmark="The Story Builder"
+              color="#FF4D1A"
+              aspectRatio={isMobile ? 1.65 : 2.6}
+              mobileRatio={1.5}
+              enabled={true}
+              radius={isMobile ? 150 : 210}
+              distance={isMobile ? 95 : 135}
+              stiffness={115}
+              damping={15}
+              twist={18}
+              shadow={true}
             />
-
-            {/* Central White Circular Button in the Center of Infinity Loop (Signature Framer Detail!) */}
-            <a
-              href="#brief"
-              onMouseDown={triggerButtonSpring}
-              onMouseMove={(e) => onMagneticMove(e, 0.35)}
-              onMouseLeave={onMagneticLeave}
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: isMobile ? "92px" : "clamp(88px, 12vw, 130px)",
-                height: isMobile ? "92px" : "clamp(88px, 12vw, 130px)",
-                borderRadius: 999,
-                background: "#FFFFFF",
-                color: "#111111",
-                fontWeight: 800,
-                fontSize: isMobile ? "12px" : "clamp(12px, 1.4vw, 14px)",
-                letterSpacing: "-0.02em",
-                textDecoration: "none",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                textAlign: "center",
-                padding: 10,
-                boxShadow: "0 14px 40px rgba(0,0,0,0.6)",
-                zIndex: 10,
-                lineHeight: 1.2,
-                cursor: "pointer",
-                willChange: "transform",
-              }}
-            >
-              <span>Book a</span>
-              <span>Shoot ↗</span>
-            </a>
           </div>
 
           {/* Bottom Copyright & Location Metadata */}
