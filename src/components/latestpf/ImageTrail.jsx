@@ -27,6 +27,12 @@ export default function ImageTrail({
     const reduce = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
 
+    // Mobile / touch optimization: do not attach pointer listeners or spawn DOM nodes on touch screens
+    const isTouch =
+      typeof window !== "undefined" &&
+      (window.matchMedia?.("(pointer: coarse)").matches || "ontouchstart" in window);
+    if (isTouch) return;
+
     // Preload images
     list.forEach((src) => {
       const i = new Image();

@@ -455,7 +455,8 @@ export default function TwistRibbon({
       const p = propsRef.current;
       const list = (p.images || []).map(srcOf).filter(Boolean).slice(0, 24);
       const aspect = Math.max(0.4, Math.min(2, p.cardShape ?? 0.75));
-      const cellH = 640;
+      const isMobileScreen = typeof window !== "undefined" && window.innerWidth <= 768;
+      const cellH = isMobileScreen ? 360 : 640;
       const cellW = Math.round(cellH * aspect);
       const loaded = (await Promise.all(list.map(loadImage))).filter(Boolean);
       if (disposed) return;
@@ -513,7 +514,10 @@ export default function TwistRibbon({
       const r = wrap.getBoundingClientRect();
       W = Math.max(1, r.width);
       H = Math.max(1, r.height);
-      dpr = Math.min(2, window.devicePixelRatio || 1);
+      const isMobileScreen = typeof window !== "undefined" && window.innerWidth <= 768;
+      dpr = isMobileScreen
+        ? Math.min(1.25, window.devicePixelRatio || 1)
+        : Math.min(1.75, window.devicePixelRatio || 1);
       canvas.width = Math.round(W * dpr);
       canvas.height = Math.round(H * dpr);
       const o = propsRef.current.orientation || "auto";

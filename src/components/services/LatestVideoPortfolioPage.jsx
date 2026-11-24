@@ -143,6 +143,8 @@ const ALL_CLIENT_REELS = [
     stats: "450K+ Views",
     videoSrc:
       "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.mp4",
+    poster:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,so_2/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.jpg",
   },
   {
     id: "reel-2",
@@ -151,6 +153,7 @@ const ALL_CLIENT_REELS = [
     tag: "Meta Ad Creative",
     stats: "890K+ Views",
     videoSrc: "/videos/rVUkWK8lRmw.mp4",
+    poster: "/shiva-landing.webp",
   },
   {
     id: "reel-3",
@@ -158,7 +161,10 @@ const ALL_CLIENT_REELS = [
     client: "Learning & School Hub",
     tag: "Educational Story",
     stats: "115K+ Views",
-    videoSrc: "/videos/_aVoaZbyXJQ.mp4",
+    videoSrc:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1793010466/portfolio%20video%20for%20editing%20services/vision%20rainbow/Vision_Rainbow_pre-primary_reel_2_aezhph.mp4",
+    poster:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,so_2/v1793010466/portfolio%20video%20for%20editing%20services/vision%20rainbow/Vision_Rainbow_pre-primary_reel_2_aezhph.jpg",
   },
   {
     id: "reel-4",
@@ -167,6 +173,7 @@ const ALL_CLIENT_REELS = [
     tag: "Authority Brand",
     stats: "310K+ Views",
     videoSrc: "/videos/VdsrsWmmhiw.mp4",
+    poster: "/shiva-about.webp",
   },
   {
     id: "reel-5",
@@ -175,6 +182,8 @@ const ALL_CLIENT_REELS = [
     tag: "Gym & Fitness",
     stats: "420K+ Views",
     videoSrc: "/videos/1EwM31QxnKk.mp4",
+    poster:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,so_2/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.jpg",
   },
   {
     id: "reel-6",
@@ -184,6 +193,8 @@ const ALL_CLIENT_REELS = [
     stats: "260K+ Views",
     videoSrc:
       "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.mp4",
+    poster:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,so_2/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.jpg",
   },
   {
     id: "reel-7",
@@ -192,6 +203,7 @@ const ALL_CLIENT_REELS = [
     tag: "Wellness & Lifestyle",
     stats: "210K+ Views",
     videoSrc: "/videos/k-bJd1yYk1A.mp4",
+    poster: "/shiva.webp",
   },
   {
     id: "reel-8",
@@ -201,6 +213,8 @@ const ALL_CLIENT_REELS = [
     stats: "95K+ Views",
     videoSrc:
       "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1793010466/portfolio%20video%20for%20editing%20services/vision%20rainbow/Vision_Rainbow_pre-primary_reel_2_aezhph.mp4",
+    poster:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,so_1/v1793010466/portfolio%20video%20for%20editing%20services/vision%20rainbow/Vision_Rainbow_pre-primary_reel_2_aezhph.jpg",
   },
 ];
 
@@ -288,6 +302,95 @@ const MANIFESTO_WORDS_SECONDARY = [
   "attention", "into", "high-ticket", "clients", "and", "customers."
 ];
 
+/* ------------------------------------------------------------
+   SHOWCASE CARD VIDEO — HIGH-PERFORMANCE LAZY VIEWPORT PLAYER
+   Crisp poster fallback guarantees zero black screen and 0 decoders
+   used when card is off-screen.
+   ------------------------------------------------------------ */
+function ShowcaseCardVideo({ card, isMobile }) {
+  const containerRef = useRef(null);
+  const videoRef = useRef(null);
+  const [isInView, setIsInView] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { rootMargin: "160px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+    if (isInView) {
+      vid.play().catch(() => {});
+    } else {
+      vid.pause();
+    }
+  }, [isInView]);
+
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        overflow: "hidden",
+      }}
+    >
+      {/* High-res poster fallback: ensures card is NEVER black and renders immediately */}
+      <img
+        src={card.poster}
+        alt={card.title}
+        loading="lazy"
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          display: "block",
+          zIndex: 1,
+        }}
+      />
+
+      {/* Video element: only mounted when card is in or near viewport */}
+      {isInView && (
+        <video
+          ref={videoRef}
+          src={card.videoSrc}
+          poster={card.poster}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          onPlaying={() => setIsPlaying(true)}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+            zIndex: 2,
+            opacity: isPlaying ? 1 : 0,
+            transition: "opacity 0.35s ease",
+          }}
+        />
+      )}
+    </div>
+  );
+}
+
 export default function LatestVideoPortfolioPage({ setPage }) {
   const [activeVideo, setActiveVideo] = useState(null);
   const [sliderPos, setSliderPos] = useState(50);
@@ -298,6 +401,28 @@ export default function LatestVideoPortfolioPage({ setPage }) {
   const manifestoRef = useRef(null);
   const sliderSectionRef = useRef(null);
   const sliderDemoAnimated = useRef(false);
+  const sliderVideoBaseRef = useRef(null);
+  const sliderVideoClipRef = useRef(null);
+
+  // Lazy viewport observer for color comparison videos
+  useEffect(() => {
+    const el = sliderSectionRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          sliderVideoBaseRef.current?.play().catch(() => {});
+          sliderVideoClipRef.current?.play().catch(() => {});
+        } else {
+          sliderVideoBaseRef.current?.pause();
+          sliderVideoClipRef.current?.pause();
+        }
+      },
+      { rootMargin: "140px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -693,14 +818,13 @@ export default function LatestVideoPortfolioPage({ setPage }) {
   };
 
   useEffect(() => {
+    if (!isDraggingSlider) return;
     const onUp = () => setIsDraggingSlider(false);
-    const onMove = (e) => {
-      if (isDraggingSlider) handleSliderMove(e);
-    };
+    const onMove = (e) => handleSliderMove(e);
     window.addEventListener("mouseup", onUp);
     window.addEventListener("touchend", onUp);
     window.addEventListener("mousemove", onMove);
-    window.addEventListener("touchmove", onMove);
+    window.addEventListener("touchmove", onMove, { passive: true });
     return () => {
       window.removeEventListener("mouseup", onUp);
       window.removeEventListener("touchend", onUp);
@@ -1432,21 +1556,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   boxShadow: "0 14px 30px -10px rgba(17, 17, 17, 0.25)",
                 }}
               >
-                {/* Playing Real Video Loop Preview */}
-                <video
-                  src={card.videoSrc}
-                  poster={card.poster}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                  }}
-                />
+                {/* Playing Real Video Loop Preview with Lazy Viewport Observer */}
+                <ShowcaseCardVideo card={card} isMobile={isMobile} />
 
                 {/* Top-Left Category Pill */}
                 <div
@@ -1926,11 +2037,19 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           >
             {/* Graded Video (Base / Full Width) */}
             <video
+              ref={sliderVideoBaseRef}
               src="https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,vc_h264/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.mp4"
-              autoPlay
+              poster="https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,so_1/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.jpg"
               muted
               loop
               playsInline
+              preload="none"
+              onTimeUpdate={(e) => {
+                const clipVid = sliderVideoClipRef.current;
+                if (clipVid && Math.abs(clipVid.currentTime - e.currentTarget.currentTime) > 0.15) {
+                  clipVid.currentTime = e.currentTarget.currentTime;
+                }
+              }}
               style={{
                 position: "absolute",
                 inset: 0,
@@ -1971,11 +2090,13 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               }}
             >
               <video
+                ref={sliderVideoClipRef}
                 src="https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,vc_h264/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.mp4"
-                autoPlay
+                poster="https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,so_1/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.jpg"
                 muted
                 loop
                 playsInline
+                preload="none"
                 style={{
                   position: "absolute",
                   inset: 0,

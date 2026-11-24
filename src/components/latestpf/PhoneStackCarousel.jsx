@@ -31,9 +31,25 @@ export default function PhoneStackCarousel({
   const [renderProgress, setRenderProgress] = useState(0);
   const [isDraggingState, setIsDraggingState] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [isInView, setIsInView] = useState(true);
 
-  // References to all video DOM elements
+  // References
+  const containerRef = useRef(null);
   const videoRefs = useRef({});
+
+  // Viewport intersection observer to freeze off-screen decoding
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   // Mobile-adaptive drag sensitivity
   const dragDistancePerSlide = isMobile ? 180 : 300;
@@ -79,32 +95,33 @@ export default function PhoneStackCarousel({
       activeVid.setAttribute("playsinline", "");
       activeVid.setAttribute("webkit-playsinline", "");
 
-      const playPromise = activeVid.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // If browser audio policy blocked unmuted play, fallback to muted to prevent black screen
-          activeVid.muted = true;
-          activeVid.play().catch(() => {});
-        });
+      if (isInView) {
+        const playPromise = activeVid.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // If browser audio policy blocked unmuted play, fallback to muted to prevent black screen
+            activeVid.muted = true;
+            activeVid.play().catch(() => {});
+          });
+        }
+      } else {
+        activeVid.pause();
       }
     }
 
-    // 2. Ensure all other non-center videos are muted and playing smoothly
-    reels.forEach((_, idx) => {
+    // 2. Pause all other non-center videos immediately so hardware decoders stay free
+    Object.keys(videoRefs.current).forEach((key) => {
+      const idx = Number(key);
       if (idx !== activeNormalizedIndex) {
         const otherVid = videoRefs.current[idx];
         if (otherVid) {
-          otherVid.muted = true;
-          otherVid.playsInline = true;
-          otherVid.setAttribute("playsinline", "");
-          otherVid.setAttribute("webkit-playsinline", "");
-          otherVid.play().catch(() => {});
+          otherVid.pause();
         }
       }
     });
-  }, [activeNormalizedIndex, isMuted, reels]);
+  }, [activeNormalizedIndex, isMuted, isInView]);
 
-  // Initial setup for all video elements on mount
+  // Initial setup for video elements on mount
   const setupVideoRef = (el, idx) => {
     if (el) {
       videoRefs.current[idx] = el;
@@ -113,7 +130,13 @@ export default function PhoneStackCarousel({
       el.playsInline = true;
       el.setAttribute("playsinline", "");
       el.setAttribute("webkit-playsinline", "");
-      el.play().catch(() => {});
+      if (idx === activeNormalizedIndex && isInView) {
+        el.play().catch(() => {});
+      } else {
+        el.pause();
+      }
+    } else {
+      delete videoRefs.current[idx];
     }
   };
 
@@ -280,6 +303,7 @@ export default function PhoneStackCarousel({
 
   return (
     <div
+      ref={containerRef}
       style={{
         position: "relative",
         width: "100%",
@@ -352,6 +376,7 @@ export default function PhoneStackCarousel({
           if (opacity <= 0.01) return null;
 
           const isCenter = absOffset < 0.5;
+          const shouldMountVideo = absOffset < 0.75 && isInView;
 
           return (
             <div
@@ -389,28 +414,54 @@ export default function PhoneStackCarousel({
                   : "box-shadow 0.3s ease, border-radius 0.3s ease",
               }}
             >
-              {/* VIDEO ELEMENT — EXPLICIT PLAYBACK INLINE */}
-              <video
-                ref={(el) => setupVideoRef(el, index)}
-                src={reel.videoSrc}
-                poster={getPoster(reel)}
-                autoPlay
-                muted={isCenter ? isMuted : true}
-                loop
-                playsInline
-                preload="auto"
-                onCanPlay={(e) => {
-                  e.currentTarget.muted = isCenter ? isMuted : true;
-                  e.currentTarget.play().catch(() => {});
-                }}
+              {/* CRISP POSTER IMAGE — ALWAYS PRESENT SO CARDS ARE NEVER BLACK */}
+              <img
+                src={getPoster(reel)}
+                alt={reel.name}
+                loading={isCenter ? "eager" : "lazy"}
                 style={{
+                  position: "absolute",
+                  inset: 0,
                   width: "100%",
                   height: "100%",
                   objectFit: "cover",
                   display: "block",
+                  zIndex: 1,
                   filter: isCenter ? "none" : "brightness(0.88) contrast(1.03)",
                 }}
               />
+
+              {/* VIDEO ELEMENT — ONLY MOUNTED & PLAYED ON THE ACTIVE CENTER CARD */}
+              {shouldMountVideo && (
+                <video
+                  ref={(el) => setupVideoRef(el, index)}
+                  src={reel.videoSrc}
+                  poster={getPoster(reel)}
+                  autoPlay
+                  muted={isCenter ? isMuted : true}
+                  loop
+                  playsInline
+                  preload={isCenter ? "auto" : "metadata"}
+                  onCanPlay={(e) => {
+                    if (isCenter && isInView) {
+                      e.currentTarget.muted = isMuted;
+                      e.currentTarget.play().catch(() => {});
+                    } else {
+                      e.currentTarget.pause();
+                    }
+                  }}
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                    zIndex: 2,
+                    filter: isCenter ? "none" : "brightness(0.88) contrast(1.03)",
+                  }}
+                />
+              )}
             </div>
           );
         })}
