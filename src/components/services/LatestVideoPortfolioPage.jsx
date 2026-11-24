@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { animate, remove } from "animejs";
 import ImageTrail from "../latestpf/ImageTrail";
 import TwistRibbon from "../latestpf/TwistRibbon";
 import LoopText from "../latestpf/LoopText";
@@ -503,6 +504,63 @@ export default function LatestVideoPortfolioPage({ setPage }) {
     };
   }, [reelsView]);
 
+  // Anime.js v4 Micro-Interactions (Dancing Equalizers, Spark Shimmer, Floating Badges)
+  useEffect(() => {
+    // 1. Equalizer audio visualizer bars on reels
+    animate(".anime-eq-bar-1", {
+      scaleY: [0.25, 1, 0.45, 0.85, 0.25],
+      duration: 750,
+      ease: "inOutSine",
+      loop: true,
+    });
+    animate(".anime-eq-bar-2", {
+      scaleY: [0.75, 0.3, 1, 0.5, 0.75],
+      duration: 650,
+      ease: "inOutSine",
+      loop: true,
+    });
+    animate(".anime-eq-bar-3", {
+      scaleY: [0.4, 0.9, 0.2, 1, 0.4],
+      duration: 850,
+      ease: "inOutSine",
+      loop: true,
+    });
+
+    // 2. Kinetic Sparkle Shimmer (✦) across branding & section badges
+    animate(".anime-spark", {
+      rotate: [0, 90, 180, 270, 360],
+      scale: [1, 1.25, 0.92, 1.2, 1],
+      duration: 4500,
+      ease: "inOutSine",
+      loop: true,
+    });
+
+    // 3. Floating micro-pulse on Hero Badge
+    animate(".anime-hero-badge", {
+      y: [0, -3, 0],
+      duration: 2400,
+      ease: "inOutSine",
+      loop: true,
+    });
+
+    return () => {
+      remove(".anime-eq-bar-1");
+      remove(".anime-eq-bar-2");
+      remove(".anime-eq-bar-3");
+      remove(".anime-spark");
+      remove(".anime-hero-badge");
+    };
+  }, [reelsView]);
+
+  // Anime.js Elastic Spring Feedback on Button Press
+  const triggerButtonSpring = (e) => {
+    animate(e.currentTarget, {
+      scale: [1, 0.92, 1.05, 1],
+      duration: 400,
+      ease: "outElastic(1, .6)",
+    });
+  };
+
   // Desktop 3D Mouse Tilt on Showcase Cards
   const onCardMouseMove = (e) => {
     if (isMobile) return;
@@ -663,7 +721,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           }}
         >
           {CONFIG.brand}
-          <span style={{ color: "#FF4D1A", fontSize: "16px", lineHeight: 1 }}>✦</span>
+          <span className="anime-spark" style={{ color: "#FF4D1A", fontSize: "16px", lineHeight: 1, display: "inline-block" }}>✦</span>
         </a>
 
         {/* Center Nav Links (Hidden on Mobile) */}
@@ -766,6 +824,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           </a>
           <a
             href="#brief"
+            onMouseDown={triggerButtonSpring}
             style={{
               background: "#111111",
               color: "#FFFFFF",
@@ -779,6 +838,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               gap: 6,
               letterSpacing: "-0.01em",
               boxShadow: "0 4px 14px rgba(17, 17, 17, 0.12)",
+              cursor: "pointer",
+              willChange: "transform",
             }}
           >
             Book a Shoot ↗
@@ -886,6 +947,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           </p>
 
           <div
+            className="anime-hero-badge"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -899,9 +961,11 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               border: "1px solid rgba(17, 17, 17, 0.08)",
               padding: isMobile ? "6px 14px" : "8px 18px",
               borderRadius: 999,
+              boxShadow: "0 2px 10px rgba(17,17,17,0.04)",
+              willChange: "transform",
             }}
           >
-            <span>✦</span> ONE CREW · ONE BRIEF <span>✦</span>
+            <span className="anime-spark" style={{ display: "inline-block" }}>✦</span> ONE CREW · ONE BRIEF <span className="anime-spark" style={{ display: "inline-block" }}>✦</span>
           </div>
 
           <a
@@ -1326,12 +1390,13 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                     Watch Full Cut With Sound ↗
                   </button>
 
-                  {/* Circular Button Matching Template (Black/White with Arrow) */}
+                  {/* Circular Button Matching Template (Black/White with Arrow) with Anime.js Spring */}
                   <button
                     onClick={() => {
                       setActiveVideo(card);
                       trackEvent("video_play", "portfolio_reel", card.title);
                     }}
+                    onMouseDown={triggerButtonSpring}
                     aria-label={`Watch ${card.title}`}
                     style={{
                       width: isMobile ? 44 : 52,
@@ -1347,6 +1412,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                       boxShadow: "0 8px 18px rgba(0,0,0,0.18)",
                       transition: "transform 0.2s ease",
                       flexShrink: 0,
+                      willChange: "transform",
                     }}
                   >
                     <svg width={isMobile ? "18" : "20"} height={isMobile ? "18" : "20"} viewBox="0 0 20 20" fill="none">
@@ -1597,21 +1663,73 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                   {reel.tag}
                 </div>
 
-                {/* Top Right Sound Icon Indicator */}
+                {/* Top Right Sound Icon Indicator with Anime.js Dancing Equalizer */}
                 <div
                   style={{
                     position: "absolute",
                     top: isMobile ? 8 : 12,
                     right: isMobile ? 8 : 12,
-                    background: "rgba(0, 0, 0, 0.65)",
+                    background: "rgba(0, 0, 0, 0.75)",
                     color: "#FFFFFF",
                     fontSize: 10,
-                    padding: "3px 7px",
+                    fontWeight: 700,
+                    padding: isMobile ? "3px 8px" : "4px 10px",
                     borderRadius: 999,
-                    backdropFilter: "blur(4px)",
+                    backdropFilter: "blur(6px)",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 5,
+                    border: "1px solid rgba(255, 255, 255, 0.14)",
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.35)",
                   }}
                 >
-                  🔊 Sound
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "flex-end",
+                      gap: 2,
+                      height: 10,
+                      paddingBottom: 1,
+                    }}
+                  >
+                    <span
+                      className="anime-eq-bar-1"
+                      style={{
+                        width: 2,
+                        height: 10,
+                        background: "#FF4D1A",
+                        borderRadius: 1,
+                        display: "inline-block",
+                        transformOrigin: "bottom",
+                        willChange: "transform",
+                      }}
+                    />
+                    <span
+                      className="anime-eq-bar-2"
+                      style={{
+                        width: 2,
+                        height: 10,
+                        background: "#FFFFFF",
+                        borderRadius: 1,
+                        display: "inline-block",
+                        transformOrigin: "bottom",
+                        willChange: "transform",
+                      }}
+                    />
+                    <span
+                      className="anime-eq-bar-3"
+                      style={{
+                        width: 2,
+                        height: 10,
+                        background: "#FF4D1A",
+                        borderRadius: 1,
+                        display: "inline-block",
+                        transformOrigin: "bottom",
+                        willChange: "transform",
+                      }}
+                    />
+                  </div>
+                  <span>Audio ON</span>
                 </div>
 
                 {/* Bottom Information */}
@@ -2521,6 +2639,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
       >
         <a
           href="#brief"
+          onMouseDown={triggerButtonSpring}
           style={{
             flex: 1,
             background: "#111111",
@@ -2532,6 +2651,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             textAlign: "center",
             textDecoration: "none",
             boxShadow: "0 4px 14px rgba(17,17,17,0.15)",
+            cursor: "pointer",
+            willChange: "transform",
           }}
         >
           Book a Shoot ↗
@@ -2540,6 +2661,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           href={waUrl()}
           target="_blank"
           rel="noopener noreferrer"
+          onMouseDown={triggerButtonSpring}
           style={{
             background: "#FF4D1A",
             color: "#FFFFFF",
@@ -2551,6 +2673,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             display: "flex",
             alignItems: "center",
             gap: 6,
+            cursor: "pointer",
+            willChange: "transform",
           }}
         >
           💬 WhatsApp
