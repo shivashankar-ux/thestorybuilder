@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import Lenis from "lenis";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { animate, remove } from "animejs";
@@ -516,35 +515,6 @@ export default function LatestVideoPortfolioPage({ setPage }) {
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // Apple-grade Momentum Smooth Scrolling (Lenis + GSAP ScrollTrigger Synchronization)
-  useEffect(() => {
-    const prefersReducedMotion =
-      typeof window !== "undefined" &&
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) return;
-
-    const lenis = new Lenis({
-      lerp: 0.08,
-      smoothWheel: true,
-      wheelMultiplier: 0.95,
-      touchMultiplier: 1.2,
-    });
-
-    lenis.on("scroll", ScrollTrigger.update);
-
-    const tick = (time) => {
-      lenis.raf(time * 1000);
-    };
-
-    gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
-
-    return () => {
-      gsap.ticker.remove(tick);
-      lenis.destroy();
-    };
   }, []);
 
   // GSAP 3.15 + ScrollTrigger Context Setup
