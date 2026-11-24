@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { animate, remove } from "animejs";
+import { useTransition, useSpring, animated } from "@react-spring/web";
 import ImageTrail from "../latestpf/ImageTrail";
 import TwistRibbon from "../latestpf/TwistRibbon";
 import LoopText from "../latestpf/LoopText";
@@ -284,6 +285,213 @@ const MANIFESTO_WORDS_SECONDARY = [
   "that", "move", "audiences,", "stop", "the", "scroll,", "and", "turn",
   "attention", "into", "high-ticket", "clients", "and", "customers."
 ];
+
+// Interactive Spring Reel Card using @react-spring/web physics
+function SpringReelCard({ reel, isMobile, reelsView, onSelect }) {
+  const isStripItem = isMobile && reelsView === "strip";
+  const [isHovered, setIsHovered] = useState(false);
+
+  // React Spring physics on hover (smooth mass & tension damping)
+  const springStyle = useSpring({
+    transform: isHovered && !isMobile ? "scale(1.035) translateY(-6px)" : "scale(1) translateY(0px)",
+    boxShadow: isHovered && !isMobile
+      ? "0 22px 45px -10px rgba(17, 17, 17, 0.35)"
+      : isMobile
+      ? "0 8px 20px -6px rgba(17, 17, 17, 0.2)"
+      : "0 14px 34px -10px rgba(17, 17, 17, 0.15)",
+    config: { tension: 300, friction: 22 },
+  });
+
+  return (
+    <animated.div
+      className="latestpf-reel-card"
+      onMouseEnter={() => !isMobile && setIsHovered(true)}
+      onMouseLeave={() => !isMobile && setIsHovered(false)}
+      onClick={onSelect}
+      style={{
+        flex: isStripItem ? "0 0 210px" : "auto",
+        scrollSnapAlign: isStripItem ? "start" : "none",
+        position: "relative",
+        aspectRatio: "9 / 16",
+        borderRadius: isMobile ? 18 : 22,
+        overflow: "hidden",
+        background: "#000000",
+        cursor: "pointer",
+        border: "2px solid rgba(17, 17, 17, 0.08)",
+        willChange: "transform, opacity",
+        ...springStyle,
+      }}
+    >
+      <video
+        src={reel.videoSrc}
+        autoPlay
+        muted
+        loop
+        playsInline
+        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+      />
+
+      {/* Gradient Overlay */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, transparent 40%, rgba(0,0,0,0.85) 100%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Tag in Top Left */}
+      <div
+        style={{
+          position: "absolute",
+          top: isMobile ? 8 : 12,
+          left: isMobile ? 8 : 12,
+          background: "rgba(255, 255, 255, 0.92)",
+          color: "#111111",
+          fontSize: isMobile ? 9 : 10,
+          fontWeight: 800,
+          textTransform: "uppercase",
+          padding: isMobile ? "3px 8px" : "4px 10px",
+          borderRadius: 999,
+          boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+        }}
+      >
+        {reel.tag}
+      </div>
+
+      {/* Top Right Sound Icon Indicator with Anime.js Dancing Equalizer */}
+      <div
+        style={{
+          position: "absolute",
+          top: isMobile ? 8 : 12,
+          right: isMobile ? 8 : 12,
+          background: "rgba(0, 0, 0, 0.75)",
+          color: "#FFFFFF",
+          fontSize: 10,
+          fontWeight: 700,
+          padding: isMobile ? "3px 8px" : "4px 10px",
+          borderRadius: 999,
+          backdropFilter: "blur(6px)",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 5,
+          border: "1px solid rgba(255, 255, 255, 0.14)",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.35)",
+        }}
+      >
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "flex-end",
+            gap: 2,
+            height: 10,
+            paddingBottom: 1,
+          }}
+        >
+          <span
+            className="anime-eq-bar-1"
+            style={{
+              width: 2,
+              height: 10,
+              background: "#FF4D1A",
+              borderRadius: 1,
+              display: "inline-block",
+              transformOrigin: "bottom",
+              willChange: "transform",
+            }}
+          />
+          <span
+            className="anime-eq-bar-2"
+            style={{
+              width: 2,
+              height: 10,
+              background: "#FFFFFF",
+              borderRadius: 1,
+              display: "inline-block",
+              transformOrigin: "bottom",
+              willChange: "transform",
+            }}
+          />
+          <span
+            className="anime-eq-bar-3"
+            style={{
+              width: 2,
+              height: 10,
+              background: "#FF4D1A",
+              borderRadius: 1,
+              display: "inline-block",
+              transformOrigin: "bottom",
+              willChange: "transform",
+            }}
+          />
+        </div>
+        <span>Audio ON</span>
+      </div>
+
+      {/* Bottom Information */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: isMobile ? 10 : 14,
+          left: isMobile ? 10 : 14,
+          right: isMobile ? 10 : 14,
+          color: "#FFFFFF",
+        }}
+      >
+        <p
+          style={{
+            margin: 0,
+            fontSize: isMobile ? 12 : 14,
+            fontWeight: 700,
+            lineHeight: 1.2,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {reel.name}
+        </p>
+        <p
+          style={{
+            margin: "2px 0 0",
+            fontSize: isMobile ? 10 : 12,
+            opacity: 0.85,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {reel.client} · {reel.stats}
+        </p>
+      </div>
+
+      {/* Center Pulsing Play Button */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: isMobile ? 40 : 48,
+          height: isMobile ? 40 : 48,
+          borderRadius: 999,
+          background: "rgba(255, 255, 255, 0.92)",
+          color: "#111111",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: isMobile ? 14 : 16,
+          paddingLeft: 2,
+          boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
+        }}
+      >
+        ▶
+      </div>
+    </animated.div>
+  );
+}
 
 export default function LatestVideoPortfolioPage({ setPage }) {
   const [activeVideo, setActiveVideo] = useState(null);
@@ -641,23 +849,19 @@ export default function LatestVideoPortfolioPage({ setPage }) {
     gsap.to(e.currentTarget, { x: 0, y: 0, duration: 0.55, ease: "elastic.out(1, 0.45)" });
   };
 
-  // Cinematic Video Modal Animate In (Anime.js spring physics)
-  useEffect(() => {
-    if (activeVideo) {
-      animate(".latestpf-modal-backdrop", {
-        opacity: [0, 1],
-        duration: 240,
-        ease: "outQuad",
-      });
-      animate(".latestpf-modal-card", {
-        scale: [0.9, 1],
-        y: [28, 0],
-        opacity: [0, 1],
-        duration: 420,
-        ease: "outBack(1.3)",
-      });
-    }
-  }, [activeVideo]);
+  // React Spring Modal Transition (smooth physics on mount AND unmount)
+  const modalTransitions = useTransition(activeVideo, {
+    from: { opacity: 0, scale: 0.88, y: 35 },
+    enter: { opacity: 1, scale: 1, y: 0 },
+    leave: { opacity: 0, scale: 0.9, y: 22 },
+    config: { mass: 0.9, tension: 280, friction: 24 },
+  });
+
+  // React Spring Slider Drag Handle Physics
+  const sliderHandleSpring = useSpring({
+    scale: isDraggingSlider ? 1.25 : 1,
+    config: { tension: 350, friction: 20 },
+  });
 
   // Desktop 3D Mouse Tilt on Showcase Cards
   const onCardMouseMove = (e) => {
@@ -1808,207 +2012,22 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 }
           }
         >
-          {ALL_CLIENT_REELS.map((reel) => {
-            const isStripItem = isMobile && reelsView === "strip";
-            return (
-              <div
-                key={reel.id}
-                className="latestpf-reel-card"
-                onClick={() => {
-                  setActiveVideo({
-                    title: reel.name,
-                    subtitle: reel.client,
-                    videoSrc: reel.videoSrc,
-                  });
-                  trackEvent("video_play", "grid_reel", reel.name);
-                }}
-                style={{
-                  flex: isStripItem ? "0 0 210px" : "auto",
-                  scrollSnapAlign: isStripItem ? "start" : "none",
-                  position: "relative",
-                  aspectRatio: "9 / 16",
-                  borderRadius: isMobile ? 18 : 22,
-                  overflow: "hidden",
-                  background: "#000000",
-                  cursor: "pointer",
-                  border: "2px solid rgba(17, 17, 17, 0.08)",
-                  boxShadow: isMobile
-                    ? "0 8px 20px -6px rgba(17, 17, 17, 0.2)"
-                    : "0 14px 34px -10px rgba(17, 17, 17, 0.15)",
-                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                  willChange: "transform, opacity",
-                }}
-              >
-                <video
-                  src={reel.videoSrc}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-
-                {/* Gradient Overlay */}
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    background:
-                      "linear-gradient(180deg, rgba(0,0,0,0.15) 0%, transparent 40%, rgba(0,0,0,0.85) 100%)",
-                    pointerEvents: "none",
-                  }}
-                />
-
-                {/* Tag in Top Left */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: isMobile ? 8 : 12,
-                    left: isMobile ? 8 : 12,
-                    background: "rgba(255, 255, 255, 0.92)",
-                    color: "#111111",
-                    fontSize: isMobile ? 9 : 10,
-                    fontWeight: 800,
-                    textTransform: "uppercase",
-                    padding: isMobile ? "3px 8px" : "4px 10px",
-                    borderRadius: 999,
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
-                  }}
-                >
-                  {reel.tag}
-                </div>
-
-                {/* Top Right Sound Icon Indicator with Anime.js Dancing Equalizer */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: isMobile ? 8 : 12,
-                    right: isMobile ? 8 : 12,
-                    background: "rgba(0, 0, 0, 0.75)",
-                    color: "#FFFFFF",
-                    fontSize: 10,
-                    fontWeight: 700,
-                    padding: isMobile ? "3px 8px" : "4px 10px",
-                    borderRadius: 999,
-                    backdropFilter: "blur(6px)",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 5,
-                    border: "1px solid rgba(255, 255, 255, 0.14)",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.35)",
-                  }}
-                >
-                  <div
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "flex-end",
-                      gap: 2,
-                      height: 10,
-                      paddingBottom: 1,
-                    }}
-                  >
-                    <span
-                      className="anime-eq-bar-1"
-                      style={{
-                        width: 2,
-                        height: 10,
-                        background: "#FF4D1A",
-                        borderRadius: 1,
-                        display: "inline-block",
-                        transformOrigin: "bottom",
-                        willChange: "transform",
-                      }}
-                    />
-                    <span
-                      className="anime-eq-bar-2"
-                      style={{
-                        width: 2,
-                        height: 10,
-                        background: "#FFFFFF",
-                        borderRadius: 1,
-                        display: "inline-block",
-                        transformOrigin: "bottom",
-                        willChange: "transform",
-                      }}
-                    />
-                    <span
-                      className="anime-eq-bar-3"
-                      style={{
-                        width: 2,
-                        height: 10,
-                        background: "#FF4D1A",
-                        borderRadius: 1,
-                        display: "inline-block",
-                        transformOrigin: "bottom",
-                        willChange: "transform",
-                      }}
-                    />
-                  </div>
-                  <span>Audio ON</span>
-                </div>
-
-                {/* Bottom Information */}
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: isMobile ? 10 : 14,
-                    left: isMobile ? 10 : 14,
-                    right: isMobile ? 10 : 14,
-                    color: "#FFFFFF",
-                  }}
-                >
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: isMobile ? 12 : 14,
-                      fontWeight: 700,
-                      lineHeight: 1.2,
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {reel.name}
-                  </p>
-                  <p
-                    style={{
-                      margin: "2px 0 0",
-                      fontSize: isMobile ? 10 : 12,
-                      opacity: 0.85,
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    {reel.client} · {reel.stats}
-                  </p>
-                </div>
-
-                {/* Center Pulsing Play Button */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: isMobile ? 40 : 48,
-                    height: isMobile ? 40 : 48,
-                    borderRadius: 999,
-                    background: "rgba(255, 255, 255, 0.92)",
-                    color: "#111111",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: isMobile ? 14 : 16,
-                    paddingLeft: 2,
-                    boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
-                  }}
-                >
-                  ▶
-                </div>
-              </div>
-            );
-          })}
+          {ALL_CLIENT_REELS.map((reel) => (
+            <SpringReelCard
+              key={reel.id}
+              reel={reel}
+              isMobile={isMobile}
+              reelsView={reelsView}
+              onSelect={() => {
+                setActiveVideo({
+                  title: reel.name,
+                  subtitle: reel.client,
+                  videoSrc: reel.videoSrc,
+                });
+                trackEvent("video_play", "grid_reel", reel.name);
+              }}
+            />
+          ))}
         </div>
       </section>
 
@@ -2323,8 +2342,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               </div>
             </div>
 
-            {/* Center Drag Handle */}
-            <div
+            {/* Center Drag Handle (React Spring Scale Physics on Drag) */}
+            <animated.div
               className="latestpf-slider-handle"
               style={{
                 position: "absolute",
@@ -2344,10 +2363,11 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 pointerEvents: "none",
                 zIndex: 5,
                 willChange: "transform",
+                ...sliderHandleSpring,
               }}
             >
               ↔
-            </div>
+            </animated.div>
           </div>
         </div>
       </section>
@@ -2723,128 +2743,131 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       </footer>
 
-      {/* 11. CINEMATIC VIDEO MODAL */}
-      {activeVideo && (
-        <div
-          className="latestpf-modal-backdrop"
-          onClick={() => setActiveVideo(null)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 100,
-            background: "rgba(0, 0, 0, 0.88)",
-            backdropFilter: "blur(18px)",
-            WebkitBackdropFilter: "blur(18px)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: isMobile ? 12 : 20,
-            willChange: "opacity",
-          }}
-        >
-          <div
-            className="latestpf-modal-card"
-            onClick={(e) => e.stopPropagation()}
+      {/* 11. CINEMATIC VIDEO MODAL (REACT SPRING TRANSITIONS ON MOUNT & UNMOUNT) */}
+      {modalTransitions((styles, item) =>
+        item ? (
+          <animated.div
+            className="latestpf-modal-backdrop"
+            onClick={() => setActiveVideo(null)}
             style={{
-              position: "relative",
-              maxWidth: 520,
-              width: "100%",
-              background: "#111111",
-              borderRadius: isMobile ? 22 : 28,
-              overflow: "hidden",
-              border: "1px solid rgba(255, 255, 255, 0.15)",
-              boxShadow: "0 30px 80px rgba(0,0,0,0.8)",
-              willChange: "transform, opacity",
+              position: "fixed",
+              inset: 0,
+              zIndex: 100,
+              background: "rgba(0, 0, 0, 0.88)",
+              backdropFilter: "blur(18px)",
+              WebkitBackdropFilter: "blur(18px)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: isMobile ? 12 : 20,
+              opacity: styles.opacity,
             }}
           >
-            {/* Modal Header */}
-            <div
+            <animated.div
+              className="latestpf-modal-card"
+              onClick={(e) => e.stopPropagation()}
               style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: isMobile ? "12px 16px" : "16px 20px",
-                borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-                background: "rgba(255, 255, 255, 0.03)",
+                position: "relative",
+                maxWidth: 520,
+                width: "100%",
+                background: "#111111",
+                borderRadius: isMobile ? 22 : 28,
+                overflow: "hidden",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
+                boxShadow: "0 30px 80px rgba(0,0,0,0.8)",
+                transform: styles.y.to((y) => `translateY(${y}px)`),
+                scale: styles.scale,
               }}
             >
-              <div>
-                <p style={{ margin: 0, fontSize: isMobile ? 14 : 15, fontWeight: 700, color: "#FFFFFF" }}>
-                  {activeVideo.title}
-                </p>
-                <p style={{ margin: 0, fontSize: 11, color: "rgba(255,255,255,0.6)" }}>
-                  {activeVideo.subtitle}
-                </p>
-              </div>
-
-              <button
-                onClick={() => setActiveVideo(null)}
+              {/* Modal Header */}
+              <div
                 style={{
-                  background: "rgba(255, 255, 255, 0.12)",
-                  border: "none",
-                  color: "#FFFFFF",
-                  width: 32,
-                  height: 32,
-                  borderRadius: 999,
-                  cursor: "pointer",
-                  fontSize: 16,
                   display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
+                  justifyContent: "space-between",
+                  padding: isMobile ? "12px 16px" : "16px 20px",
+                  borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+                  background: "rgba(255, 255, 255, 0.03)",
                 }}
               >
-                ✕
-              </button>
-            </div>
+                <div>
+                  <p style={{ margin: 0, fontSize: isMobile ? 14 : 15, fontWeight: 700, color: "#FFFFFF" }}>
+                    {item.title}
+                  </p>
+                  <p style={{ margin: 0, fontSize: 11, color: "rgba(255,255,255,0.6)" }}>
+                    {item.subtitle}
+                  </p>
+                </div>
 
-            {/* Video Player */}
-            <div style={{ position: "relative", width: "100%", aspectRatio: "9 / 16", background: "#000" }}>
-              <video
-                src={activeVideo.videoSrc}
-                controls
-                autoPlay
-                playsInline
-                style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
-              />
-            </div>
+                <button
+                  onClick={() => setActiveVideo(null)}
+                  style={{
+                    background: "rgba(255, 255, 255, 0.12)",
+                    border: "none",
+                    color: "#FFFFFF",
+                    width: 32,
+                    height: 32,
+                    borderRadius: 999,
+                    cursor: "pointer",
+                    fontSize: 16,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
 
-            {/* Modal Footer CTA */}
-            <div
-              style={{
-                padding: isMobile ? "12px 16px" : "16px 20px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                background: "rgba(255, 255, 255, 0.04)",
-                gap: 10,
-              }}
-            >
-              <span style={{ fontSize: isMobile ? 11 : 12, color: "rgba(255, 255, 255, 0.7)" }}>
-                Want a video cut like this?
-              </span>
+              {/* Video Player */}
+              <div style={{ position: "relative", width: "100%", aspectRatio: "9 / 16", background: "#000" }}>
+                <video
+                  src={item.videoSrc}
+                  controls
+                  autoPlay
+                  playsInline
+                  style={{ width: "100%", height: "100%", objectFit: "contain", display: "block" }}
+                />
+              </div>
 
-              <a
-                href={waUrl(`Hi Story Builder, I love the "${activeVideo.title}" reel and want a quote for something similar.`)}
-                target="_blank"
-                rel="noopener noreferrer"
+              {/* Modal Footer CTA */}
+              <div
                 style={{
-                  background: "#FF4D1A",
-                  color: "#FFFFFF",
-                  fontWeight: 700,
-                  fontSize: isMobile ? 12 : 13,
-                  padding: isMobile ? "8px 16px" : "9px 18px",
-                  borderRadius: 999,
-                  textDecoration: "none",
-                  display: "inline-flex",
+                  padding: isMobile ? "12px 16px" : "16px 20px",
+                  display: "flex",
                   alignItems: "center",
-                  gap: 6,
+                  justifyContent: "space-between",
+                  background: "rgba(255, 255, 255, 0.04)",
+                  gap: 10,
                 }}
               >
-                Quote this style ↗
-              </a>
-            </div>
-          </div>
-        </div>
+                <span style={{ fontSize: isMobile ? 11 : 12, color: "rgba(255, 255, 255, 0.7)" }}>
+                  Want a video cut like this?
+                </span>
+
+                <a
+                  href={waUrl(`Hi Story Builder, I love the "${item.title}" reel and want a quote for something similar.`)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    background: "#FF4D1A",
+                    color: "#FFFFFF",
+                    fontWeight: 700,
+                    fontSize: isMobile ? 12 : 13,
+                    padding: isMobile ? "8px 16px" : "9px 18px",
+                    borderRadius: 999,
+                    textDecoration: "none",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  Quote this style ↗
+                </a>
+              </div>
+            </animated.div>
+          </animated.div>
+        ) : null
       )}
 
       {/* 12. MOBILE STICKY BOTTOM ACTION BAR (HIDDEN ON DESKTOP VIA CSS) */}
