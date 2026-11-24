@@ -848,6 +848,19 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           }}
         >
           <a
+            href="#reels"
+            style={{
+              textDecoration: "none",
+              color: "#111111",
+              fontSize: 14,
+              fontWeight: 600,
+              letterSpacing: "-0.01em",
+              opacity: 0.85,
+            }}
+          >
+            All Reels
+          </a>
+          <a
             href="#work"
             style={{
               textDecoration: "none",
@@ -872,19 +885,6 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             }}
           >
             Services
-          </a>
-          <a
-            href="#reels"
-            style={{
-              textDecoration: "none",
-              color: "#111111",
-              fontSize: 14,
-              fontWeight: 600,
-              letterSpacing: "-0.01em",
-              opacity: 0.85,
-            }}
-          >
-            All Reels
           </a>
           <a
             href="#testimonials"
@@ -1234,7 +1234,71 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       </section>
 
-      {/* 4. SELECTED WORK ("Sel...") SECTION — 4 STORY BUILDER SHOWCASE CARDS */}
+      {/* 4. PHONE STACK CAROUSEL — VIRAL CLIENT REELS (FEATURED RIGHT AFTER INTRO) */}
+      <section
+        id="reels"
+        className="latestpf-reels-section"
+        style={{
+          padding: isMobile ? "0 16px 44px" : "0 24px clamp(50px, 7vw, 90px)",
+          maxWidth: 1280,
+          margin: "0 auto",
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          style={{
+            marginBottom: isMobile ? 12 : 20,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+          }}
+        >
+          <span
+            style={{
+              fontSize: isMobile ? 11 : 12,
+              fontWeight: 800,
+              letterSpacing: "0.06em",
+              textTransform: "uppercase",
+              color: "#FF4D1A",
+              display: "block",
+              marginBottom: 4,
+            }}
+          >
+            ✦ Social Proof & Reel Showcase
+          </span>
+          <h3
+            style={{
+              margin: "0 0 6px",
+              fontSize: isMobile ? "clamp(24px, 5.5vw, 30px)" : "clamp(30px, 4vw, 44px)",
+              fontWeight: 800,
+              letterSpacing: "-0.035em",
+              color: "#111111",
+            }}
+          >
+            Viral Client Reels in Action
+          </h3>
+          <p
+            style={{
+              margin: 0,
+              fontSize: isMobile ? 12 : 14,
+              color: "rgba(17, 17, 17, 0.6)",
+              fontWeight: 500,
+              maxWidth: 500,
+            }}
+          >
+            Swipe left or right to explore reels. Tap the speaker icon to unmute and listen directly inside the iPhone.
+          </p>
+        </div>
+
+        {/* The Smooth Phone Stack Carousel */}
+        <PhoneStackCarousel
+          reels={ALL_CLIENT_REELS}
+          isMobile={isMobile}
+        />
+      </section>
+
+      {/* 5. SELECTED WORK ("Sel...") SECTION — 4 STORY BUILDER SHOWCASE CARDS */}
       <section
         id="work"
         className="latestpf-work-section"
@@ -1626,70 +1690,6 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           );
         })}
         </div>
-      </section>
-
-      {/* 5. PHONE STACK CAROUSEL — FRAMER MARKETPLACE INSPIRATION */}
-      <section
-        id="reels"
-        className="latestpf-reels-section"
-        style={{
-          padding: isMobile ? "0 16px 48px" : "0 24px clamp(60px, 8vw, 100px)",
-          maxWidth: 1280,
-          margin: "0 auto",
-          boxSizing: "border-box",
-        }}
-      >
-        <div
-          style={{
-            marginBottom: isMobile ? 12 : 20,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            textAlign: "center",
-          }}
-        >
-          <span
-            style={{
-              fontSize: isMobile ? 11 : 12,
-              fontWeight: 800,
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-              color: "#FF4D1A",
-              display: "block",
-              marginBottom: 4,
-            }}
-          >
-            ✦ Social Proof & Reel Showcase
-          </span>
-          <h3
-            style={{
-              margin: "0 0 6px",
-              fontSize: isMobile ? "clamp(24px, 5.5vw, 30px)" : "clamp(30px, 4vw, 44px)",
-              fontWeight: 800,
-              letterSpacing: "-0.035em",
-              color: "#111111",
-            }}
-          >
-            Viral Client Reels in Action
-          </h3>
-          <p
-            style={{
-              margin: 0,
-              fontSize: isMobile ? 12 : 14,
-              color: "rgba(17, 17, 17, 0.6)",
-              fontWeight: 500,
-              maxWidth: 500,
-            }}
-          >
-            Swipe left or right to explore reels. Tap the speaker icon to unmute and listen directly inside the iPhone.
-          </p>
-        </div>
-
-        {/* The Smooth Phone Stack Carousel */}
-        <PhoneStackCarousel
-          reels={ALL_CLIENT_REELS}
-          isMobile={isMobile}
-        />
       </section>
 
       {/* 6. THINGS WE DO ("Thin...") SECTION — 4 STORY BUILDER CAPABILITY TILES */}
