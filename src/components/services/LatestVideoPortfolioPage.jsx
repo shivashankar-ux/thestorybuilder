@@ -826,15 +826,16 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             textDecoration: "none",
             color: "#111111",
             fontWeight: 800,
-            fontSize: "clamp(18px, 2.5vw, 22px)",
+            fontSize: isMobile ? "16px" : "clamp(18px, 2.5vw, 22px)",
             letterSpacing: "-0.04em",
             display: "inline-flex",
             alignItems: "center",
             gap: 4,
+            whiteSpace: "nowrap",
           }}
         >
           {CONFIG.brand}
-          <span className="anime-spark" style={{ color: "#FF4D1A", fontSize: "16px", lineHeight: 1, display: "inline-block" }}>✦</span>
+          <span className="anime-spark" style={{ color: "#FF4D1A", fontSize: "15px", lineHeight: 1, display: "inline-block" }}>✦</span>
         </a>
 
         {/* Center Nav Links (Hidden on Mobile) */}
@@ -913,28 +914,8 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           </a>
         </nav>
 
-        {/* Header CTA Pill */}
+        {/* Header Right CTA (Single clean button on mobile, no cramped wrapping) */}
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <a
-            href={waUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="latestpf-mobile-only"
-            style={{
-              background: "#FF4D1A",
-              color: "#FFFFFF",
-              textDecoration: "none",
-              fontSize: 12,
-              fontWeight: 700,
-              padding: "7px 14px",
-              borderRadius: 999,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 4,
-            }}
-          >
-            WhatsApp ↗
-          </a>
           <a
             href="#brief"
             onMouseDown={triggerButtonSpring}
@@ -944,16 +925,17 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               background: "#111111",
               color: "#FFFFFF",
               textDecoration: "none",
-              fontSize: 13,
+              fontSize: isMobile ? 12 : 13,
               fontWeight: 700,
-              padding: "10px 20px",
+              padding: isMobile ? "8px 16px" : "10px 20px",
               borderRadius: 999,
               display: "inline-flex",
               alignItems: "center",
-              gap: 6,
+              gap: 5,
               letterSpacing: "-0.01em",
               boxShadow: "0 4px 14px rgba(17, 17, 17, 0.12)",
               cursor: "pointer",
+              whiteSpace: "nowrap",
               willChange: "transform",
             }}
           >
@@ -1699,21 +1681,13 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               maxWidth: 500,
             }}
           >
-            Click any side card or swipe to bring it into the center iPhone frame. Tap the screen to watch full cut.
+            Swipe left or right to explore reels. Tap the speaker icon to unmute and listen directly inside the iPhone.
           </p>
         </div>
 
         {/* The Smooth Phone Stack Carousel */}
         <PhoneStackCarousel
           reels={ALL_CLIENT_REELS}
-          onSelectReel={(reel) => {
-            setActiveVideo({
-              title: reel.name,
-              subtitle: reel.client,
-              videoSrc: reel.videoSrc,
-            });
-            trackEvent("video_play", "phone_stack", reel.name);
-          }}
           isMobile={isMobile}
         />
       </section>
