@@ -48,7 +48,7 @@ const STORYBUILDER_MEDIA = [
   "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_4/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.jpg",
 ];
 
-// The 4 Signature Showcase Cards (The Story Builder's Actual Client Projects)
+// The Signature Showcase Cards (The Story Builder's Actual Client Projects)
 const SHOWCASE_CARDS = [
   {
     id: "card-1",
@@ -73,9 +73,31 @@ const SHOWCASE_CARDS = [
     stats: "450K+ Views · Commercial Master",
   },
   {
-    id: "card-2",
+    id: "card-ntf",
     num: "02",
-    cat: "02 / Performance Ads",
+    cat: "02 / Farmhouse & Resort",
+    title: "Neem Tree Farms",
+    subtitle: "Luxury Farmhouse & Event Venue Showcase",
+    desc: "Cinematic property showcase shot on Sony Alpha 4K cinema cameras with golden-hour drone landscapes, immersive nature sound foley, and resort luxury film grading. Directed on-location in Hyderabad.",
+    tags: ["Luxury Farmhouse", "4K Cinema", "Resort Film", "Hyderabad Shoot"],
+    bgColor: "#F5DF77", // Warm Golden Sunlight Farmhouse
+    borderColor: "#E5CD5F",
+    inkColor: "#111111",
+    btnBg: "#111111",
+    btnInk: "#FFFFFF",
+    badgeBg: "rgba(17, 17, 17, 0.08)",
+    videoSrc:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,vc_h264/v1795579958/portfolio%20video%20for%20editing%20services/website%20videos/farm%20house%20neem%20tree/NTF_1F_rysbyy.mp4",
+    poster:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_800,so_0/v1795579958/portfolio%20video%20for%20editing%20services/website%20videos/farm%20house%20neem%20tree/NTF_1F_rysbyy.jpg",
+    miniThumb:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_200,so_0/v1795579958/portfolio%20video%20for%20editing%20services/website%20videos/farm%20house%20neem%20tree/NTF_1F_rysbyy.jpg",
+    stats: "380K+ Views · Resort Master",
+  },
+  {
+    id: "card-2",
+    num: "03",
+    cat: "03 / Performance Ads",
     title: "Digital Medha",
     subtitle: "High-ROAS Meta & YouTube Ad Creatives",
     desc: "Direct-response ad creative generating 890K+ views and 4.2x ROAS across Meta and YouTube feeds with thumb-stopping retention hooks and conversion-focused narrative pacing.",
@@ -93,8 +115,8 @@ const SHOWCASE_CARDS = [
   },
   {
     id: "card-3",
-    num: "03",
-    cat: "03 / Gym & Fitness",
+    num: "04",
+    cat: "04 / Gym & Fitness",
     title: "Icons & Veto Gym",
     subtitle: "High-Octane Member Commercial",
     desc: "Dynamic commercial filmed with speed ramps, member workout action cuts, and explosive bass foley synchronized to the rhythm of the gym. Filled new membership quotas in two weeks.",
@@ -115,8 +137,8 @@ const SHOWCASE_CARDS = [
   },
   {
     id: "card-4",
-    num: "04",
-    cat: "04 / Founder Authority",
+    num: "05",
+    cat: "05 / Founder Authority",
     title: "Jaya Daga",
     subtitle: "Executive Coaching & Personal Brand",
     desc: "Founder documentary reel establishing authority, leadership trust, and driving consistent inbound coaching leads with editorial typography and cinematic color grading.",
@@ -148,6 +170,17 @@ const ALL_CLIENT_REELS = [
       "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,so_2/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.jpg",
   },
   {
+    id: "reel-ntf-1",
+    name: "Neem Tree Farms Stay",
+    client: "Neem Tree Farms",
+    tag: "Luxury Farmhouse",
+    stats: "380K+ Views",
+    videoSrc:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1795579958/portfolio%20video%20for%20editing%20services/website%20videos/farm%20house%20neem%20tree/NTF_1F_rysbyy.mp4",
+    poster:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,so_0/v1795579958/portfolio%20video%20for%20editing%20services/website%20videos/farm%20house%20neem%20tree/NTF_1F_rysbyy.jpg",
+  },
+  {
     id: "reel-2",
     name: "Digital Medha Ads",
     client: "Performance Agency",
@@ -155,6 +188,17 @@ const ALL_CLIENT_REELS = [
     stats: "890K+ Views",
     videoSrc: "/videos/rVUkWK8lRmw.mp4",
     poster: "/shiva-landing.webp",
+  },
+  {
+    id: "reel-ntf-2",
+    name: "Neem Tree Farms Tour",
+    client: "Neem Tree Farms",
+    tag: "Property Walkthrough",
+    stats: "290K+ Views",
+    videoSrc:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1795580065/portfolio%20video%20for%20editing%20services/website%20videos/farm%20house%20neem%20tree/NTF_2_gmiu2b.mp4",
+    poster:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,so_0/v1795580065/portfolio%20video%20for%20editing%20services/website%20videos/farm%20house%20neem%20tree/NTF_2_gmiu2b.jpg",
   },
   {
     id: "reel-3",
@@ -1508,7 +1552,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 fontWeight: 500,
               }}
             >
-              Real client deliverables produced in Hyderabad: commercial brand films, paid Meta ad creatives, and viral gym reels.
+              Real client deliverables produced in Hyderabad: commercial brand films, luxury farmhouses, paid Meta ad creatives, and viral gym reels.
             </p>
             <span
               style={{
@@ -1522,7 +1566,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 flexShrink: 0,
               }}
             >
-              04
+              05
             </span>
           </div>
         </div>

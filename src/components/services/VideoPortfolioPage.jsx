@@ -1108,13 +1108,45 @@ const PAGE_CSS = `
 }
 `;
 
+/* Hero Featured Reels for 9:16 Vertical Showcase */
+const HERO_REELS = [
+  {
+    id: "neemtree",
+    title: "Neem Tree Farms",
+    badge: "✦ Luxury Farmhouse",
+    videoSrc:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,vc_h264/v1795579958/portfolio%20video%20for%20editing%20services/website%20videos/farm%20house%20neem%20tree/NTF_1F_rysbyy.mp4",
+  },
+  {
+    id: "farhaan",
+    title: "Farhaan Campaign",
+    badge: "✦ Commercial Film",
+    videoSrc:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,vc_h264/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.mp4",
+  },
+];
+
 /* Client Reels Data (Optimized streaming bandwidth & formats) */
 const PORTFOLIO_STRIP_REELS = [
+  {
+    handle: "neemtreefarms_1",
+    name: "Neem Tree Farms — Luxury Stay",
+    type: "mp4",
+    videoSrc:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1795579958/portfolio%20video%20for%20editing%20services/website%20videos/farm%20house%20neem%20tree/NTF_1F_rysbyy.mp4",
+  },
   {
     handle: "farhaan_edit_1",
     name: "Commercial Brand Video",
     type: "mp4",
     videoSrc: "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.mp4",
+  },
+  {
+    handle: "neemtreefarms_2",
+    name: "Neem Tree Farms — Property Tour",
+    type: "mp4",
+    videoSrc:
+      "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1795580065/portfolio%20video%20for%20editing%20services/website%20videos/farm%20house%20neem%20tree/NTF_2_gmiu2b.mp4",
   },
   {
     handle: "digitalmedhaadvertising",
@@ -1230,6 +1262,7 @@ const WAVE_BARS = Array.from({ length: 90 }, (_, i) => {
 });
 
 export default function VideoPortfolioPage({ setPage }) {
+  const [activeHeroIdx, setActiveHeroIdx] = useState(0);
   const [playerOpen, setPlayerOpen] = useState(false);
   const [playerVideo, setPlayerVideo] = useState(null);
   const [heroUnmuted, setHeroUnmuted] = useState(false);
@@ -1711,10 +1744,65 @@ export default function VideoPortfolioPage({ setPage }) {
 
                 {/* Hero Featured Reel in Vertical 9:16 Format */}
                 <div className="vp-hero-reel-wrap">
+                  {/* Interactive Switcher between Neem Tree Farms & Farhaan Campaign */}
+                  <div style={{ display: "flex", gap: 8, marginBottom: 12, justifyContent: "center" }}>
+                    {HERO_REELS.map((hr, idx) => (
+                      <button
+                        key={hr.id}
+                        type="button"
+                        onClick={() => {
+                          setActiveHeroIdx(idx);
+                          if (heroVideoRef.current) {
+                            heroVideoRef.current.currentTime = 0;
+                            heroVideoRef.current.play().catch(() => {});
+                          }
+                        }}
+                        style={{
+                          background: activeHeroIdx === idx ? "#E1306C" : "rgba(255, 255, 255, 0.08)",
+                          color: activeHeroIdx === idx ? "#FFFFFF" : "rgba(255, 255, 255, 0.7)",
+                          border: activeHeroIdx === idx ? "1px solid #E1306C" : "1px solid rgba(255, 255, 255, 0.14)",
+                          borderRadius: 999,
+                          padding: "6px 14px",
+                          fontSize: "12px",
+                          fontWeight: 700,
+                          cursor: "pointer",
+                          transition: "all 0.2s ease",
+                          letterSpacing: "0.02em",
+                        }}
+                      >
+                        {hr.title}
+                      </button>
+                    ))}
+                  </div>
+
                   <div className="vp-hero-reel-card">
+                    {/* Badge */}
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 12,
+                        left: 12,
+                        zIndex: 4,
+                        background: "rgba(0, 0, 0, 0.68)",
+                        backdropFilter: "blur(8px)",
+                        WebkitBackdropFilter: "blur(8px)",
+                        border: "1px solid rgba(255, 255, 255, 0.18)",
+                        borderRadius: 999,
+                        padding: "4px 10px",
+                        fontSize: "10.5px",
+                        fontWeight: 700,
+                        color: "#FFFFFF",
+                        letterSpacing: "0.04em",
+                        pointerEvents: "none",
+                      }}
+                    >
+                      {HERO_REELS[activeHeroIdx].badge}
+                    </div>
+
                     <video
+                      key={HERO_REELS[activeHeroIdx].videoSrc}
                       ref={heroVideoRef}
-                      src="https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_720,vc_h264/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.mp4"
+                      src={HERO_REELS[activeHeroIdx].videoSrc}
                       autoPlay
                       loop
                       muted={!heroUnmuted}
