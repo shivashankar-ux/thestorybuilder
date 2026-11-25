@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
    SPLIT SCREEN CAPABILITIES — FRAMER "CYPHER" SIGNATURE INSPIRATION
    Original Framer inspiration: https://splitscreenmenu.framer.website
    Luxury Split-Screen Capabilities Showcase with Interactive Cross-Fade
-   50/50 Desktop Split · 120fps Transitions · Mobile-Optimized Stack
+   50/50 Desktop Split · 100% Mobile Responsive · 120fps Transitions
    ============================================================ */
 
 export const CAPABILITIES_DATA = [
@@ -75,9 +75,17 @@ export const CAPABILITIES_DATA = [
   },
 ];
 
-export default function SplitScreenCapabilities({ isMobile = false }) {
+export default function SplitScreenCapabilities() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState(null);
+
+  // Check if touch device to prevent stuck hover states
+  const isTouchRef = useRef(false);
+  useEffect(() => {
+    isTouchRef.current =
+      typeof window !== "undefined" &&
+      (window.matchMedia("(pointer: coarse)").matches || "ontouchstart" in window);
+  }, []);
 
   const displayedIndex = hoveredIndex !== null ? hoveredIndex : activeIndex;
   const activeItem = CAPABILITIES_DATA[displayedIndex] || CAPABILITIES_DATA[0];
@@ -90,60 +98,160 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
     });
   }, []);
 
+  const handleMouseEnter = (index) => {
+    if (isTouchRef.current) return;
+    setHoveredIndex(index);
+  };
+
+  const handleMouseLeave = () => {
+    if (isTouchRef.current) return;
+    setHoveredIndex(null);
+  };
+
+  const handleItemSelect = (index) => {
+    setActiveIndex(index);
+    setHoveredIndex(null);
+  };
+
   const whatsappUrl = (capTitle) =>
     `https://wa.me/918341928526?text=${encodeURIComponent(
       `Hi Story Builder team, I'm interested in your ${capTitle} service from the Things We Do section.`
     )}`;
 
   return (
-    <div
-      style={{
-        width: "100%",
-        borderRadius: isMobile ? 22 : 36,
-        overflow: "hidden",
-        background: "#08090C",
-        border: "1px solid rgba(255, 255, 255, 0.12)",
-        boxShadow: "0 32px 80px -15px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(0, 0, 0, 0.9)",
-        boxSizing: "border-box",
-        position: "relative",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          flexDirection: isMobile ? "column-reverse" : "row",
-          minHeight: isMobile ? "auto" : 640,
-        }}
-      >
+    <div className="split-cap-root">
+      {/* Scope CSS with pure media queries so responsiveness works independent of JS state */}
+      <style>{`
+        .split-cap-root {
+          width: 100%;
+          max-width: 100%;
+          border-radius: 36px;
+          overflow: hidden;
+          background: #08090C;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          box-shadow: 0 32px 80px -15px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(0, 0, 0, 0.9);
+          box-sizing: border-box;
+          position: relative;
+        }
+        .split-cap-flex {
+          display: flex;
+          flex-direction: row;
+          min-height: 640px;
+          width: 100%;
+          box-sizing: border-box;
+        }
+        .split-cap-left {
+          flex: 0 0 52%;
+          width: 52%;
+          display: flex;
+          flex-direction: column;
+          justifyContent: space-between;
+          padding: clamp(32px, 4vw, 56px);
+          background: #0A0B0E;
+          position: relative;
+          z-index: 2;
+          box-sizing: border-box;
+          border-right: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .split-cap-right {
+          flex: 0 0 48%;
+          width: 48%;
+          position: relative;
+          min-height: 100%;
+          background: #050608;
+          overflow: hidden;
+          box-sizing: border-box;
+        }
+        .split-cap-header {
+          display: flex;
+          align-items: center;
+          justifyContent: space-between;
+          margin-bottom: clamp(24px, 3.5vw, 44px);
+          padding-bottom: 16px;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+        .split-cap-title {
+          font-size: clamp(30px, 3.5vw, 50px);
+          font-weight: 800;
+          line-height: 1.05;
+          letter-spacing: -0.035em;
+          transition: color 0.25s ease, transform 0.25s ease;
+          display: inline-block;
+          word-break: break-word;
+        }
+        .split-cap-footer {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          justifyContent: space-between;
+          gap: 12px;
+          margin-top: clamp(24px, 3.5vw, 40px);
+          padding-top: 16px;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Fluid Mobile & Tablet Breakpoint */
+        @media (max-width: 880px) {
+          .split-cap-root {
+            border-radius: 22px;
+          }
+          .split-cap-flex {
+            flex-direction: column-reverse !important;
+            min-height: auto !important;
+          }
+          .split-cap-left {
+            flex: 1 1 100% !important;
+            width: 100% !important;
+            padding: 20px 16px 24px !important;
+            border-right: none !important;
+          }
+          .split-cap-right {
+            flex: 0 0 250px !important;
+            width: 100% !important;
+            height: 250px !important;
+            min-height: 250px !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+          }
+          .split-cap-title {
+            font-size: clamp(22px, 6vw, 30px) !important;
+          }
+          .split-cap-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 6px !important;
+            margin-bottom: 18px !important;
+            padding-bottom: 12px !important;
+          }
+          .split-cap-footer {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 12px !important;
+            margin-top: 20px !important;
+            padding-top: 14px !important;
+          }
+        }
+        @keyframes splitFadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `}</style>
+
+      <div className="split-cap-flex">
         {/* ============================================================
             LEFT PANEL: EDITORIAL NAVIGATION & CAPABILITY DETAILS
             ============================================================ */}
-        <div
-          style={{
-            flex: isMobile ? "1 1 auto" : "0 0 52%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            padding: isMobile ? "24px 20px 28px" : "clamp(36px, 4.5vw, 56px)",
-            background: "#0A0B0E",
-            position: "relative",
-            zIndex: 2,
-            boxSizing: "border-box",
-            borderRight: isMobile ? "none" : "1px solid rgba(255, 255, 255, 0.08)",
-          }}
-        >
+        <div className="split-cap-left">
           {/* Top Bar: Brand Identifier & Coordinates */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: isMobile ? 24 : "clamp(28px, 3.5vw, 44px)",
-              paddingBottom: 16,
-              borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div className="split-cap-header">
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <span
                 style={{
                   width: 8,
@@ -151,15 +259,16 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
                   borderRadius: 999,
                   background: activeItem.accentColor,
                   display: "inline-block",
-                  boxShadow: `0 0 12px ${activeItem.accentColor}`,
+                  boxShadow: `0 0 10px ${activeItem.accentColor}`,
                   transition: "background 0.3s ease, box-shadow 0.3s ease",
+                  flexShrink: 0,
                 }}
               />
               <span
                 style={{
-                  fontSize: 12,
+                  fontSize: 11,
                   fontWeight: 800,
-                  letterSpacing: "0.14em",
+                  letterSpacing: "0.12em",
                   textTransform: "uppercase",
                   color: "#FFFFFF",
                 }}
@@ -170,10 +279,10 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
 
             <span
               style={{
-                fontSize: 11,
+                fontSize: 10.5,
                 fontFamily: "monospace",
                 color: "rgba(255, 255, 255, 0.45)",
-                letterSpacing: "0.08em",
+                letterSpacing: "0.06em",
               }}
             >
               HYD · 17.3850° N, 78.4867° E
@@ -185,7 +294,7 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: isMobile ? 14 : "clamp(12px, 1.8vw, 22px)",
+              gap: 12,
               flex: 1,
               justifyContent: "center",
             }}
@@ -196,15 +305,16 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
               return (
                 <div
                   key={item.id}
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                  onClick={() => {
-                    setActiveIndex(index);
-                    setHoveredIndex(null);
-                  }}
+                  onMouseEnter={() => handleMouseEnter(index)}
+                  onMouseLeave={handleMouseLeave}
+                  onClick={() => handleItemSelect(index)}
                   style={{
                     cursor: "pointer",
-                    transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                    padding: "8px 12px",
+                    borderRadius: 14,
+                    background: isSelected ? "rgba(255, 255, 255, 0.04)" : "transparent",
+                    transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+                    WebkitTapHighlightColor: "transparent",
                   }}
                 >
                   {/* Row: Title + Number */}
@@ -213,22 +323,15 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
                       display: "flex",
                       alignItems: "baseline",
                       justifyContent: "space-between",
-                      gap: 16,
+                      gap: 12,
                       userSelect: "none",
                     }}
                   >
                     <span
+                      className="split-cap-title"
                       style={{
-                        fontSize: isMobile
-                          ? "clamp(26px, 7.5vw, 34px)"
-                          : "clamp(34px, 3.8vw, 52px)",
-                        fontWeight: isSelected ? 800 : 400,
-                        lineHeight: 1.05,
-                        letterSpacing: "-0.035em",
                         color: isSelected ? "#FFFFFF" : "rgba(255, 255, 255, 0.32)",
-                        transition: "color 0.25s ease, transform 0.25s ease",
-                        display: "inline-block",
-                        transform: isSelected && !isMobile ? "translateX(6px)" : "none",
+                        transform: isSelected ? "translateX(4px)" : "none",
                       }}
                     >
                       {item.label}
@@ -236,12 +339,13 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
 
                     <span
                       style={{
-                        fontSize: isMobile ? 12 : 14,
+                        fontSize: 13,
                         fontFamily: "monospace",
                         fontWeight: isSelected ? 800 : 400,
                         letterSpacing: "0.04em",
-                        color: isSelected ? activeItem.accentColor : "rgba(255, 255, 255, 0.28)",
+                        color: isSelected ? item.accentColor : "rgba(255, 255, 255, 0.28)",
                         transition: "color 0.25s ease",
+                        flexShrink: 0,
                       }}
                     >
                       {item.num}
@@ -252,14 +356,15 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
                   {isSelected && (
                     <div
                       style={{
-                        marginTop: 14,
-                        marginBottom: 6,
-                        padding: isMobile ? "14px 16px" : "18px 22px",
-                        borderRadius: 16,
+                        marginTop: 12,
+                        marginBottom: 4,
+                        padding: "14px 16px",
+                        borderRadius: 14,
                         background: item.bgTint,
                         border: `1px solid ${item.accentColor}33`,
-                        boxShadow: `0 12px 28px -8px ${item.accentColor}18`,
-                        animation: "splitFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1)",
+                        boxShadow: `0 10px 24px -8px ${item.accentColor}18`,
+                        animation: "splitFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                        boxSizing: "border-box",
                       }}
                     >
                       <div
@@ -268,16 +373,16 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
                           flexWrap: "wrap",
                           alignItems: "center",
                           justifyContent: "space-between",
-                          gap: 8,
+                          gap: 6,
                           marginBottom: 8,
                         }}
                       >
                         <span
                           style={{
-                            fontSize: 12,
+                            fontSize: 11.5,
                             fontWeight: 800,
                             color: item.accentColor,
-                            letterSpacing: "0.05em",
+                            letterSpacing: "0.04em",
                             textTransform: "uppercase",
                           }}
                         >
@@ -286,9 +391,9 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
 
                         <span
                           style={{
-                            fontSize: 11,
+                            fontSize: 10.5,
                             fontWeight: 700,
-                            padding: "3px 9px",
+                            padding: "3px 8px",
                             borderRadius: 999,
                             background: "rgba(255, 255, 255, 0.12)",
                             color: "#FFFFFF",
@@ -300,9 +405,9 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
 
                       <p
                         style={{
-                          margin: "0 0 12px",
-                          fontSize: isMobile ? 13 : 14,
-                          lineHeight: 1.5,
+                          margin: "0 0 10px",
+                          fontSize: 13,
+                          lineHeight: 1.45,
                           color: "rgba(255, 255, 255, 0.78)",
                           fontWeight: 400,
                         }}
@@ -315,17 +420,17 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
                         style={{
                           display: "flex",
                           flexWrap: "wrap",
-                          gap: 6,
-                          marginBottom: 14,
+                          gap: 5,
+                          marginBottom: 12,
                         }}
                       >
                         {item.pills.map((pill, pIdx) => (
                           <span
                             key={pIdx}
                             style={{
-                              fontSize: 11,
+                              fontSize: 10.5,
                               fontWeight: 600,
-                              padding: "4px 10px",
+                              padding: "3px 9px",
                               borderRadius: 999,
                               background: "rgba(255, 255, 255, 0.08)",
                               color: "rgba(255, 255, 255, 0.9)",
@@ -345,18 +450,18 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
                         style={{
                           display: "inline-flex",
                           alignItems: "center",
-                          gap: 8,
-                          fontSize: 12,
+                          gap: 6,
+                          fontSize: 11.5,
                           fontWeight: 800,
                           color: "#111111",
                           background: item.accentColor,
-                          padding: "7px 16px",
+                          padding: "6px 14px",
                           borderRadius: 999,
                           textDecoration: "none",
-                          boxShadow: `0 4px 14px ${item.accentColor}44`,
+                          boxShadow: `0 4px 12px ${item.accentColor}44`,
                           transition: "transform 0.2s ease",
                         }}
-                        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.04)")}
+                        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
                         onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
                       >
                         <span>Book this Pipeline on WhatsApp</span>
@@ -370,22 +475,11 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
           </div>
 
           {/* Bottom Bar: Contact & Direct Actions */}
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              alignItems: "center",
-              justifyContent: "space-between",
-              gap: 12,
-              marginTop: isMobile ? 24 : "clamp(28px, 3.5vw, 40px)",
-              paddingTop: 16,
-              borderTop: "1px solid rgba(255, 255, 255, 0.08)",
-            }}
-          >
+          <div className="split-cap-footer">
             <a
               href="mailto:hello@thestorybuilder.in"
               style={{
-                fontSize: 13,
+                fontSize: 12.5,
                 color: "rgba(255, 255, 255, 0.65)",
                 textDecoration: "none",
                 fontWeight: 600,
@@ -397,11 +491,11 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
               hello@thestorybuilder.in
             </a>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
               <a
-                href="#order"
+                href="#brief"
                 style={{
-                  fontSize: 12,
+                  fontSize: 11.5,
                   color: "rgba(255, 255, 255, 0.5)",
                   textDecoration: "none",
                   fontWeight: 600,
@@ -417,7 +511,7 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  fontSize: 12,
+                  fontSize: 11.5,
                   color: "#FF4D1A",
                   textDecoration: "none",
                   fontWeight: 700,
@@ -433,15 +527,12 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
             RIGHT PANEL: DYNAMIC FULL-BLEED ARCHITECTURAL VISUAL
             ============================================================ */}
         <div
-          style={{
-            flex: isMobile ? "0 0 280px" : "0 0 48%",
-            position: "relative",
-            minHeight: isMobile ? 280 : "100%",
-            background: "#050608",
-            overflow: "hidden",
-            boxSizing: "border-box",
-            borderBottom: isMobile ? "1px solid rgba(255, 255, 255, 0.08)" : "none",
+          className="split-cap-right"
+          onClick={() => {
+            // Tapping visual cycles to next capability on mobile
+            setActiveIndex((prev) => (prev + 1) % CAPABILITIES_DATA.length);
           }}
+          style={{ cursor: "pointer" }}
         >
           {/* Layered Cross-Fading Images */}
           {CAPABILITIES_DATA.map((item, index) => {
@@ -456,9 +547,9 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
                   width: "100%",
                   height: "100%",
                   opacity: isVisible ? 1 : 0,
-                  transform: isVisible ? "scale(1)" : "scale(1.06)",
+                  transform: isVisible ? "scale(1)" : "scale(1.05)",
                   transition:
-                    "opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1)",
+                    "opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1)",
                   pointerEvents: "none",
                 }}
               >
@@ -479,7 +570,7 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
                     position: "absolute",
                     inset: 0,
                     background:
-                      "linear-gradient(to bottom, rgba(8,9,12,0.3) 0%, transparent 40%, rgba(8,9,12,0.7) 100%)",
+                      "linear-gradient(to bottom, rgba(8,9,12,0.2) 0%, transparent 40%, rgba(8,9,12,0.65) 100%)",
                   }}
                 />
               </div>
@@ -490,19 +581,20 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
           <div
             style={{
               position: "absolute",
-              bottom: isMobile ? 14 : 24,
-              right: isMobile ? 14 : 24,
+              bottom: 14,
+              right: 14,
               zIndex: 3,
-              background: "rgba(0, 0, 0, 0.72)",
+              background: "rgba(0, 0, 0, 0.75)",
               backdropFilter: "blur(12px)",
               WebkitBackdropFilter: "blur(12px)",
               border: "1px solid rgba(255, 255, 255, 0.18)",
               borderRadius: 999,
-              padding: "6px 14px",
+              padding: "5px 12px",
               display: "flex",
               alignItems: "center",
-              gap: 8,
-              boxShadow: "0 8px 24px rgba(0, 0, 0, 0.5)",
+              gap: 7,
+              boxShadow: "0 6px 18px rgba(0, 0, 0, 0.5)",
+              pointerEvents: "none",
             }}
           >
             <span
@@ -517,11 +609,11 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
             />
             <span
               style={{
-                fontSize: 11,
+                fontSize: 10.5,
                 fontFamily: "monospace",
                 color: "#FFFFFF",
                 fontWeight: 700,
-                letterSpacing: "0.08em",
+                letterSpacing: "0.06em",
                 textTransform: "uppercase",
               }}
             >
@@ -530,20 +622,6 @@ export default function SplitScreenCapabilities({ isMobile = false }) {
           </div>
         </div>
       </div>
-
-      {/* Global CSS for Keyframe Animations */}
-      <style>{`
-        @keyframes splitFadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(8px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </div>
   );
 }

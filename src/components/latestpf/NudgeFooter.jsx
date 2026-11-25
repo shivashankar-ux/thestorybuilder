@@ -440,7 +440,7 @@ export default function NudgeFooter({
         position: "relative",
         aspectRatio: fixedHeight ? undefined : compact ? mobileRatio : aspectRatio,
         background: "transparent",
-        overflow: "visible",
+        overflow: "hidden",
         isolation: "isolate",
       }}
     >
@@ -450,10 +450,15 @@ export default function NudgeFooter({
         [data-nudge-scope="${scopeId}"] .nudge-piece img { display:block; width:100%; height:auto; user-select:none; }
         [data-nudge-scope="${scopeId}"] .nudge-badge { display:block; width:100%; aspect-ratio:1; position:relative; }
         [data-nudge-scope="${scopeId}"] .nudge-badge-copy { position:absolute; inset:16%; display:flex; align-items:center; justify-content:center; text-align:center; font-family:"Bricolage Grotesque", Arial, sans-serif; font-weight:800; font-size:var(--nbf); line-height:1.04; letter-spacing:-0.035em; white-space:pre-line; }
-        @container nudge-footer (max-width:600px) {
+        @container nudge-footer (max-width:650px) {
             [data-nudge-scope="${scopeId}"] .nudge-piece { left:var(--nmx); top:var(--nmy); width:var(--nms); }
             [data-nudge-scope="${scopeId}"] .nudge-mobile-hidden { display:none; }
             [data-nudge-scope="${scopeId}"] .nudge-badge-copy { font-size:var(--nmbf); }
+            [data-nudge-scope="${scopeId}"] [data-nudge-wordmark] { font-size: min(10.2cqw, 38px) !important; max-width: 96% !important; }
+        }
+        @media (max-width: 768px) {
+            .nudge-footer-root { overflow: hidden !important; max-width: 100vw !important; }
+            [data-nudge-scope="${scopeId}"] [data-nudge-wordmark] { font-size: min(10.2cqw, 38px) !important; max-width: 96% !important; }
         }
         @media (prefers-reduced-motion:reduce) { [data-nudge-scope="${scopeId}"] .nudge-piece { will-change:auto; } }
       `}</style>
@@ -514,10 +519,11 @@ export default function NudgeFooter({
             left: "50%",
             transform: "translateX(-50%)",
             color,
-            fontSize: fontSize ? `${fontSize}px` : "24cqw",
-            whiteSpace: "pre",
+            fontSize: fontSize ? `${fontSize}px` : "clamp(24px, 10.5cqw, 24cqw)",
+            whiteSpace: "nowrap",
             lineHeight: 1.1,
             width: "max-content",
+            maxWidth: "96%",
             zIndex: 1,
             pointerEvents: "none",
             userSelect: "none",

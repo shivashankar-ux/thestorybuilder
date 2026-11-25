@@ -426,8 +426,19 @@ export default function LatestVideoPortfolioPage({ setPage }) {
   }, []);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     trackPageView("/latestpf", "Latest Video Portfolio — The Story Builder");
+
+    if (window.location.hash) {
+      const targetId = window.location.hash.slice(1);
+      const el = document.getElementById(targetId);
+      if (el) {
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: "smooth" });
+        }, 120);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
 
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
@@ -564,15 +575,15 @@ export default function LatestVideoPortfolioPage({ setPage }) {
       if (splitCap) {
         gsap.fromTo(
           splitCap,
-          { y: 35, opacity: 0 },
+          { y: 24, opacity: 0.85 },
           {
             y: 0,
             opacity: 1,
-            duration: 0.8,
+            duration: 0.7,
             ease: "power3.out",
             scrollTrigger: {
               trigger: "#services",
-              start: "top 80%",
+              start: "top 85%",
               toggleActions: "play none none reverse",
             },
           }
@@ -865,7 +876,21 @@ export default function LatestVideoPortfolioPage({ setPage }) {
       />
       {/* SCOPED RESPONSIVE STYLES FOR /latestpf */}
       <style>{`
+        .latestpf-reels-section,
+        .latestpf-work-section,
+        .latestpf-services-section,
+        .latestpf-testimonials-section,
+        .latestpf-brief-section {
+          scroll-margin-top: 100px;
+        }
         @media (max-width: 800px) {
+          .latestpf-reels-section,
+          .latestpf-work-section,
+          .latestpf-services-section,
+          .latestpf-testimonials-section,
+          .latestpf-brief-section {
+            scroll-margin-top: 75px !important;
+          }
           .latestpf-desktop-nav {
             display: none !important;
           }
@@ -1363,6 +1388,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         id="reels"
         className="latestpf-reels-section"
         style={{
+          scrollMarginTop: isMobile ? "75px" : "100px",
           padding: isMobile ? "0 16px 44px" : "0 24px clamp(50px, 7vw, 90px)",
           maxWidth: 1280,
           margin: "0 auto",
@@ -1427,6 +1453,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         id="work"
         className="latestpf-work-section"
         style={{
+          scrollMarginTop: isMobile ? "75px" : "100px",
           padding: isMobile ? "0 16px 44px" : "0 24px clamp(60px, 8vw, 110px)",
           maxWidth: 1280,
           margin: "0 auto",
@@ -1808,6 +1835,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         id="services"
         className="latestpf-services-section"
         style={{
+          scrollMarginTop: isMobile ? "75px" : "100px",
           padding: isMobile ? "0 16px 44px" : "0 24px clamp(60px, 8vw, 110px)",
           maxWidth: 1280,
           margin: "0 auto",
@@ -2073,6 +2101,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         id="testimonials"
         className="latestpf-testimonials-section"
         style={{
+          scrollMarginTop: isMobile ? "75px" : "100px",
           padding: isMobile ? "36px 16px" : "clamp(60px, 8vw, 110px) 24px",
           maxWidth: 1280,
           margin: "0 auto",
@@ -2166,6 +2195,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         id="brief"
         className="latestpf-brief-section"
         style={{
+          scrollMarginTop: isMobile ? "75px" : "100px",
           padding: isMobile ? "36px 16px" : "clamp(60px, 8vw, 110px) 24px",
           maxWidth: 1100,
           margin: "0 auto",
