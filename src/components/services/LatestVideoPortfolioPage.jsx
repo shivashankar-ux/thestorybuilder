@@ -9,6 +9,7 @@ import LoopText from "../latestpf/LoopText";
 import QuoteDeck from "../latestpf/QuoteDeck";
 import OrderForm from "../latestpf/OrderForm";
 import PhoneStackCarousel from "../latestpf/PhoneStackCarousel";
+import SplitScreenCapabilities from "../latestpf/SplitScreenCapabilities";
 import NudgeFooter from "../latestpf/NudgeFooter";
 import { trackPageView, trackEvent } from "../../utils/tracking";
 
@@ -558,17 +559,16 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         );
       }
 
-      // 5. Capability Tiles ("Things We Do") Staggered Lift
-      const capCards = gsap.utils.toArray(".latestpf-capability-card");
-      if (capCards.length > 0) {
+      // 5. Split-Screen Capabilities ("Things We Do") Staggered Lift
+      const splitCap = document.querySelector(".latestpf-split-capabilities");
+      if (splitCap) {
         gsap.fromTo(
-          capCards,
+          splitCap,
           { y: 35, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            stagger: 0.09,
-            duration: 0.7,
+            duration: 0.8,
             ease: "power3.out",
             scrollTrigger: {
               trigger: "#services",
@@ -1860,95 +1860,9 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           </div>
         </div>
 
-        {/* 4 Pastel Tiles Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: isMobile
-              ? "1fr"
-              : "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
-            gap: isMobile ? 14 : 20,
-          }}
-        >
-          {CAPABILITIES.map((cap, i) => (
-            <div
-              key={i}
-              className="latestpf-capability-card"
-              style={{
-                background: cap.bgColor,
-                border: `2px solid ${cap.borderColor}`,
-                borderRadius: isMobile ? 20 : 28,
-                padding: isMobile ? "20px 18px" : "32px 28px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                minHeight: isMobile ? "auto" : 320,
-                boxShadow: "0 12px 28px -10px rgba(17, 17, 17, 0.08)",
-                transition: "transform 0.3s ease",
-                willChange: "transform, opacity",
-              }}
-            >
-              <div>
-                <span
-                  style={{
-                    display: "inline-block",
-                    fontSize: isMobile ? 11 : 12,
-                    fontWeight: 800,
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                    color: "rgba(17, 17, 17, 0.6)",
-                    marginBottom: isMobile ? 10 : 16,
-                  }}
-                >
-                  {cap.tag}
-                </span>
-
-                <h4
-                  style={{
-                    margin: isMobile ? "0 0 10px" : "0 0 14px",
-                    fontSize: isMobile ? "20px" : "clamp(22px, 2.2vw, 26px)",
-                    fontWeight: 800,
-                    lineHeight: 1.15,
-                    letterSpacing: "-0.03em",
-                    color: "#111111",
-                  }}
-                >
-                  {cap.title}
-                </h4>
-
-                <p
-                  style={{
-                    margin: isMobile ? "0 0 18px" : "0 0 24px",
-                    fontSize: isMobile ? 13 : 14,
-                    lineHeight: 1.45,
-                    color: "rgba(17, 17, 17, 0.75)",
-                    fontWeight: 500,
-                  }}
-                >
-                  {cap.desc}
-                </p>
-              </div>
-
-              {/* Pills */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {cap.pills.map((pill, idx) => (
-                  <span
-                    key={idx}
-                    style={{
-                      background: "rgba(17, 17, 17, 0.08)",
-                      color: "#111111",
-                      fontSize: isMobile ? 10 : 11,
-                      fontWeight: 700,
-                      padding: "4px 10px",
-                      borderRadius: 999,
-                    }}
-                  >
-                    {pill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          ))}
+        {/* Luxury Split-Screen Capabilities Showcase (Framer "Cypher" Signature) */}
+        <div className="latestpf-split-capabilities">
+          <SplitScreenCapabilities isMobile={isMobile} />
         </div>
       </section>
 
