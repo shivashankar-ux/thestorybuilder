@@ -418,6 +418,7 @@ function ShowcaseCardVideo({ card, isMobile }) {
 
 export default function LatestVideoPortfolioPage({ setPage }) {
   const [activeVideo, setActiveVideo] = useState(null);
+  const [heroMuted, setHeroMuted] = useState(true);
   const [sliderPos, setSliderPos] = useState(50);
   const [isDraggingSlider, setIsDraggingSlider] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -900,6 +901,35 @@ export default function LatestVideoPortfolioPage({ setPage }) {
       />
       {/* SCOPED RESPONSIVE STYLES FOR /latestpf */}
       <style>{`
+        @keyframes latestpfMarquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes latestpfPulseDot {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.45; transform: scale(1.25); }
+        }
+        .latestpf-hero-grid {
+          display: grid;
+          grid-template-columns: 1.15fr 0.85fr;
+          gap: clamp(28px, 4vw, 56px);
+          align-items: center;
+        }
+        .latestpf-hero-marquee-track {
+          display: flex;
+          width: max-content;
+          animation: latestpfMarquee 26s linear infinite;
+          will-change: transform;
+        }
+        .latestpf-hero-marquee-track:hover {
+          animation-play-state: paused;
+        }
+        @media (max-width: 960px) {
+          .latestpf-hero-grid {
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+          }
+        }
         .latestpf-reels-section,
         .latestpf-work-section,
         .latestpf-services-section,
@@ -1117,181 +1147,475 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       </header>
 
-      {/* 2. TRADITIONAL HIGH-CONVERTING HERO SECTION (CLEAR HEADLINE, CAPTION & PRIMARY CTAS) */}
+      {/* 2. MODERN STUDIO BENTO HERO SECTION (HIGH-CONTRAST COPY, 2 CTAS & LIVE REEL SHOWCASE) */}
       <section
         className="latestpf-hero-section"
         style={{
           position: "relative",
           width: "100%",
-          maxWidth: 1280,
-          margin: "0 auto",
-          padding: isMobile ? "32px 16px 28px" : "clamp(54px, 7vw, 88px) 24px clamp(40px, 5vw, 60px)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          textAlign: "center",
+          overflow: "hidden",
+          padding: isMobile ? "24px 16px 28px" : "clamp(36px, 5vw, 64px) 24px clamp(36px, 4vw, 52px)",
           boxSizing: "border-box",
+          backgroundImage:
+            "radial-gradient(rgba(17, 17, 17, 0.08) 1px, transparent 1px), radial-gradient(circle at 80% 25%, rgba(255, 77, 26, 0.10) 0%, transparent 45%), radial-gradient(circle at 15% 75%, rgba(206, 242, 55, 0.16) 0%, transparent 40%)",
+          backgroundSize: "24px 24px, 100% 100%, 100% 100%",
         }}
       >
-        {/* Top Eyebrow Badge */}
         <div
-          className="anime-hero-badge"
+          className="latestpf-hero-grid"
           style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            fontSize: isMobile ? 11 : 12.5,
-            fontWeight: 800,
-            letterSpacing: "0.06em",
-            textTransform: "uppercase",
-            color: "#111111",
-            background: "#FFFFFF",
-            border: "1px solid rgba(17, 17, 17, 0.12)",
-            padding: isMobile ? "7px 14px" : "8px 18px",
-            borderRadius: 999,
-            boxShadow: "0 4px 16px rgba(17, 17, 17, 0.05)",
-            marginBottom: isMobile ? 20 : 28,
-            willChange: "transform",
+            maxWidth: 1280,
+            margin: "0 auto",
+            position: "relative",
+            zIndex: 2,
           }}
         >
-          <span className="anime-spark" style={{ color: "#FF4D1A", display: "inline-block" }}>✦</span>
-          <span>Hyderabad’s Video Shoot & Edit Studio · One Crew, One Brief</span>
+          {/* LEFT COLUMN: HOOK HEADLINE, CAPTION, 2 CTAS & TRUST PILLS */}
+          <div style={{ textAlign: isMobile ? "center" : "left", display: "flex", flexDirection: "column", alignItems: isMobile ? "center" : "flex-start" }}>
+            {/* Live Studio Status Pill */}
+            <div
+              className="anime-hero-badge"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                fontSize: isMobile ? 10.5 : 12,
+                fontWeight: 800,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: "#111111",
+                background: "#FFFFFF",
+                border: "1px solid rgba(17, 17, 17, 0.12)",
+                padding: isMobile ? "6px 13px" : "8px 16px",
+                borderRadius: 999,
+                boxShadow: "0 4px 14px rgba(17, 17, 17, 0.06)",
+                marginBottom: isMobile ? 16 : 22,
+                willChange: "transform",
+              }}
+            >
+              <span
+                style={{
+                  width: 8,
+                  height: 8,
+                  borderRadius: 999,
+                  background: "#10B981",
+                  display: "inline-block",
+                  animation: "latestpfPulseDot 1.8s ease-in-out infinite",
+                }}
+              />
+              <span>Hyderabad Studio · One Crew, One Brief</span>
+            </div>
+
+            {/* Bold High-Impact H1 Headline */}
+            <h1
+              style={{
+                margin: "0 0 16px",
+                fontSize: isMobile ? "clamp(32px, 8.8vw, 42px)" : "clamp(42px, 4.6vw, 66px)",
+                fontWeight: 800,
+                lineHeight: 1.04,
+                letterSpacing: "-0.04em",
+                color: "#111111",
+              }}
+            >
+              We Shoot & Edit Videos That{" "}
+              <span
+                style={{
+                  color: "#FF4D1A",
+                  display: "inline-block",
+                  position: "relative",
+                }}
+              >
+                Stop the Scroll
+              </span>{" "}
+              & Scale Brands.
+            </h1>
+
+            {/* Clear Value Proposition Caption */}
+            <p
+              style={{
+                margin: "0 0 26px",
+                fontSize: isMobile ? 14.5 : "clamp(15.5px, 1.35vw, 18px)",
+                lineHeight: 1.52,
+                fontWeight: 500,
+                color: "rgba(17, 17, 17, 0.72)",
+                maxWidth: 560,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              From on-location 4K cinema shoots in Hyderabad to high-retention Reels, commercial films, and paid Meta ads — produced end-to-end by one dedicated crew.
+            </p>
+
+            {/* Primary CTA Buttons: WhatsApp & Our Works */}
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: isMobile ? "center" : "flex-start",
+                gap: 12,
+                width: "100%",
+                marginBottom: isMobile ? 22 : 28,
+              }}
+            >
+              {/* Primary CTA 1: Chat on WhatsApp */}
+              <a
+                href={waUrl("Hi Story Builder team, I visited /latestpf and want to discuss a video shoot & edit project.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent("Contact", { method: "whatsapp", placement: "latestpf_hero" })}
+                onMouseDown={triggerButtonSpring}
+                onMouseMove={(e) => onMagneticMove(e, 0.25)}
+                onMouseLeave={onMagneticLeave}
+                style={{
+                  background: "#FF4D1A",
+                  color: "#FFFFFF",
+                  textDecoration: "none",
+                  fontSize: isMobile ? 14 : 15,
+                  fontWeight: 800,
+                  padding: isMobile ? "13px 24px" : "15px 28px",
+                  borderRadius: 999,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                  letterSpacing: "-0.01em",
+                  boxShadow: "0 10px 24px rgba(255, 77, 26, 0.28)",
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                  willChange: "transform",
+                  flex: isMobile ? "1 1 auto" : "0 0 auto",
+                }}
+              >
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+                </svg>
+                Chat on WhatsApp ↗
+              </a>
+
+              {/* Primary CTA 2: Explore Our Work */}
+              <a
+                href="#work"
+                onMouseDown={triggerButtonSpring}
+                onMouseMove={(e) => onMagneticMove(e, 0.25)}
+                onMouseLeave={onMagneticLeave}
+                style={{
+                  background: "#111111",
+                  color: "#FFFFFF",
+                  textDecoration: "none",
+                  fontSize: isMobile ? 14 : 15,
+                  fontWeight: 700,
+                  padding: isMobile ? "13px 24px" : "15px 28px",
+                  borderRadius: 999,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                  letterSpacing: "-0.01em",
+                  boxShadow: "0 10px 24px rgba(17, 17, 17, 0.16)",
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                  willChange: "transform",
+                  flex: isMobile ? "1 1 auto" : "0 0 auto",
+                }}
+              >
+                Explore Our Work ↓
+              </a>
+            </div>
+
+            {/* Scannable Trust & Capability Highlights */}
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: isMobile ? "center" : "flex-start",
+                gap: isMobile ? "8px 14px" : "8px 18px",
+                fontSize: isMobile ? 12 : 13,
+                fontWeight: 600,
+                color: "rgba(17, 17, 17, 0.68)",
+              }}
+            >
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+                <span style={{ color: "#FF4D1A", fontWeight: 800 }}>✓</span> Sony Alpha 4K Rigs
+              </span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+                <span style={{ color: "#FF4D1A", fontWeight: 800 }}>✓</span> 48h First Cut
+              </span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+                <span style={{ color: "#FF4D1A", fontWeight: 800 }}>✓</span> Color & Sound Mix
+              </span>
+              <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+                <span style={{ color: "#FF4D1A", fontWeight: 800 }}>✓</span> 100% In-House
+              </span>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: MODERN STUDIO BENTO SHOWCASE (LIVE REEL + METRIC CARDS) */}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: isMobile ? "1fr" : "1.1fr 0.9fr",
+              gap: 14,
+              alignItems: "stretch",
+            }}
+          >
+            {/* Tall Live 9:16 Showreel Card */}
+            <div
+              style={{
+                position: "relative",
+                borderRadius: 24,
+                overflow: "hidden",
+                background: "#0B0C10",
+                aspectRatio: isMobile ? "9 / 12" : "9 / 14",
+                maxHeight: isMobile ? 380 : 460,
+                width: "100%",
+                boxShadow: "0 24px 50px -12px rgba(17, 17, 17, 0.35)",
+                border: "2px solid rgba(17, 17, 17, 0.12)",
+              }}
+            >
+              <video
+                src="https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,vc_h264/v1795579958/portfolio%20video%20for%20editing%20services/website%20videos/farm%20house%20neem%20tree/NTF_1F_rysbyy.mp4"
+                poster="https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_540,so_0/v1795579958/portfolio%20video%20for%20editing%20services/website%20videos/farm%20house%20neem%20tree/NTF_1F_rysbyy.jpg"
+                autoPlay
+                loop
+                muted={heroMuted}
+                playsInline
+                preload="metadata"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  display: "block",
+                }}
+              />
+
+              {/* Top Overlay Gradient & Live Tag */}
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 32%, transparent 58%, rgba(0,0,0,0.82) 100%)",
+                  pointerEvents: "none",
+                }}
+              />
+
+              <div
+                style={{
+                  position: "absolute",
+                  top: 12,
+                  left: 12,
+                  right: 12,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: 8,
+                  zIndex: 3,
+                }}
+              >
+                <span
+                  style={{
+                    background: "rgba(17, 17, 17, 0.72)",
+                    backdropFilter: "blur(10px)",
+                    WebkitBackdropFilter: "blur(10px)",
+                    border: "1px solid rgba(255, 255, 255, 0.16)",
+                    color: "#FFFFFF",
+                    fontSize: 10.5,
+                    fontWeight: 700,
+                    padding: "5px 10px",
+                    borderRadius: 999,
+                    letterSpacing: "0.04em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  ✦ Featured Shoot
+                </span>
+
+                <button
+                  type="button"
+                  onClick={() => setHeroMuted((m) => !m)}
+                  aria-label={heroMuted ? "Unmute hero video" : "Mute hero video"}
+                  style={{
+                    background: heroMuted ? "rgba(17, 17, 17, 0.75)" : "#FF4D1A",
+                    backdropFilter: "blur(10px)",
+                    WebkitBackdropFilter: "blur(10px)",
+                    border: "1px solid rgba(255, 255, 255, 0.22)",
+                    color: "#FFFFFF",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    padding: "5px 11px",
+                    borderRadius: 999,
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 5,
+                  }}
+                >
+                  {heroMuted ? "🔇 Sound Off" : "🔊 Sound On"}
+                </button>
+              </div>
+
+              {/* Bottom Caption & Watch Link */}
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: 14,
+                  left: 14,
+                  right: 14,
+                  zIndex: 3,
+                  display: "flex",
+                  alignItems: "flex-end",
+                  justifyContent: "space-between",
+                  gap: 8,
+                }}
+              >
+                <div>
+                  <div style={{ fontSize: 10.5, fontWeight: 700, color: "#CEF237", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+                    Neem Tree Farms
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: "#FFFFFF", lineHeight: 1.2 }}>
+                    4K Luxury Property Film
+                  </div>
+                </div>
+                <a
+                  href="#reels"
+                  style={{
+                    background: "#FFFFFF",
+                    color: "#111111",
+                    fontSize: 11,
+                    fontWeight: 800,
+                    padding: "6px 12px",
+                    borderRadius: 999,
+                    textDecoration: "none",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  All Reels →
+                </a>
+              </div>
+            </div>
+
+            {/* Right Bento Stack (2 Crisp Studio Cards) */}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateRows: isMobile ? "auto auto" : "1fr 1fr",
+                gridTemplateColumns: isMobile ? "1fr 1fr" : "1fr",
+                gap: 14,
+              }}
+            >
+              {/* Bento Card 1: Electric Lime Performance Card */}
+              <div
+                style={{
+                  background: "#CEF237",
+                  borderRadius: 22,
+                  padding: isMobile ? "16px 14px" : "22px 20px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  border: "2px solid #B8DC29",
+                  boxShadow: "0 14px 30px -10px rgba(17, 17, 17, 0.12)",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em", color: "rgba(17,17,17,0.7)" }}>
+                    Ad Performance
+                  </span>
+                  <span style={{ fontSize: 15 }}>⚡</span>
+                </div>
+                <div style={{ marginTop: 12 }}>
+                  <div style={{ fontSize: isMobile ? 28 : 38, fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1, color: "#111111" }}>
+                    4.2x
+                  </div>
+                  <div style={{ fontSize: isMobile ? 12 : 13, fontWeight: 700, color: "rgba(17,17,17,0.8)", marginTop: 6, lineHeight: 1.3 }}>
+                    Average ROAS on Paid Meta & Reels Creatives
+                  </div>
+                </div>
+              </div>
+
+              {/* Bento Card 2: Dark Studio Craft Card */}
+              <div
+                style={{
+                  background: "#111111",
+                  color: "#FFFFFF",
+                  borderRadius: 22,
+                  padding: isMobile ? "16px 14px" : "22px 20px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  boxShadow: "0 14px 30px -10px rgba(17, 17, 17, 0.25)",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.06em", color: "rgba(255,255,255,0.55)" }}>
+                    Client Reach
+                  </span>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <img
+                      src="https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_100,so_2/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.jpg"
+                      alt="Farhaan"
+                      style={{ width: 24, height: 24, borderRadius: 999, objectFit: "cover", border: "2px solid #111111" }}
+                    />
+                    <img
+                      src="https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_100,so_2/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.jpg"
+                      alt="Veto Gym"
+                      style={{ width: 24, height: 24, borderRadius: 999, objectFit: "cover", border: "2px solid #111111", marginLeft: -8 }}
+                    />
+                  </div>
+                </div>
+                <div style={{ marginTop: 12 }}>
+                  <div style={{ fontSize: isMobile ? 28 : 38, fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1, color: "#FFFFFF" }}>
+                    2.8M+
+                  </div>
+                  <div style={{ fontSize: isMobile ? 12 : 13, fontWeight: 600, color: "rgba(255,255,255,0.7)", marginTop: 6, lineHeight: 1.3 }}>
+                    Organic & Paid Views Across Hyderabad Brands
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Bold High-Impact H1 Headline */}
-        <h1
-          style={{
-            margin: "0 0 18px",
-            fontSize: isMobile ? "clamp(34px, 9vw, 44px)" : "clamp(48px, 6.2vw, 78px)",
-            fontWeight: 800,
-            lineHeight: 1.05,
-            letterSpacing: "-0.04em",
-            color: "#111111",
-            maxWidth: 960,
-          }}
-        >
-          We Shoot & Edit Videos That{" "}
-          <span style={{ color: "#FF4D1A", display: "inline-block" }}>Stop the Scroll</span>{" "}
-          & Scale Brands.
-        </h1>
-
-        {/* Clear Value Proposition Caption */}
-        <p
-          style={{
-            margin: "0 0 32px",
-            fontSize: isMobile ? 15 : "clamp(16px, 1.6vw, 20px)",
-            lineHeight: 1.5,
-            fontWeight: 500,
-            color: "rgba(17, 17, 17, 0.72)",
-            maxWidth: 680,
-            letterSpacing: "-0.01em",
-          }}
-        >
-          From on-location 4K cinema shoots across Hyderabad to high-retention Reels, commercial films, and paid Meta ads — handled end-to-end by one dedicated crew.
-        </p>
-
-        {/* Primary CTA Buttons: WhatsApp & Our Works */}
+        {/* FULL-WIDTH SMOOTH CLIENT & DELIVERABLE TICKER MARQUEE */}
         <div
           style={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: isMobile ? 12 : 16,
+            marginTop: isMobile ? 28 : 44,
+            borderTop: "1px solid rgba(17, 17, 17, 0.08)",
+            borderBottom: "1px solid rgba(17, 17, 17, 0.08)",
+            padding: "12px 0",
+            overflow: "hidden",
             width: "100%",
-            marginBottom: isMobile ? 28 : 36,
+            background: "rgba(255, 255, 255, 0.45)",
           }}
         >
-          {/* Primary CTA 1: Chat on WhatsApp */}
-          <a
-            href={waUrl("Hi Story Builder team, I visited /latestpf and want to discuss a video shoot & edit project.")}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => trackEvent("Contact", { method: "whatsapp", placement: "latestpf_hero" })}
-            onMouseDown={triggerButtonSpring}
-            onMouseMove={(e) => onMagneticMove(e, 0.28)}
-            onMouseLeave={onMagneticLeave}
-            style={{
-              background: "#FF4D1A",
-              color: "#FFFFFF",
-              textDecoration: "none",
-              fontSize: isMobile ? 14 : 16,
-              fontWeight: 800,
-              padding: isMobile ? "14px 26px" : "16px 32px",
-              borderRadius: 999,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 8,
-              letterSpacing: "-0.01em",
-              boxShadow: "0 10px 26px rgba(255, 77, 26, 0.28)",
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-              willChange: "transform",
-              flex: isMobile ? "1 1 auto" : "0 0 auto",
-            }}
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-            </svg>
-            Chat on WhatsApp ↗
-          </a>
-
-          {/* Primary CTA 2: Explore Our Work */}
-          <a
-            href="#work"
-            onMouseDown={triggerButtonSpring}
-            onMouseMove={(e) => onMagneticMove(e, 0.28)}
-            onMouseLeave={onMagneticLeave}
-            style={{
-              background: "#111111",
-              color: "#FFFFFF",
-              textDecoration: "none",
-              fontSize: isMobile ? 14 : 16,
-              fontWeight: 700,
-              padding: isMobile ? "14px 26px" : "16px 32px",
-              borderRadius: 999,
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 8,
-              letterSpacing: "-0.01em",
-              boxShadow: "0 10px 26px rgba(17, 17, 17, 0.16)",
-              cursor: "pointer",
-              whiteSpace: "nowrap",
-              willChange: "transform",
-              flex: isMobile ? "1 1 auto" : "0 0 auto",
-            }}
-          >
-            Explore Our Work ↓
-          </a>
-        </div>
-
-        {/* Scannable Trust & Capability Highlights */}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: isMobile ? "8px 14px" : "10px 24px",
-            fontSize: isMobile ? 12 : 13.5,
-            fontWeight: 600,
-            color: "rgba(17, 17, 17, 0.65)",
-          }}
-        >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <span style={{ color: "#FF4D1A", fontWeight: 800 }}>✓</span> Sony Alpha 4K Cinema Rigs
-          </span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <span style={{ color: "#FF4D1A", fontWeight: 800 }}>✓</span> 48h First-Cut Turnaround
-          </span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <span style={{ color: "#FF4D1A", fontWeight: 800 }}>✓</span> In-House Color & Sound Design
-          </span>
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <span style={{ color: "#FF4D1A", fontWeight: 800 }}>✓</span> Reels, Ads & Commercials
-          </span>
+          <div className="latestpf-hero-marquee-track">
+            {[0, 1].map((dup) => (
+              <div
+                key={dup}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: isMobile ? 24 : 40,
+                  paddingRight: isMobile ? 24 : 40,
+                  fontSize: isMobile ? 11.5 : 12.5,
+                  fontWeight: 800,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  color: "rgba(17, 17, 17, 0.65)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                <span>✦ FARHAAN COMMERCIAL</span>
+                <span>✦ NEEM TREE FARMS</span>
+                <span>✦ ICONS GYM</span>
+                <span>✦ DIGITAL MEDHA</span>
+                <span>✦ VETO GYM</span>
+                <span>✦ VISION RAINBOW</span>
+                <span>✦ JAYA DAGA COACHING</span>
+                <span>✦ MADHURA YOGA</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
