@@ -3,9 +3,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { animate, remove } from "animejs";
 import { useTransition, useSpring, animated } from "@react-spring/web";
-import ImageTrail from "../latestpf/ImageTrail";
-import TwistRibbon from "../latestpf/TwistRibbon";
-import LoopText from "../latestpf/LoopText";
 import QuoteDeck from "../latestpf/QuoteDeck";
 import OrderForm from "../latestpf/OrderForm";
 import PhoneStackCarousel from "../latestpf/PhoneStackCarousel";
@@ -18,7 +15,6 @@ gsap.registerPlugin(ScrollTrigger);
 /* ============================================================
    LATEST VIDEO PORTFOLIO — /latestpf
    100% The Story Builder Content, Real Client Videos & Imagery
-   Framer Signature Layout (Ivory #F3EFEA · Colored Cards · Black Footer)
    ============================================================ */
 
 const CONFIG = {
@@ -31,22 +27,6 @@ const CONFIG = {
 
 const waUrl = (msg) =>
   `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg || CONFIG.waMessage)}`;
-
-// 100% Real Story Builder Client Video Stills & Founder Photography for Ribbon & Trail
-const STORYBUILDER_MEDIA = [
-  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_2/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.jpg",
-  "/shiva-landing.webp",
-  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_2/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.jpg",
-  "/shiva-about.webp",
-  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_2/v1793010466/portfolio%20video%20for%20editing%20services/vision%20rainbow/Vision_Rainbow_pre-primary_reel_2_aezhph.jpg",
-  "/shiva.webp",
-  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_1/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.22_PM_xm5ybc.jpg",
-  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_1/v1792571813/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-21_at_12.06.36_PM_vtlfsv.jpg",
-  "/shiva-landing.png",
-  "/shiva-about.png",
-  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_3/v1792571810/portfolio%20video%20for%20editing%20services/farhaan%20videos/WhatsApp_Video_2026-10-18_at_7.04.34_PM_oewt6w.jpg",
-  "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_640,so_4/v1793023865/portfolio%20video%20for%20editing%20services/Veto%20Gym/GYM_showcase_V1_mizyxa.jpg",
-];
 
 // The Signature Showcase Cards (The Story Builder's Actual Client Projects)
 const SHOWCASE_CARDS = [
@@ -1137,198 +1117,182 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       </header>
 
-      {/* 2. HERO SECTION WITH IMAGE TRAIL & 3D TWIST RIBBON */}
+      {/* 2. TRADITIONAL HIGH-CONVERTING HERO SECTION (CLEAR HEADLINE, CAPTION & PRIMARY CTAS) */}
       <section
         className="latestpf-hero-section"
         style={{
           position: "relative",
           width: "100%",
-          minHeight: isMobile ? "auto" : "84vh",
+          maxWidth: 1280,
+          margin: "0 auto",
+          padding: isMobile ? "32px 16px 28px" : "clamp(54px, 7vw, 88px) 24px clamp(40px, 5vw, 60px)",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          padding: isMobile ? "20px 16px 28px" : "30px 24px 40px",
-          overflow: "hidden",
+          alignItems: "center",
+          textAlign: "center",
           boxSizing: "border-box",
         }}
       >
-        {/* Floating cursor trail on the warm light canvas with real project stills */}
+        {/* Top Eyebrow Badge */}
         <div
+          className="anime-hero-badge"
           style={{
-            position: "absolute",
-            inset: 0,
-            zIndex: 1,
-            pointerEvents: "none",
-          }}
-        >
-          <ImageTrail
-            images={STORYBUILDER_MEDIA}
-            size={isMobile ? 140 : 220}
-            spacing={isMobile ? 60 : 85}
-            lifetime={1.1}
-            rotation={12}
-            radius={16}
-          />
-        </div>
-
-        {/* 3D WebGL2 Twist Ribbon threading through wordmark "the story builder" */}
-        <div
-          className="latestpf-hero-ribbon"
-          style={{
-            position: "relative",
-            zIndex: 2,
-            width: "100%",
-            height: isMobile ? "270px" : "clamp(440px, 58vh, 640px)",
-            minHeight: isMobile ? "270px" : "auto",
-            display: "flex",
+            display: "inline-flex",
             alignItems: "center",
-            justifyContent: "center",
+            gap: 8,
+            fontSize: isMobile ? 11 : 12.5,
+            fontWeight: 800,
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
+            color: "#111111",
+            background: "#FFFFFF",
+            border: "1px solid rgba(17, 17, 17, 0.12)",
+            padding: isMobile ? "7px 14px" : "8px 18px",
+            borderRadius: 999,
+            boxShadow: "0 4px 16px rgba(17, 17, 17, 0.05)",
+            marginBottom: isMobile ? 20 : 28,
+            willChange: "transform",
           }}
         >
-          <TwistRibbon
-            images={STORYBUILDER_MEDIA}
-            wordmark="the story builder"
-            fontFamily="Bricolage Grotesque"
-            fontWeight={800}
-            wordmarkColor="#111111"
-            wordmarkSize={isMobile ? 0.44 : 0.62}
-            background="#F3EFEA"
-            ribbonWidth={isMobile ? 0.88 : 0.96}
-            cardShape={0.75}
-            gap={0.06}
-            corners={0.08}
-            twists={2}
-            depth={1.18}
-            speed={0.32}
-            tilt={1}
-            shading={0.35}
-            fog={0.28}
-          />
+          <span className="anime-spark" style={{ color: "#FF4D1A", display: "inline-block" }}>✦</span>
+          <span>Hyderabad’s Video Shoot & Edit Studio · One Crew, One Brief</span>
         </div>
 
-        {/* Hero Bottom 3-Part Micro-Content */}
+        {/* Bold High-Impact H1 Headline */}
+        <h1
+          style={{
+            margin: "0 0 18px",
+            fontSize: isMobile ? "clamp(34px, 9vw, 44px)" : "clamp(48px, 6.2vw, 78px)",
+            fontWeight: 800,
+            lineHeight: 1.05,
+            letterSpacing: "-0.04em",
+            color: "#111111",
+            maxWidth: 960,
+          }}
+        >
+          We Shoot & Edit Videos That{" "}
+          <span style={{ color: "#FF4D1A", display: "inline-block" }}>Stop the Scroll</span>{" "}
+          & Scale Brands.
+        </h1>
+
+        {/* Clear Value Proposition Caption */}
+        <p
+          style={{
+            margin: "0 0 32px",
+            fontSize: isMobile ? 15 : "clamp(16px, 1.6vw, 20px)",
+            lineHeight: 1.5,
+            fontWeight: 500,
+            color: "rgba(17, 17, 17, 0.72)",
+            maxWidth: 680,
+            letterSpacing: "-0.01em",
+          }}
+        >
+          From on-location 4K cinema shoots across Hyderabad to high-retention Reels, commercial films, and paid Meta ads — handled end-to-end by one dedicated crew.
+        </p>
+
+        {/* Primary CTA Buttons: WhatsApp & Our Works */}
         <div
           style={{
-            position: "relative",
-            zIndex: 3,
             display: "flex",
             flexWrap: "wrap",
             alignItems: "center",
-            justifyContent: "space-between",
-            gap: isMobile ? 12 : 20,
-            maxWidth: 1280,
+            justifyContent: "center",
+            gap: isMobile ? 12 : 16,
             width: "100%",
-            margin: "0 auto",
-            paddingTop: isMobile ? 14 : 20,
+            marginBottom: isMobile ? 28 : 36,
           }}
         >
-          <p
+          {/* Primary CTA 1: Chat on WhatsApp */}
+          <a
+            href={waUrl("Hi Story Builder team, I visited /latestpf and want to discuss a video shoot & edit project.")}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent("Contact", { method: "whatsapp", placement: "latestpf_hero" })}
+            onMouseDown={triggerButtonSpring}
+            onMouseMove={(e) => onMagneticMove(e, 0.28)}
+            onMouseLeave={onMagneticLeave}
             style={{
-              margin: 0,
-              fontSize: isMobile ? "13px" : "clamp(13px, 1.4vw, 15px)",
-              lineHeight: 1.4,
-              fontWeight: 500,
-              color: "rgba(17, 17, 17, 0.72)",
-              maxWidth: 320,
-              letterSpacing: "-0.01em",
-            }}
-          >
-            Shot by one crew in Hyderabad. Cut by the same team. High-retention video production for modern brands.
-          </p>
-
-          <div
-            className="anime-hero-badge"
-            style={{
+              background: "#FF4D1A",
+              color: "#FFFFFF",
+              textDecoration: "none",
+              fontSize: isMobile ? 14 : 16,
+              fontWeight: 800,
+              padding: isMobile ? "14px 26px" : "16px 32px",
+              borderRadius: 999,
               display: "inline-flex",
               alignItems: "center",
-              gap: 6,
-              fontSize: isMobile ? 11 : 13,
-              fontWeight: 700,
-              letterSpacing: "0.06em",
-              textTransform: "uppercase",
-              color: "#111111",
-              background: "rgba(17, 17, 17, 0.05)",
-              border: "1px solid rgba(17, 17, 17, 0.08)",
-              padding: isMobile ? "6px 14px" : "8px 18px",
-              borderRadius: 999,
-              boxShadow: "0 2px 10px rgba(17,17,17,0.04)",
+              justifyContent: "center",
+              gap: 8,
+              letterSpacing: "-0.01em",
+              boxShadow: "0 10px 26px rgba(255, 77, 26, 0.28)",
+              cursor: "pointer",
+              whiteSpace: "nowrap",
               willChange: "transform",
+              flex: isMobile ? "1 1 auto" : "0 0 auto",
             }}
           >
-            <span className="anime-spark" style={{ display: "inline-block" }}>✦</span> ONE CREW · ONE BRIEF <span className="anime-spark" style={{ display: "inline-block" }}>✦</span>
-          </div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+            </svg>
+            Chat on WhatsApp ↗
+          </a>
 
+          {/* Primary CTA 2: Explore Our Work */}
           <a
             href="#work"
+            onMouseDown={triggerButtonSpring}
+            onMouseMove={(e) => onMagneticMove(e, 0.28)}
+            onMouseLeave={onMagneticLeave}
             style={{
-              margin: 0,
-              fontSize: isMobile ? 12 : 13,
-              fontWeight: 600,
-              color: "rgba(17, 17, 17, 0.55)",
+              background: "#111111",
+              color: "#FFFFFF",
               textDecoration: "none",
+              fontSize: isMobile ? 14 : 16,
+              fontWeight: 700,
+              padding: isMobile ? "14px 26px" : "16px 32px",
+              borderRadius: 999,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
               letterSpacing: "-0.01em",
+              boxShadow: "0 10px 26px rgba(17, 17, 17, 0.16)",
+              cursor: "pointer",
+              whiteSpace: "nowrap",
+              willChange: "transform",
+              flex: isMobile ? "1 1 auto" : "0 0 auto",
             }}
           >
-            (scroll to explore ↓)
+            Explore Our Work ↓
           </a>
         </div>
-      </section>
 
-      {/* 3. BIG TYPOGRAPHIC MANIFESTO STATEMENT (GSAP SCROLLTRIGGER SCRUB HIGHLIGHT) */}
-      <section
-        ref={manifestoRef}
-        className="latestpf-manifesto-section"
-        style={{
-          padding: isMobile ? "32px 16px" : "clamp(60px, 8vw, 110px) 24px",
-          maxWidth: 1280,
-          margin: "0 auto",
-          boxSizing: "border-box",
-        }}
-      >
-        <h2
+        {/* Scannable Trust & Capability Highlights */}
+        <div
           style={{
-            margin: 0,
-            fontSize: isMobile ? "clamp(22px, 5.2vw, 32px)" : "clamp(34px, 5.5vw, 68px)",
-            fontWeight: 800,
-            lineHeight: 1.15,
-            letterSpacing: "-0.035em",
-            color: "#111111",
-            maxWidth: 1100,
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: isMobile ? "8px 14px" : "10px 24px",
+            fontSize: isMobile ? 12 : 13.5,
+            fontWeight: 600,
+            color: "rgba(17, 17, 17, 0.65)",
           }}
         >
-          <span>
-            {MANIFESTO_WORDS_PRIMARY.map((w, i) => (
-              <span
-                key={i}
-                className="latestpf-manifesto-word"
-                style={{
-                  display: "inline-block",
-                  marginRight: "0.28em",
-                  color: "#111111",
-                  willChange: "opacity, transform",
-                }}
-              >
-                {w}
-              </span>
-            ))}
-          </span>{" "}
-          <span>
-            {MANIFESTO_WORDS_SECONDARY.map((w, i) => (
-              <span
-                key={i}
-                className="latestpf-manifesto-word"
-                style={{
-                  display: "inline-block",
-                  marginRight: "0.28em",
-                  color: "rgba(17, 17, 17, 0.75)",
-                  willChange: "opacity, transform",
-                }}
-              >
-                {w}
-              </span>
-            ))}
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span style={{ color: "#FF4D1A", fontWeight: 800 }}>✓</span> Sony Alpha 4K Cinema Rigs
           </span>
-        </h2>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span style={{ color: "#FF4D1A", fontWeight: 800 }}>✓</span> 48h First-Cut Turnaround
+          </span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span style={{ color: "#FF4D1A", fontWeight: 800 }}>✓</span> In-House Color & Sound Design
+          </span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span style={{ color: "#FF4D1A", fontWeight: 800 }}>✓</span> Reels, Ads & Commercials
+          </span>
+        </div>
       </section>
 
       {/* 3.5. PERFORMANCE PROOF STAT RIBBON (ANIMATED STAT COUNTERS VIA ANIME.JS + GSAP) */}
@@ -1459,29 +1423,30 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               marginBottom: 4,
             }}
           >
-            ✦ Social Proof & Reel Showcase
+            ✦ Client Reels in Action · Swipe & Listen
           </span>
           <h3
             style={{
-              margin: "0 0 6px",
-              fontSize: isMobile ? "clamp(24px, 5.5vw, 30px)" : "clamp(30px, 4vw, 44px)",
+              margin: "0 0 8px",
+              fontSize: isMobile ? "clamp(26px, 6vw, 32px)" : "clamp(32px, 4.2vw, 48px)",
               fontWeight: 800,
               letterSpacing: "-0.035em",
               color: "#111111",
             }}
           >
-            Viral Client Reels in Action
+            Scroll-Stopping Reels We Shot & Edited
           </h3>
           <p
             style={{
               margin: 0,
-              fontSize: isMobile ? 12 : 14,
-              color: "rgba(17, 17, 17, 0.6)",
+              fontSize: isMobile ? 13 : 15,
+              color: "rgba(17, 17, 17, 0.68)",
               fontWeight: 500,
-              maxWidth: 500,
+              maxWidth: 560,
+              lineHeight: 1.45,
             }}
           >
-            Swipe left or right to explore reels. Tap the speaker icon to unmute and listen directly inside the iPhone.
+            Real shoots for Hyderabad brands, luxury farmhouses, gyms, and founders. Swipe left or right, and tap the speaker icon to hear the full sound mix.
           </p>
         </div>
 
@@ -1504,7 +1469,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           boxSizing: "border-box",
         }}
       >
-        {/* Section Header: "Sel..." typographic watermark + Subtitle */}
+        {/* Section Header: Featured Client Campaigns */}
         <div
           style={{
             display: "flex",
@@ -1518,20 +1483,33 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           }}
         >
           <div>
+            <span
+              style={{
+                fontSize: isMobile ? 11 : 12,
+                fontWeight: 800,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: "#FF4D1A",
+                display: "block",
+                marginBottom: 6,
+              }}
+            >
+              ✦ Featured Client Campaigns
+            </span>
             <h3
               className="latestpf-watermark-1"
               style={{
                 margin: 0,
-                fontSize: isMobile ? "clamp(38px, 9vw, 52px)" : "clamp(56px, 10vw, 110px)",
+                fontSize: isMobile ? "clamp(30px, 7.5vw, 40px)" : "clamp(40px, 5vw, 64px)",
                 fontWeight: 800,
-                lineHeight: 0.9,
-                letterSpacing: "-0.05em",
+                lineHeight: 1.02,
+                letterSpacing: "-0.04em",
                 color: "#111111",
                 display: "inline-block",
                 willChange: "transform",
               }}
             >
-              Sel<span style={{ color: "rgba(17, 17, 17, 0.2)" }}>ected</span>
+              Selected Work & Case Studies
             </h3>
           </div>
 
@@ -1540,19 +1518,19 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               display: "flex",
               alignItems: "center",
               gap: 12,
-              maxWidth: 440,
+              maxWidth: 460,
             }}
           >
             <p
               style={{
                 margin: 0,
                 fontSize: isMobile ? 13 : "clamp(14px, 1.4vw, 16px)",
-                lineHeight: 1.4,
-                color: "rgba(17, 17, 17, 0.65)",
+                lineHeight: 1.45,
+                color: "rgba(17, 17, 17, 0.68)",
                 fontWeight: 500,
               }}
             >
-              Real client deliverables produced in Hyderabad: commercial brand films, luxury farmhouses, paid Meta ad creatives, and viral gym reels.
+              End-to-end productions delivered for commercial brands, luxury properties, gyms, and founders. Tap any project to watch the full master cut with sound.
             </p>
             <span
               style={{
@@ -1900,34 +1878,47 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           }}
         >
           <div>
+            <span
+              style={{
+                fontSize: isMobile ? 11 : 12,
+                fontWeight: 800,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: "#FF4D1A",
+                display: "block",
+                marginBottom: 6,
+              }}
+            >
+              ✦ What We Do Under One Roof
+            </span>
             <h3
               className="latestpf-watermark-2"
               style={{
                 margin: 0,
-                fontSize: isMobile ? "clamp(38px, 9vw, 52px)" : "clamp(56px, 10vw, 110px)",
+                fontSize: isMobile ? "clamp(30px, 7.5vw, 40px)" : "clamp(40px, 5vw, 64px)",
                 fontWeight: 800,
-                lineHeight: 0.9,
-                letterSpacing: "-0.05em",
+                lineHeight: 1.02,
+                letterSpacing: "-0.04em",
                 color: "#111111",
                 display: "inline-block",
                 willChange: "transform",
               }}
             >
-              Thin<span style={{ color: "rgba(17, 17, 17, 0.2)" }}>gs we do</span>
+              From Script to Final 4K Cut
             </h3>
           </div>
 
-          <div style={{ maxWidth: 440 }}>
+          <div style={{ maxWidth: 460 }}>
             <p
               style={{
                 margin: 0,
                 fontSize: isMobile ? 13 : "clamp(14px, 1.4vw, 16px)",
                 lineHeight: 1.45,
-                color: "rgba(17, 17, 17, 0.65)",
+                color: "rgba(17, 17, 17, 0.68)",
                 fontWeight: 500,
               }}
             >
-              From on-location 4K filming in Hyderabad to multi-platform master edits, we handle your entire video pipeline under one roof.
+              Stop juggling separate cameramen, editors, and colorists. Explore our 5-stage production pipeline below — tap any stage to preview.
             </p>
           </div>
         </div>
@@ -2163,32 +2154,43 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         >
           {/* Left Column: Heading */}
           <div>
+            <span
+              style={{
+                fontSize: isMobile ? 11 : 12,
+                fontWeight: 800,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: "#FF4D1A",
+                display: "block",
+                marginBottom: 8,
+              }}
+            >
+              ✦ Real Client Results & Reviews
+            </span>
             <h3
               style={{
-                margin: isMobile ? "0 0 12px" : "0 0 20px",
-                fontSize: isMobile ? "clamp(32px, 7vw, 44px)" : "clamp(44px, 6vw, 76px)",
+                margin: isMobile ? "0 0 12px" : "0 0 18px",
+                fontSize: isMobile ? "clamp(30px, 7.5vw, 40px)" : "clamp(40px, 5vw, 62px)",
                 fontWeight: 800,
                 lineHeight: 1.05,
                 letterSpacing: "-0.04em",
                 color: "#111111",
               }}
             >
-              Kind words,
-              <br />
-              said loudly.
+              Trusted by Founders & Brands Across Hyderabad.
             </h3>
 
             <p
               style={{
                 margin: 0,
-                fontSize: isMobile ? "13px" : "clamp(15px, 1.5vw, 18px)",
-                lineHeight: 1.45,
-                color: "rgba(17, 17, 17, 0.68)",
-                maxWidth: 440,
+                fontSize: isMobile ? "13.5px" : "clamp(15px, 1.5vw, 18px)",
+                lineHeight: 1.48,
+                color: "rgba(17, 17, 17, 0.7)",
+                maxWidth: 460,
                 fontWeight: 500,
               }}
             >
-              Real reviews from founders, coaches, and gym owners across Hyderabad who trust The Story Builder to shoot, cut, and scale their video presence.
+              Read how local businesses, fitness studios, and personal brands grew their views, engagement, and inbound leads with our crew.
             </p>
 
             <div style={{ marginTop: isMobile ? 18 : 32, display: "flex", gap: 12 }}>
@@ -2267,28 +2269,28 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 marginBottom: 6,
               }}
             >
-              ✦ Start Your Project Brief
+              ✦ Get a Custom Package Quote in 30 Seconds
             </span>
             <h3
               style={{
                 margin: "0 0 8px",
-                fontSize: isMobile ? "clamp(24px, 5.5vw, 32px)" : "clamp(30px, 4vw, 48px)",
+                fontSize: isMobile ? "clamp(26px, 6vw, 34px)" : "clamp(32px, 4.2vw, 48px)",
                 fontWeight: 800,
                 letterSpacing: "-0.035em",
                 color: "#111111",
               }}
             >
-              Let’s create something iconic.
+              Ready to Shoot? Build Your Project Brief.
             </h3>
             <p
               style={{
                 margin: 0,
-                fontSize: isMobile ? 13 : 15,
-                color: "rgba(17, 17, 17, 0.65)",
-                lineHeight: 1.45,
+                fontSize: isMobile ? 13.5 : 15.5,
+                color: "rgba(17, 17, 17, 0.68)",
+                lineHeight: 1.5,
               }}
             >
-              Fill in your project details below. This automatically crafts a scoped brief sent straight to our team on WhatsApp for an immediate quote.
+              Pick your video format, deliverable count, and timeline below — we’ll send a tailored package quote straight to your WhatsApp.
             </p>
           </div>
 
