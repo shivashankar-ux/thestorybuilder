@@ -9,6 +9,7 @@ import PhoneStackCarousel from "../latestpf/PhoneStackCarousel";
 import SplitScreenCapabilities from "../latestpf/SplitScreenCapabilities";
 import NudgeFooter from "../latestpf/NudgeFooter";
 import HeroIllustration from "../latestpf/HeroIllustration";
+import GalleryTunnel from "../latestpf/GalleryTunnel";
 import { trackPageView, trackEvent } from "../../utils/tracking";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -1911,6 +1912,143 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             </div>
           );
         })}
+        </div>
+      </section>
+
+      {/* 5.5. 3D PRODUCTION VAULT — INTERACTIVE GALLERY TUNNEL WITH REAL SHOOT FOOTAGE */}
+      <section
+        className="latestpf-vault-section"
+        style={{
+          padding: isMobile ? "0 16px 44px" : "0 24px clamp(60px, 8vw, 100px)",
+          maxWidth: 1280,
+          margin: "0 auto",
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: isMobile ? 310 : 460,
+            borderRadius: isMobile ? 22 : 36,
+            overflow: "hidden",
+            background: "#08090C",
+            border: "2px solid rgba(17, 17, 17, 0.14)",
+            boxShadow: "0 28px 65px -15px rgba(0, 0, 0, 0.45)",
+          }}
+        >
+          {/* Three.js 3D Tunnel Flying Through Real Shoot Stills */}
+          <GalleryTunnel
+            colors={["#FF4D1A", "#CEF237", "#2B47FC", "#FFE27A", "#F9C0C4"]}
+            background="#08090C"
+            lineColor="#FFFFFF"
+            lineOpacity={20}
+            grid={4}
+            speed={85}
+            boost={95}
+            fade={92}
+            label={true}
+            labelText="Hold to Warp ⚡"
+            labelFill="#FFFFFF"
+            labelColor="#111111"
+          />
+
+          {/* Subtle Radial Vignette for Crisp Overlay Readability */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              background:
+                "radial-gradient(circle at center, rgba(8, 9, 12, 0.72) 0%, rgba(8, 9, 12, 0.28) 55%, rgba(8, 9, 12, 0.55) 100%)",
+              pointerEvents: "none",
+              zIndex: 2,
+            }}
+          />
+
+          {/* Centered Editorial Overlay */}
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              zIndex: 3,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              padding: isMobile ? "20px 18px" : "32px 24px",
+              pointerEvents: "none",
+            }}
+          >
+            <span
+              style={{
+                fontSize: isMobile ? 10.5 : 12,
+                fontWeight: 800,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "#CEF237",
+                background: "rgba(255, 255, 255, 0.08)",
+                border: "1px solid rgba(255, 255, 255, 0.16)",
+                padding: isMobile ? "5px 12px" : "6px 14px",
+                borderRadius: 999,
+                marginBottom: isMobile ? 10 : 14,
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+              }}
+            >
+              ✦ The Story Builder Archive · 140+ Shoots
+            </span>
+
+            <h3
+              style={{
+                margin: "0 0 8px",
+                fontSize: isMobile ? "clamp(24px, 6.5vw, 32px)" : "clamp(32px, 4vw, 48px)",
+                fontWeight: 800,
+                lineHeight: 1.08,
+                letterSpacing: "-0.035em",
+                color: "#FFFFFF",
+                maxWidth: 680,
+              }}
+            >
+              Inside Our Production Vault
+            </h3>
+
+            <p
+              style={{
+                margin: "0 0 18px",
+                fontSize: isMobile ? 12.5 : 15,
+                color: "rgba(255, 255, 255, 0.78)",
+                fontWeight: 500,
+                maxWidth: 480,
+                lineHeight: 1.45,
+              }}
+            >
+              {isMobile
+                ? "Tap & hold anywhere to warp through frames from our Hyderabad shoots."
+                : "Press and hold anywhere to warp through real frames from our Hyderabad shoots."}
+            </p>
+
+            <a
+              href="#brief"
+              style={{
+                pointerEvents: "auto",
+                background: "#FF4D1A",
+                color: "#FFFFFF",
+                textDecoration: "none",
+                fontSize: isMobile ? 12.5 : 14,
+                fontWeight: 800,
+                padding: isMobile ? "10px 20px" : "12px 24px",
+                borderRadius: 999,
+                boxShadow: "0 8px 24px rgba(255, 77, 26, 0.35)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                cursor: "pointer",
+              }}
+            >
+              Book Your Shoot ↗
+            </a>
+          </div>
         </div>
       </section>
 
