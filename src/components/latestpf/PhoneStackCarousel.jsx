@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
 /* ============================================================
-   PHONE STACK CAROUSEL — MINIMALIST FRAMER INSPIRATION
+   PHONE STACK CAROUSEL — 120FPS ZERO-RE-RENDER GPU CAROUSEL
    Ultra-realistic iPhone 16 Pro Center Frame + Overlapping Stack
-   Pure Video · Zero Text Clutter · 120fps Gesture Drag/Swipe Physics
-   Plays Inside iPhone Only (No Modal) · Prominent Mute/Unmute Toggle
+   Direct DOM transform updates in rAF · 1:1 Finger Tracking
+   Plays Inside iPhone Only · Prominent Mute/Unmute Toggle
    ============================================================ */
 
 export default function PhoneStackCarousel({
@@ -13,7 +13,7 @@ export default function PhoneStackCarousel({
 }) {
   const n = reels.length;
 
-  // Continuous physics state stored in refs for 120fps GPU performance
+  // Continuous physics state stored in refs for zero-React-overhead 120fps GPU updates
   const progressRef = useRef(0);
   const targetProgressRef = useRef(0);
   const velocityRef = useRef(0);
@@ -26,16 +26,20 @@ export default function PhoneStackCarousel({
   const lastDragTimeRef = useRef(0);
   const animFrameRef = useRef(null);
   const wheelTimeoutRef = useRef(null);
+  const lastActiveIdxRef = useRef(0);
 
-  // Active React render state updated via requestAnimationFrame
-  const [renderProgress, setRenderProgress] = useState(0);
+  // Only re-render React when the center reel index changes or mute/view toggles
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isDraggingState, setIsDraggingState] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [isInView, setIsInView] = useState(true);
 
-  // References
   const containerRef = useRef(null);
+  const cardRefs = useRef({});
   const videoRefs = useRef({});
+
+  // Swipe sensitivity (tuned for effortless, fast thumb flicks)
+  const dragDistancePerSlide = isMobile ? 145 : 230;
 
   // Viewport intersection observer to freeze off-screen decoding
   useEffect(() => {
@@ -51,13 +55,72 @@ export default function PhoneStackCarousel({
     return () => io.disconnect();
   }, []);
 
-  // Mobile-adaptive drag sensitivity
-  const dragDistancePerSlide = isMobile ? 180 : 300;
+  // Compute card transform & opacity directly on DOM nodes (zero virtual DOM diffing)
+  const applyTransforms = useCallback(
+    (progress) => {
+      if (!n) return;
+      const maxVisible = isMobile ? 2.1 : 3.8;
 
-  // Active integer slide index normalized into [0, n - 1]
-  const activeNormalizedIndex = ((Math.round(renderProgress) % n) + n) % n;
+      for (let index = 0; index < n; index++) {
+        const el = cardRefs.current[index];
+        if (!el) continue;
 
-  // 1. CONTINUOUS PHYSICS ANIMATION LOOP (SPRING LERP AT 120FPS)
+        let offset = index - (progress % n);
+        while (offset > n / 2) offset -= n;
+        while (offset < -n / 2) offset += n;
+
+        const absOffset = Math.abs(offset);
+        const sign = Math.sign(offset);
+
+        let translateX = 0;
+        if (isMobile) {
+          if (absOffset <= 1) {
+            translateX = sign * absOffset * 84;
+          } else {
+            translateX = sign * (84 + (absOffset - 1) * 72);
+          }
+        } else {
+          if (absOffset <= 1) {
+            translateX = sign * absOffset * 175;
+          } else if (absOffset <= 2) {
+            translateX = sign * (175 + (absOffset - 1) * 145);
+          } else if (absOffset <= 3) {
+            translateX = sign * (320 + (absOffset - 2) * 130);
+          } else {
+            translateX = sign * (450 + (absOffset - 3) * 110);
+          }
+        }
+
+        const scale = Math.max(0.72, 1 - absOffset * (isMobile ? 0.075 : 0.082));
+        const zIndex = Math.max(1, Math.round(50 - absOffset * 10));
+
+        let opacity = 1;
+        if (absOffset > maxVisible - 1) {
+          opacity = Math.max(0, 1 - (absOffset - (maxVisible - 1)));
+        }
+
+        el.style.transform = `translate3d(calc(-50% + ${translateX.toFixed(2)}px), 0, 0) scale(${scale.toFixed(4)})`;
+        el.style.zIndex = String(zIndex);
+        el.style.opacity = opacity.toFixed(3);
+        el.style.visibility = opacity <= 0.01 ? "hidden" : "visible";
+        el.style.pointerEvents = opacity <= 0.01 ? "none" : "auto";
+      }
+
+      const norm = ((Math.round(progress) % n) + n) % n;
+      if (norm !== lastActiveIdxRef.current) {
+        lastActiveIdxRef.current = norm;
+        setActiveIndex(norm);
+      }
+    },
+    [n, isMobile]
+  );
+
+  // Initial layout pass when n or isMobile changes
+  useEffect(() => {
+    applyTransforms(progressRef.current);
+  }, [applyTransforms]);
+
+  // 1. CONTINUOUS PHYSICS LOOP (1:1 DRAG + BUTTERY 120FPS SPRING SNAP)
   const startPhysicsLoop = useCallback(() => {
     if (animFrameRef.current) return;
 
@@ -66,27 +129,32 @@ export default function PhoneStackCarousel({
       const target = targetProgressRef.current;
       const isDragging = isDraggingRef.current;
 
-      const lerpFactor = isDragging ? 0.45 : 0.15;
-      const diff = target - current;
+      if (isDragging) {
+        // 1:1 instant finger/mouse tracking with zero lag
+        progressRef.current = target;
+        applyTransforms(target);
+        animFrameRef.current = requestAnimationFrame(tick);
+        return;
+      }
 
-      if (Math.abs(diff) > 0.0002 || isDragging) {
-        progressRef.current = current + diff * lerpFactor;
-        setRenderProgress(progressRef.current);
+      const diff = target - current;
+      if (Math.abs(diff) > 0.0005) {
+        progressRef.current = current + diff * 0.24;
+        applyTransforms(progressRef.current);
         animFrameRef.current = requestAnimationFrame(tick);
       } else {
         progressRef.current = target;
-        setRenderProgress(target);
+        applyTransforms(target);
         animFrameRef.current = null;
       }
     };
 
     animFrameRef.current = requestAnimationFrame(tick);
-  }, []);
+  }, [applyTransforms]);
 
-  // 2. VIDEO PLAYBACK & AUDIO MANAGEMENT (ENSURES NEVER BLACK ON MOBILE)
+  // 2. VIDEO PLAYBACK & AUDIO MANAGEMENT (ONLY ACTIVE CENTER VIDEO PLAYS)
   useEffect(() => {
-    // 1. Configure the active center reel video
-    const activeVid = videoRefs.current[activeNormalizedIndex];
+    const activeVid = videoRefs.current[activeIndex];
     if (activeVid) {
       activeVid.defaultMuted = true;
       activeVid.muted = isMuted;
@@ -99,7 +167,6 @@ export default function PhoneStackCarousel({
         const playPromise = activeVid.play();
         if (playPromise !== undefined) {
           playPromise.catch(() => {
-            // If browser audio policy blocked unmuted play, fallback to muted to prevent black screen
             activeVid.muted = true;
             activeVid.play().catch(() => {});
           });
@@ -109,28 +176,26 @@ export default function PhoneStackCarousel({
       }
     }
 
-    // 2. Pause all other non-center videos immediately so hardware decoders stay free
     Object.keys(videoRefs.current).forEach((key) => {
       const idx = Number(key);
-      if (idx !== activeNormalizedIndex) {
+      if (idx !== activeIndex) {
         const otherVid = videoRefs.current[idx];
         if (otherVid) {
           otherVid.pause();
         }
       }
     });
-  }, [activeNormalizedIndex, isMuted, isInView]);
+  }, [activeIndex, isMuted, isInView]);
 
-  // Initial setup for video elements on mount
   const setupVideoRef = (el, idx) => {
     if (el) {
       videoRefs.current[idx] = el;
       el.defaultMuted = true;
-      el.muted = idx === activeNormalizedIndex ? isMuted : true;
+      el.muted = idx === activeIndex ? isMuted : true;
       el.playsInline = true;
       el.setAttribute("playsinline", "");
       el.setAttribute("webkit-playsinline", "");
-      if (idx === activeNormalizedIndex && isInView) {
+      if (idx === activeIndex && isInView) {
         el.play().catch(() => {});
       } else {
         el.pause();
@@ -140,7 +205,7 @@ export default function PhoneStackCarousel({
     }
   };
 
-  // 3. MOUSE DRAG GESTURES (LEFT TO RIGHT / RIGHT TO LEFT)
+  // 3. MOUSE DRAG GESTURES (1:1 ZERO-DELAY)
   const handleMouseDown = (e) => {
     if (e.target.closest("button") || e.target.closest("a")) return;
 
@@ -148,7 +213,7 @@ export default function PhoneStackCarousel({
     hasDraggedRef.current = false;
     setIsDraggingState(true);
     dragStartXRef.current = e.clientX;
-    dragStartProgressRef.current = targetProgressRef.current;
+    dragStartProgressRef.current = progressRef.current;
     lastDragXRef.current = e.clientX;
     lastDragTimeRef.current = performance.now();
     velocityRef.current = 0;
@@ -181,7 +246,7 @@ export default function PhoneStackCarousel({
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
 
-      const flickMomentum = velocityRef.current * 140;
+      const flickMomentum = velocityRef.current * 185;
       const projected = targetProgressRef.current - flickMomentum / dragDistancePerSlide;
       targetProgressRef.current = Math.round(projected);
       startPhysicsLoop();
@@ -191,7 +256,7 @@ export default function PhoneStackCarousel({
     window.addEventListener("mouseup", handleMouseUp);
   };
 
-  // 4. TOUCH SWIPE GESTURES (MOBILE)
+  // 4. TOUCH SWIPE GESTURES (MOBILE 1:1 INSTANT TRACKING)
   const handleTouchStart = (e) => {
     if (e.touches.length !== 1) return;
     if (e.target.closest("button") || e.target.closest("a")) return;
@@ -201,7 +266,7 @@ export default function PhoneStackCarousel({
     setIsDraggingState(true);
     dragStartXRef.current = e.touches[0].clientX;
     dragStartYRef.current = e.touches[0].clientY;
-    dragStartProgressRef.current = targetProgressRef.current;
+    dragStartProgressRef.current = progressRef.current;
     lastDragXRef.current = e.touches[0].clientX;
     lastDragTimeRef.current = performance.now();
     velocityRef.current = 0;
@@ -218,7 +283,7 @@ export default function PhoneStackCarousel({
       hasDraggedRef.current = true;
     }
 
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 8) {
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 6) {
       if (e.cancelable) e.preventDefault();
     }
 
@@ -239,7 +304,7 @@ export default function PhoneStackCarousel({
     isDraggingRef.current = false;
     setIsDraggingState(false);
 
-    const flickMomentum = velocityRef.current * 130;
+    const flickMomentum = velocityRef.current * 185;
     const projected = targetProgressRef.current - flickMomentum / dragDistancePerSlide;
     targetProgressRef.current = Math.round(projected);
     startPhysicsLoop();
@@ -252,14 +317,14 @@ export default function PhoneStackCarousel({
 
     if (e.cancelable) e.preventDefault();
 
-    targetProgressRef.current += delta * 0.0022;
+    targetProgressRef.current += delta * 0.0028;
     startPhysicsLoop();
 
     if (wheelTimeoutRef.current) clearTimeout(wheelTimeoutRef.current);
     wheelTimeoutRef.current = setTimeout(() => {
       targetProgressRef.current = Math.round(targetProgressRef.current);
       startPhysicsLoop();
-    }, 150);
+    }, 110);
   };
 
   // 6. KEYBOARD ARROWS
@@ -292,7 +357,7 @@ export default function PhoneStackCarousel({
   const phoneWidth = isMobile ? 230 : 284;
   const phoneHeight = isMobile ? 452 : 558;
 
-  // Helper to get poster fallback
+  // Helper to get real video poster (no personal fallback photos)
   const getPoster = (reel) => {
     if (reel.poster) return reel.poster;
     if (reel.videoSrc?.includes("cloudinary.com") && reel.videoSrc?.endsWith(".mp4")) {
@@ -338,58 +403,26 @@ export default function PhoneStackCarousel({
       >
         {/* CARDS STACKED IN PERSPECTIVE HORIZONTALLY */}
         {reels.map((reel, index) => {
-          let offset = index - (renderProgress % n);
-          while (offset > n / 2) offset -= n;
-          while (offset < -n / 2) offset += n;
-
-          const absOffset = Math.abs(offset);
-          const sign = Math.sign(offset);
-
-          let translateX = 0;
-          if (isMobile) {
-            if (absOffset <= 1) {
-              translateX = sign * absOffset * 84;
-            } else {
-              translateX = sign * (84 + (absOffset - 1) * 72);
-            }
-          } else {
-            if (absOffset <= 1) {
-              translateX = sign * absOffset * 175;
-            } else if (absOffset <= 2) {
-              translateX = sign * (175 + (absOffset - 1) * 145);
-            } else if (absOffset <= 3) {
-              translateX = sign * (320 + (absOffset - 2) * 130);
-            } else {
-              translateX = sign * (450 + (absOffset - 3) * 110);
-            }
-          }
-
-          const scale = Math.max(0.72, 1 - absOffset * (isMobile ? 0.075 : 0.082));
-          const zIndex = Math.max(1, Math.round(50 - absOffset * 10));
-
-          const maxVisible = isMobile ? 2.1 : 3.8;
-          let opacity = 1;
-          if (absOffset > maxVisible - 1) {
-            opacity = Math.max(0, 1 - (absOffset - (maxVisible - 1)));
-          }
-
-          if (opacity <= 0.01) return null;
-
-          const isCenter = absOffset < 0.5;
-          const shouldMountVideo = absOffset < 0.75 && isInView;
+          const isCenter = index === activeIndex;
+          const posterUrl = getPoster(reel);
 
           return (
             <div
               key={reel.id || index}
+              ref={(el) => {
+                if (el) cardRefs.current[index] = el;
+                else delete cardRefs.current[index];
+              }}
               onClick={() => {
                 if (hasDraggedRef.current) return;
 
-                if (absOffset >= 0.4) {
-                  // Glide side card into center
-                  targetProgressRef.current = Math.round(renderProgress) + Math.round(offset);
+                if (!isCenter) {
+                  let diff = index - activeIndex;
+                  if (diff > n / 2) diff -= n;
+                  if (diff < -n / 2) diff += n;
+                  targetProgressRef.current = Math.round(progressRef.current) + diff;
                   startPhysicsLoop();
                 } else {
-                  // Tap center reel to toggle sound directly inside the iPhone
                   setIsMuted((prev) => !prev);
                 }
               }}
@@ -398,50 +431,63 @@ export default function PhoneStackCarousel({
                 width: cardWidth,
                 height: cardHeight,
                 left: "50%",
-                transform: `translate3d(calc(-50% + ${translateX}px), 0, 0) scale(${scale})`,
-                zIndex,
-                opacity,
+                transform: "translate3d(-50%, 0, 0)",
+                zIndex: 10,
                 borderRadius: isMobile ? 24 : 32,
                 overflow: "hidden",
-                boxShadow: isCenter
-                  ? "0 28px 70px -12px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.08)"
-                  : "0 18px 42px -10px rgba(0, 0, 0, 0.25)",
+                boxShadow: "0 20px 48px -12px rgba(0, 0, 0, 0.35)",
                 background: "#0E1013",
                 cursor: "pointer",
                 willChange: "transform, opacity",
-                transition: isDraggingState
-                  ? "none"
-                  : "box-shadow 0.3s ease, border-radius 0.3s ease",
               }}
             >
-              {/* CRISP POSTER IMAGE — ALWAYS PRESENT SO CARDS ARE NEVER BLACK */}
-              <img
-                src={getPoster(reel)}
-                alt={reel.name}
-                loading={isCenter ? "eager" : "lazy"}
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  display: "block",
-                  zIndex: 1,
-                  filter: isCenter ? "none" : "brightness(0.88) contrast(1.03)",
-                }}
-              />
+              {/* COVER IMAGE (Cloudinary thumbnail) OR FIRST VIDEO FRAME (#t=0.5) FOR LOCAL MP4S */}
+              {posterUrl ? (
+                <img
+                  src={posterUrl}
+                  alt={reel.name}
+                  loading={isCenter ? "eager" : "lazy"}
+                  draggable={false}
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                    zIndex: 1,
+                  }}
+                />
+              ) : (
+                <video
+                  src={`${reel.videoSrc}#t=0.5`}
+                  muted
+                  playsInline
+                  preload="metadata"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    display: "block",
+                    zIndex: 1,
+                    pointerEvents: "none",
+                  }}
+                />
+              )}
 
-              {/* VIDEO ELEMENT — ONLY MOUNTED & PLAYED ON THE ACTIVE CENTER CARD */}
-              {shouldMountVideo && (
+              {/* ACTIVE VIDEO ELEMENT — ONLY MOUNTED ON THE CENTER CARD FOR ZERO DECODER LAG */}
+              {isCenter && isInView && (
                 <video
                   ref={(el) => setupVideoRef(el, index)}
                   src={reel.videoSrc}
-                  poster={getPoster(reel)}
+                  poster={posterUrl}
                   autoPlay
-                  muted={isCenter ? isMuted : true}
+                  muted={isMuted}
                   loop
                   playsInline
-                  preload={isCenter ? "auto" : "metadata"}
+                  preload="auto"
                   onCanPlay={(e) => {
                     if (isCenter && isInView) {
                       e.currentTarget.muted = isMuted;
@@ -458,7 +504,33 @@ export default function PhoneStackCarousel({
                     objectFit: "cover",
                     display: "block",
                     zIndex: 2,
-                    filter: isCenter ? "none" : "brightness(0.88) contrast(1.03)",
+                  }}
+                />
+              )}
+
+              {/* Subtle dim overlay on side cards (cheaper than CSS filter) */}
+              {!isCenter && (
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "rgba(0, 0, 0, 0.14)",
+                    pointerEvents: "none",
+                    zIndex: 3,
+                  }}
+                />
+              )}
+
+              {/* Subtle Top & Bottom Vignette on Center Card for Mute Icon Visibility */}
+              {isCenter && (
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background:
+                      "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 22%, transparent 80%, rgba(0,0,0,0.35) 100%)",
+                    pointerEvents: "none",
+                    zIndex: 3,
                   }}
                 />
               )}
@@ -466,265 +538,167 @@ export default function PhoneStackCarousel({
           );
         })}
 
-        {/* 2. REALISTIC IPHONE 16 PRO FIXED CENTER FRAME (CLEAN & MINIMALIST) */}
+        {/* 2. STATIONARY ULTRA-REALISTIC IPHONE 16 PRO HARDWARE BEZEL OVERLAY */}
         <div
-          onClick={() => {
-            if (!hasDraggedRef.current) {
-              // Tapping anywhere on the iPhone frame toggles sound!
-              setIsMuted((prev) => !prev);
-            }
-          }}
           style={{
             position: "absolute",
-            left: "50%",
-            transform: "translateX(-50%)",
             width: phoneWidth,
             height: phoneHeight,
-            zIndex: 55,
-            cursor: isDraggingState ? "grabbing" : "pointer",
-            borderRadius: isMobile ? 36 : 46,
-            boxSizing: "border-box",
-            border: isMobile ? "5.5px solid #1C1E22" : "7px solid #1B1D21",
+            left: "50%",
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 80,
+            pointerEvents: "none",
+            borderRadius: isMobile ? 32 : 40,
+            border: `${isMobile ? 6 : 8}px solid #121417`,
             boxShadow:
-              "inset 0 0 0 1px rgba(255, 255, 255, 0.2), inset 0 0 0 2.5px rgba(0, 0, 0, 0.85), 0 32px 80px -15px rgba(0, 0, 0, 0.45)",
-            pointerEvents: "auto",
+              "0 0 0 1.5px #2E323B, 0 30px 65px -10px rgba(0, 0, 0, 0.52), inset 0 0 10px rgba(0, 0, 0, 0.65)",
+            boxSizing: "border-box",
           }}
         >
-          {/* HARDWARE BUTTONS (LEFT SIDE: ACTION + VOLUME BUTTONS) */}
-          <div
-            style={{
-              position: "absolute",
-              left: isMobile ? -8 : -10.5,
-              top: isMobile ? 65 : 78,
-              width: 3,
-              height: isMobile ? 20 : 24,
-              background: "#2D3035",
-              borderRadius: "2px 0 0 2px",
-              boxShadow: "inset 0 1px 1px rgba(255,255,255,0.25)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              left: isMobile ? -8 : -10.5,
-              top: isMobile ? 98 : 118,
-              width: 3,
-              height: isMobile ? 36 : 44,
-              background: "#2D3035",
-              borderRadius: "2px 0 0 2px",
-              boxShadow: "inset 0 1px 1px rgba(255,255,255,0.25)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              left: isMobile ? -8 : -10.5,
-              top: isMobile ? 144 : 172,
-              width: 3,
-              height: isMobile ? 36 : 44,
-              background: "#2D3035",
-              borderRadius: "2px 0 0 2px",
-              boxShadow: "inset 0 1px 1px rgba(255,255,255,0.25)",
-            }}
-          />
+          {/* Titanium Side Buttons */}
+          <div style={{ position: "absolute", left: -10, top: 84, width: 2.5, height: 22, background: "#2E323B", borderRadius: 2 }} />
+          <div style={{ position: "absolute", left: -10, top: 118, width: 2.5, height: 38, background: "#2E323B", borderRadius: 2 }} />
+          <div style={{ position: "absolute", left: -10, top: 164, width: 2.5, height: 38, background: "#2E323B", borderRadius: 2 }} />
+          <div style={{ position: "absolute", right: -10, top: 132, width: 2.5, height: 56, background: "#2E323B", borderRadius: 2 }} />
 
-          {/* HARDWARE BUTTONS (RIGHT SIDE: POWER BUTTON + CAMERA CONTROL) */}
+          {/* Dynamic Island */}
           <div
             style={{
               position: "absolute",
-              right: isMobile ? -8 : -10.5,
-              top: isMobile ? 95 : 112,
-              width: 3,
-              height: isMobile ? 52 : 64,
-              background: "#2D3035",
-              borderRadius: "0 2px 2px 0",
-              boxShadow: "inset 0 1px 1px rgba(255,255,255,0.25)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              right: isMobile ? -7.5 : -10,
-              bottom: isMobile ? 95 : 120,
-              width: 2.5,
-              height: isMobile ? 28 : 34,
-              background: "#24262A",
-              borderRadius: "0 2px 2px 0",
-            }}
-          />
-
-          {/* TOP EARPIECE MICRO-SPEAKER SLIT */}
-          <div
-            style={{
-              position: "absolute",
-              top: 3,
+              top: isMobile ? 10 : 14,
               left: "50%",
               transform: "translateX(-50%)",
-              width: isMobile ? 36 : 42,
-              height: 2,
-              background: "#090A0C",
-              borderRadius: 999,
-            }}
-          />
-
-          {/* DYNAMIC ISLAND PILL */}
-          <div
-            style={{
-              position: "absolute",
-              top: isMobile ? 7 : 9,
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: isMobile ? 68 : 84,
-              height: isMobile ? 20 : 24,
+              width: isMobile ? 76 : 94,
+              height: isMobile ? 21 : 25,
               background: "#000000",
               borderRadius: 999,
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
-              padding: "0 8px",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.7)",
-              pointerEvents: "none",
+              justifyContent: "flex-end",
+              paddingRight: 7,
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.6)",
             }}
           >
-            {/* Front Camera Lens with Sapphire Blue Reflection */}
-            <span
-              style={{
-                width: isMobile ? 7 : 8,
-                height: isMobile ? 7 : 8,
-                borderRadius: 999,
-                background: "radial-gradient(circle at 35% 35%, #253347 0%, #07090E 75%)",
-                display: "inline-block",
-              }}
-            />
-            {/* Ambient Sensor */}
-            <span
-              style={{
-                width: 4.5,
-                height: 4.5,
-                borderRadius: 999,
-                background: "#0D1117",
-                display: "inline-block",
-              }}
-            />
+            <div style={{ width: 7, height: 7, borderRadius: 999, background: "#141824", boxShadow: "inset 0 0 2px #2B47FC" }} />
           </div>
 
-          {/* PROMINENT MUTE / UNMUTE SYMBOL BUTTON (TOP RIGHT) */}
+          {/* MUTE / UNMUTE SYMBOL BUTTON */}
           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               setIsMuted((prev) => !prev);
             }}
-            aria-label={isMuted ? "Unmute sound" : "Mute sound"}
+            aria-label={isMuted ? "Unmute video" : "Mute video"}
+            title={isMuted ? "Tap to Unmute" : "Tap to Mute"}
             style={{
               position: "absolute",
               top: isMobile ? 10 : 14,
               right: isMobile ? 10 : 14,
-              zIndex: 70,
-              background: isMuted ? "rgba(0, 0, 0, 0.72)" : "#FF4D1A",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
-              border: isMuted
-                ? "1px solid rgba(255, 255, 255, 0.28)"
-                : "1px solid rgba(255, 255, 255, 0.45)",
-              color: "#FFFFFF",
-              borderRadius: 999,
-              padding: isMobile ? "5px 10px" : "6px 12px",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 5,
-              fontSize: isMobile ? 11 : 12,
-              fontWeight: 800,
-              cursor: "pointer",
               pointerEvents: "auto",
-              boxShadow: "0 4px 14px rgba(0, 0, 0, 0.45)",
-              transition: "all 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+              background: isMuted ? "rgba(0, 0, 0, 0.65)" : "#FF4D1A",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+              border: "1px solid rgba(255, 255, 255, 0.25)",
+              color: "#FFFFFF",
+              width: isMobile ? 32 : 36,
+              height: isMobile ? 32 : 36,
+              borderRadius: 999,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(0, 0, 0, 0.35)",
+              transition: "background 0.2s ease, transform 0.15s ease",
+              zIndex: 90,
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.06)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
           >
-            <span style={{ fontSize: isMobile ? 12 : 14 }}>{isMuted ? "🔇" : "🔊"}</span>
-            <span>{isMuted ? "Sound Off" : "Sound On"}</span>
+            {isMuted ? (
+              <svg width={isMobile ? "15" : "17"} height={isMobile ? "15" : "17"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+            ) : (
+              <svg width={isMobile ? "15" : "17"} height={isMobile ? "15" : "17"} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+              </svg>
+            )}
           </button>
 
-          {/* BOTTOM IOS HOME INDICATOR BAR */}
+          {/* Bottom Home Indicator Bar */}
           <div
             style={{
               position: "absolute",
-              bottom: 6,
+              bottom: isMobile ? 6 : 8,
               left: "50%",
               transform: "translateX(-50%)",
-              width: isMobile ? 84 : 106,
-              height: 3.5,
-              background: "rgba(255, 255, 255, 0.75)",
+              width: isMobile ? 86 : 110,
+              height: 4,
               borderRadius: 999,
-              boxShadow: "0 1px 3px rgba(0,0,0,0.5)",
-              pointerEvents: "none",
+              background: "rgba(255, 255, 255, 0.85)",
+              boxShadow: "0 1px 4px rgba(0, 0, 0, 0.4)",
             }}
           />
         </div>
       </div>
 
-      {/* 3. MINIMALIST CONTROLS: SUBTLE HINT & PAGINATION PILLS */}
+      {/* 3. MINIMAL STATUS HINT & DOTS */}
       <div
         style={{
-          marginTop: isMobile ? 10 : 16,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           gap: 10,
+          marginTop: isMobile ? 8 : 14,
         }}
       >
-        {/* Clean Interactive Sound Toggle Hint */}
         <div
           onClick={() => setIsMuted((prev) => !prev)}
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: 6,
-            fontSize: isMobile ? 11 : 12,
+            gap: 8,
+            fontSize: isMobile ? 11.5 : 13,
             fontWeight: 700,
-            color: isMuted ? "rgba(17, 17, 17, 0.65)" : "#FF4D1A",
-            background: isMuted ? "rgba(17, 17, 17, 0.05)" : "rgba(255, 77, 26, 0.1)",
-            padding: "5px 14px",
+            color: "#111111",
+            background: "rgba(17, 17, 17, 0.06)",
+            padding: "6px 14px",
             borderRadius: 999,
             cursor: "pointer",
-            transition: "all 0.2s ease",
           }}
         >
-          <span>{isMuted ? "🔇" : "🔊"}</span>
-          <span>{isMuted ? "Tap iPhone or button to unmute sound" : "Sound is playing inside iPhone · Tap to mute"}</span>
+          <span>{isMuted ? "🔇 Tap video or icon for sound" : "🔊 Sound On · Swipe left or right"}</span>
         </div>
 
-        {/* 8 INTERACTIVE PAGINATION PILLS */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-          }}
-        >
-          {reels.map((_, dotIdx) => {
-            const isActive = dotIdx === activeNormalizedIndex;
+        {/* Dot Indicators */}
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          {reels.map((_, i) => {
+            const active = i === activeIndex;
             return (
               <button
-                key={dotIdx}
+                key={i}
+                type="button"
+                aria-label={`View reel ${i + 1}`}
                 onClick={() => {
-                  targetProgressRef.current =
-                    Math.round(renderProgress) +
-                    ((((dotIdx - activeNormalizedIndex) % n) + n * 1.5) % n) -
-                    n * 0.5;
+                  let diff = i - activeIndex;
+                  if (diff > n / 2) diff -= n;
+                  if (diff < -n / 2) diff += n;
+                  targetProgressRef.current = Math.round(progressRef.current) + diff;
                   startPhysicsLoop();
                 }}
-                aria-label={`Go to reel ${dotIdx + 1}`}
                 style={{
-                  border: "none",
-                  padding: 0,
-                  width: isActive ? 24 : 7,
+                  width: active ? 22 : 7,
                   height: 7,
                   borderRadius: 999,
-                  background: isActive ? "#FF4D1A" : "rgba(17, 17, 17, 0.2)",
+                  background: active ? "#FF4D1A" : "rgba(17, 17, 17, 0.2)",
+                  border: "none",
+                  padding: 0,
                   cursor: "pointer",
-                  transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                  transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
                 }}
               />
             );

@@ -168,7 +168,6 @@ const ALL_CLIENT_REELS = [
     tag: "Meta Ad Creative",
     stats: "890K+ Views",
     videoSrc: "/videos/rVUkWK8lRmw.mp4",
-    poster: "/shiva-landing.webp",
   },
   {
     id: "reel-ntf-2",
@@ -199,7 +198,6 @@ const ALL_CLIENT_REELS = [
     tag: "Authority Brand",
     stats: "310K+ Views",
     videoSrc: "/videos/VdsrsWmmhiw.mp4",
-    poster: "/shiva-about.webp",
   },
   {
     id: "reel-5",
@@ -229,7 +227,6 @@ const ALL_CLIENT_REELS = [
     tag: "Wellness & Lifestyle",
     stats: "210K+ Views",
     videoSrc: "/videos/k-bJd1yYk1A.mp4",
-    poster: "/shiva.webp",
   },
   {
     id: "reel-8",
