@@ -291,7 +291,7 @@ const CLIENT_TESTIMONIALS = [
     quote: "Working with The Story Builder on our personal brand series was transformative. They directed the shoot, kept pacing razor-sharp, and the video quality was indistinguishable from an international film. Inbound inquiries tripled in the first 30 days.",
     name: "Jaya Daga",
     role: "Founder & Author, Authority Coaching",
-    image: "/shiva-about.webp",
+    icon: "founder",
     color: "#FFE27A", // Top Yellow Card
     ink: "#111111",
   },
@@ -299,7 +299,7 @@ const CLIENT_TESTIMONIALS = [
     quote: "The gym walkthrough and dynamic member workout reels they produced drove insane traction on Instagram. Filled our membership quota in two weeks flat. One crew, one brief.",
     name: "Icons Gym",
     role: "Management Team, Hyderabad",
-    image: "/shiva-landing.webp",
+    icon: "fitness",
     color: "#2D46F0", // Cobalt Card
     ink: "#FFFFFF",
   },
@@ -307,7 +307,7 @@ const CLIENT_TESTIMONIALS = [
     quote: "Their ad creatives outperformed every other video format we ran on Meta. The retention hooks and sound design made all the difference. Consistently generated 4.2x ROAS across campaigns.",
     name: "Digital Medha",
     role: "Growth Head, Performance Agency",
-    image: "/shiva.webp",
+    icon: "growth",
     color: "#CFF26A", // Neon Lime Card
     ink: "#111111",
   },
@@ -315,7 +315,7 @@ const CLIENT_TESTIMONIALS = [
     quote: "They captured the true soul and warmth of our learning environment with sensitivity and cinematic grace. The storytelling is authentic and the feedback from parents has been phenomenal.",
     name: "Vision Rainbow",
     role: "Creative Director, School & Learning Hub",
-    image: "https://res.cloudinary.com/dvr5erobx/video/upload/q_auto,w_400,so_2/v1793010466/portfolio%20video%20for%20editing%20services/vision%20rainbow/Vision_Rainbow_pre-primary_reel_2_aezhph.jpg",
+    icon: "education",
     color: "#FF4D1A", // Orange Card
     ink: "#FFFFFF",
   },

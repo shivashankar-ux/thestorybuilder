@@ -196,9 +196,10 @@ export default function QuoteDeck({
       boxShadow: depth === 0 ? "0 20px 45px -12px rgba(17,17,17,0.35)" : "0 10px 22px -10px rgba(17,17,17,0.2)",
       overflow: "hidden",
       display: "flex",
-      flexDirection: compact ? "column" : "row",
-      padding: compact ? "14px 14px 12px" : 18,
-      gap: compact ? 10 : 24,
+      flexDirection: "column",
+      justifyContent: "space-between",
+      padding: compact ? "20px 18px" : "26px 30px",
+      gap: compact ? 12 : 16,
       boxSizing: "border-box",
       cursor: depth === 0 ? (dragging ? "grabbing" : "grab") : "default",
       touchAction: depth === 0 ? "pan-y" : "auto",
@@ -231,6 +232,37 @@ export default function QuoteDeck({
     </svg>
   );
 
+  const renderClientIcon = (iconType, inkColor) => {
+    const stroke = inkColor || "#111111";
+    switch (iconType) {
+      case "fitness":
+        return (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M6.5 6.5L17.5 17.5M3.5 9.5L9.5 3.5M14.5 20.5L20.5 14.5M2 12l2-2m16 4l2-2" />
+          </svg>
+        );
+      case "growth":
+        return (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M3 17l6-6 4 4 8-8M17 7h4v4" />
+          </svg>
+        );
+      case "education":
+        return (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 10L12 5 2 10l10 5 10-5z" />
+            <path d="M6 12v5c0 1.7 2.7 3 6 3s6-1.3 6-3v-5" />
+          </svg>
+        );
+      default:
+        return (
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth="2.1" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M15 10l4.55-2.27A1 1 0 0 1 21 8.62v6.76a1 1 0 0 1-1.45.89L15 14v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2z" />
+          </svg>
+        );
+    }
+  };
+
   return (
     <div
       ref={wrapRef}
@@ -240,8 +272,9 @@ export default function QuoteDeck({
     >
       <div style={{ position: "relative", width: "100%", height: deckH, flexShrink: 0 }} aria-live="polite">
         {list.map((it, idx) => {
-          const src = srcOf(it.image);
           const depth = order.indexOf(idx);
+          const textLen = (it.quote || "").length;
+          const adaptiveFontSize = textLen > 165 ? Math.max(15, qSize - 3.5) : Math.max(16, qSize - 1.5);
           return (
             <figure
               key={idx}
@@ -252,34 +285,65 @@ export default function QuoteDeck({
               onPointerUp={depth === 0 ? onUp : undefined}
               onPointerCancel={depth === 0 ? onUp : undefined}
             >
-              <div
+              {/* Top Bar: Suitable Category Icon + 5-Star Rating */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: 12,
+                      background: it.ink === "#FFFFFF" ? "rgba(255,255,255,0.14)" : "rgba(17,17,17,0.08)",
+                      border: it.ink === "#FFFFFF" ? "1px solid rgba(255,255,255,0.22)" : "1px solid rgba(17,17,17,0.12)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {renderClientIcon(it.icon, it.ink)}
+                  </div>
+                  <span style={{ fontSize: 13, letterSpacing: "0.08em", opacity: 0.9 }} aria-label="5 out of 5 stars">
+                    ★★★★★
+                  </span>
+                </div>
+                <span style={{ ...qFont, fontSize: 38, lineHeight: 0.7, opacity: 0.35, userSelect: "none" }}>
+                  “
+                </span>
+              </div>
+
+              {/* Clean Full-Width Client Feedback Quote */}
+              <blockquote
                 style={{
-                  flex: compact ? "0 0 auto" : "0 0 34%",
-                  height: compact ? 120 : "100%",
-                  borderRadius: 14,
-                  overflow: "hidden",
-                  background: "rgba(0,0,0,0.15)",
+                  margin: 0,
+                  ...qFont,
+                  fontSize: compact ? Math.min(18, adaptiveFontSize) : adaptiveFontSize,
+                  lineHeight: 1.32,
+                  fontWeight: 600,
                 }}
               >
-                {src ? (
-                  <img
-                    src={src}
-                    alt={it.name}
-                    draggable={false}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "50% 25%", display: "block" }}
-                  />
-                ) : null}
-              </div>
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: compact ? "0 4px" : "12px 14px 10px 0", minWidth: 0 }}>
-                <blockquote style={{ margin: 0, ...qFont, fontSize: qSize, lineHeight: 1.25 }}>
-                  <span style={{ display: "block", fontSize: qSize * 2, lineHeight: 0.6, height: qSize * 0.9, opacity: 0.85 }}>“</span>
-                  {it.quote}
-                </blockquote>
-                <figcaption style={{ ...bFont, display: "flex", flexDirection: "column", gap: 2, marginTop: 14 }}>
-                  <span style={{ fontSize: 16, fontWeight: 700 }}>{it.name}</span>
-                  <span style={{ fontSize: 14, opacity: 0.75 }}>{it.role}</span>
-                </figcaption>
-              </div>
+                {it.quote}
+              </blockquote>
+
+              {/* Author Footer */}
+              <figcaption style={{ ...bFont, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, paddingTop: 10, borderTop: it.ink === "#FFFFFF" ? "1px solid rgba(255,255,255,0.16)" : "1px solid rgba(17,17,17,0.1)" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  <span style={{ fontSize: 16, fontWeight: 800 }}>{it.name}</span>
+                  <span style={{ fontSize: 13, opacity: 0.78, fontWeight: 500 }}>{it.role}</span>
+                </div>
+                <span
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 700,
+                    padding: "4px 10px",
+                    borderRadius: 999,
+                    background: it.ink === "#FFFFFF" ? "rgba(255,255,255,0.14)" : "rgba(17,17,17,0.08)",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  ✓ Verified Client
+                </span>
+              </figcaption>
             </figure>
           );
         })}
