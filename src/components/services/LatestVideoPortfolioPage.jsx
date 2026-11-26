@@ -7,7 +7,6 @@ import QuoteDeck from "../latestpf/QuoteDeck";
 import OrderForm from "../latestpf/OrderForm";
 import PhoneStackCarousel from "../latestpf/PhoneStackCarousel";
 import SplitScreenCapabilities from "../latestpf/SplitScreenCapabilities";
-import NudgeFooter from "../latestpf/NudgeFooter";
 import HeroIllustration from "../latestpf/HeroIllustration";
 import GalleryTunnel from "../latestpf/GalleryTunnel";
 import { trackPageView, trackEvent } from "../../utils/tracking";
@@ -2205,11 +2204,11 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 fontWeight: 600,
               }}
             >
-              <a href="#work" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
-                Work
-              </a>
               <a href="#reels" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
                 All Reels
+              </a>
+              <a href="#vault" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
+                Vault
               </a>
               <a href="#services" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
                 Services
@@ -2218,7 +2217,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 Reviews
               </a>
               <a href="#brief" style={{ color: "rgba(255, 255, 255, 0.75)", textDecoration: "none" }}>
-                Contact
+                Brief
               </a>
               <a
                 href={waUrl()}
@@ -2231,29 +2230,136 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             </div>
           </div>
 
-          {/* Centerpiece: Framer NudgeFooter with Giant Interactive Wordmark & Repelling Stickers */}
+          {/* Centerpiece: Clean Editorial Hero-Matched Finale (No Fruit Stickers) */}
           <div
             style={{
-              position: "relative",
               width: "100%",
-              maxWidth: 1200,
+              maxWidth: 1080,
               margin: "0 auto",
-              padding: isMobile ? "10px 0 20px" : "20px 0 40px",
+              padding: isMobile ? "12px 0 24px" : "16px 0 36px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
             }}
           >
-            <NudgeFooter
-              wordmark="The Story Builder"
-              color="#FF4D1A"
-              aspectRatio={isMobile ? 1.65 : 2.6}
-              mobileRatio={1.5}
-              enabled={true}
-              radius={isMobile ? 150 : 210}
-              distance={isMobile ? 95 : 135}
-              stiffness={115}
-              damping={15}
-              twist={18}
-              shadow={true}
-            />
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                fontSize: isMobile ? 10.5 : 12,
+                fontWeight: 700,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: "#FFFFFF",
+                background: "rgba(255, 255, 255, 0.08)",
+                border: "1px solid rgba(255, 255, 255, 0.14)",
+                padding: isMobile ? "6px 13px" : "7px 16px",
+                borderRadius: 999,
+                marginBottom: isMobile ? 16 : 22,
+              }}
+            >
+              <span style={{ color: "#CEF237" }}>✦</span>
+              <span>One Crew · One Brief · Hyderabad Studio</span>
+            </div>
+
+            <h2
+              style={{
+                margin: "0 0 14px",
+                fontSize: isMobile ? "clamp(30px, 8.2vw, 42px)" : "clamp(42px, 5vw, 66px)",
+                fontWeight: 700,
+                lineHeight: 1.08,
+                letterSpacing: "-0.035em",
+                color: "#FFFFFF",
+                maxWidth: 820,
+              }}
+            >
+              Shot by Storytellers,
+              <br />
+              Ready to{" "}
+              <span style={{ color: "#FF4D1A", fontWeight: 800 }}>Stop the Scroll?</span>
+            </h2>
+
+            <p
+              style={{
+                margin: "0 0 26px",
+                fontSize: isMobile ? 14 : 16.5,
+                lineHeight: 1.5,
+                color: "rgba(255, 255, 255, 0.68)",
+                maxWidth: 560,
+                fontWeight: 500,
+              }}
+            >
+              From brand & competitor research to scripted 4K shoots and high-retention edits — let’s build your next campaign.
+            </p>
+
+            {/* 2 Hero-Matched Pill CTAs */}
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 12,
+                marginBottom: isMobile ? 32 : 48,
+              }}
+            >
+              <a
+                href={waUrl("Hi Story Builder team, I’m ready to book a shoot & edit package.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackEvent("Contact", { method: "whatsapp", placement: "latestpf_footer" })}
+                style={{
+                  background: "#FF4D1A",
+                  color: "#FFFFFF",
+                  textDecoration: "none",
+                  fontSize: isMobile ? 13.5 : 14.5,
+                  fontWeight: 700,
+                  padding: isMobile ? "12px 22px" : "13px 26px",
+                  borderRadius: 999,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  boxShadow: "0 10px 24px rgba(255, 77, 26, 0.28)",
+                }}
+              >
+                Chat on WhatsApp ↗
+              </a>
+
+              <a
+                href="#brief"
+                style={{
+                  background: "#FFFFFF",
+                  color: "#111111",
+                  textDecoration: "none",
+                  fontSize: isMobile ? 13.5 : 14.5,
+                  fontWeight: 700,
+                  padding: isMobile ? "12px 22px" : "13px 26px",
+                  borderRadius: 999,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                }}
+              >
+                Build Project Brief ↑
+              </a>
+            </div>
+
+            {/* Clean Architectural Brand Wordmark */}
+            <div
+              style={{
+                fontSize: isMobile ? "clamp(32px, 9.5vw, 48px)" : "clamp(58px, 8.8vw, 120px)",
+                fontWeight: 800,
+                letterSpacing: "-0.05em",
+                lineHeight: 0.95,
+                color: "#FF4D1A",
+                userSelect: "none",
+                whiteSpace: "nowrap",
+              }}
+            >
+              the story builder<span style={{ color: "#CEF237" }}>✦</span>
+            </div>
           </div>
 
           {/* Bottom Copyright & Location Metadata */}
