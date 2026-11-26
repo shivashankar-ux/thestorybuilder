@@ -1066,7 +1066,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             All Reels
           </a>
           <a
-            href="#work"
+            href="#vault"
             style={{
               textDecoration: "none",
               color: "#111111",
@@ -1076,7 +1076,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
               opacity: 0.85,
             }}
           >
-            Work
+            Vault
           </a>
           <a
             href="#services"
@@ -1283,7 +1283,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             </a>
 
             <a
-              href="#work"
+              href="#reels"
               onMouseDown={triggerButtonSpring}
               onMouseMove={(e) => onMagneticMove(e, 0.25)}
               onMouseLeave={onMagneticLeave}
@@ -1520,405 +1520,12 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         />
       </section>
 
-      {/* 5. SELECTED WORK ("Sel...") SECTION — 4 STORY BUILDER SHOWCASE CARDS */}
+      {/* 5. 3D PRODUCTION VAULT — INTERACTIVE GALLERY TUNNEL WITH REAL SHOOT FOOTAGE */}
       <section
-        id="work"
-        className="latestpf-work-section"
-        style={{
-          scrollMarginTop: isMobile ? "75px" : "100px",
-          padding: isMobile ? "0 16px 44px" : "0 24px clamp(60px, 8vw, 110px)",
-          maxWidth: 1280,
-          margin: "0 auto",
-          boxSizing: "border-box",
-        }}
-      >
-        {/* Section Header: Featured Client Campaigns */}
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "flex-end",
-            justifyContent: "space-between",
-            gap: isMobile ? 12 : 20,
-            marginBottom: isMobile ? 24 : "clamp(36px, 5vw, 60px)",
-            borderBottom: "1px solid rgba(17, 17, 17, 0.12)",
-            paddingBottom: isMobile ? 16 : 24,
-          }}
-        >
-          <div>
-            <span
-              style={{
-                fontSize: isMobile ? 11 : 12,
-                fontWeight: 800,
-                letterSpacing: "0.06em",
-                textTransform: "uppercase",
-                color: "#FF4D1A",
-                display: "block",
-                marginBottom: 6,
-              }}
-            >
-              ✦ Featured Client Campaigns
-            </span>
-            <h3
-              className="latestpf-watermark-1"
-              style={{
-                margin: 0,
-                fontSize: isMobile ? "clamp(30px, 7.5vw, 40px)" : "clamp(40px, 5vw, 64px)",
-                fontWeight: 800,
-                lineHeight: 1.02,
-                letterSpacing: "-0.04em",
-                color: "#111111",
-                display: "inline-block",
-                willChange: "transform",
-              }}
-            >
-              Selected Work & Case Studies
-            </h3>
-          </div>
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 12,
-              maxWidth: 460,
-            }}
-          >
-            <p
-              style={{
-                margin: 0,
-                fontSize: isMobile ? 13 : "clamp(14px, 1.4vw, 16px)",
-                lineHeight: 1.45,
-                color: "rgba(17, 17, 17, 0.68)",
-                fontWeight: 500,
-              }}
-            >
-              End-to-end productions delivered for commercial brands, luxury properties, gyms, and founders. Tap any project to watch the full master cut with sound.
-            </p>
-            <span
-              style={{
-                fontSize: isMobile ? 13 : 16,
-                fontWeight: 700,
-                color: "#111111",
-                fontVariantNumeric: "tabular-nums",
-                background: "rgba(17, 17, 17, 0.08)",
-                padding: isMobile ? "4px 10px" : "6px 12px",
-                borderRadius: 999,
-                flexShrink: 0,
-              }}
-            >
-              05
-            </span>
-          </div>
-        </div>
-
-        {/* 4 Showcase Cards Sticky Stacking Deck on Scroll */}
-        <div
-          style={{
-            position: "relative",
-            display: "flex",
-            flexDirection: "column",
-            paddingBottom: isMobile ? "24px" : "40px",
-          }}
-        >
-          {SHOWCASE_CARDS.map((card, index) => {
-            const topOffset = isMobile
-              ? `calc(56px + ${index * 10}px)`
-              : `calc(78px + ${index * 26}px)`;
-            const isLast = index === SHOWCASE_CARDS.length - 1;
-            return (
-              <div
-                key={card.id}
-                className="latestpf-showcase-card"
-                onMouseMove={onCardMouseMove}
-                onMouseLeave={onCardMouseLeave}
-                style={{
-                  position: "sticky",
-                  top: topOffset,
-                  zIndex: 10 + index,
-                  background: card.bgColor,
-                  color: card.inkColor,
-                  borderRadius: isMobile ? 22 : 36,
-                  border: `${isMobile ? 2 : 3}px solid ${card.borderColor}`,
-                  padding: isMobile ? "14px 14px 16px" : "clamp(20px, 3.2vw, 36px)",
-                  marginBottom: isLast ? "0px" : isMobile ? "clamp(24px, 5vh, 44px)" : "clamp(120px, 28vh, 260px)",
-                  display: "grid",
-                  gridTemplateColumns: isMobile ? "1fr" : "repeat(auto-fit, minmax(min(100%, 380px), 1fr))",
-                  gap: isMobile ? 16 : "clamp(24px, 3.5vw, 44px)",
-                  alignItems: "center",
-                  boxShadow: `0 ${14 + index * 8}px ${36 + index * 12}px -12px rgba(17, 17, 17, ${0.16 + index * 0.04})`,
-                  overflow: "hidden",
-                  transition: "transform 0.35s ease, box-shadow 0.35s ease",
-                  transformOrigin: "top center",
-                }}
-              >
-              {/* Left Column: Live Video Loop Preview inside Card */}
-              <div
-                onClick={() => {
-                  setActiveVideo(card);
-                  trackEvent("video_play", "portfolio_reel", card.title);
-                }}
-                style={{
-                  position: "relative",
-                  borderRadius: isMobile ? 14 : 22,
-                  overflow: "hidden",
-                  aspectRatio: isMobile ? "16 / 9" : "16 / 10",
-                  background: "#000000",
-                  cursor: "pointer",
-                  boxShadow: "0 14px 30px -10px rgba(17, 17, 17, 0.25)",
-                }}
-              >
-                {/* Playing Real Video Loop Preview with Lazy Viewport Observer */}
-                <ShowcaseCardVideo card={card} isMobile={isMobile} />
-
-                {/* Top-Left Category Pill */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: isMobile ? 10 : 14,
-                    left: isMobile ? 10 : 14,
-                    background: "rgba(255, 255, 255, 0.94)",
-                    color: "#111111",
-                    fontSize: isMobile ? 10 : 11,
-                    fontWeight: 800,
-                    letterSpacing: "0.06em",
-                    textTransform: "uppercase",
-                    padding: isMobile ? "4px 10px" : "6px 14px",
-                    borderRadius: 999,
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.14)",
-                    zIndex: 2,
-                  }}
-                >
-                  {card.cat}
-                </div>
-
-                {/* Center Pulsing Play Overlay Button */}
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background: "rgba(0, 0, 0, 0.2)",
-                    transition: "background 0.3s ease",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: isMobile ? 48 : 60,
-                      height: isMobile ? 48 : 60,
-                      borderRadius: 999,
-                      background: "rgba(255, 255, 255, 0.95)",
-                      color: "#111111",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: isMobile ? 16 : 20,
-                      boxShadow: "0 10px 24px rgba(0, 0, 0, 0.3)",
-                      paddingLeft: 3,
-                    }}
-                  >
-                    ▶
-                  </div>
-                </div>
-
-                {/* Bottom stats pill */}
-                <div
-                  style={{
-                    position: "absolute",
-                    bottom: isMobile ? 8 : 12,
-                    right: isMobile ? 8 : 12,
-                    background: "rgba(0, 0, 0, 0.72)",
-                    backdropFilter: "blur(6px)",
-                    color: "#FFFFFF",
-                    fontSize: isMobile ? 10 : 11,
-                    fontWeight: 600,
-                    padding: "3px 8px",
-                    borderRadius: 6,
-                  }}
-                >
-                  {card.stats}
-                </div>
-              </div>
-
-              {/* Right Column: Content, Real Project Details & Action Button */}
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  minHeight: "100%",
-                  gap: isMobile ? 12 : 20,
-                  position: "relative",
-                }}
-              >
-                {/* Floating Thumbnail in Top Right (Real Project Still!) - Desktop only */}
-                {!isMobile && (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: -4,
-                      right: 0,
-                      width: 58,
-                      height: 58,
-                      borderRadius: 14,
-                      overflow: "hidden",
-                      border: "2px solid rgba(255, 255, 255, 0.4)",
-                      boxShadow: "0 10px 20px rgba(0,0,0,0.18)",
-                    }}
-                  >
-                    <img
-                      src={card.miniThumb}
-                      alt={card.title}
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                    />
-                  </div>
-                )}
-
-                <div>
-                  <span
-                    style={{
-                      display: "block",
-                      fontSize: isMobile ? 11 : 13,
-                      fontWeight: 700,
-                      opacity: 0.75,
-                      marginBottom: isMobile ? 4 : 8,
-                      letterSpacing: "0.02em",
-                      textTransform: "uppercase",
-                    }}
-                  >
-                    {card.subtitle}
-                  </span>
-
-                  <h4
-                    style={{
-                      margin: isMobile ? "0 0 8px" : "0 0 14px",
-                      fontSize: isMobile ? "clamp(20px, 5vw, 24px)" : "clamp(30px, 4vw, 48px)",
-                      fontWeight: 800,
-                      lineHeight: 1.1,
-                      letterSpacing: "-0.03em",
-                      color: card.inkColor,
-                    }}
-                  >
-                    {card.title}
-                  </h4>
-
-                  <p
-                    style={{
-                      margin: isMobile ? "0 0 14px" : "0 0 24px",
-                      fontSize: isMobile ? 13 : "clamp(14px, 1.4vw, 16px)",
-                      lineHeight: 1.45,
-                      opacity: 0.9,
-                      fontWeight: 500,
-                      maxWidth: 440,
-                    }}
-                  >
-                    {card.desc}
-                  </p>
-
-                  {/* Tag Pills */}
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: isMobile ? 6 : 8 }}>
-                    {card.tags.map((tag, i) => (
-                      <span
-                        key={i}
-                        style={{
-                          background: card.badgeBg,
-                          color: card.inkColor,
-                          fontSize: isMobile ? 11 : 12,
-                          fontWeight: 700,
-                          padding: isMobile ? "4px 10px" : "6px 14px",
-                          borderRadius: 999,
-                          letterSpacing: "-0.01em",
-                        }}
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Bottom Row: Actions */}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    paddingTop: isMobile ? 10 : 16,
-                  }}
-                >
-                  <button
-                    onClick={() => {
-                      setActiveVideo(card);
-                      trackEvent("video_play", "portfolio_reel", card.title);
-                    }}
-                    style={{
-                      background: "none",
-                      border: "none",
-                      color: card.inkColor,
-                      fontSize: isMobile ? 13 : 14,
-                      fontWeight: 700,
-                      padding: 0,
-                      cursor: "pointer",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 6,
-                      textDecoration: "underline",
-                      textUnderlineOffset: 4,
-                    }}
-                  >
-                    Watch Full Cut With Sound ↗
-                  </button>
-
-                  {/* Circular Button Matching Template (Black/White with Arrow) with Anime.js Spring & GSAP Magnetic Pull */}
-                  <button
-                    onClick={() => {
-                      setActiveVideo(card);
-                      trackEvent("video_play", "portfolio_reel", card.title);
-                    }}
-                    onMouseDown={triggerButtonSpring}
-                    onMouseMove={(e) => onMagneticMove(e, 0.45)}
-                    onMouseLeave={onMagneticLeave}
-                    aria-label={`Watch ${card.title}`}
-                    style={{
-                      width: isMobile ? 44 : 52,
-                      height: isMobile ? 44 : 52,
-                      borderRadius: 999,
-                      background: card.btnBg,
-                      color: card.btnInk,
-                      border: "none",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      boxShadow: "0 8px 18px rgba(0,0,0,0.18)",
-                      transition: "box-shadow 0.2s ease",
-                      flexShrink: 0,
-                      willChange: "transform",
-                    }}
-                  >
-                    <svg width={isMobile ? "18" : "20"} height={isMobile ? "18" : "20"} viewBox="0 0 20 20" fill="none">
-                      <path
-                        d="M4 10h12M11 4.5l5.5 5.5-5.5 5.5"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-        </div>
-      </section>
-
-      {/* 5.5. 3D PRODUCTION VAULT — INTERACTIVE GALLERY TUNNEL WITH REAL SHOOT FOOTAGE */}
-      <section
+        id="vault"
         className="latestpf-vault-section"
         style={{
+          scrollMarginTop: isMobile ? "75px" : "100px",
           padding: isMobile ? "0 16px 44px" : "0 24px clamp(60px, 8vw, 100px)",
           maxWidth: 1280,
           margin: "0 auto",
@@ -2089,7 +1696,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 marginBottom: 6,
               }}
             >
-              ✦ What We Do Under One Roof
+              ✦ How We Work · After Client Onboarding
             </span>
             <h3
               className="latestpf-watermark-2"
@@ -2104,7 +1711,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 willChange: "transform",
               }}
             >
-              From Script to Final 4K Cut
+              Our 4-Step Shoot & Edit Process
             </h3>
           </div>
 
@@ -2118,7 +1725,7 @@ export default function LatestVideoPortfolioPage({ setPage }) {
                 fontWeight: 500,
               }}
             >
-              Stop juggling separate cameramen, editors, and colorists. Explore our 5-stage production pipeline below — tap any stage to preview.
+              After client onboarding, we research your brand & competition, plan Reels with scripts, shoot only after script approval, and finish in post-production.
             </p>
           </div>
         </div>
