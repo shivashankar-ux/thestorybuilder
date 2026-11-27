@@ -6,6 +6,7 @@ import verifyPaymentHandler from './api/verify-payment.js';
 import adminEbooksHandler from './api/admin-ebooks.js';
 import adminUploadHandler from './api/admin-upload.js';
 import usQuoteHandler from './api/us-quote.js';
+import consoleInviteHandler from './api/console-invite.js';
 
 dotenv.config();
 
@@ -34,6 +35,10 @@ app.all('/api/admin-upload', (req, res) => {
 
 app.post('/api/us-quote', (req, res) => {
   usQuoteHandler(req, res);
+});
+
+app.all('/api/console-invite', (req, res) => {
+  consoleInviteHandler(req, res);
 });
 
 app.listen(port, () => {

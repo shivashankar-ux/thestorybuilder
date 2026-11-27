@@ -145,6 +145,19 @@ textarea{width:100%;min-height:150px;background:var(--surface);color:var(--fg);b
       <div class="fld"><label for="loginPass">Password</label><input id="loginPass" type="password" required autocomplete="current-password"></div>
       <div id="loginError" class="mini" style="color:var(--bad)"></div>
       <button type="submit" class="btn primary" id="loginBtn">Log in</button>
+      <a href="#" id="forgotLink" class="mini" style="color:var(--accent);text-align:center">Forgot password?</a>
+    </form>
+  </div>
+</div>
+
+<div class="wrap" id="setPwWrap" style="max-width:380px;margin:60px auto;display:none">
+  <div class="pane" style="padding:24px">
+    <div class="brand" style="margin-bottom:18px"><div class="logo">S</div><div>Set your password</div></div>
+    <form id="setPwForm" style="display:flex;flex-direction:column;gap:12px">
+      <div class="fld"><label for="setPwNew">New password</label><input id="setPwNew" type="password" required autocomplete="new-password" minlength="8"></div>
+      <div class="fld"><label for="setPwConfirm">Confirm password</label><input id="setPwConfirm" type="password" required autocomplete="new-password" minlength="8"></div>
+      <div id="setPwError" class="mini" style="color:var(--bad)"></div>
+      <button type="submit" class="btn primary">Set password &amp; continue</button>
     </form>
   </div>
 </div>
@@ -285,6 +298,19 @@ async function upsertPerson(p){const{error}=await sb.from('people').upsert(mapPe
 async function deletePerson(id){const{error}=await sb.from('people').delete().eq('id',id);if(error)throw error}
 async function insertActivity(a){const{error}=await sb.from('activity_log').insert(mapActivityOut(a));if(error)throw error}
 
+async function inviteLogin({email,name,role,clientId}){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session) throw new Error('Not logged in');
+  const res=await fetch('/api/console-invite',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
+    body:JSON.stringify({email,name,role,clientId})
+  });
+  const json=await res.json().catch(()=>({ok:false,error:'Unexpected server response'}));
+  if(!json.ok) throw new Error(json.error||'Invite failed');
+  return json;
+}
+
 function log(who,text,c,cv){state.activity.unshift({id:uid(),t:now(),who,text,c:c||null,cv:!!cv}); state.activity.length=Math.min(state.activity.length,60)}
 let tt=0;
 function toast(m){const el=$('#toast');el.textContent=m;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2400)}
@@ -350,6 +376,7 @@ function saveClient(p){
   const start=fromIso(d.cf_start)||now(),endIn=fromIso(d.cf_end);
   const fee=p.role==='admin'?Math.max(0,Number(d.cf_fee)||0):null;
   const isNew=p.form.id==='new';
+  const inviteEmail=(d.cf_email||'').trim(),inviteName=(d.cf_contact||'').trim()||name;
   let c, linkedLead=null;
   mutate(()=>{
     if(isNew){c={id:uid(),fee:0,created:now()};state.clients.push(c)}else c=client(p.form.id);
@@ -359,10 +386,14 @@ function saveClient(p){
     if(isNew&&p.form.lead){const l=state.leads.find(l=>l.id===p.form.lead);if(l){l.clientId=c.id;l.stage='Plan signed';linkedLead=l}}
     log('Team',(isNew?'added client ':'updated client ')+c.name,c.id,false);
     p.form=null;
-  },isNew?'Client added':'Client updated everywhere',()=>{
+  },isNew?'Client added':'Client updated everywhere',async()=>{
     const tasks=[upsertClient(c),insertActivity(state.activity[0])];
     if(linkedLead) tasks.push(upsertLead(linkedLead));
-    return Promise.all(tasks);
+    await Promise.all(tasks);
+    if(isNew&&inviteEmail){
+      try{ await inviteLogin({email:inviteEmail,name:inviteName,role:'client',clientId:c.id}); toast('Login invite sent to '+inviteEmail) }
+      catch(e){ toast('Client saved, but invite email failed: '+e.message) }
+    }
   });
 }
 
@@ -434,8 +465,15 @@ const A={
   },
   addperson:()=>{
     const name=(drafts.pName||'').trim();if(!name){toast('Enter the name');return}
+    const email=(drafts.pEmail||'').trim();
     let person_;
-    mutate(()=>{person_={id:uid(),name,job:drafts.pJob||'Planner'};state.people.push(person_);drafts.pName='';log('Team','added team member '+name,null,false)},'Team member added',()=>Promise.all([upsertPerson(person_),insertActivity(state.activity[0])]));
+    mutate(()=>{person_={id:uid(),name,job:drafts.pJob||'Planner'};state.people.push(person_);drafts.pName='';drafts.pEmail='';log('Team','added team member '+name,null,false)},'Team member added',async()=>{
+      await Promise.all([upsertPerson(person_),insertActivity(state.activity[0])]);
+      if(email){
+        try{ await inviteLogin({email,name,role:'manager'}); toast('Login invite sent to '+email) }
+        catch(e){ toast('Team member saved, but invite email failed: '+e.message) }
+      }
+    });
   },
   del:d=>{
     const key=d.k+':'+d.id;
@@ -543,7 +581,7 @@ function clientForm(p){
   const f=p.form,isNew=f.id==='new',c=isNew?null:client(f.id),admin=p.role==='admin';
   const linked=c?itemsOf(c.id).length+' content item(s) and '+state.invoices.filter(i=>i.c===c.id).length+' invoice(s)':'';
   return '<div class="panel"><div class="panel-h"><h2>'+(isNew?'Add client':'Edit '+esc(c.name))+'</h2><button type="button" class="btn sm" data-a="cclose" data-pane="'+p.id+'">Cancel</button></div>'+
-   '<div class="formgrid">'+sugField(p,'Client or business name','cf_name')+fld(p,'Contact person','cf_contact','text')+fld(p,'Phone','cf_phone','text')+fld(p,'Email','cf_email','text')+
+   '<div class="formgrid">'+sugField(p,'Client or business name','cf_name')+fld(p,'Client name','cf_contact','text')+fld(p,'Phone','cf_phone','text')+fld(p,'Email','cf_email','text')+
    fld(p,'Service','cf_service','select',SERVICES)+fld(p,'Engagement','cf_plan','select',PLANS.map(x=>[x[0],x[1]]))+
    (admin?fld(p,'Fee in rupees (per billing period)','cf_fee','text',null,'e.g. 20000'):'')+
    fld(p,'Start date','cf_start','date')+fld(p,'End or delivery date (empty = automatic for retainers)','cf_end','date')+fld(p,'Status','cf_status','select',STATUSES)+fld(p,'Notes','cf_notes','text')+'</div>'+
@@ -597,7 +635,7 @@ function vInvoices(p){
 }
 function vTeam(p){
   const admin=p.role==='admin';
-  return (admin?'<div class="addform"><input type="text" id="t'+p.id+'n" placeholder="Name" data-draft="pName" value="'+esc(drafts.pName||'')+'" aria-label="Name"><select data-c="draft" data-key="pJob" aria-label="Job">'+JOBS.map(j=>'<option'+((drafts.pJob||'Planner')===j?' selected':'')+'>'+j+'</option>').join('')+'</select><button type="button" class="btn primary" data-a="addperson">Add team member</button></div>':'')+
+  return (admin?'<div class="addform"><input type="text" id="t'+p.id+'n" placeholder="Name" data-draft="pName" value="'+esc(drafts.pName||'')+'" aria-label="Name"><input type="email" id="t'+p.id+'e" placeholder="Email (optional — sends a login invite)" data-draft="pEmail" value="'+esc(drafts.pEmail||'')+'" aria-label="Email"><select data-c="draft" data-key="pJob" aria-label="Job">'+JOBS.map(j=>'<option'+((drafts.pJob||'Planner')===j?' selected':'')+'>'+j+'</option>').join('')+'</select><button type="button" class="btn primary" data-a="addperson">Add team member</button></div>':'')+
   (state.people.length?'<div class="list">'+state.people.map(u=>{const t=tasksFor(u.id),od=t.filter(r=>r.stage==='script_approved'&&r.shoot&&r.shoot<now()).length;
     return '<div class="row"><div class="grow"><div class="t">'+esc(u.name)+'</div><div class="m">'+esc(u.job)+'</div></div><span class="pill">'+t.length+' open</span>'+(od?'<span class="pill bad">'+od+' late</span>':'<span class="pill good">on track</span>')+(admin?delBtn('person',u.id,'Remove'):'')+'</div>'}).join('')+'</div>':'<div class="empty">No team members yet</div>')+
   '<div class="note">Planner, Videographer and Editor get the My day view. New content items are assigned to the first person with the matching job; change it on the content board.</div>';
@@ -689,6 +727,35 @@ function tick(){
 }
 
 /* ---------- auth / bootstrap ---------- */
+function showSetPasswordScreen(){
+  $('#loginWrap').style.display='none';
+  $('#appWrap').style.display='none';
+  $('#setPwWrap').style.display='';
+}
+document.getElementById('forgotLink').addEventListener('click',async e=>{
+  e.preventDefault();
+  const email=document.getElementById('loginEmail').value.trim();
+  if(!email){toast('Enter your email above first');return}
+  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+'/db'});
+  if(error){toast(error.message);return}
+  toast('Check your email for a reset link.');
+});
+document.getElementById('setPwForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const pw=document.getElementById('setPwNew').value,pw2=document.getElementById('setPwConfirm').value;
+  const err=document.getElementById('setPwError');
+  err.textContent='';
+  if(pw.length<8){err.textContent='Password must be at least 8 characters.';return}
+  if(pw!==pw2){err.textContent='Passwords do not match.';return}
+  const {error}=await sb.auth.updateUser({password:pw});
+  if(error){err.textContent=error.message;return}
+  history.replaceState(null,'',location.pathname);
+  $('#setPwWrap').style.display='none';
+  await boot();
+});
+sb.auth.onAuthStateChange((event)=>{
+  if(event==='PASSWORD_RECOVERY') showSetPasswordScreen();
+});
 async function boot(){
   const {data:{session}}=await sb.auth.getSession();
   if(!session){$('#loginWrap').style.display='';$('#appWrap').style.display='none';return}
@@ -722,7 +789,15 @@ document.getElementById('loginForm').addEventListener('submit',async e=>{
   if(error){errEl.textContent=error.message;return}
   await boot();
 });
-boot();
+(async function start(){
+  const hash=window.location.hash||'';
+  if(hash.indexOf('type=invite')>-1||hash.indexOf('type=recovery')>-1){
+    await new Promise(r=>setTimeout(r,300)); // let supabase-js finish parsing the URL into a session
+    showSetPasswordScreen();
+  } else {
+    await boot();
+  }
+})();
 setInterval(tick,5000);
 })();
 </script>
