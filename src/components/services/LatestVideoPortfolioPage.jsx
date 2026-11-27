@@ -10,6 +10,7 @@ import SplitScreenCapabilities from "../latestpf/SplitScreenCapabilities";
 import HeroIllustration from "../latestpf/HeroIllustration";
 import GalleryTunnel from "../latestpf/GalleryTunnel";
 import InfinityGallery from "../latestpf/InfinityGallery";
+import ClayRobot from "../latestpf/ClayRobot";
 import { trackPageView, trackEvent } from "../../utils/tracking";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -2204,6 +2205,81 @@ export default function LatestVideoPortfolioPage({ setPage }) {
             muted="rgba(17, 17, 17, 0.6)"
             buttonText="#FFFFFF"
           />
+        </div>
+      </section>
+
+      {/* 9.5. INTERACTIVE 3D CLAY MASCOT JUST ABOVE FOOTER */}
+      <section
+        style={{
+          padding: isMobile ? "0 16px 36px" : "0 24px clamp(44px, 6vw, 72px)",
+          maxWidth: 1100,
+          margin: "0 auto",
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: isMobile ? 280 : 420,
+            borderRadius: isMobile ? 22 : 36,
+            overflow: "hidden",
+            border: "2px solid rgba(17, 17, 17, 0.08)",
+            boxShadow: "0 24px 60px -15px rgba(17, 17, 17, 0.1)",
+          }}
+        >
+          <ClayRobot
+            background={{
+              top: "#E8E2D8",
+              bottom: "#F3EFEA",
+              shadow: "#BFB3A3",
+              shadowDepth: 38,
+            }}
+            colors={{
+              clay: "#FF5A2B",
+              visor: "#111318",
+              eyes: "#CEF237",
+            }}
+            scale={isMobile ? 92 : 100}
+            walk={true}
+            walkSpeed={5}
+            wave={true}
+            blink={true}
+            glance={5}
+            response={{
+              track: "page",
+              headTurn: 7,
+              eyeTravel: 6,
+              followSpeed: 6,
+              hop: 6,
+            }}
+          />
+
+          {/* Subtle Brand Overlay Pill */}
+          <div
+            style={{
+              position: "absolute",
+              top: isMobile ? 12 : 18,
+              left: isMobile ? 12 : 20,
+              pointerEvents: "none",
+              background: "rgba(17, 17, 17, 0.82)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+              color: "#FFFFFF",
+              fontSize: isMobile ? 10 : 11.5,
+              fontWeight: 700,
+              letterSpacing: "0.05em",
+              textTransform: "uppercase",
+              padding: isMobile ? "5px 11px" : "6px 14px",
+              borderRadius: 999,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+            }}
+          >
+            <span style={{ color: "#CEF237" }}>✦</span>
+            <span>{isMobile ? "Tap me to hop!" : "Move cursor or tap to say hi"}</span>
+          </div>
         </div>
       </section>
 
