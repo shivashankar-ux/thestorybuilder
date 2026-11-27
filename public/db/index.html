@@ -198,6 +198,28 @@ textarea{width:100%;min-height:150px;background:var(--surface);color:var(--fg);b
   .head-email{display:none}
 }
 
+/* ---------- vertical stacking on phones: no squeezed horizontal rows/tables ---------- */
+@media (max-width:700px){
+  .row{flex-direction:column;align-items:stretch;gap:6px}
+  .row .grow{min-width:0;width:100%}
+  .row>*:not(.grow){align-self:flex-start}
+  .step{flex-direction:column;align-items:stretch}
+  .step .grow{min-width:0;width:100%}
+  .step>*:not(.grow){align-self:flex-start}
+
+  .scroll-x{overflow-x:visible}
+  table.table{display:block;width:100%}
+  table.table thead{display:none}
+  table.table tbody{display:block}
+  table.table tr{display:block;margin-bottom:10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface2)}
+  table.table tr:last-child{margin-bottom:0}
+  table.table td{display:block;padding:7px 0;border-top:1px solid var(--line);text-align:left}
+  table.table tr td:first-child{border-top:0;padding-top:0}
+  table.table td[data-label]{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  table.table td[data-label]::before{content:attr(data-label);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;flex:none;padding-top:2px}
+  table.table td.num{text-align:right}
+}
+
 /* ---------- mobile bottom nav (Instagram-style) ---------- */
 .bottom-nav{display:none}
 @media (max-width:860px){
@@ -719,7 +741,7 @@ function vClients(p){
   if(!state.clients.length)return h+'<div class="empty">No clients yet. Add your first one.</div>';
   h+='<div class="scroll-x"><table class="table"><thead><tr><th>Client</th><th>Service</th><th>Engagement</th><th>Period</th><th>Content</th>'+(admin?'<th class="num">Unpaid</th>':'')+'<th></th></tr></thead><tbody>'+state.clients.map(c=>{
     const d=daysLeft(c),un=state.invoices.filter(i=>i.c===c.id&&!i.paid).reduce((s,i)=>s+i.amount,0);
-    return '<tr><td><b>'+esc(c.name)+'</b> <span class="pill '+(c.status==='Active'?'good':c.status==='On hold'?'warn':'')+'">'+c.status+'</span><div class="mini">'+esc([c.contact,c.phone].filter(Boolean).join(' · '))+'</div></td><td>'+esc(c.service)+'</td><td>'+planLabel(c)+(admin&&c.fee?'<div class="mini">'+money(c.fee)+(isRet(c)?' / '+PER[c.months]:'')+'</div>':'')+'</td><td>'+dstr(c.start)+(c.end?' to '+dstr(c.end)+(c.status==='Active'&&isRet(c)?'<div class="mini"><span class="pill '+(d<=14?'warn':'')+'">'+d+' days left</span></div>':''):'')+'</td><td style="min-width:110px">'+segsFor(c.id)+'</td>'+(admin?'<td class="num">'+(un?money(un):'-')+'</td>':'')+'<td><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn sm" data-a="cedit" data-pane="'+p.id+'" data-client="'+c.id+'">Edit</button><button type="button" class="btn sm" data-a="open" data-pane="'+p.id+'" data-client="'+c.id+'">Client view</button>'+(admin?delBtn('client',c.id):'')+'</div></td></tr>'}).join('')+'</tbody></table></div>';
+    return '<tr><td data-label="Client"><b>'+esc(c.name)+'</b> <span class="pill '+(c.status==='Active'?'good':c.status==='On hold'?'warn':'')+'">'+c.status+'</span><div class="mini">'+esc([c.contact,c.phone].filter(Boolean).join(' · '))+'</div></td><td data-label="Service">'+esc(c.service)+'</td><td data-label="Plan">'+planLabel(c)+(admin&&c.fee?'<div class="mini">'+money(c.fee)+(isRet(c)?' / '+PER[c.months]:'')+'</div>':'')+'</td><td data-label="Period">'+dstr(c.start)+(c.end?' to '+dstr(c.end)+(c.status==='Active'&&isRet(c)?'<div class="mini"><span class="pill '+(d<=14?'warn':'')+'">'+d+' days left</span></div>':''):'')+'</td><td data-label="Content" style="min-width:110px">'+segsFor(c.id)+'</td>'+(admin?'<td data-label="Unpaid" class="num">'+(un?money(un):'-')+'</td>':'')+'<td><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn sm" data-a="cedit" data-pane="'+p.id+'" data-client="'+c.id+'">Edit</button><button type="button" class="btn sm" data-a="open" data-pane="'+p.id+'" data-client="'+c.id+'">Client view</button>'+(admin?delBtn('client',c.id):'')+'</div></td></tr>'}).join('')+'</tbody></table></div>';
   if(armed&&armed.startsWith('client:')){const c=client(armed.slice(7));if(c)h+='<div class="note">Deleting <b>'+esc(c.name)+'</b> also removes '+itemsOf(c.id).length+' content item(s) and '+state.invoices.filter(i=>i.c===c.id).length+' invoice(s). Click the red button again to confirm.</div>'}
   return h;
 }
@@ -748,14 +770,14 @@ function vApprovals(p){
   if(!pend.length)return '<div class="empty">No approvals waiting</div>';
   return '<div class="scroll-x"><table class="table"><thead><tr><th>Item</th><th>Client</th><th>Type</th><th>Clock</th><th></th></tr></thead><tbody>'+pend.map(r=>{
     const od=due(r)<now();
-    return '<tr><td><b>'+esc(r.title)+'</b>'+(r.rev>FREE_REVISIONS?' <span class="pill bad">extra round</span>':'')+'</td><td>'+esc(cname(r.c))+'</td><td>'+(r.stage==='script_sent'?'Draft':'Edit')+'</td><td>'+cd(due(r))+'</td><td><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn sm" data-a="remind" data-reel="'+r.id+'">Remind</button><button type="button" class="btn sm good" data-a="adv" data-reel="'+r.id+'" data-who="Team (manual)">Record approval</button>'+(od&&!r.shifted&&r.shoot?'<button type="button" class="btn sm" data-a="shift" data-reel="'+r.id+'">Move dates</button>':'')+'</div></td></tr>'}).join('')+'</tbody></table></div><div class="note">Reminders at 24h and 48h will go out automatically once WhatsApp is connected. Record approval by hand when the client replies on a call.</div>';
+    return '<tr><td data-label="Item"><b>'+esc(r.title)+'</b>'+(r.rev>FREE_REVISIONS?' <span class="pill bad">extra round</span>':'')+'</td><td data-label="Client">'+esc(cname(r.c))+'</td><td data-label="Type">'+(r.stage==='script_sent'?'Draft':'Edit')+'</td><td data-label="Due">'+cd(due(r))+'</td><td><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn sm" data-a="remind" data-reel="'+r.id+'">Remind</button><button type="button" class="btn sm good" data-a="adv" data-reel="'+r.id+'" data-who="Team (manual)">Record approval</button>'+(od&&!r.shifted&&r.shoot?'<button type="button" class="btn sm" data-a="shift" data-reel="'+r.id+'">Move dates</button>':'')+'</div></td></tr>'}).join('')+'</tbody></table></div><div class="note">Reminders at 24h and 48h will go out automatically once WhatsApp is connected. Record approval by hand when the client replies on a call.</div>';
 }
 function vInvoices(p){
   const inv=state.invoices.filter(i=>client(i.c)),tot=inv.reduce((s,i)=>s+i.amount,0),paid=inv.filter(i=>i.paid).reduce((s,i)=>s+i.amount,0),act=active();
   return '<div class="kpis">'+kpi('Billed',money(tot),inv.length+' invoices')+kpi('Collected',money(paid),'paid','good')+kpi('Outstanding',money(tot-paid),'to collect',tot-paid?'warn':'')+'</div>'+
   (act.length?'<div class="addform"><select data-c="draft" data-key="invClient" aria-label="Client for new invoice">'+act.map(c=>'<option value="'+c.id+'"'+((drafts.invClient||act[0].id)===c.id?' selected':'')+'>'+esc(c.name)+(c.fee?' ('+money(c.fee)+')':'')+'</option>').join('')+'</select><input type="text" placeholder="Amount (empty = client fee)" data-draft="invAmt" value="'+esc(drafts.invAmt||'')+'" aria-label="Amount"><button type="button" class="btn primary" data-a="newinv">Create invoice</button></div>':'<div class="note">Add an active client to create invoices.</div>')+
   (inv.length?'<div class="scroll-x"><table class="table"><thead><tr><th>Invoice</th><th>Client</th><th class="num">Amount</th><th>Due</th><th>Status</th><th></th></tr></thead><tbody>'+inv.map(i=>{const od=!i.paid&&i.due<now();
-    return '<tr><td><b>'+i.no+'</b></td><td>'+esc(cname(i.c))+'</td><td class="num">'+money(i.amount)+'</td><td>'+dstr(i.due)+'</td><td><span class="pill '+(i.paid?'good':od?'bad':'warn')+'">'+(i.paid?'Paid':od?'Overdue':'Unpaid')+'</span></td><td><div style="display:flex;gap:6px">'+(i.paid?'':'<button type="button" class="btn sm good" data-a="paid" data-inv="'+i.id+'">Record payment</button>')+delBtn('inv',i.id)+'</div></td></tr>'}).join('')+'</tbody></table></div>':'<div class="empty">No invoices yet</div>');
+    return '<tr><td data-label="Invoice"><b>'+i.no+'</b></td><td data-label="Client">'+esc(cname(i.c))+'</td><td data-label="Amount" class="num">'+money(i.amount)+'</td><td data-label="Due">'+dstr(i.due)+'</td><td data-label="Status"><span class="pill '+(i.paid?'good':od?'bad':'warn')+'">'+(i.paid?'Paid':od?'Overdue':'Unpaid')+'</span></td><td><div style="display:flex;gap:6px">'+(i.paid?'':'<button type="button" class="btn sm good" data-a="paid" data-inv="'+i.id+'">Record payment</button>')+delBtn('inv',i.id)+'</div></td></tr>'}).join('')+'</tbody></table></div>':'<div class="empty">No invoices yet</div>');
 }
 function vTeam(p){
   const admin=p.role==='admin';
@@ -795,7 +817,7 @@ function cApprovalsTab(c){const ap=cApprovals(c);return ap.length?ap.map(approve
 function cResults(c){
   const ps=itemsOf(c.id).filter(r=>r.stage==='posted'),v=ps.reduce((s,r)=>s+r.views,0),l=ps.reduce((s,r)=>s+r.likes,0),sv=ps.reduce((s,r)=>s+r.saves,0);
   return '<div class="kpis">'+kpi('Views',v.toLocaleString('en-IN'),ps.length+' delivered')+kpi('Likes',l.toLocaleString('en-IN'),'')+kpi('Saves',sv.toLocaleString('en-IN'),'')+'</div>'+
-  (ps.length?'<div class="scroll-x"><table class="table"><thead><tr><th>Item</th><th class="num">Views</th><th class="num">Likes</th><th class="num">Saves</th></tr></thead><tbody>'+ps.map(r=>'<tr><td><b>'+esc(r.title)+'</b></td><td class="num">'+r.views.toLocaleString('en-IN')+'</td><td class="num">'+r.likes+'</td><td class="num">'+r.saves+'</td></tr>').join('')+'</tbody></table></div>':'<div class="empty">Results appear after the first item is delivered</div>')+
+  (ps.length?'<div class="scroll-x"><table class="table"><thead><tr><th>Item</th><th class="num">Views</th><th class="num">Likes</th><th class="num">Saves</th></tr></thead><tbody>'+ps.map(r=>'<tr><td data-label="Item"><b>'+esc(r.title)+'</b></td><td data-label="Views" class="num">'+r.views.toLocaleString('en-IN')+'</td><td data-label="Likes" class="num">'+r.likes+'</td><td data-label="Saves" class="num">'+r.saves+'</td></tr>').join('')+'</tbody></table></div>':'<div class="empty">Results appear after the first item is delivered</div>')+
   '<div class="note">We share what happened, not promises. Results depend on your business, your offer and the platform.</div>';
 }
 function cPlan(c){
