@@ -1,5 +1,14 @@
 <title>Story Builder Console</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ff7a1a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SB Console">
+<link rel="manifest" href="/db/manifest.json">
+<link rel="apple-touch-icon" href="/db/icon-180.png">
+<link rel="icon" href="/db/icon-192.png">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
 <style>
 /* Layout: top bar, then one or two panes (staff console / client portal) side by side. Each pane = switcher, tabs, body. Dark-first with orange accent to match Agency OS. */
@@ -175,6 +184,27 @@ textarea{width:100%;min-height:150px;background:var(--surface);color:var(--fg);b
   .btn{padding:6px 9px}
   .col{width:180px}
 }
+
+/* ---------- mobile bottom nav (Instagram-style) ---------- */
+.bottom-nav{display:none}
+@media (max-width:860px){
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+  .pane>.tabs{display:none}
+  .bottom-nav{
+    display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;
+    background:var(--surface);border-top:1px solid var(--line);
+    padding:6px max(8px,env(safe-area-inset-left,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-right,0px));
+    gap:2px;
+  }
+  .bottom-nav button{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;
+    border:0;background:transparent;color:var(--muted);padding:6px 2px;border-radius:10px;font-size:10px;font-weight:600;
+  }
+  .bottom-nav button svg{width:21px;height:21px}
+  .bottom-nav button.active{color:var(--accent)}
+  .bottom-nav button .bn-badge{position:absolute;transform:translate(10px,-9px);background:var(--bad);color:#fff;border-radius:999px;font-size:9px;min-width:14px;height:14px;display:flex;align-items:center;justify-content:center;padding:0 3px}
+}
+.install-btn{display:none}
 </style>
 
 <div class="wrap" id="loginWrap" style="max-width:380px;margin:60px auto">
@@ -218,11 +248,13 @@ textarea{width:100%;min-height:150px;background:var(--surface);color:var(--fg);b
     <div class="brand"><div class="logo">S</div><div>Story Builder Console<small>Live · connected to your database</small></div></div>
     <div class="tools">
       <span class="sync" id="sync"><span class="dot" id="dot"></span><span id="synctxt">Live</span></span>
+      <button type="button" class="btn install-btn" id="installBtn">Install app</button>
       <button type="button" class="btn" data-a="backup" id="bk">Backup</button>
     </div>
   </header>
   <div id="backup"></div>
   <main class="panes" id="panes"></main>
+  <nav class="bottom-nav" id="bottomNav"></nav>
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -849,11 +881,66 @@ function render(){
   if(showBackup&&document.activeElement&&document.activeElement.id!=='bkText')renderBackup();
   drawCharts();
   initDragDrop();
+  renderBottomNav();
 }
 function tick(){
   document.querySelectorAll('[data-due]').forEach(e=>{const l=left(+e.dataset.due);e.textContent=l.txt;e.className='cd '+l.cls});
   const s=Math.floor((Date.now()-lastSync)/1000);const se=$('#synctxt');if(se)se.textContent=s<5?'Live · saved just now':'Live · saved '+(s<60?s+'s':Math.floor(s/60)+'m')+' ago';
 }
+
+/* ---------- mobile bottom nav ---------- */
+const NAV_ICONS={
+  overview:'<circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 2"/>',
+  clients:'<circle cx="7" cy="7" r="3"/><circle cx="14" cy="8" r="2.5"/><path d="M2 17c0-3 2-5 5-5s5 2 5 5M12 17c0-2 1-4 3-4.5"/>',
+  pipeline:'<path d="M3 3h14l-5 7v5l-4 2v-7z"/>',
+  board:'<rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/>',
+  approvals:'<circle cx="10" cy="10" r="8"/><path d="M6.5 10l2.5 2.5 4.5-5"/>',
+  invoices:'<rect x="4" y="2" width="12" height="16" rx="1.5"/><path d="M7 6h6M7 10h6M7 14h3"/>',
+  team:'<circle cx="7" cy="7" r="3"/><circle cx="14" cy="7" r="3"/><path d="M2 17c0-3 2-5 5-5M18 17c0-3-2-5-5-5"/>',
+  myday:'<circle cx="10" cy="10" r="4"/><path d="M10 2v2M10 16v2M3 10H1M19 10h-2M4.5 4.5l1.5 1.5M15.5 4.5L14 6M4.5 15.5L6 14M15.5 15.5L14 14"/>',
+  results:'<path d="M3 17V9M9 17V5M15 17v-7M2 17h16"/>',
+  plan:'<rect x="4" y="2" width="12" height="16" rx="1.5"/><path d="M7 7h6M7 11h6"/>'
+};
+function renderBottomNav(){
+  const el=$('#bottomNav');
+  if(!el||!panes||!panes[0])return;
+  const p=panes[0],staff=p.portal==='staff',c=client(p.client);
+  const tabs=TABS[staff?p.role:'client'];
+  let badge=0;
+  if(!staff&&c)badge=cApprovals(c).length; else if(staff&&p.role!=='employee')badge=pending().filter(r=>due(r)<now()).length;
+  el.innerHTML=tabs.map(t=>{
+    const icon=NAV_ICONS[t[0]]||NAV_ICONS.overview;
+    const showBadge=t[0]==='approvals'&&badge;
+    return '<button type="button" data-a="tab" data-pane="'+p.id+'" data-v="'+t[0]+'" class="'+(p.tab===t[0]?'active':'')+'" style="position:relative">'+
+      (showBadge?'<span class="bn-badge">'+badge+'</span>':'')+
+      '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+icon+'</svg>'+
+      '<span>'+esc(t[1])+'</span></button>';
+  }).join('');
+}
+
+/* ---------- PWA install + service worker ---------- */
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/db/sw.js',{scope:'/db'}).catch(()=>{});
+  });
+}
+let deferredInstallPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  const btn=$('#installBtn');
+  if(btn)btn.style.display='inline-flex';
+});
+document.getElementById('installBtn').addEventListener('click',async()=>{
+  if(!deferredInstallPrompt)return;
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt=null;
+  $('#installBtn').style.display='none';
+});
+window.addEventListener('appinstalled',()=>{
+  const btn=$('#installBtn');if(btn)btn.style.display='none';
+});
 
 /* ---------- command palette (Ctrl+K) ---------- */
 function cmdkOpen(){

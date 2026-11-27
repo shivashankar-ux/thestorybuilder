@@ -1,0 +1,16 @@
+{
+  "name": "Story Builder Console",
+  "short_name": "SB Console",
+  "start_url": "/db",
+  "scope": "/db",
+  "id": "/db",
+  "display": "standalone",
+  "background_color": "#0d0e11",
+  "theme_color": "#ff7a1a",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "/db/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/db/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/db/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
