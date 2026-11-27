@@ -8,10 +8,10 @@ const REF_H = 900;
 const REF_ASPECT = REF_W / REF_H;
 
 const DEFAULT_BACKGROUND = {
-  top: "#E8E2D8",
+  top: "#F3EFEA",
   bottom: "#F3EFEA",
-  shadow: "#BFB3A3",
-  shadowDepth: 38,
+  shadow: "#CFC6B8",
+  shadowDepth: 34,
 };
 
 const DEFAULT_COLORS = {
@@ -714,6 +714,8 @@ export default function ClayRobot({
     let waveAt = -1;
     let waveSide = 1;
     let greet = false;
+    let nextRoam = 0.6;
+    let roamGoal = 0;
     const rand = makeRandom(0x5eed);
 
     const gaps = new Float64Array(15);
@@ -1155,10 +1157,11 @@ export default function ClayRobot({
         lastActive = clock;
       } else if (p.glance > 0 && !rm) {
         if (clock >= nextGlance) {
-          const home = rand() < 0.3;
-          glanceYaw = home ? 0 : (rand() * 2 - 1) * 0.5;
-          glancePitch = home ? 0 : (rand() * 1.1 - 0.4) * 0.3;
-          nextGlance = clock + (1.4 + rand() * 2.6) * (10 / (4 + p.glance * 1.2));
+          const home = rand() < 0.2;
+          glanceYaw = home ? 0 : (rand() * 2 - 1) * 0.72;
+          // Toddler curiosity: often looks up at the website sections above & around
+          glancePitch = home ? 0.1 : (rand() * 1.15 - 0.25) * 0.42;
+          nextGlance = clock + (1.1 + rand() * 2.0) * (10 / (4 + p.glance * 1.2));
         }
         setAim(glanceYaw, glancePitch);
       } else {
@@ -1170,8 +1173,26 @@ export default function ClayRobot({
       if (p.walk && !rm && dropDone) {
         walkRange(range);
         let want = walkGoal;
-        if (active && ptrSeen) want = ptrFloorX;
-        else if (clock - lastActive > 4) want = 0;
+        if (active && ptrSeen && ptrInFrame) {
+          // When cursor is right over the robot area, waddle toward cursor
+          want = ptrFloorX;
+        } else {
+          // Toddler-like autonomous roaming across the full website width
+          if (clock >= nextRoam) {
+            const span = range[1] - range[0];
+            roamGoal = range[0] + rand() * span;
+            nextRoam = clock + 2.2 + rand() * 2.6;
+            // Occasional playful toddler hop or wave while exploring
+            const actionRoll = rand();
+            if (actionRoll < 0.25 && hopAt < 0 && p.resp.hop > 0) {
+              hopAt = clock;
+              joyAt = clock;
+            } else if (actionRoll < 0.48 && waveAt < 0) {
+              startWave(roamGoal - walkX);
+            }
+          }
+          want = roamGoal;
+        }
         want = Math.min(range[1], Math.max(range[0], want));
         const walking = Math.abs(walkV) > 0.05;
         if (waveAt >= 0) walkGoal = walkX;

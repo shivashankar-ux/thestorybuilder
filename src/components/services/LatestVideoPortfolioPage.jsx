@@ -2208,78 +2208,48 @@ export default function LatestVideoPortfolioPage({ setPage }) {
         </div>
       </section>
 
-      {/* 9.5. INTERACTIVE 3D CLAY MASCOT JUST ABOVE FOOTER */}
+      {/* 9.5. UNCONSTRAINED FULL-WIDTH ROAMING 3D CLAY ROBOT ABOVE FOOTER */}
       <section
         style={{
-          padding: isMobile ? "0 16px 36px" : "0 24px clamp(44px, 6vw, 72px)",
-          maxWidth: 1100,
-          margin: "0 auto",
-          boxSizing: "border-box",
+          width: "100%",
+          margin: 0,
+          padding: 0,
+          overflow: "hidden",
         }}
       >
         <div
           style={{
             position: "relative",
             width: "100%",
-            height: isMobile ? 280 : 420,
-            borderRadius: isMobile ? 22 : 36,
-            overflow: "hidden",
-            border: "2px solid rgba(17, 17, 17, 0.08)",
-            boxShadow: "0 24px 60px -15px rgba(17, 17, 17, 0.1)",
+            height: isMobile ? 220 : 320,
           }}
         >
           <ClayRobot
             background={{
-              top: "#E8E2D8",
+              top: "#F3EFEA",
               bottom: "#F3EFEA",
-              shadow: "#BFB3A3",
-              shadowDepth: 38,
+              shadow: "#CFC6B8",
+              shadowDepth: 34,
             }}
             colors={{
               clay: "#FF5A2B",
               visor: "#111318",
               eyes: "#CEF237",
             }}
-            scale={isMobile ? 92 : 100}
+            scale={isMobile ? 76 : 82}
             walk={true}
             walkSpeed={5}
             wave={true}
             blink={true}
-            glance={5}
+            glance={7}
             response={{
               track: "page",
-              headTurn: 7,
-              eyeTravel: 6,
+              headTurn: 8,
+              eyeTravel: 7,
               followSpeed: 6,
               hop: 6,
             }}
           />
-
-          {/* Subtle Brand Overlay Pill */}
-          <div
-            style={{
-              position: "absolute",
-              top: isMobile ? 12 : 18,
-              left: isMobile ? 12 : 20,
-              pointerEvents: "none",
-              background: "rgba(17, 17, 17, 0.82)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-              color: "#FFFFFF",
-              fontSize: isMobile ? 10 : 11.5,
-              fontWeight: 700,
-              letterSpacing: "0.05em",
-              textTransform: "uppercase",
-              padding: isMobile ? "5px 11px" : "6px 14px",
-              borderRadius: 999,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-            }}
-          >
-            <span style={{ color: "#CEF237" }}>✦</span>
-            <span>{isMobile ? "Tap me to hop!" : "Move cursor or tap to say hi"}</span>
-          </div>
         </div>
       </section>
 
