@@ -1,0 +1,612 @@
+<title>Story Builder Console</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: top bar, then one or two panes (staff console / client portal) side by side. Each pane = switcher, tabs, body. Dark-first with orange accent to match Agency OS. */
+:root{
+  --bg:#0d0e11; --surface:#15171c; --surface2:#1c1f26; --line:#2a2e37; --fg:#eceef3; --muted:#9aa1ae;
+  --accent:#ff7a1a; --accent-ink:#1b0e03; --accent-soft:rgba(255,122,26,.14);
+  --good:#3ccb94; --good-soft:rgba(60,203,148,.14); --warn:#f4b73e; --warn-soft:rgba(244,183,62,.15);
+  --bad:#ff6363; --bad-soft:rgba(255,99,99,.15); --info:#6aa8ff; --info-soft:rgba(106,168,255,.15);
+  --font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif; --display:'Space Grotesk','Inter',system-ui,sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#f3f4f6; --surface:#ffffff; --surface2:#f0f1f4; --line:#dcdfe5; --fg:#16181d; --muted:#5d6572;
+  --accent:#e55a00; --accent-ink:#ffffff; --accent-soft:rgba(229,90,0,.10);
+  --good:#12805c; --good-soft:rgba(18,128,92,.11); --warn:#966300; --warn-soft:rgba(150,99,0,.12);
+  --bad:#c92a2a; --bad-soft:rgba(201,42,42,.10); --info:#1d62c9; --info-soft:rgba(29,98,201,.10); color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#f3f4f6; --surface:#ffffff; --surface2:#f0f1f4; --line:#dcdfe5; --fg:#16181d; --muted:#5d6572;
+  --accent:#e55a00; --accent-ink:#ffffff; --accent-soft:rgba(229,90,0,.10);
+  --good:#12805c; --good-soft:rgba(18,128,92,.11); --warn:#966300; --warn-soft:rgba(150,99,0,.12);
+  --bad:#c92a2a; --bad-soft:rgba(201,42,42,.10); --info:#1d62c9; --info-soft:rgba(29,98,201,.10); color-scheme:light}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:14px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 40px}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1500px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.topbar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-.01em}
+.logo{width:28px;height:28px;border-radius:8px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:15px}
+.brand small{font:500 11px var(--font);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-top:1px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sync{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);padding:5px 10px;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--good);box-shadow:0 0 0 0 var(--good)}
+.dot.pulse{animation:pulse .9s ease-out}
+@keyframes pulse{0%{box-shadow:0 0 0 0 var(--good)}100%{box-shadow:0 0 0 9px transparent}}
+@media (prefers-reduced-motion:reduce){.dot.pulse{animation:none}}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 11px;font-size:13px;font-weight:500;white-space:nowrap}
+.btn:hover{background:var(--surface2)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.good{border-color:var(--good);color:var(--good);background:var(--good-soft)}
+.btn.bad{border-color:var(--bad);color:var(--bad);background:var(--bad-soft)}
+.btn.sm{padding:4px 9px;font-size:12px;border-radius:7px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface)}
+.seg button{border:0;background:transparent;padding:6px 12px;font-size:13px;font-weight:500;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
+select,input[type=text]{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:13px;min-width:0}
+.panes{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
+@media (min-width:1150px){.panes.split{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pane{background:var(--surface);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;min-width:0}
+.pane-head{border-radius:13px 13px 0 0;display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--surface2)}
+.pane-head .sp{flex:1}
+.tabs{display:flex;gap:2px;padding:0 10px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:thin}
+.tabs button{border:0;background:transparent;padding:11px 12px;font-size:13px;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;display:flex;gap:6px;align-items:center}
+.tabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+.badge{background:var(--bad);color:#fff;border-radius:999px;font-size:11px;padding:0 6px;min-width:18px;text-align:center;font-weight:600}
+.body{padding:16px;display:flex;flex-direction:column;gap:16px;min-width:0}
+h2{font:600 15px var(--display);margin:0;letter-spacing:-.005em}
+.sub{color:var(--muted);font-size:12.5px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.kpi{border:1px solid var(--line);border-radius:10px;padding:11px 13px;background:var(--surface2);min-width:0}
+.kpi .l{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.kpi .v{font:700 24px var(--display);letter-spacing:-.02em;margin-top:3px;font-variant-numeric:tabular-nums}
+.kpi .s{font-size:12px;color:var(--muted);margin-top:1px}
+.kpi.bad .v{color:var(--bad)} .kpi.warn .v{color:var(--warn)} .kpi.good .v{color:var(--good)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.panel{border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.panel-h{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.list{display:flex;flex-direction:column}
+.row{display:flex;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line);min-width:0;flex-wrap:wrap}
+.row:first-child{border-top:0}
+.row .grow{flex:1;min-width:160px}
+.row .t{font-weight:600}
+.row .m{color:var(--muted);font-size:12.5px}
+.pill{display:inline-block;border-radius:999px;padding:2px 9px;font-size:11.5px;font-weight:600;white-space:nowrap;background:var(--surface2);color:var(--muted);border:1px solid var(--line)}
+.pill.good{background:var(--good-soft);color:var(--good);border-color:transparent}
+.pill.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.pill.bad{background:var(--bad-soft);color:var(--bad);border-color:transparent}
+.pill.info{background:var(--info-soft);color:var(--info);border-color:transparent}
+.pill.accent{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.cd{font-variant-numeric:tabular-nums;font-weight:600;font-size:12.5px}
+.cd.ok{color:var(--good)} .cd.warn{color:var(--warn)} .cd.bad{color:var(--bad)}
+.bar{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;display:flex;gap:2px}
+.bar i{display:block;height:100%}
+.segs{display:flex;gap:4px}
+.segs i{flex:1;height:8px;border-radius:3px;background:var(--line)}
+.segs i.p{background:var(--good)} .segs i.w{background:var(--accent)} .segs i.a{background:var(--warn)}
+.scroll-x{overflow-x:auto;padding-bottom:6px}
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(214px,1fr);gap:10px;min-width:max-content}
+.col{background:var(--surface2);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:8px;width:220px}
+.col h3{margin:2px 4px;font:600 12px var(--font);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;display:flex;justify-content:space-between}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:9px 10px;display:flex;flex-direction:column;gap:6px}
+.card .t{font-weight:600;font-size:13px}
+.card .m{font-size:12px;color:var(--muted)}
+.card .acts{display:flex;gap:6px;flex-wrap:wrap}
+.table{width:100%;border-collapse:collapse;font-size:13px}
+.table th{text-align:left;font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;padding:6px 10px 6px 0;font-weight:600}
+.table td{padding:9px 10px 9px 0;border-top:1px solid var(--line);vertical-align:middle}
+.num{font-variant-numeric:tabular-nums;text-align:right}
+.note{border:1px dashed var(--line);border-radius:10px;padding:10px 12px;color:var(--muted);font-size:12.5px}
+.empty{color:var(--muted);padding:14px 0;text-align:center}
+.approve{display:flex;flex-direction:column;gap:9px;border:1px solid var(--warn);background:var(--warn-soft);border-radius:12px;padding:13px}
+.approve.late{border-color:var(--bad);background:var(--bad-soft)}
+.approve .btns{display:flex;gap:8px;flex-wrap:wrap}
+.approve input{flex:1;min-width:160px}
+.hello{font:700 22px var(--display);letter-spacing:-.02em;margin:0}
+.big{font:700 34px var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.feed .row{font-size:13px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:10px;font-weight:600;font-size:13px;opacity:0;pointer-events:none;transition:opacity .18s;z-index:30;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1}
+.addform{display:flex;gap:8px;flex-wrap:wrap}
+.addform input{flex:1;min-width:120px}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.fld{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fld label{font-size:12px;color:var(--muted)}
+.fld input,.fld select{width:100%}
+.steps{display:flex;flex-direction:column;gap:8px}
+.step{display:flex;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px;flex-wrap:wrap}
+.step .grow{flex:1;min-width:180px}
+.tick{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;font-size:12px}
+.tick.done{background:var(--good);border-color:var(--good);color:#fff}
+.btn.danger{border-color:var(--bad);color:var(--bad)}
+.btn.danger.armed{background:var(--bad);color:#fff}
+textarea{width:100%;min-height:150px;background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:8px;font:12px ui-monospace,Menlo,Consolas,monospace}
+.backup{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.mini{font-size:12px;color:var(--muted)}
+.sugwrap{position:relative;flex:1;min-width:140px}
+.sugwrap input{width:100%}
+.sug{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.35);z-index:25;max-height:270px;overflow:auto}
+.sug button{display:flex;width:100%;justify-content:space-between;align-items:center;gap:8px;text-align:left;border:0;background:transparent;padding:9px 12px;border-top:1px solid var(--line)}
+.sug button:first-child{border-top:0}
+.sug button:hover,.sug button:focus-visible{background:var(--surface2)}
+</style>
+
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand"><div class="logo">S</div><div>Story Builder Console<small>Prototype · your own data, saved in this browser</small></div></div>
+    <div class="tools">
+      <span class="sync" id="sync"><span class="dot" id="dot"></span><span id="synctxt">Live</span></span>
+      <div class="seg" role="group" aria-label="Layout">
+        <button type="button" data-a="layout" data-v="single" id="l-single">One view</button>
+        <button type="button" data-a="layout" data-v="split" id="l-split">Staff + Client side by side</button>
+      </div>
+      <button type="button" class="btn" data-a="backup" id="bk">Backup</button>
+    </div>
+  </header>
+  <div id="backup"></div>
+  <main class="panes" id="panes"></main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+const HR=36e5, DAY=24*HR, FREE_REVISIONS=2, KEY='sb-console-v2';
+const STAGES=['idea','script_drafted','script_sent','script_approved','shot','editing','edit_sent','edit_approved','posted'];
+const STAGE_LABEL={idea:'Idea',script_drafted:'Draft ready',script_sent:'Sent for approval',script_approved:'Approved to produce',shot:'Shot',editing:'Editing',edit_sent:'Edit sent',edit_approved:'Edit approved',posted:'Delivered'};
+const CLIENT_STATUS={idea:'Idea stage',script_drafted:'Being written',script_sent:'Needs your approval',script_approved:'Approved, production planned',shot:'Shot, editing starts next',editing:'Being edited',edit_sent:'Edit ready, needs your approval',edit_approved:'Approved, scheduled',posted:'Delivered'};
+const FLOW={idea:['script_drafted','Draft ready'],script_drafted:['script_sent','Send for approval'],script_sent:['script_approved','Record approval'],script_approved:['shot','Mark shot'],shot:['editing','Start editing'],editing:['edit_sent','Send edit for approval'],edit_sent:['edit_approved','Record approval'],edit_approved:['posted','Mark delivered']};
+const RESP={idea:'planner',script_drafted:'planner',script_approved:'shooter',shot:'editor',editing:'editor'};
+const RESP_JOB={planner:'Planner',shooter:'Videographer',editor:'Editor'};
+const LEAD_STAGES=['To visit','Visited','Follow-up','Trial signed','Plan signed','Not interested'];
+const SERVICES=['Video content','Website','Social media','Ads','Branding','Other'];
+const PLANS=[['m1','Retainer: monthly',1],['m3','Retainer: quarterly',3],['m6','Retainer: half-yearly',6],['m12','Retainer: annual',12],['once','One-time project',0]];
+const JOBS=['Planner','Videographer','Editor','Manager','Other'];
+const ITEM_TYPES=['Reel','Post','Video','Web page','Other'];
+const STATUSES=['Active','On hold','Completed'];
+const TABS={
+  admin:[['overview','Overview'],['clients','Clients'],['pipeline','Pipeline'],['board','Content board'],['approvals','Approvals'],['invoices','Invoices'],['team','Team']],
+  manager:[['overview','Overview'],['clients','Clients'],['pipeline','Pipeline'],['board','Content board'],['approvals','Approvals'],['team','Team']],
+  employee:[['myday','My day'],['board','Content board']],
+  client:[['overview','Overview'],['approvals','Approvals'],['results','Results'],['plan','Plan and invoices']]
+};
+
+let state, panes, layout='single', drafts={}, lastSync=Date.now(), pid=1, armed=null, showBackup=false;
+
+const blank=()=>({clients:[],items:[],invoices:[],leads:[],people:[],activity:[],seq:{inv:0}});
+function load(){try{const s=localStorage.getItem(KEY);if(s)return Object.assign(blank(),JSON.parse(s))}catch(e){}return blank()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+function init(){
+  state=load(); drafts={};
+  panes=[{id:pid++,portal:'staff',role:'admin',user:null,client:null,tab:'overview',filter:'all',form:null,pform:false}];
+}
+const now=()=>Date.now();
+const $=s=>document.querySelector(s);
+const uid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>'₹'+Math.round(Number(n)||0).toLocaleString('en-IN');
+const dstr=t=>t?new Date(t).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'}):'-';
+const iso=t=>{const d=new Date(t);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+const fromIso=s=>s?new Date(s+'T00:00:00').getTime():null;
+const addMonths=(t,m)=>{const d=new Date(t);d.setMonth(d.getMonth()+m);return d.getTime()};
+const client=id=>state.clients.find(c=>c.id===id);
+const item=id=>state.items.find(r=>r.id===id);
+const person=id=>state.people.find(p=>p.id===id);
+const due=r=>r.sentAt+48*HR;
+const active=()=>state.clients.filter(c=>c.status==='Active');
+const planLabel=c=>{const t=(PLANS.find(p=>p[2]===c.months)||PLANS[4])[1].replace('Retainer: ','');return t.charAt(0).toUpperCase()+t.slice(1)};
+const PER={1:'month',3:'quarter',6:'6 months',12:'year'};
+const isRet=c=>c.months>0;
+const cname=id=>{const c=client(id);return c?c.name:'(deleted client)'};
+const contact=c=>c.contact||c.name;
+const pending=()=>state.items.filter(r=>(r.stage==='script_sent'||r.stage==='edit_sent')&&client(r.c)).sort((a,b)=>due(a)-due(b));
+const daysLeft=c=>c.end?Math.ceil((c.end-now())/DAY):null;
+const itemsOf=cid=>state.items.filter(r=>r.c===cid);
+const delivered=cid=>itemsOf(cid).filter(r=>r.stage==='posted').length;
+
+function left(d){
+  const ms=d-now(),a=Math.abs(ms),h=Math.floor(a/HR),m=Math.floor(a%HR/60000);
+  return {txt:ms<0?'Overdue '+h+'h '+m+'m':h+'h '+m+'m left',cls:(ms<0||ms<6*HR)?'bad':ms<24*HR?'warn':'ok'};
+}
+const cd=d=>{const l=left(d);return '<span class="cd '+l.cls+'" data-due="'+d+'">'+l.txt+'</span>'};
+function tone(s){
+  if(s==='posted')return 'good';
+  if(s==='script_sent'||s==='edit_sent')return 'warn';
+  if(s==='script_approved'||s==='edit_approved')return 'info';
+  if(s==='shot'||s==='editing')return 'accent';
+  return '';
+}
+const stagePill=s=>'<span class="pill '+tone(s)+'">'+STAGE_LABEL[s]+'</span>';
+
+/* Every change goes through mutate(): data is saved, then every pane redraws from the same data. */
+let raf=0;
+function mutate(fn,msg){
+  fn(); lastSync=Date.now(); save();
+  if(!raf) raf=requestAnimationFrame(()=>{raf=0;render();pulse()});
+  if(msg) toast(msg);
+}
+function log(who,text,c,cv){state.activity.unshift({t:now(),who,text,c:c||null,cv:!!cv}); state.activity.length=Math.min(state.activity.length,60)}
+let tt=0;
+function toast(m){const el=$('#toast');el.textContent=m;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2400)}
+function pulse(){const d=$('#dot');d.classList.remove('pulse');void d.offsetWidth;d.classList.add('pulse')}
+const P=id=>panes.find(p=>p.id==id);
+
+/* ---------- workflow ---------- */
+function advance(id,who){
+  const r=item(id),f=FLOW[r.stage]; if(!f)return;
+  mutate(()=>{
+    r.stage=f[0];
+    if(f[0]==='script_sent'||f[0]==='edit_sent') r.sentAt=now();
+    log(who,f[1]+': '+r.title,r.c,true);
+  },f[1]+' done');
+}
+function clientApprove(id){
+  const r=item(id),kind=r.stage==='script_sent'?'draft':'edit';
+  mutate(()=>{r.stage=kind==='draft'?'script_approved':'edit_approved'; log({cl:r.c},'approved the '+kind+': '+r.title,r.c,true)},'Approved. The team sees it instantly.');
+}
+function clientChanges(id){
+  const r=item(id),note=(drafts['n'+id]||'').trim();
+  if(!note){toast('Add a short note so the team knows what to change');return}
+  const kind=r.stage==='script_sent'?'draft':'edit';
+  mutate(()=>{
+    r.note=note; delete drafts['n'+id];
+    if(kind==='draft') r.stage='script_drafted'; else {r.stage='editing'; r.rev+=1}
+    log({cl:r.c},'requested changes on the '+kind+': '+r.title,r.c,true);
+  },'Changes sent to the team');
+}
+function defaultAssignee(job){const p=state.people.find(p=>p.job===job);return p?p.id:null}
+function newItem(cid,title,type,shoot){
+  return {id:uid('i'),c:cid,title,type,stage:'idea',rev:0,sentAt:null,shoot:shoot||null,views:0,likes:0,saves:0,note:'',reminded:0,shifted:false,
+    planner:defaultAssignee('Planner'),shooter:defaultAssignee('Videographer'),editor:defaultAssignee('Editor')};
+}
+function removeClient(id){
+  state.items=state.items.filter(i=>i.c!==id);
+  state.invoices=state.invoices.filter(i=>i.c!==id);
+  state.activity=state.activity.filter(a=>a.c!==id);
+  state.leads.forEach(l=>{if(l.clientId===id)l.clientId=null});
+  state.clients=state.clients.filter(c=>c.id!==id);
+}
+function removePerson(id){
+  state.items.forEach(r=>{['planner','shooter','editor'].forEach(k=>{if(r[k]===id)r[k]=null})});
+  state.people=state.people.filter(p=>p.id!==id);
+}
+function clientDefaults(c,lead){
+  const planKey=c?(isRet(c)?'m'+c.months:'once'):'m1';
+  return {cf_name:c?c.name:(lead?lead.name:''),cf_contact:c?c.contact:'',cf_phone:c?c.phone:'',cf_email:c?c.email:'',cf_service:c?c.service:'Video content',
+    cf_plan:planKey,cf_fee:c?String(c.fee||''):'',cf_start:iso(c?c.start:now()),cf_end:(c&&c.endCustom)?iso(c.end):'',cf_status:c?c.status:'Active',cf_notes:c?c.notes:(lead?'Area: '+lead.area:'')};
+}
+function saveClient(p){
+  const d=drafts,name=(d.cf_name||'').trim();
+  if(!name){toast('Enter the client name');return}
+  const planKey=d.cf_plan||'m1',months=(PLANS.find(x=>x[0]===planKey)||PLANS[0])[2];
+  const start=fromIso(d.cf_start)||now(),endIn=fromIso(d.cf_end);
+  const fee=p.role==='admin'?Math.max(0,Number(d.cf_fee)||0):null;
+  const isNew=p.form.id==='new';
+  mutate(()=>{
+    let c;
+    if(isNew){c={id:uid('c'),fee:0,created:now()};state.clients.push(c)}else c=client(p.form.id);
+    Object.assign(c,{name,contact:(d.cf_contact||'').trim(),phone:(d.cf_phone||'').trim(),email:(d.cf_email||'').trim(),service:d.cf_service,months,start,
+      end:endIn||(months?addMonths(start,months):null),endCustom:!!endIn,status:d.cf_status,notes:(d.cf_notes||'').trim()});
+    if(fee!==null)c.fee=fee;
+    if(isNew&&p.form.lead){const l=state.leads.find(l=>l.id===p.form.lead);if(l){l.clientId=c.id;l.stage='Plan signed'}}
+    log('Team',(isNew?'added client ':'updated client ')+c.name,c.id,false);
+    p.form=null;
+  },isNew?'Client added':'Client updated everywhere');
+}
+
+/* ---------- actions ---------- */
+const A={
+  tab:d=>{P(d.pane).tab=d.v;render()},
+  portal:d=>{const p=P(d.pane);p.portal=d.v;p.tab=d.v==='client'?'overview':TABS[p.role][0][0];render()},
+  layout:d=>{layout=d.v;
+    if(d.v==='split'&&panes.length<2)panes.push({id:pid++,portal:'client',role:'admin',user:null,client:null,tab:'overview',filter:'all',form:null,pform:false});
+    if(d.v==='single')panes=panes.slice(0,1);render()},
+  adv:d=>advance(d.reel,d.who||'Team'),
+  approve:d=>clientApprove(d.reel),
+  changes:d=>clientChanges(d.reel),
+  remind:d=>{const r=item(d.reel),c=client(r.c);mutate(()=>{r.reminded++;log('Reminder','queued for '+contact(c)+' (WhatsApp, simulated): '+r.title,r.c,false)},'Reminder queued for '+contact(c))},
+  shift:d=>{const r=item(d.reel),days=Math.max(1,Math.ceil((now()-due(r))/DAY));
+    mutate(()=>{if(r.shoot)r.shoot+=days*DAY;r.shifted=true;log('Team','moved dates by '+days+' day(s) due to late approval: '+r.title,r.c,true)},'Dates moved by '+days+' day(s)')},
+  paid:d=>{const i=state.invoices.find(i=>i.id===d.inv);mutate(()=>{i.paid=true;i.paidOn=now();log('Finance','recorded payment '+i.no+' ('+money(i.amount)+')',i.c,true)},'Payment recorded')},
+  newinv:()=>{
+    const cid=drafts.invClient||(active()[0]||{}).id;if(!cid){toast('Add a client first');return}
+    const c=client(cid),amt=Number(drafts.invAmt)||c.fee;
+    if(!amt){toast('Enter an amount (this client has no fee set)');return}
+    mutate(()=>{state.seq.inv++;const no='INV-'+new Date().getFullYear()+'-'+String(state.seq.inv).padStart(3,'0');
+      state.invoices.unshift({id:uid('v'),c:cid,no,amount:amt,due:now()+7*DAY,paid:false});drafts.invAmt='';log('Finance','created invoice '+no,cid,true)},'Invoice created');
+  },
+  pick:d=>{
+    hideSug();
+    if(d.key==='leadName'){
+      if(d.k==='client'){const c=client(d.id),m=(c.notes||'').match(/Area:\s*(.+)/);drafts.leadName=c.name;drafts.leadClient=c.id;if(m)drafts.leadArea=m[1];
+        document.querySelectorAll('[data-draft=leadName]').forEach(i=>i.value=drafts.leadName);document.querySelectorAll('[data-draft=leadArea]').forEach(i=>i.value=drafts.leadArea||'');toast('Existing client selected. Add lead links it.')}
+      else{const l=state.leads.find(l=>l.id===d.id);toast('Already in your pipeline: '+l.stage)}
+    }else if(d.key==='cf_name'){
+      const p=P(d.pane);
+      if(d.k==='client'){Object.assign(drafts,clientDefaults(client(d.id),null));p.form={id:d.id};toast('Already a client. Editing it.')}
+      else{const l=state.leads.find(l=>l.id===d.id);drafts.cf_name=l.name;if(!drafts.cf_notes)drafts.cf_notes='Area: '+l.area;p.form={id:'new',lead:l.id};toast('Lead selected. It will be linked.')}
+      render();
+    }
+  },
+  addlead:()=>{
+    const name=(drafts.leadName||'').trim();if(!name){toast('Enter the business name');return}
+    const dup=state.leads.find(l=>l.name.toLowerCase()===name.toLowerCase());
+    if(dup){toast('Already in your pipeline ('+dup.stage+')');return}
+    let cid=drafts.leadClient&&client(drafts.leadClient)?drafts.leadClient:null;
+    if(!cid){const c=state.clients.find(c=>c.name.toLowerCase()===name.toLowerCase());if(c)cid=c.id}
+    mutate(()=>{state.leads.unshift({id:uid('l'),name,area:(drafts.leadArea||'').trim()||'-',stage:cid?'Plan signed':'To visit',clientId:cid});drafts.leadName='';drafts.leadArea='';drafts.leadClient='';log('Team','added lead '+name,cid,false)},cid?'Linked to existing client':'Lead added');
+  },
+  convert:d=>{const p=P(d.pane),l=state.leads.find(l=>l.id===d.lead);Object.assign(drafts,clientDefaults(null,l));p.tab='clients';p.form={id:'new',lead:l.id};render()},
+  cnew:d=>{const p=P(d.pane);Object.assign(drafts,clientDefaults(null,null));p.form={id:'new'};render()},
+  cedit:d=>{const p=P(d.pane);Object.assign(drafts,clientDefaults(client(d.client),null));p.form={id:d.client};render()},
+  cclose:d=>{P(d.pane).form=null;render()},
+  csave:d=>saveClient(P(d.pane)),
+  open:d=>{const p=P(d.pane);p.portal='client';p.client=d.client;p.tab='overview';render()},
+  additem:d=>{
+    const cid=drafts.itClient||(active()[0]||{}).id,title=(drafts.itTitle||'').trim();
+    if(!cid){toast('Add a client first');return}
+    if(!title){toast('Enter a title');return}
+    mutate(()=>{const r=newItem(cid,title,drafts.itType||'Reel',fromIso(drafts.itDate));state.items.push(r);drafts.itTitle='';log('Team','added '+(r.type||'item').toLowerCase()+': '+title,cid,true)},'Added to the content board');
+  },
+  add4:()=>{
+    const cid=drafts.itClient||(active()[0]||{}).id;if(!cid){toast('Add a client first');return}
+    const mon=new Date().toLocaleDateString('en-IN',{month:'short',year:'numeric'});
+    mutate(()=>{for(let i=1;i<=4;i++)state.items.push(newItem(cid,'Reel '+i+' ('+mon+')','Reel',null));log('Team','created the month: 4 reels',cid,true)},'4 reels created for '+cname(cid));
+  },
+  addperson:()=>{
+    const name=(drafts.pName||'').trim();if(!name){toast('Enter the name');return}
+    mutate(()=>{state.people.push({id:uid('u'),name,job:drafts.pJob||'Planner'});drafts.pName='';log('Team','added team member '+name,null,false)},'Team member added');
+  },
+  del:d=>{
+    const key=d.k+':'+d.id;
+    if(armed!==key){armed=key;render();setTimeout(()=>{if(armed===key){armed=null;render()}},4000);return}
+    armed=null;
+    mutate(()=>{
+      if(d.k==='client')removeClient(d.id);
+      else if(d.k==='item')state.items=state.items.filter(i=>i.id!==d.id);
+      else if(d.k==='lead')state.leads=state.leads.filter(l=>l.id!==d.id);
+      else if(d.k==='person')removePerson(d.id);
+      else if(d.k==='inv')state.invoices=state.invoices.filter(i=>i.id!==d.id);
+    },'Deleted');
+  },
+  backup:()=>{showBackup=!showBackup;renderBackup()},
+  bkcopy:()=>{const t=$('#bkText');t.select();let ok=false;try{ok=navigator.clipboard&&navigator.clipboard.writeText(t.value)}catch(e){}if(ok&&ok.catch)ok.catch(()=>{});toast('Copied. Paste it somewhere safe.')},
+  bkload:()=>{try{const o=JSON.parse($('#bkText').value);if(!o||!Array.isArray(o.clients))throw 0;mutate(()=>{state=Object.assign(blank(),o)},'Data loaded')}catch(e){toast('That is not valid backup data')}},
+  bkclear:()=>{const key='all:clear';if(armed!==key){armed=key;renderBackup();setTimeout(()=>{if(armed===key){armed=null;renderBackup()}},4000);return}armed=null;mutate(()=>{state=blank()},'All data cleared')}
+};
+document.addEventListener('click',e=>{if(!e.target.closest('.sugwrap'))hideSug();const t=e.target.closest('[data-a]');if(!t||t.disabled)return;const f=A[t.dataset.a];if(f)f(t.dataset)});
+document.addEventListener('change',e=>{
+  const t=e.target.closest('[data-c]');if(!t)return;const k=t.dataset.c,v=t.value;
+  if(k==='pane'){const p=P(t.dataset.pane);p[t.dataset.k]=v;if(t.dataset.k==='role'){p.tab=TABS[v][0][0];p.form=null}render()}
+  else if(k==='lead'){const l=state.leads.find(l=>l.id===t.dataset.id);mutate(()=>{l.stage=v;log('Team',l.name+' moved to '+v,null,false)},'Lead moved to '+v)}
+  else if(k==='assign'){const r=item(t.dataset.id);mutate(()=>{r[t.dataset.role]=v||null;log('Team','assigned '+(v?person(v).name:'nobody')+' to '+r.title,r.c,false)},'Assigned')}
+  else if(k==='draft'){drafts[t.dataset.key]=v}
+});
+document.addEventListener('input',e=>{const t=e.target.closest('[data-draft]');if(t){drafts[t.dataset.draft]=t.value;if(t.dataset.draft==='leadName')drafts.leadClient=''}const s=e.target.closest('[data-suggest]');if(s)showSuggest(s)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideSug()});
+
+/* ---------- shared bits ---------- */
+const kpi=(l,v,s,t)=>'<div class="kpi '+(t||'')+'"><div class="l">'+l+'</div><div class="v">'+v+'</div><div class="s">'+s+'</div></div>';
+function fld(p,label,key,type,opts,ph){
+  const id='f'+p.id+key,v=drafts[key]==null?'':drafts[key];
+  if(type==='select')return '<div class="fld"><label for="'+id+'">'+label+'</label><select id="'+id+'" data-draft="'+key+'">'+opts.map(o=>{const ov=Array.isArray(o)?o[0]:o,ol=Array.isArray(o)?o[1]:o;return '<option value="'+esc(ov)+'"'+(String(v)===String(ov)?' selected':'')+'>'+esc(ol)+'</option>'}).join('')+'</select></div>';
+  return '<div class="fld"><label for="'+id+'">'+label+'</label><input id="'+id+'" type="'+type+'" data-draft="'+key+'" value="'+esc(v)+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+'></div>';
+}
+function sugField(p,label,key,ph){const id='f'+p.id+key;return '<div class="fld"><label for="'+id+'">'+label+'</label><div class="sugwrap"><input id="'+id+'" type="text" autocomplete="off" data-draft="'+key+'" data-suggest="'+key+'" data-pane="'+p.id+'" value="'+esc(drafts[key]||'')+'"'+(ph?' placeholder="'+esc(ph)+'"':'')+'><div class="sug" hidden></div></div></div>'}
+function hideSug(){document.querySelectorAll('.sug').forEach(b=>{b.hidden=true})}
+function showSuggest(inp){
+  const box=inp.parentNode.querySelector('.sug'),raw=inp.value.trim(),q=raw.toLowerCase(),key=inp.dataset.suggest;
+  if(!q){box.hidden=true;return}
+  const m=[];
+  state.clients.forEach(c=>{if(c.name.toLowerCase().includes(q))m.push({k:'client',id:c.id,name:c.name,sub:c.service+' · '+planLabel(c)+' · '+c.status})});
+  state.leads.forEach(l=>{if(!l.clientId&&l.name.toLowerCase().includes(q))m.push({k:'lead',id:l.id,name:l.name,sub:'Lead · '+l.stage})});
+  box.innerHTML=(m.length?m.slice(0,6).map(x=>'<button type="button" data-a="pick" data-k="'+x.k+'" data-id="'+x.id+'" data-key="'+key+'" data-pane="'+(inp.dataset.pane||'')+'"><span><b>'+esc(x.name)+'</b> <span class="mini">'+esc(x.sub)+'</span></span><span class="pill '+(x.k==='client'?'good':'')+'">'+(x.k==='client'?'Existing client':'Lead')+'</span></button>').join(''):'')+
+    '<div class="mini" style="padding:9px 12px;border-top:1px solid var(--line)">'+(m.length?'Or keep typing to add ':'No match. Add ')+'<b>'+esc(raw)+'</b> as new</div>';
+  box.hidden=false;
+}
+function respInfo(r){const k=RESP[r.stage];return k?{k,pid:r[k]}:null}
+function tasksFor(uid){
+  const u=person(uid);if(!u)return[];
+  const key={Planner:'planner',Videographer:'shooter',Editor:'editor'}[u.job];if(!key)return[];
+  return state.items.filter(r=>client(r.c)&&RESP[r.stage]===key&&r[key]===uid).sort((a,b)=>(a.shoot||9e15)-(b.shoot||9e15));
+}
+function actor(w){if(w&&w.cl){const c=client(w.cl);return c?contact(c)+' (client)':'Client'}return w}
+function feed(list,showClient){
+  if(!list.length)return '<div class="empty">Nothing yet</div>';
+  return '<div class="list feed">'+list.slice(0,8).map(a=>'<div class="row"><div class="grow"><span class="t">'+esc(actor(a.who))+'</span> '+esc(a.text)+(showClient&&a.c&&client(a.c)?' <span class="mini">· '+esc(client(a.c).name)+'</span>':'')+'</div><span class="m">'+timeAgo(a.t)+'</span></div>').join('')+'</div>';
+}
+function timeAgo(t){const m=Math.max(0,Math.floor((now()-t)/60000));return m<1?'just now':m<60?m+'m ago':m<1440?Math.floor(m/60)+'h ago':Math.floor(m/1440)+'d ago'}
+function segsFor(cid){
+  const rs=itemsOf(cid);if(!rs.length)return '<span class="mini">No content items</span>';
+  return '<div class="segs">'+rs.map(r=>'<i class="'+(r.stage==='posted'?'p':(r.stage==='script_sent'||r.stage==='edit_sent')?'a':['idea','script_drafted'].includes(r.stage)?'':'w')+'" title="'+esc(r.title)+': '+STAGE_LABEL[r.stage]+'"></i>').join('')+'</div>';
+}
+function delBtn(k,id,label){const on=armed===k+':'+id;return '<button type="button" class="btn sm danger'+(on?' armed':'')+'" data-a="del" data-k="'+k+'" data-id="'+id+'">'+(on?'Click again to delete':(label||'Delete'))+'</button>'}
+
+/* ---------- staff views ---------- */
+function vOverview(p){
+  const admin=p.role==='admin';
+  if(!state.clients.length&&!state.people.length){
+    const step=(done,title,sub,tab)=>'<div class="step"><span class="tick '+(done?'done':'')+'">'+(done?'✓':'')+'</span><div class="grow"><div class="t">'+title+'</div><div class="m">'+sub+'</div></div><button type="button" class="btn sm'+(done?'':' primary')+'" data-a="tab" data-pane="'+p.id+'" data-v="'+tab+'">Open</button></div>';
+    return '<div><h1 class="hello">Let us set this up</h1><div class="sub">Three short steps. Everything you add shows up on every screen and on the client portal.</div></div><div class="steps">'+
+      step(false,'1. Add your clients','Retainer or one-time, any service','clients')+step(false,'2. Add your team','Planner, videographer, editor, manager','team')+step(false,'3. Add content items','Reels, posts or videos for clients who buy content','board')+'</div>';
+  }
+  const act=active(),pend=pending(),late=pend.filter(r=>due(r)<now()),rets=act.filter(isRet),ones=act.filter(c=>!isRet(c));
+  const renew=rets.filter(c=>daysLeft(c)!==null&&daysLeft(c)<=14);
+  const out=state.invoices.filter(i=>!i.paid&&client(i.c));
+  const mrr=rets.reduce((s,c)=>s+c.fee/c.months,0),totalItems=state.items.length,deliv=state.items.filter(r=>r.stage==='posted').length;
+  const k=[];
+  k.push(kpi('Active clients',act.length,rets.length+' retainer · '+ones.length+' one-time'));
+  if(admin){k.push(kpi('Monthly retainer revenue',money(mrr),'from '+rets.length+' retainer(s)'));k.push(kpi('Outstanding',money(out.reduce((s,i)=>s+i.amount,0)),out.length+' unpaid invoice(s)',out.some(i=>i.due<now())?'bad':''))}
+  k.push(kpi('Content delivered',deliv+'/'+totalItems,'all clients','good'));
+  k.push(kpi('Approvals waiting',pend.length,late.length?late.length+' overdue':'none overdue',late.length?'bad':''));
+  k.push(kpi('Renewals in 14 days',renew.length,renew.map(c=>esc(c.name)).join(', ')||'none',renew.length?'warn':''));
+  const att=[];
+  late.forEach(r=>att.push('<div class="row"><span class="pill bad">Approval overdue</span><div class="grow"><div class="t">'+esc(r.title)+'</div><div class="m">'+esc(cname(r.c))+' · '+cd(due(r))+'</div></div><button type="button" class="btn sm" data-a="remind" data-reel="'+r.id+'">Remind</button></div>'));
+  state.items.filter(r=>r.stage==='script_approved'&&r.shoot&&r.shoot<now()&&client(r.c)).forEach(r=>att.push('<div class="row"><span class="pill bad">Production overdue</span><div class="grow"><div class="t">'+esc(r.title)+'</div><div class="m">'+esc(cname(r.c))+' · planned '+dstr(r.shoot)+'</div></div></div>'));
+  if(admin)state.invoices.filter(i=>!i.paid&&i.due<now()&&client(i.c)).forEach(i=>att.push('<div class="row"><span class="pill bad">Invoice overdue</span><div class="grow"><div class="t">'+i.no+' · '+money(i.amount)+'</div><div class="m">'+esc(cname(i.c))+'</div></div><button type="button" class="btn sm" data-a="paid" data-inv="'+i.id+'">Mark paid</button></div>'));
+  renew.forEach(c=>att.push('<div class="row"><span class="pill warn">Renewal</span><div class="grow"><div class="t">'+esc(c.name)+'</div><div class="m">'+planLabel(c)+' ends '+dstr(c.end)+' ('+daysLeft(c)+' days)</div></div></div>'));
+  ones.filter(c=>c.end&&c.end<now()).forEach(c=>att.push('<div class="row"><span class="pill warn">Past delivery date</span><div class="grow"><div class="t">'+esc(c.name)+'</div><div class="m">Due '+dstr(c.end)+'. Mark Completed when delivered.</div></div></div>'));
+  const fun=LEAD_STAGES.map(s=>({s,n:state.leads.filter(l=>l.stage===s).length})),mx=Math.max(1,...fun.map(f=>f.n));
+  return '<div class="kpis">'+k.join('')+'</div>'+
+  '<div class="cols">'+
+   '<div class="panel"><div class="panel-h"><h2>Needs attention</h2><span class="sub">Checked automatically</span></div>'+(att.length?'<div class="list">'+att.join('')+'</div>':'<div class="empty">All clear</div>')+'</div>'+
+   '<div class="panel"><div class="panel-h"><h2>Content by client</h2><span class="sub">one segment per item</span></div>'+(act.length?'<div class="list">'+act.map(c=>'<div class="row"><div class="grow"><div class="t">'+esc(c.name)+'</div><div class="m">'+(itemsOf(c.id).length?delivered(c.id)+' of '+itemsOf(c.id).length+' delivered':esc(c.service)+' · '+planLabel(c))+'</div></div><div style="width:120px;flex:none">'+segsFor(c.id)+'</div></div>').join('')+'</div>':'<div class="empty">No active clients</div>')+'</div>'+
+   '<div class="panel"><div class="panel-h"><h2>Lead pipeline</h2></div><div class="list">'+fun.map(f=>'<div class="row" style="flex-wrap:nowrap"><div style="width:104px;flex:none" class="m">'+f.s+'</div><div class="grow" style="min-width:0"><div class="bar"><i style="width:'+Math.round(f.n/mx*100)+'%;background:var(--accent)"></i></div></div><b class="num" style="width:20px">'+f.n+'</b></div>').join('')+'</div></div>'+
+   '<div class="panel"><div class="panel-h"><h2>Live activity</h2></div>'+feed(state.activity,true)+'</div>'+
+  '</div>';
+}
+function clientForm(p){
+  const f=p.form,isNew=f.id==='new',c=isNew?null:client(f.id),admin=p.role==='admin';
+  const linked=c?itemsOf(c.id).length+' content item(s) and '+state.invoices.filter(i=>i.c===c.id).length+' invoice(s)':'';
+  return '<div class="panel"><div class="panel-h"><h2>'+(isNew?'Add client':'Edit '+esc(c.name))+'</h2><button type="button" class="btn sm" data-a="cclose" data-pane="'+p.id+'">Cancel</button></div>'+
+   '<div class="formgrid">'+sugField(p,'Client or business name','cf_name')+fld(p,'Contact person','cf_contact','text')+fld(p,'Phone','cf_phone','text')+fld(p,'Email','cf_email','text')+
+   fld(p,'Service','cf_service','select',SERVICES)+fld(p,'Engagement','cf_plan','select',PLANS.map(x=>[x[0],x[1]]))+
+   (admin?fld(p,'Fee in rupees (per billing period)','cf_fee','text',null,'e.g. 20000'):'')+
+   fld(p,'Start date','cf_start','date')+fld(p,'End or delivery date (empty = automatic for retainers)','cf_end','date')+fld(p,'Status','cf_status','select',STATUSES)+fld(p,'Notes','cf_notes','text')+'</div>'+
+   (c?'<div class="note">Linked to '+linked+'. Saving updates the name, plan, dates and status on the content board, approvals, invoices, renewals and the client portal at once.</div>':'<div class="note">'+(f.lead?'Created from a lead. The lead is marked Plan signed and stays linked.':'The client appears on every screen after you save.')+'</div>')+
+   '<div><button type="button" class="btn primary" data-a="csave" data-pane="'+p.id+'">'+(isNew?'Add client':'Save changes')+'</button></div></div>';
+}
+function vClients(p){
+  const admin=p.role==='admin';
+  let h='<div class="panel-h"><div class="sub">'+state.clients.length+' client(s). Retainers renew; one-time projects end on delivery.</div><button type="button" class="btn primary" data-a="cnew" data-pane="'+p.id+'">Add client</button></div>';
+  if(p.form)h+=clientForm(p);
+  if(!state.clients.length)return h+'<div class="empty">No clients yet. Add your first one.</div>';
+  h+='<div class="scroll-x"><table class="table"><thead><tr><th>Client</th><th>Service</th><th>Engagement</th><th>Period</th><th>Content</th>'+(admin?'<th class="num">Unpaid</th>':'')+'<th></th></tr></thead><tbody>'+state.clients.map(c=>{
+    const d=daysLeft(c),un=state.invoices.filter(i=>i.c===c.id&&!i.paid).reduce((s,i)=>s+i.amount,0);
+    return '<tr><td><b>'+esc(c.name)+'</b> <span class="pill '+(c.status==='Active'?'good':c.status==='On hold'?'warn':'')+'">'+c.status+'</span><div class="mini">'+esc([c.contact,c.phone].filter(Boolean).join(' · '))+'</div></td><td>'+esc(c.service)+'</td><td>'+planLabel(c)+(admin&&c.fee?'<div class="mini">'+money(c.fee)+(isRet(c)?' / '+PER[c.months]:'')+'</div>':'')+'</td><td>'+dstr(c.start)+(c.end?' to '+dstr(c.end)+(c.status==='Active'&&isRet(c)?'<div class="mini"><span class="pill '+(d<=14?'warn':'')+'">'+d+' days left</span></div>':''):'')+'</td><td style="min-width:110px">'+segsFor(c.id)+'</td>'+(admin?'<td class="num">'+(un?money(un):'-')+'</td>':'')+'<td><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn sm" data-a="cedit" data-pane="'+p.id+'" data-client="'+c.id+'">Edit</button><button type="button" class="btn sm" data-a="open" data-pane="'+p.id+'" data-client="'+c.id+'">Client view</button>'+(admin?delBtn('client',c.id):'')+'</div></td></tr>'}).join('')+'</tbody></table></div>';
+  if(armed&&armed.startsWith('client:')){const c=client(armed.slice(7));if(c)h+='<div class="note">Deleting <b>'+esc(c.name)+'</b> also removes '+itemsOf(c.id).length+' content item(s) and '+state.invoices.filter(i=>i.c===c.id).length+' invoice(s). Click the red button again to confirm.</div>'}
+  return h;
+}
+function vPipeline(p){
+  return '<div class="addform"><div class="sugwrap"><input type="text" id="p'+p.id+'n" placeholder="Business name (existing clients appear as you type)" autocomplete="off" data-draft="leadName" data-suggest="leadName" data-pane="'+p.id+'" value="'+esc(drafts.leadName||'')+'" aria-label="Business name"><div class="sug" hidden></div></div><input type="text" id="p'+p.id+'a" placeholder="Area" data-draft="leadArea" value="'+esc(drafts.leadArea||'')+'" aria-label="Area"><button type="button" class="btn primary" data-a="addlead">Add lead</button></div>'+
+  '<div class="scroll-x"><div class="board">'+LEAD_STAGES.map(s=>{const ls=state.leads.filter(l=>l.stage===s);
+    return '<div class="col"><h3><span>'+s+'</span><span>'+ls.length+'</span></h3>'+ls.map(l=>{const lc=l.clientId?client(l.clientId):null;
+      return '<div class="card"><div class="t">'+esc(lc?lc.name:l.name)+'</div><div class="m">'+esc(l.area)+(lc?' · client':'')+'</div><select data-c="lead" data-id="'+l.id+'" aria-label="Move '+esc(l.name)+'">'+LEAD_STAGES.map(x=>'<option'+(x===l.stage?' selected':'')+'>'+x+'</option>').join('')+'</select><div class="acts">'+(lc?'<button type="button" class="btn sm" data-a="open" data-pane="'+p.id+'" data-client="'+lc.id+'">Client view</button>':'<button type="button" class="btn sm primary" data-a="convert" data-pane="'+p.id+'" data-lead="'+l.id+'">Convert to client</button>')+delBtn('lead',l.id)+'</div></div>'}).join('')+'</div>'}).join('')+'</div></div>';
+}
+function vBoard(p){
+  const ro=p.role==='employee',act=active();
+  const form=ro?'':(act.length?'<div class="addform"><select data-c="draft" data-key="itClient" aria-label="Client">'+act.map(c=>'<option value="'+c.id+'"'+((drafts.itClient||act[0].id)===c.id?' selected':'')+'>'+esc(c.name)+'</option>').join('')+'</select><input type="text" id="b'+p.id+'t" placeholder="Title, e.g. Trainer intro reel" data-draft="itTitle" value="'+esc(drafts.itTitle||'')+'" aria-label="Title"><select data-c="draft" data-key="itType" aria-label="Type">'+ITEM_TYPES.map(t=>'<option'+((drafts.itType||'Reel')===t?' selected':'')+'>'+t+'</option>').join('')+'</select><input type="date" data-draft="itDate" value="'+esc(drafts.itDate||'')+'" aria-label="Production date"><button type="button" class="btn primary" data-a="additem">Add</button><button type="button" class="btn" data-a="add4" title="Creates Reel 1 to 4 for the selected client">Add 4 reels for this month</button></div>':'<div class="note">Add an active client first, then add content items for them here.</div>');
+  const rs=state.items.filter(r=>client(r.c)&&(p.filter==='all'||r.c===p.filter));
+  return form+'<div class="panel-h"><div class="sub">'+(ro?'Read only. Use My day to update your tasks.':'No production without an approved draft. Third edit round is flagged as extra.')+'</div><select data-c="pane" data-pane="'+p.id+'" data-k="filter" aria-label="Filter by client"><option value="all">All clients</option>'+state.clients.map(c=>'<option value="'+c.id+'"'+(p.filter===c.id?' selected':'')+'>'+esc(c.name)+'</option>').join('')+'</select></div>'+
+  '<div class="scroll-x"><div class="board">'+STAGES.map(s=>{const cs=rs.filter(r=>r.stage===s);
+    return '<div class="col"><h3><span>'+STAGE_LABEL[s]+'</span><span>'+cs.length+'</span></h3>'+(cs.length?cs.map(r=>{const ri=respInfo(r),f=FLOW[r.stage];
+      const opts=ri?state.people.filter(u=>u.job===RESP_JOB[ri.k]):[];
+      return '<div class="card"><div class="t">'+esc(r.title)+'</div><div class="m">'+esc(cname(r.c))+' · '+esc(r.type)+(r.shoot?' · '+dstr(r.shoot):'')+'</div>'+
+      ((s==='script_sent'||s==='edit_sent')?'<div>'+cd(due(r))+'</div>':'')+
+      (r.rev?'<div><span class="pill '+(r.rev>FREE_REVISIONS?'bad':'')+'">Revision '+r.rev+' of '+FREE_REVISIONS+(r.rev>FREE_REVISIONS?' · extra round':'')+'</span></div>':'')+
+      (!ro&&ri?'<select data-c="assign" data-id="'+r.id+'" data-role="'+ri.k+'" aria-label="Assigned '+RESP_JOB[ri.k]+'"><option value="">'+RESP_JOB[ri.k]+': unassigned</option>'+opts.map(u=>'<option value="'+u.id+'"'+(ri.pid===u.id?' selected':'')+'>'+RESP_JOB[ri.k]+': '+esc(u.name)+'</option>').join('')+'</select>':(ri&&ri.pid&&person(ri.pid)?'<div class="mini">'+RESP_JOB[ri.k]+': '+esc(person(ri.pid).name)+'</div>':''))+
+      (ro?'':'<div class="acts">'+(f?'<button type="button" class="btn sm" data-a="adv" data-reel="'+r.id+'" data-who="'+(p.role==='admin'?'Admin':'Manager')+'">'+f[1]+'</button>':'')+delBtn('item',r.id)+'</div>')+'</div>'}).join(''):'<div class="m" style="padding:4px 6px">Empty</div>')+'</div>'}).join('')+'</div></div>';
+}
+function vApprovals(p){
+  const pend=pending();
+  if(!pend.length)return '<div class="empty">No approvals waiting</div>';
+  return '<div class="scroll-x"><table class="table"><thead><tr><th>Item</th><th>Client</th><th>Type</th><th>Clock</th><th></th></tr></thead><tbody>'+pend.map(r=>{
+    const od=due(r)<now();
+    return '<tr><td><b>'+esc(r.title)+'</b>'+(r.rev>FREE_REVISIONS?' <span class="pill bad">extra round</span>':'')+'</td><td>'+esc(cname(r.c))+'</td><td>'+(r.stage==='script_sent'?'Draft':'Edit')+'</td><td>'+cd(due(r))+'</td><td><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn sm" data-a="remind" data-reel="'+r.id+'">Remind</button><button type="button" class="btn sm good" data-a="adv" data-reel="'+r.id+'" data-who="Team (manual)">Record approval</button>'+(od&&!r.shifted&&r.shoot?'<button type="button" class="btn sm" data-a="shift" data-reel="'+r.id+'">Move dates</button>':'')+'</div></td></tr>'}).join('')+'</tbody></table></div><div class="note">Reminders at 24h and 48h will go out automatically once the database and WhatsApp are connected. Record approval by hand when the client replies on a call.</div>';
+}
+function vInvoices(p){
+  const inv=state.invoices.filter(i=>client(i.c)),tot=inv.reduce((s,i)=>s+i.amount,0),paid=inv.filter(i=>i.paid).reduce((s,i)=>s+i.amount,0),act=active();
+  return '<div class="kpis">'+kpi('Billed',money(tot),inv.length+' invoices')+kpi('Collected',money(paid),'paid','good')+kpi('Outstanding',money(tot-paid),'to collect',tot-paid?'warn':'')+'</div>'+
+  (act.length?'<div class="addform"><select data-c="draft" data-key="invClient" aria-label="Client for new invoice">'+act.map(c=>'<option value="'+c.id+'"'+((drafts.invClient||act[0].id)===c.id?' selected':'')+'>'+esc(c.name)+(c.fee?' ('+money(c.fee)+')':'')+'</option>').join('')+'</select><input type="text" placeholder="Amount (empty = client fee)" data-draft="invAmt" value="'+esc(drafts.invAmt||'')+'" aria-label="Amount"><button type="button" class="btn primary" data-a="newinv">Create invoice</button></div>':'<div class="note">Add an active client to create invoices.</div>')+
+  (inv.length?'<div class="scroll-x"><table class="table"><thead><tr><th>Invoice</th><th>Client</th><th class="num">Amount</th><th>Due</th><th>Status</th><th></th></tr></thead><tbody>'+inv.map(i=>{const od=!i.paid&&i.due<now();
+    return '<tr><td><b>'+i.no+'</b></td><td>'+esc(cname(i.c))+'</td><td class="num">'+money(i.amount)+'</td><td>'+dstr(i.due)+'</td><td><span class="pill '+(i.paid?'good':od?'bad':'warn')+'">'+(i.paid?'Paid':od?'Overdue':'Unpaid')+'</span></td><td><div style="display:flex;gap:6px">'+(i.paid?'':'<button type="button" class="btn sm good" data-a="paid" data-inv="'+i.id+'">Record payment</button>')+delBtn('inv',i.id)+'</div></td></tr>'}).join('')+'</tbody></table></div>':'<div class="empty">No invoices yet</div>');
+}
+function vTeam(p){
+  const admin=p.role==='admin';
+  return (admin?'<div class="addform"><input type="text" id="t'+p.id+'n" placeholder="Name" data-draft="pName" value="'+esc(drafts.pName||'')+'" aria-label="Name"><select data-c="draft" data-key="pJob" aria-label="Job">'+JOBS.map(j=>'<option'+((drafts.pJob||'Planner')===j?' selected':'')+'>'+j+'</option>').join('')+'</select><button type="button" class="btn primary" data-a="addperson">Add team member</button></div>':'')+
+  (state.people.length?'<div class="list">'+state.people.map(u=>{const t=tasksFor(u.id),od=t.filter(r=>r.stage==='script_approved'&&r.shoot&&r.shoot<now()).length;
+    return '<div class="row"><div class="grow"><div class="t">'+esc(u.name)+'</div><div class="m">'+esc(u.job)+'</div></div><span class="pill">'+t.length+' open</span>'+(od?'<span class="pill bad">'+od+' late</span>':'<span class="pill good">on track</span>')+(admin?delBtn('person',u.id,'Remove'):'')+'</div>'}).join('')+'</div>':'<div class="empty">No team members yet</div>')+
+  '<div class="note">Planner, Videographer and Editor get the My day view. Switch Role to Employee to see exactly what they see. New content items are assigned to the first person with the matching job; change it on the content board.</div>';
+}
+function vMyDay(p){
+  if(!state.people.length)return '<div class="empty">Add team members first (Team tab as Admin)</div>';
+  const u=person(p.user)||state.people[0],t=tasksFor(u.id);
+  return '<h1 class="hello">Good day, '+esc(u.name)+'</h1><div class="sub">'+esc(u.job)+'</div>'+
+  (t.length?'<div class="list">'+t.map(r=>{const f=FLOW[r.stage],late=r.stage==='script_approved'&&r.shoot&&r.shoot<now();
+    return '<div class="row"><div class="grow"><div class="t">'+esc(r.title)+'</div><div class="m">'+esc(cname(r.c))+(r.shoot?' · '+dstr(r.shoot):'')+(r.note?' · client note: '+esc(r.note):'')+'</div></div>'+(late?'<span class="pill bad">late</span>':'')+stagePill(r.stage)+'<button type="button" class="btn primary sm" data-a="adv" data-reel="'+r.id+'" data-who="'+esc(u.name)+'">'+f[1]+'</button></div>'}).join('')+'</div>':'<div class="empty">Nothing waiting for you</div>');
+}
+
+/* ---------- client portal views ---------- */
+const cApprovals=c=>state.items.filter(r=>r.c===c.id&&(r.stage==='script_sent'||r.stage==='edit_sent')).sort((a,b)=>due(a)-due(b));
+function approveCard(r){
+  const od=due(r)<now(),kind=r.stage==='script_sent'?'draft':'edit';
+  return '<div class="approve '+(od?'late':'')+'"><div class="panel-h"><div><div class="t" style="font-weight:700">'+esc(r.title)+'</div><div class="sub">'+(kind==='draft'?'Please read the draft and approve it so we can start production.':'Please review the edit and approve it so we can deliver.')+'</div></div>'+cd(due(r))+'</div>'+
+   '<div class="btns"><button type="button" class="btn good" data-a="approve" data-reel="'+r.id+'">Approve</button></div>'+
+   '<div class="btns"><input type="text" id="n'+r.id+'" placeholder="Need changes? Tell us what to change" data-draft="n'+r.id+'" value="'+esc(drafts['n'+r.id]||'')+'" aria-label="Change request note"><button type="button" class="btn bad" data-a="changes" data-reel="'+r.id+'">Request changes</button></div>'+
+   (kind==='edit'&&r.rev>=FREE_REVISIONS?'<div class="sub">This would be round '+(r.rev+1)+'. Two rounds are free; extra rounds may be charged as per the agreement.</div>':'')+'</div>';
+}
+function cOverview(c){
+  const rs=itemsOf(c.id),ap=cApprovals(c),d=daysLeft(c);
+  return '<div><h1 class="hello">Hi '+esc(contact(c))+'</h1><div class="sub">'+esc(c.name)+' · '+esc(c.service)+' · '+planLabel(c)+'</div></div>'+
+  '<div class="kpis">'+kpi('Status',esc(c.status),c.end?(isRet(c)?'plan ends ':'delivery ')+dstr(c.end):'')+
+  (rs.length?kpi('Delivered',delivered(c.id)+'/'+rs.length,'content items','good')+kpi('Waiting for you',ap.length,ap.length?'please approve':'all caught up',ap.length?'warn':''):'')+
+  (isRet(c)&&d!==null?kpi('Days left in plan',d,'renewal reminder at 14 days',d<=14?'warn':''):'')+'</div>'+
+  (ap.length?ap.map(approveCard).join(''):'')+
+  (rs.length?'<div class="panel"><div class="panel-h"><h2>Your content</h2></div><div class="list">'+rs.map(r=>'<div class="row"><div class="grow"><div class="t">'+esc(r.title)+'</div><div class="m">'+CLIENT_STATUS[r.stage]+(['script_approved','shot','editing'].includes(r.stage)&&r.shoot?' · '+dstr(r.shoot):'')+'</div></div>'+stagePill(r.stage)+'</div>').join('')+'</div></div>':'')+
+  '<div class="panel"><div class="panel-h"><h2>Recent updates</h2></div>'+feed(state.activity.filter(a=>a.cv&&a.c===c.id),false)+'</div>';
+}
+function cApprovalsTab(c){const ap=cApprovals(c);return ap.length?ap.map(approveCard).join(''):'<div class="empty">Nothing needs your approval right now</div>'}
+function cResults(c){
+  const ps=itemsOf(c.id).filter(r=>r.stage==='posted'),v=ps.reduce((s,r)=>s+r.views,0),l=ps.reduce((s,r)=>s+r.likes,0),sv=ps.reduce((s,r)=>s+r.saves,0);
+  return '<div class="kpis">'+kpi('Views',v.toLocaleString('en-IN'),ps.length+' delivered')+kpi('Likes',l.toLocaleString('en-IN'),'')+kpi('Saves',sv.toLocaleString('en-IN'),'')+'</div>'+
+  (ps.length?'<div class="scroll-x"><table class="table"><thead><tr><th>Item</th><th class="num">Views</th><th class="num">Likes</th><th class="num">Saves</th></tr></thead><tbody>'+ps.map(r=>'<tr><td><b>'+esc(r.title)+'</b></td><td class="num">'+r.views.toLocaleString('en-IN')+'</td><td class="num">'+r.likes+'</td><td class="num">'+r.saves+'</td></tr>').join('')+'</tbody></table></div>':'<div class="empty">Results appear after the first item is delivered</div>')+
+  '<div class="note">We share what happened, not promises. Results depend on your business, your offer and the platform.</div>';
+}
+function cPlan(c){
+  const d=daysLeft(c),inv=state.invoices.filter(i=>i.c===c.id);
+  return '<div class="kpis">'+kpi('Plan',planLabel(c),esc(c.service))+kpi(isRet(c)?'Plan ends':'Delivery',c.end?dstr(c.end):'-',d!==null?d+' days':'',d!==null&&d<=14?'warn':'')+'</div>'+
+  '<div class="panel"><div class="panel-h"><h2>Invoices</h2></div>'+(inv.length?'<div class="list">'+inv.map(i=>{const od=!i.paid&&i.due<now();return '<div class="row"><div class="grow"><div class="t">'+i.no+'</div><div class="m">Due '+dstr(i.due)+'</div></div><b class="num">'+money(i.amount)+'</b><span class="pill '+(i.paid?'good':od?'bad':'warn')+'">'+(i.paid?'Paid':od?'Overdue':'Unpaid')+'</span></div>'}).join('')+'</div>':'<div class="empty">No invoices yet</div>')+'</div>';
+}
+
+/* ---------- shell ---------- */
+function pane(p){
+  const staff=p.portal==='staff',tabs=TABS[staff?p.role:'client'];
+  const c=client(p.client);
+  let badge=0;
+  if(!staff&&c)badge=cApprovals(c).length; else if(staff&&p.role!=='employee')badge=pending().filter(r=>due(r)<now()).length;
+  const head='<div class="pane-head"><div class="seg" role="group" aria-label="Portal"><button type="button" data-a="portal" data-pane="'+p.id+'" data-v="staff" aria-pressed="'+staff+'">Story Builder</button><button type="button" data-a="portal" data-pane="'+p.id+'" data-v="client" aria-pressed="'+!staff+'">Client portal</button></div>'+
+   (staff?'<select data-c="pane" data-pane="'+p.id+'" data-k="role" aria-label="Role"><option value="admin"'+(p.role==='admin'?' selected':'')+'>Role: Admin</option><option value="manager"'+(p.role==='manager'?' selected':'')+'>Role: Manager</option><option value="employee"'+(p.role==='employee'?' selected':'')+'>Role: Employee</option></select>'+
+     (p.role==='employee'&&state.people.length?'<select data-c="pane" data-pane="'+p.id+'" data-k="user" aria-label="Employee">'+state.people.map(u=>'<option value="'+u.id+'"'+(p.user===u.id?' selected':'')+'>'+esc(u.name)+' ('+esc(u.job)+')</option>').join('')+'</select>':'')
+    :(state.clients.length?'<select data-c="pane" data-pane="'+p.id+'" data-k="client" aria-label="Client">'+state.clients.map(x=>'<option value="'+x.id+'"'+(p.client===x.id?' selected':'')+'>'+esc(x.name)+'</option>').join('')+'</select>':''))+'</div>';
+  const nav='<nav class="tabs" role="tablist">'+tabs.map(t=>'<button type="button" role="tab" data-a="tab" data-pane="'+p.id+'" data-v="'+t[0]+'" aria-selected="'+(p.tab===t[0])+'">'+t[1]+((t[0]==='approvals'&&badge)?'<span class="badge">'+badge+'</span>':'')+'</button>').join('')+'</nav>';
+  let body='';
+  if(staff){body=({overview:vOverview,clients:vClients,pipeline:vPipeline,board:vBoard,approvals:vApprovals,invoices:vInvoices,team:vTeam,myday:vMyDay}[p.tab]||vOverview)(p)}
+  else if(!c){body='<div class="empty">No clients yet. Add one in the Story Builder view under Clients, then pick it here.</div>'}
+  else{body=({overview:cOverview,approvals:cApprovalsTab,results:cResults,plan:cPlan}[p.tab]||cOverview)(c)}
+  return '<section class="pane" aria-label="'+(staff?'Staff console':'Client portal')+'">'+head+nav+'<div class="body">'+body+'</div></section>';
+}
+function renderBackup(){
+  const el=$('#backup');
+  if(!showBackup){el.innerHTML='';$('#bk').textContent='Backup';return}
+  $('#bk').textContent='Close backup';
+  el.innerHTML='<div class="backup"><div><h2>Backup and restore</h2><div class="mini">Your data lives in this browser only until the database is connected. Copy this text somewhere safe. It is also what we will import into the database.</div></div><textarea id="bkText" aria-label="Backup data">'+esc(JSON.stringify(state,null,1))+'</textarea><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-a="bkcopy">Copy</button><button type="button" class="btn" data-a="bkload">Load pasted data</button><button type="button" class="btn danger'+(armed==='all:clear'?' armed':'')+'" data-a="bkclear">'+(armed==='all:clear'?'Click again to erase everything':'Erase all data')+'</button></div></div>';
+}
+function render(){
+  panes.forEach(p=>{
+    if(p.portal==='staff'&&!TABS[p.role].some(t=>t[0]===p.tab))p.tab=TABS[p.role][0][0];
+    if(!client(p.client))p.client=state.clients.length?state.clients[0].id:null;
+    if(p.filter!=='all'&&!client(p.filter))p.filter='all';
+    if(!person(p.user))p.user=state.people.length?state.people[0].id:null;
+    if(p.form&&p.form.id!=='new'&&!client(p.form.id))p.form=null;
+  });
+  const el=$('#panes');
+  const y=window.scrollY,xs=[...el.querySelectorAll('.scroll-x')].map(s=>s.scrollLeft);
+  el.className='panes'+(layout==='split'?' split':'');
+  el.innerHTML=panes.map(pane).join('');
+  [...el.querySelectorAll('.scroll-x')].forEach((s,i)=>{if(xs[i])s.scrollLeft=xs[i]});
+  window.scrollTo(0,y);
+  $('#l-single').setAttribute('aria-pressed',layout==='single');$('#l-split').setAttribute('aria-pressed',layout==='split');
+  if(showBackup&&document.activeElement&&document.activeElement.id!=='bkText')renderBackup();
+}
+function tick(){
+  document.querySelectorAll('[data-due]').forEach(e=>{const l=left(+e.dataset.due);e.textContent=l.txt;e.className='cd '+l.cls});
+  const s=Math.floor((Date.now()-lastSync)/1000);$('#synctxt').textContent=s<5?'Live · saved just now':'Live · saved '+(s<60?s+'s':Math.floor(s/60)+'m')+' ago';
+}
+init();render();tick();setInterval(tick,5000);
+})();
+</script>

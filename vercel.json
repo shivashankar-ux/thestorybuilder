@@ -29,6 +29,14 @@
       "destination": "https://thestorybuilderdashboard.vercel.app/tsb/:path*"
     },
     {
+      "source": "/db",
+      "destination": "/db/index.html"
+    },
+    {
+      "source": "/db/",
+      "destination": "/db/index.html"
+    },
+    {
       "source": "/((?!api/|.*\\..*).*)",
       "destination": "/index.html"
     }
