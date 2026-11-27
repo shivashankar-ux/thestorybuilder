@@ -9,6 +9,7 @@ import PhoneStackCarousel from "../latestpf/PhoneStackCarousel";
 import SplitScreenCapabilities from "../latestpf/SplitScreenCapabilities";
 import HeroIllustration from "../latestpf/HeroIllustration";
 import GalleryTunnel from "../latestpf/GalleryTunnel";
+import InfinityGallery from "../latestpf/InfinityGallery";
 import { trackPageView, trackEvent } from "../../utils/tracking";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -1514,6 +1515,72 @@ export default function LatestVideoPortfolioPage({ setPage }) {
           reels={ALL_CLIENT_REELS}
           isMobile={isMobile}
         />
+      </section>
+
+      {/* 4.5. INFINITY MASONRY GALLERY — SEAMLESS DRIFTING VIDEO COVER WALL */}
+      <section
+        id="gallery"
+        className="latestpf-gallery-section"
+        style={{
+          scrollMarginTop: isMobile ? "75px" : "100px",
+          padding: isMobile ? "0 16px 44px" : "0 24px clamp(60px, 8vw, 100px)",
+          maxWidth: 1280,
+          margin: "0 auto",
+          boxSizing: "border-box",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "flex-end",
+            justifyContent: "space-between",
+            gap: isMobile ? 10 : 20,
+            marginBottom: isMobile ? 18 : 28,
+          }}
+        >
+          <div>
+            <span
+              style={{
+                fontSize: isMobile ? 11 : 12,
+                fontWeight: 800,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                color: "#FF4D1A",
+                display: "block",
+                marginBottom: 6,
+              }}
+            >
+              ✦ Infinite Reel Wall · Tap Any Cover to Watch
+            </span>
+            <h3
+              style={{
+                margin: 0,
+                fontSize: isMobile ? "clamp(26px, 6.5vw, 34px)" : "clamp(34px, 4.2vw, 52px)",
+                fontWeight: 800,
+                lineHeight: 1.05,
+                letterSpacing: "-0.035em",
+                color: "#111111",
+              }}
+            >
+              Explore Our Full Video Feed
+            </h3>
+          </div>
+          <p
+            style={{
+              margin: 0,
+              fontSize: isMobile ? 13 : 15,
+              color: "rgba(17, 17, 17, 0.68)",
+              fontWeight: 500,
+              maxWidth: 420,
+              lineHeight: 1.45,
+            }}
+          >
+            Glide through our commercial shoots, farmhouse films, gym reels, and meta ads — tap any cover photo to play the full cut with sound.
+          </p>
+        </div>
+
+        <InfinityGallery items={ALL_CLIENT_REELS} isMobile={isMobile} />
       </section>
 
       {/* 5. 3D PRODUCTION VAULT — INTERACTIVE GALLERY TUNNEL WITH REAL SHOOT FOOTAGE */}
