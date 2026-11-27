@@ -181,8 +181,21 @@ textarea{width:100%;min-height:150px;background:var(--surface);color:var(--fg);b
   .hello{font-size:19px}
   .kpi .v{font-size:20px}
   .pane-head,.topbar{gap:6px 10px}
-  .btn{padding:6px 9px}
   .col{width:180px}
+}
+
+/* ---------- touch target sizing (phones/tablets) ---------- */
+@media (max-width:860px){
+  .btn{min-height:40px;padding:9px 14px;font-size:14px}
+  .btn.sm{min-height:34px;padding:7px 12px;font-size:12.5px}
+  select,input[type=text],input[type=email],input[type=password],input[type=date],input[type=number]{min-height:40px;padding:9px 11px;font-size:14px}
+  .tick,.dot{flex:none}
+  .head-email{max-width:38vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .approve .btns{gap:10px}
+  .card .acts .btn{flex:1;min-width:0}
+}
+@media (max-width:420px){
+  .head-email{display:none}
 }
 
 /* ---------- mobile bottom nav (Instagram-style) ---------- */
@@ -788,7 +801,7 @@ function pane(p){
   const head='<div class="pane-head">'+
     (previewing?'<button type="button" class="btn sm" data-a="backToStaff" data-pane="'+p.id+'">&larr; Back to Story Builder</button>'
       :'<span class="pill">'+(staff?('Role: '+esc(authProfile.role==='admin'?'Admin':'Manager')):'Client portal')+'</span>')+
-    '<span class="sp"></span><span class="mini">'+esc(authProfile.email)+'</span>'+
+    '<span class="sp"></span><span class="mini head-email">'+esc(authProfile.email)+'</span>'+
     '<button type="button" class="btn sm" data-a="logout">Log out</button></div>';
   const nav='<nav class="tabs" role="tablist">'+tabs.map(t=>'<button type="button" role="tab" data-a="tab" data-pane="'+p.id+'" data-v="'+t[0]+'" aria-selected="'+(p.tab===t[0])+'">'+t[1]+((t[0]==='approvals'&&badge)?'<span class="badge">'+badge+'</span>':'')+'</button>').join('')+'</nav>';
   let body='';
@@ -841,6 +854,9 @@ function initDragDrop(){
         chosenClass:'drag-chosen',
         filter:'select,button,a,input',
         preventOnFilter:false,
+        delay:150,
+        delayOnTouchOnly:true,
+        touchStartThreshold:5,
         onEnd(evt){
           const toStage=evt.to.dataset.stage,fromStage=evt.from.dataset.stage;
           if(toStage===fromStage)return;
