@@ -424,10 +424,16 @@ function removePerson(id){
   state.items.forEach(r=>{['planner','shooter','editor'].forEach(k=>{if(r[k]===id)r[k]=null})});
   state.people=state.people.filter(p=>p.id!==id);
 }
+function nextBillingFifth(){
+  const d=new Date();
+  const candidate=new Date(d.getFullYear(),d.getMonth(),5);
+  if(d.getDate()>5)candidate.setMonth(candidate.getMonth()+1);
+  return candidate.getTime();
+}
 function clientDefaults(c,lead){
   const planKey=c?(isRet(c)?'m'+c.months:'once'):'m1';
   return {cf_name:c?c.name:(lead?lead.name:''),cf_contact:c?c.contact:'',cf_phone:c?c.phone:'',cf_email:c?c.email:'',cf_service:c?c.service:'Video content',
-    cf_plan:planKey,cf_fee:c?String(c.fee||''):'',cf_start:iso(c?c.start:now()),cf_end:(c&&c.endCustom)?iso(c.end):'',cf_status:c?c.status:'Active',cf_notes:c?c.notes:(lead?'Area: '+lead.area:'')};
+    cf_plan:planKey,cf_fee:c?String(c.fee||''):'',cf_start:iso(c?c.start:nextBillingFifth()),cf_end:(c&&c.endCustom)?iso(c.end):'',cf_status:c?c.status:'Active',cf_notes:c?c.notes:(lead?'Area: '+lead.area:'')};
 }
 function saveClient(p){
   const d=drafts,name=(d.cf_name||'').trim();
