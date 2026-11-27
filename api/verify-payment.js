@@ -43,26 +43,32 @@ export default async function handler(req, res) {
           .eq("razorpay_order_id", orderId)
           .single();
 
-        if (order && order.status === "paid") {
-          let signedUrl = null;
-          if (order.ebooks?.file_url) {
-            const cleanPath = order.ebooks.file_url.replace(/^ebooks-private\//, "");
-            const { data: signedData } = await supabase.storage
-              .from("ebooks-private")
-              .createSignedUrl(cleanPath, 86400);
-            signedUrl = signedData?.signedUrl || null;
-          }
-
-          return res.status(200).json({
-            ok: true,
-            status: "paid",
-            order,
-            download_url: signedUrl,
-          });
+        if (!order) {
+          return res.status(404).json({ ok: false, error: "Order not found." });
         }
+
+        if (order.status !== "paid") {
+          return res.status(200).json({ ok: true, status: order.status, order });
+        }
+
+        let signedUrl = null;
+        if (order.ebooks?.file_url) {
+          const cleanPath = order.ebooks.file_url.replace(/^ebooks-private\//, "");
+          const { data: signedData } = await supabase.storage
+            .from("ebooks-private")
+            .createSignedUrl(cleanPath, 86400);
+          signedUrl = signedData?.signedUrl || null;
+        }
+
+        return res.status(200).json({
+          ok: true,
+          status: "paid",
+          order,
+          download_url: signedUrl,
+        });
       }
 
-      return res.status(200).json({ ok: true, status: "paid", message: "Order processed." });
+      return res.status(503).json({ ok: false, error: "Order lookup service unavailable." });
     }
 
     // POST: Signature Verification

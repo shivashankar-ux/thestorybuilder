@@ -5,3 +5,7 @@ dist
 .vercel
 .DS_Store
 
+.env*
+
+# Private operations documents (uploaded to a private Supabase bucket, never to git)
+Story_Builder_Operations_Pack/

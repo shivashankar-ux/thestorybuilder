@@ -28,8 +28,10 @@ export default async function handler(req, res) {
   const token = authHeader.replace("Bearer ", "").trim();
   const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 
-  // Flexible Password Authentication Check
-  if (ADMIN_PASSWORD && token !== ADMIN_PASSWORD && token !== "admin123" && token !== "thestorybuilder" && token !== "admin") {
+  if (!ADMIN_PASSWORD) {
+    return res.status(500).json({ ok: false, error: "Server misconfigured: ADMIN_PASSWORD is not set." });
+  }
+  if (token !== ADMIN_PASSWORD) {
     return res.status(401).json({ ok: false, error: "Unauthorized. Incorrect Admin Password." });
   }
 

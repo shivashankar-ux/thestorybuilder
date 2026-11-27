@@ -52,6 +52,7 @@ import StoreFrontPage from "./components/store/StoreFrontPage";
 import EbookDetailPage from "./components/store/EbookDetailPage";
 import StoreSuccessPage from "./components/store/StoreSuccessPage";
 import AdminDashboard from "./components/store/AdminDashboard";
+import CRMPage from "./components/crm/CRMPage";
 
 import {
   trackPageView,
@@ -71,12 +72,18 @@ const pageTransition = {
 function getRouteFromPath(pathStr) {
   if (!pathStr || typeof pathStr !== "string") return { page: "home", slug: null };
 
+  // crm.thestorybuilder.in is a dedicated password-gated portal: always show it, regardless of path
+  if (typeof window !== "undefined" && window.location.hostname === "crm.thestorybuilder.in") {
+    return { page: "crm", slug: null };
+  }
+
   // Strip query string and hash parameters so URLs with ?utm_... or ?gclid=... or #hash match correctly
   const cleanPath = pathStr.split("?")[0].split("#")[0].trim();
   const p = (cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`)
     .toLowerCase()
     .replace(/\/$/, "") || "/";
 
+  if (p === "/crm") return { page: "crm", slug: null };
   if (p === "" || p === "/" || p === "/home") return { page: "home", slug: null };
   if (p === "/landing") return { page: "landing", slug: null };
   if (p === "/services") return { page: "services", slug: null };
@@ -144,6 +151,7 @@ function getPathFromRoute(page, slug) {
   if (page === "store") return "/store";
   if (page === "store-success") return "/store/success";
   if (page === "store-admin") return "/store/admin";
+  if (page === "crm") return "/crm";
   if (page === "store-detail" && slug) return `/store/${slug}`;
   if (page === "case" && slug) return `/case-studies/${slug}`;
   if (page === "not-found") return "/404";
@@ -162,6 +170,12 @@ const pageMetadata = {
   "store-admin": {
     title: "Store Admin | The Story Builder",
     desc: "Admin dashboard to manage ebooks.",
+    noindex: true,
+  },
+  crm: {
+    title: "Operations Portal | The Story Builder",
+    desc: "Password-protected operations document portal.",
+    noindex: true,
   },
   "store-detail": {
     title: "Digital Ebook Playbook | The Story Builder",
@@ -325,6 +339,9 @@ export default function App() {
     const canonicalEl = document.querySelector('link[rel="canonical"]');
     if (canonicalEl) canonicalEl.setAttribute("href", `https://thestorybuilder.in${desired}`);
 
+    const robotsEl = document.querySelector('meta[name="robots"]');
+    if (robotsEl) robotsEl.setAttribute("content", meta.noindex ? "noindex, nofollow" : "index, follow");
+
     window.scrollTo({ top: 0, behavior: "smooth" });
 
     trackEvent("viewed_page", { page, path: desired });
@@ -345,7 +362,7 @@ export default function App() {
   return (
     <div>
       <div className="grain" aria-hidden="true" />
-      {page !== "landing" && page !== "us-video-editing" && page !== "video-portfolio" && page !== "latestpf" && <Navbar page={page} setPage={navigate} />}
+      {page !== "landing" && page !== "us-video-editing" && page !== "video-portfolio" && page !== "latestpf" && page !== "crm" && <Navbar page={page} setPage={navigate} />}
 
       <AnimatePresence mode="wait">
         {page === "home" && (
@@ -524,6 +541,12 @@ export default function App() {
           </motion.div>
         )}
 
+        {page === "crm" && (
+          <motion.div key="crm" {...pageTransition}>
+            <CRMPage />
+          </motion.div>
+        )}
+
         {page === "case" && (
           <motion.div key={pageKey} {...pageTransition}>
             <CaseStudy slug={caseSlug} navigate={navigate} />
@@ -537,10 +560,10 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {page !== "landing" && page !== "us-video-editing" && page !== "video-portfolio" && page !== "latestpf" && <Footer setPage={navigate} />}
+      {page !== "landing" && page !== "us-video-editing" && page !== "video-portfolio" && page !== "latestpf" && page !== "crm" && <Footer setPage={navigate} />}
 
-      {page !== "landing" && page !== "us-video-editing" && page !== "video-portfolio" && page !== "latestpf" && <WhatsAppButton />}
-      {page !== "landing" && page !== "us-video-editing" && page !== "video-portfolio" && page !== "latestpf" && <ExitIntent setPage={navigate} />}
+      {page !== "landing" && page !== "us-video-editing" && page !== "video-portfolio" && page !== "latestpf" && page !== "crm" && <WhatsAppButton />}
+      {page !== "landing" && page !== "us-video-editing" && page !== "video-portfolio" && page !== "latestpf" && page !== "crm" && <ExitIntent setPage={navigate} />}
       <CookieConsent setPage={navigate} />
     </div>
   );

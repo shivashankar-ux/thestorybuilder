@@ -6,6 +6,8 @@ import verifyPaymentHandler from './api/verify-payment.js';
 import adminEbooksHandler from './api/admin-ebooks.js';
 import adminUploadHandler from './api/admin-upload.js';
 import usQuoteHandler from './api/us-quote.js';
+import crmAuthHandler from './api/crm-auth.js';
+import crmFilesHandler from './api/crm-files.js';
 
 dotenv.config();
 
@@ -34,6 +36,16 @@ app.all('/api/admin-upload', (req, res) => {
 
 app.post('/api/us-quote', (req, res) => {
   usQuoteHandler(req, res);
+});
+
+const crmCors = cors({ origin: 'http://localhost:5173', credentials: true });
+
+app.post('/api/crm-auth', crmCors, (req, res) => {
+  crmAuthHandler(req, res);
+});
+
+app.get('/api/crm-files', crmCors, (req, res) => {
+  crmFilesHandler(req, res);
 });
 
 app.listen(port, () => {
