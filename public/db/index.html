@@ -49,7 +49,7 @@ button{cursor:pointer}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;background:var(--surface)}
 .seg button{border:0;background:transparent;padding:6px 12px;font-size:13px;font-weight:500;color:var(--muted)}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:600}
-select,input[type=text]{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:13px;min-width:0}
+select,input[type=text],input[type=email],input[type=password]{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 9px;font-size:13px;min-width:0}
 .panes{display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
 @media (min-width:1150px){.panes.split{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .pane{background:var(--surface);border:1px solid var(--line);border-radius:14px;display:flex;flex-direction:column;min-width:0}
@@ -137,15 +137,23 @@ textarea{width:100%;min-height:150px;background:var(--surface);color:var(--fg);b
 .sug button:hover,.sug button:focus-visible{background:var(--surface2)}
 </style>
 
-<div class="wrap">
+<div class="wrap" id="loginWrap" style="max-width:380px;margin:60px auto">
+  <div class="pane" style="padding:24px">
+    <div class="brand" style="margin-bottom:18px"><div class="logo">S</div><div>Story Builder Console</div></div>
+    <form id="loginForm" style="display:flex;flex-direction:column;gap:12px">
+      <div class="fld"><label for="loginEmail">Email</label><input id="loginEmail" type="email" required autocomplete="username"></div>
+      <div class="fld"><label for="loginPass">Password</label><input id="loginPass" type="password" required autocomplete="current-password"></div>
+      <div id="loginError" class="mini" style="color:var(--bad)"></div>
+      <button type="submit" class="btn primary" id="loginBtn">Log in</button>
+    </form>
+  </div>
+</div>
+
+<div class="wrap" id="appWrap" style="display:none">
   <header class="topbar">
-    <div class="brand"><div class="logo">S</div><div>Story Builder Console<small>Prototype · your own data, saved in this browser</small></div></div>
+    <div class="brand"><div class="logo">S</div><div>Story Builder Console<small>Live · connected to your database</small></div></div>
     <div class="tools">
       <span class="sync" id="sync"><span class="dot" id="dot"></span><span id="synctxt">Live</span></span>
-      <div class="seg" role="group" aria-label="Layout">
-        <button type="button" data-a="layout" data-v="single" id="l-single">One view</button>
-        <button type="button" data-a="layout" data-v="split" id="l-split">Staff + Client side by side</button>
-      </div>
       <button type="button" class="btn" data-a="backup" id="bk">Backup</button>
     </div>
   </header>
@@ -154,9 +162,14 @@ textarea{width:100%;min-height:150px;background:var(--surface);color:var(--fg);b
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
 (function(){
-const HR=36e5, DAY=24*HR, FREE_REVISIONS=2, KEY='sb-console-v2';
+const SUPABASE_URL='https://dvazqcphiyeqetbhkozn.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR2YXpxY3BoaXllcWV0Ymhrb3puIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU3NzgyNDMsImV4cCI6MjExMTM1NDI0M30.uVz0238oD_qifK_qmRHge_No3bOcqMP8EJn9HPcHrLs';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
+const HR=36e5, DAY=24*HR, FREE_REVISIONS=2;
 const STAGES=['idea','script_drafted','script_sent','script_approved','shot','editing','edit_sent','edit_approved','posted'];
 const STAGE_LABEL={idea:'Idea',script_drafted:'Draft ready',script_sent:'Sent for approval',script_approved:'Approved to produce',shot:'Shot',editing:'Editing',edit_sent:'Edit sent',edit_approved:'Edit approved',posted:'Delivered'};
 const CLIENT_STATUS={idea:'Idea stage',script_drafted:'Being written',script_sent:'Needs your approval',script_approved:'Approved, production planned',shot:'Shot, editing starts next',editing:'Being edited',edit_sent:'Edit ready, needs your approval',edit_approved:'Approved, scheduled',posted:'Delivered'};
@@ -176,18 +189,13 @@ const TABS={
   client:[['overview','Overview'],['approvals','Approvals'],['results','Results'],['plan','Plan and invoices']]
 };
 
-let state, panes, layout='single', drafts={}, lastSync=Date.now(), pid=1, armed=null, showBackup=false;
+let state, panes, drafts={}, lastSync=Date.now(), armed=null, showBackup=false;
+let authProfile=null; // {id,email,role,client_id}
 
-const blank=()=>({clients:[],items:[],invoices:[],leads:[],people:[],activity:[],seq:{inv:0}});
-function load(){try{const s=localStorage.getItem(KEY);if(s)return Object.assign(blank(),JSON.parse(s))}catch(e){}return blank()}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
-function init(){
-  state=load(); drafts={};
-  panes=[{id:pid++,portal:'staff',role:'admin',user:null,client:null,tab:'overview',filter:'all',form:null,pform:false}];
-}
+const blank=()=>({clients:[],items:[],invoices:[],leads:[],people:[],activity:[]});
 const now=()=>Date.now();
 const $=s=>document.querySelector(s);
-const uid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const uid=_=>crypto.randomUUID();
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>'₹'+Math.round(Number(n)||0).toLocaleString('en-IN');
 const dstr=t=>t?new Date(t).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'}):'-';
@@ -223,18 +231,73 @@ function tone(s){
 }
 const stagePill=s=>'<span class="pill '+tone(s)+'">'+STAGE_LABEL[s]+'</span>';
 
-/* Every change goes through mutate(): data is saved, then every pane redraws from the same data. */
+/* ---------- DB <-> in-memory mappers ---------- */
+function mapClientIn(row){return {id:row.id,name:row.name,contact:row.contact||'',phone:row.phone||'',email:row.email||'',service:row.service||'',months:row.months,
+  start:row.start_date?fromIso(row.start_date):now(),end:row.end_date?fromIso(row.end_date):null,endCustom:!!row.end_custom,status:row.status,notes:row.notes||'',
+  fee:Number(row.fee)||0,created:row.created_at?new Date(row.created_at).getTime():now()}}
+function mapClientOut(c){return {id:c.id,name:c.name,contact:c.contact||null,phone:c.phone||null,email:c.email||null,service:c.service||null,months:c.months,
+  start_date:iso(c.start),end_date:c.end?iso(c.end):null,end_custom:!!c.endCustom,status:c.status,notes:c.notes||null,fee:c.fee||0}}
+function mapItemIn(row){return {id:row.id,c:row.client_id,title:row.title,type:row.type,stage:row.stage,rev:row.rev||0,sentAt:row.sent_at?new Date(row.sent_at).getTime():null,
+  shoot:row.shoot_date?new Date(row.shoot_date).getTime():null,views:row.views||0,likes:row.likes||0,saves:row.saves||0,note:row.note||'',reminded:row.reminded||0,
+  shifted:!!row.shifted,planner:row.planner_id,shooter:row.shooter_id,editor:row.editor_id}}
+function mapItemOut(r){return {id:r.id,client_id:r.c,title:r.title,type:r.type,stage:r.stage,rev:r.rev||0,sent_at:r.sentAt?new Date(r.sentAt).toISOString():null,
+  shoot_date:r.shoot?new Date(r.shoot).toISOString():null,views:r.views||0,likes:r.likes||0,saves:r.saves||0,note:r.note||null,reminded:r.reminded||0,
+  shifted:!!r.shifted,planner_id:r.planner||null,shooter_id:r.shooter||null,editor_id:r.editor||null}}
+function mapInvoiceIn(row){return {id:row.id,c:row.client_id,no:row.invoice_no,amount:Number(row.amount),due:new Date(row.due_date).getTime(),paid:!!row.paid,
+  paidOn:row.paid_on?new Date(row.paid_on).getTime():null}}
+function mapInvoiceOut(i){return {id:i.id,client_id:i.c,invoice_no:i.no,amount:i.amount,due_date:new Date(i.due).toISOString(),paid:!!i.paid,
+  paid_on:i.paidOn?new Date(i.paidOn).toISOString():null}}
+function mapLeadIn(row){return {id:row.id,name:row.name,area:row.area||'-',stage:row.stage,clientId:row.client_id}}
+function mapLeadOut(l){return {id:l.id,name:l.name,area:l.area||null,stage:l.stage,client_id:l.clientId||null}}
+function mapPersonIn(row){return {id:row.id,name:row.name,job:row.job}}
+function mapPersonOut(p){return {id:p.id,name:p.name,job:p.job}}
+function mapActivityIn(row){return {id:row.id,t:new Date(row.created_at).getTime(),
+  who:(row.who&&row.who.indexOf('client:')===0)?{cl:row.who.slice(7)}:row.who,text:row.text,c:row.client_id,cv:!!row.client_visible}}
+function mapActivityOut(a){return {id:a.id,who:(a.who&&a.who.cl)?('client:'+a.who.cl):String(a.who),text:a.text,client_id:a.c||null,
+  client_visible:!!a.cv,created_at:new Date(a.t).toISOString()}}
+
+async function loadFromDb(){
+  const [c,i,inv,l,p,a]=await Promise.all([
+    sb.from('clients').select('*'),
+    sb.from('content_items').select('*'),
+    sb.from('invoices').select('*'),
+    sb.from('leads').select('*'),
+    sb.from('people').select('*'),
+    sb.from('activity_log').select('*').order('created_at',{ascending:false}).limit(60),
+  ]);
+  state=blank();
+  state.clients=(c.data||[]).map(mapClientIn);
+  state.items=(i.data||[]).map(mapItemIn);
+  state.invoices=(inv.data||[]).map(mapInvoiceIn);
+  state.leads=(l.data||[]).map(mapLeadIn);
+  state.people=(p.data||[]).map(mapPersonIn);
+  state.activity=(a.data||[]).map(mapActivityIn);
+}
+async function upsertClient(c){const{error}=await sb.from('clients').upsert(mapClientOut(c));if(error)throw error}
+async function deleteClient(id){const{error}=await sb.from('clients').delete().eq('id',id);if(error)throw error}
+async function upsertItem(r){const{error}=await sb.from('content_items').upsert(mapItemOut(r));if(error)throw error}
+async function deleteItem(id){const{error}=await sb.from('content_items').delete().eq('id',id);if(error)throw error}
+async function upsertInvoice(i){const{error}=await sb.from('invoices').upsert(mapInvoiceOut(i));if(error)throw error}
+async function deleteInvoice(id){const{error}=await sb.from('invoices').delete().eq('id',id);if(error)throw error}
+async function upsertLead(l){const{error}=await sb.from('leads').upsert(mapLeadOut(l));if(error)throw error}
+async function deleteLead(id){const{error}=await sb.from('leads').delete().eq('id',id);if(error)throw error}
+async function upsertPerson(p){const{error}=await sb.from('people').upsert(mapPersonOut(p));if(error)throw error}
+async function deletePerson(id){const{error}=await sb.from('people').delete().eq('id',id);if(error)throw error}
+async function insertActivity(a){const{error}=await sb.from('activity_log').insert(mapActivityOut(a));if(error)throw error}
+
+function log(who,text,c,cv){state.activity.unshift({id:uid(),t:now(),who,text,c:c||null,cv:!!cv}); state.activity.length=Math.min(state.activity.length,60)}
+let tt=0;
+function toast(m){const el=$('#toast');el.textContent=m;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2400)}
+function pulse(){const d=$('#dot');if(!d)return;d.classList.remove('pulse');void d.offsetWidth;d.classList.add('pulse')}
+const P=id=>panes.find(p=>p.id==id);
+
 let raf=0;
-function mutate(fn,msg){
-  fn(); lastSync=Date.now(); save();
+function mutate(fn,msg,sync){
+  fn(); lastSync=Date.now();
+  if(sync){ Promise.resolve().then(sync).catch(e=>toast('Sync problem: '+(e&&e.message?e.message:'could not save to the database'))); }
   if(!raf) raf=requestAnimationFrame(()=>{raf=0;render();pulse()});
   if(msg) toast(msg);
 }
-function log(who,text,c,cv){state.activity.unshift({t:now(),who,text,c:c||null,cv:!!cv}); state.activity.length=Math.min(state.activity.length,60)}
-let tt=0;
-function toast(m){const el=$('#toast');el.textContent=m;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),2400)}
-function pulse(){const d=$('#dot');d.classList.remove('pulse');void d.offsetWidth;d.classList.add('pulse')}
-const P=id=>panes.find(p=>p.id==id);
 
 /* ---------- workflow ---------- */
 function advance(id,who){
@@ -243,11 +306,11 @@ function advance(id,who){
     r.stage=f[0];
     if(f[0]==='script_sent'||f[0]==='edit_sent') r.sentAt=now();
     log(who,f[1]+': '+r.title,r.c,true);
-  },f[1]+' done');
+  },f[1]+' done',()=>Promise.all([upsertItem(r),insertActivity(state.activity[0])]));
 }
 function clientApprove(id){
   const r=item(id),kind=r.stage==='script_sent'?'draft':'edit';
-  mutate(()=>{r.stage=kind==='draft'?'script_approved':'edit_approved'; log({cl:r.c},'approved the '+kind+': '+r.title,r.c,true)},'Approved. The team sees it instantly.');
+  mutate(()=>{r.stage=kind==='draft'?'script_approved':'edit_approved'; log({cl:r.c},'approved the '+kind+': '+r.title,r.c,true)},'Approved. The team sees it instantly.',()=>Promise.all([upsertItem(r),insertActivity(state.activity[0])]));
 }
 function clientChanges(id){
   const r=item(id),note=(drafts['n'+id]||'').trim();
@@ -257,11 +320,11 @@ function clientChanges(id){
     r.note=note; delete drafts['n'+id];
     if(kind==='draft') r.stage='script_drafted'; else {r.stage='editing'; r.rev+=1}
     log({cl:r.c},'requested changes on the '+kind+': '+r.title,r.c,true);
-  },'Changes sent to the team');
+  },'Changes sent to the team',()=>Promise.all([upsertItem(r),insertActivity(state.activity[0])]));
 }
 function defaultAssignee(job){const p=state.people.find(p=>p.job===job);return p?p.id:null}
 function newItem(cid,title,type,shoot){
-  return {id:uid('i'),c:cid,title,type,stage:'idea',rev:0,sentAt:null,shoot:shoot||null,views:0,likes:0,saves:0,note:'',reminded:0,shifted:false,
+  return {id:uid(),c:cid,title,type,stage:'idea',rev:0,sentAt:null,shoot:shoot||null,views:0,likes:0,saves:0,note:'',reminded:0,shifted:false,
     planner:defaultAssignee('Planner'),shooter:defaultAssignee('Videographer'),editor:defaultAssignee('Editor')};
 }
 function removeClient(id){
@@ -287,38 +350,44 @@ function saveClient(p){
   const start=fromIso(d.cf_start)||now(),endIn=fromIso(d.cf_end);
   const fee=p.role==='admin'?Math.max(0,Number(d.cf_fee)||0):null;
   const isNew=p.form.id==='new';
+  let c, linkedLead=null;
   mutate(()=>{
-    let c;
-    if(isNew){c={id:uid('c'),fee:0,created:now()};state.clients.push(c)}else c=client(p.form.id);
+    if(isNew){c={id:uid(),fee:0,created:now()};state.clients.push(c)}else c=client(p.form.id);
     Object.assign(c,{name,contact:(d.cf_contact||'').trim(),phone:(d.cf_phone||'').trim(),email:(d.cf_email||'').trim(),service:d.cf_service,months,start,
       end:endIn||(months?addMonths(start,months):null),endCustom:!!endIn,status:d.cf_status,notes:(d.cf_notes||'').trim()});
     if(fee!==null)c.fee=fee;
-    if(isNew&&p.form.lead){const l=state.leads.find(l=>l.id===p.form.lead);if(l){l.clientId=c.id;l.stage='Plan signed'}}
+    if(isNew&&p.form.lead){const l=state.leads.find(l=>l.id===p.form.lead);if(l){l.clientId=c.id;l.stage='Plan signed';linkedLead=l}}
     log('Team',(isNew?'added client ':'updated client ')+c.name,c.id,false);
     p.form=null;
-  },isNew?'Client added':'Client updated everywhere');
+  },isNew?'Client added':'Client updated everywhere',()=>{
+    const tasks=[upsertClient(c),insertActivity(state.activity[0])];
+    if(linkedLead) tasks.push(upsertLead(linkedLead));
+    return Promise.all(tasks);
+  });
 }
 
 /* ---------- actions ---------- */
 const A={
   tab:d=>{P(d.pane).tab=d.v;render()},
-  portal:d=>{const p=P(d.pane);p.portal=d.v;p.tab=d.v==='client'?'overview':TABS[p.role][0][0];render()},
-  layout:d=>{layout=d.v;
-    if(d.v==='split'&&panes.length<2)panes.push({id:pid++,portal:'client',role:'admin',user:null,client:null,tab:'overview',filter:'all',form:null,pform:false});
-    if(d.v==='single')panes=panes.slice(0,1);render()},
   adv:d=>advance(d.reel,d.who||'Team'),
   approve:d=>clientApprove(d.reel),
   changes:d=>clientChanges(d.reel),
-  remind:d=>{const r=item(d.reel),c=client(r.c);mutate(()=>{r.reminded++;log('Reminder','queued for '+contact(c)+' (WhatsApp, simulated): '+r.title,r.c,false)},'Reminder queued for '+contact(c))},
+  remind:d=>{const r=item(d.reel),c=client(r.c);mutate(()=>{r.reminded++;log('Reminder','queued for '+contact(c)+' (WhatsApp, simulated): '+r.title,r.c,false)},'Reminder queued for '+contact(c),()=>Promise.all([upsertItem(r),insertActivity(state.activity[0])]))},
   shift:d=>{const r=item(d.reel),days=Math.max(1,Math.ceil((now()-due(r))/DAY));
-    mutate(()=>{if(r.shoot)r.shoot+=days*DAY;r.shifted=true;log('Team','moved dates by '+days+' day(s) due to late approval: '+r.title,r.c,true)},'Dates moved by '+days+' day(s)')},
-  paid:d=>{const i=state.invoices.find(i=>i.id===d.inv);mutate(()=>{i.paid=true;i.paidOn=now();log('Finance','recorded payment '+i.no+' ('+money(i.amount)+')',i.c,true)},'Payment recorded')},
+    mutate(()=>{if(r.shoot)r.shoot+=days*DAY;r.shifted=true;log('Team','moved dates by '+days+' day(s) due to late approval: '+r.title,r.c,true)},'Dates moved by '+days+' day(s)',()=>Promise.all([upsertItem(r),insertActivity(state.activity[0])]))},
+  paid:d=>{const i=state.invoices.find(i=>i.id===d.inv);mutate(()=>{i.paid=true;i.paidOn=now();log('Finance','recorded payment '+i.no+' ('+money(i.amount)+')',i.c,true)},'Payment recorded',()=>Promise.all([upsertInvoice(i),insertActivity(state.activity[0])]))},
   newinv:()=>{
     const cid=drafts.invClient||(active()[0]||{}).id;if(!cid){toast('Add a client first');return}
     const c=client(cid),amt=Number(drafts.invAmt)||c.fee;
     if(!amt){toast('Enter an amount (this client has no fee set)');return}
-    mutate(()=>{state.seq.inv++;const no='INV-'+new Date().getFullYear()+'-'+String(state.seq.inv).padStart(3,'0');
-      state.invoices.unshift({id:uid('v'),c:cid,no,amount:amt,due:now()+7*DAY,paid:false});drafts.invAmt='';log('Finance','created invoice '+no,cid,true)},'Invoice created');
+    let inv;
+    mutate(()=>{
+      const yr=new Date().getFullYear();
+      const seqNo=state.invoices.filter(i=>i.no&&i.no.indexOf('INV-'+yr+'-')===0).length+1;
+      const no='INV-'+yr+'-'+String(seqNo).padStart(3,'0');
+      inv={id:uid(),c:cid,no,amount:amt,due:now()+7*DAY,paid:false};
+      state.invoices.unshift(inv);drafts.invAmt='';log('Finance','created invoice '+no,cid,true);
+    },'Invoice created',()=>Promise.all([upsertInvoice(inv),insertActivity(state.activity[0])]));
   },
   pick:d=>{
     hideSug();
@@ -339,7 +408,8 @@ const A={
     if(dup){toast('Already in your pipeline ('+dup.stage+')');return}
     let cid=drafts.leadClient&&client(drafts.leadClient)?drafts.leadClient:null;
     if(!cid){const c=state.clients.find(c=>c.name.toLowerCase()===name.toLowerCase());if(c)cid=c.id}
-    mutate(()=>{state.leads.unshift({id:uid('l'),name,area:(drafts.leadArea||'').trim()||'-',stage:cid?'Plan signed':'To visit',clientId:cid});drafts.leadName='';drafts.leadArea='';drafts.leadClient='';log('Team','added lead '+name,cid,false)},cid?'Linked to existing client':'Lead added');
+    let lead;
+    mutate(()=>{lead={id:uid(),name,area:(drafts.leadArea||'').trim()||'-',stage:cid?'Plan signed':'To visit',clientId:cid};state.leads.unshift(lead);drafts.leadName='';drafts.leadArea='';drafts.leadClient='';log('Team','added lead '+name,cid,false)},cid?'Linked to existing client':'Lead added',()=>Promise.all([upsertLead(lead),insertActivity(state.activity[0])]));
   },
   convert:d=>{const p=P(d.pane),l=state.leads.find(l=>l.id===d.lead);Object.assign(drafts,clientDefaults(null,l));p.tab='clients';p.form={id:'new',lead:l.id};render()},
   cnew:d=>{const p=P(d.pane);Object.assign(drafts,clientDefaults(null,null));p.form={id:'new'};render()},
@@ -347,20 +417,25 @@ const A={
   cclose:d=>{P(d.pane).form=null;render()},
   csave:d=>saveClient(P(d.pane)),
   open:d=>{const p=P(d.pane);p.portal='client';p.client=d.client;p.tab='overview';render()},
+  backToStaff:d=>{const p=P(d.pane);p.portal='staff';render()},
+  logout:async()=>{await sb.auth.signOut();location.reload()},
   additem:d=>{
     const cid=drafts.itClient||(active()[0]||{}).id,title=(drafts.itTitle||'').trim();
     if(!cid){toast('Add a client first');return}
     if(!title){toast('Enter a title');return}
-    mutate(()=>{const r=newItem(cid,title,drafts.itType||'Reel',fromIso(drafts.itDate));state.items.push(r);drafts.itTitle='';log('Team','added '+(r.type||'item').toLowerCase()+': '+title,cid,true)},'Added to the content board');
+    let r;
+    mutate(()=>{r=newItem(cid,title,drafts.itType||'Reel',fromIso(drafts.itDate));state.items.push(r);drafts.itTitle='';log('Team','added '+(r.type||'item').toLowerCase()+': '+title,cid,true)},'Added to the content board',()=>Promise.all([upsertItem(r),insertActivity(state.activity[0])]));
   },
   add4:()=>{
     const cid=drafts.itClient||(active()[0]||{}).id;if(!cid){toast('Add a client first');return}
     const mon=new Date().toLocaleDateString('en-IN',{month:'short',year:'numeric'});
-    mutate(()=>{for(let i=1;i<=4;i++)state.items.push(newItem(cid,'Reel '+i+' ('+mon+')','Reel',null));log('Team','created the month: 4 reels',cid,true)},'4 reels created for '+cname(cid));
+    let items;
+    mutate(()=>{items=[];for(let i=1;i<=4;i++){const it=newItem(cid,'Reel '+i+' ('+mon+')','Reel',null);items.push(it);state.items.push(it)}log('Team','created the month: 4 reels',cid,true)},'4 reels created for '+cname(cid),()=>Promise.all(items.map(upsertItem).concat([insertActivity(state.activity[0])])));
   },
   addperson:()=>{
     const name=(drafts.pName||'').trim();if(!name){toast('Enter the name');return}
-    mutate(()=>{state.people.push({id:uid('u'),name,job:drafts.pJob||'Planner'});drafts.pName='';log('Team','added team member '+name,null,false)},'Team member added');
+    let person_;
+    mutate(()=>{person_={id:uid(),name,job:drafts.pJob||'Planner'};state.people.push(person_);drafts.pName='';log('Team','added team member '+name,null,false)},'Team member added',()=>Promise.all([upsertPerson(person_),insertActivity(state.activity[0])]));
   },
   del:d=>{
     const key=d.k+':'+d.id;
@@ -372,19 +447,23 @@ const A={
       else if(d.k==='lead')state.leads=state.leads.filter(l=>l.id!==d.id);
       else if(d.k==='person')removePerson(d.id);
       else if(d.k==='inv')state.invoices=state.invoices.filter(i=>i.id!==d.id);
-    },'Deleted');
+    },'Deleted',()=>{
+      if(d.k==='client')return deleteClient(d.id);
+      if(d.k==='item')return deleteItem(d.id);
+      if(d.k==='lead')return deleteLead(d.id);
+      if(d.k==='person')return deletePerson(d.id);
+      if(d.k==='inv')return deleteInvoice(d.id);
+    });
   },
   backup:()=>{showBackup=!showBackup;renderBackup()},
-  bkcopy:()=>{const t=$('#bkText');t.select();let ok=false;try{ok=navigator.clipboard&&navigator.clipboard.writeText(t.value)}catch(e){}if(ok&&ok.catch)ok.catch(()=>{});toast('Copied. Paste it somewhere safe.')},
-  bkload:()=>{try{const o=JSON.parse($('#bkText').value);if(!o||!Array.isArray(o.clients))throw 0;mutate(()=>{state=Object.assign(blank(),o)},'Data loaded')}catch(e){toast('That is not valid backup data')}},
-  bkclear:()=>{const key='all:clear';if(armed!==key){armed=key;renderBackup();setTimeout(()=>{if(armed===key){armed=null;renderBackup()}},4000);return}armed=null;mutate(()=>{state=blank()},'All data cleared')}
+  bkcopy:()=>{const t=$('#bkText');t.select();let ok=false;try{ok=navigator.clipboard&&navigator.clipboard.writeText(t.value)}catch(e){}if(ok&&ok.catch)ok.catch(()=>{});toast('Copied. Paste it somewhere safe.')}
 };
 document.addEventListener('click',e=>{if(!e.target.closest('.sugwrap'))hideSug();const t=e.target.closest('[data-a]');if(!t||t.disabled)return;const f=A[t.dataset.a];if(f)f(t.dataset)});
 document.addEventListener('change',e=>{
   const t=e.target.closest('[data-c]');if(!t)return;const k=t.dataset.c,v=t.value;
   if(k==='pane'){const p=P(t.dataset.pane);p[t.dataset.k]=v;if(t.dataset.k==='role'){p.tab=TABS[v][0][0];p.form=null}render()}
-  else if(k==='lead'){const l=state.leads.find(l=>l.id===t.dataset.id);mutate(()=>{l.stage=v;log('Team',l.name+' moved to '+v,null,false)},'Lead moved to '+v)}
-  else if(k==='assign'){const r=item(t.dataset.id);mutate(()=>{r[t.dataset.role]=v||null;log('Team','assigned '+(v?person(v).name:'nobody')+' to '+r.title,r.c,false)},'Assigned')}
+  else if(k==='lead'){const l=state.leads.find(l=>l.id===t.dataset.id);mutate(()=>{l.stage=v;log('Team',l.name+' moved to '+v,null,false)},'Lead moved to '+v,()=>Promise.all([upsertLead(l),insertActivity(state.activity[0])]))}
+  else if(k==='assign'){const r=item(t.dataset.id);mutate(()=>{r[t.dataset.role]=v||null;log('Team','assigned '+(v?person(v).name:'nobody')+' to '+r.title,r.c,false)},'Assigned',()=>Promise.all([upsertItem(r),insertActivity(state.activity[0])]))}
   else if(k==='draft'){drafts[t.dataset.key]=v}
 });
 document.addEventListener('input',e=>{const t=e.target.closest('[data-draft]');if(t){drafts[t.dataset.draft]=t.value;if(t.dataset.draft==='leadName')drafts.leadClient=''}const s=e.target.closest('[data-suggest]');if(s)showSuggest(s)});
@@ -507,7 +586,7 @@ function vApprovals(p){
   if(!pend.length)return '<div class="empty">No approvals waiting</div>';
   return '<div class="scroll-x"><table class="table"><thead><tr><th>Item</th><th>Client</th><th>Type</th><th>Clock</th><th></th></tr></thead><tbody>'+pend.map(r=>{
     const od=due(r)<now();
-    return '<tr><td><b>'+esc(r.title)+'</b>'+(r.rev>FREE_REVISIONS?' <span class="pill bad">extra round</span>':'')+'</td><td>'+esc(cname(r.c))+'</td><td>'+(r.stage==='script_sent'?'Draft':'Edit')+'</td><td>'+cd(due(r))+'</td><td><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn sm" data-a="remind" data-reel="'+r.id+'">Remind</button><button type="button" class="btn sm good" data-a="adv" data-reel="'+r.id+'" data-who="Team (manual)">Record approval</button>'+(od&&!r.shifted&&r.shoot?'<button type="button" class="btn sm" data-a="shift" data-reel="'+r.id+'">Move dates</button>':'')+'</div></td></tr>'}).join('')+'</tbody></table></div><div class="note">Reminders at 24h and 48h will go out automatically once the database and WhatsApp are connected. Record approval by hand when the client replies on a call.</div>';
+    return '<tr><td><b>'+esc(r.title)+'</b>'+(r.rev>FREE_REVISIONS?' <span class="pill bad">extra round</span>':'')+'</td><td>'+esc(cname(r.c))+'</td><td>'+(r.stage==='script_sent'?'Draft':'Edit')+'</td><td>'+cd(due(r))+'</td><td><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn sm" data-a="remind" data-reel="'+r.id+'">Remind</button><button type="button" class="btn sm good" data-a="adv" data-reel="'+r.id+'" data-who="Team (manual)">Record approval</button>'+(od&&!r.shifted&&r.shoot?'<button type="button" class="btn sm" data-a="shift" data-reel="'+r.id+'">Move dates</button>':'')+'</div></td></tr>'}).join('')+'</tbody></table></div><div class="note">Reminders at 24h and 48h will go out automatically once WhatsApp is connected. Record approval by hand when the client replies on a call.</div>';
 }
 function vInvoices(p){
   const inv=state.invoices.filter(i=>client(i.c)),tot=inv.reduce((s,i)=>s+i.amount,0),paid=inv.filter(i=>i.paid).reduce((s,i)=>s+i.amount,0),act=active();
@@ -521,7 +600,7 @@ function vTeam(p){
   return (admin?'<div class="addform"><input type="text" id="t'+p.id+'n" placeholder="Name" data-draft="pName" value="'+esc(drafts.pName||'')+'" aria-label="Name"><select data-c="draft" data-key="pJob" aria-label="Job">'+JOBS.map(j=>'<option'+((drafts.pJob||'Planner')===j?' selected':'')+'>'+j+'</option>').join('')+'</select><button type="button" class="btn primary" data-a="addperson">Add team member</button></div>':'')+
   (state.people.length?'<div class="list">'+state.people.map(u=>{const t=tasksFor(u.id),od=t.filter(r=>r.stage==='script_approved'&&r.shoot&&r.shoot<now()).length;
     return '<div class="row"><div class="grow"><div class="t">'+esc(u.name)+'</div><div class="m">'+esc(u.job)+'</div></div><span class="pill">'+t.length+' open</span>'+(od?'<span class="pill bad">'+od+' late</span>':'<span class="pill good">on track</span>')+(admin?delBtn('person',u.id,'Remove'):'')+'</div>'}).join('')+'</div>':'<div class="empty">No team members yet</div>')+
-  '<div class="note">Planner, Videographer and Editor get the My day view. Switch Role to Employee to see exactly what they see. New content items are assigned to the first person with the matching job; change it on the content board.</div>';
+  '<div class="note">Planner, Videographer and Editor get the My day view. New content items are assigned to the first person with the matching job; change it on the content board.</div>';
 }
 function vMyDay(p){
   if(!state.people.length)return '<div class="empty">Add team members first (Team tab as Admin)</div>';
@@ -569,10 +648,12 @@ function pane(p){
   const c=client(p.client);
   let badge=0;
   if(!staff&&c)badge=cApprovals(c).length; else if(staff&&p.role!=='employee')badge=pending().filter(r=>due(r)<now()).length;
-  const head='<div class="pane-head"><div class="seg" role="group" aria-label="Portal"><button type="button" data-a="portal" data-pane="'+p.id+'" data-v="staff" aria-pressed="'+staff+'">Story Builder</button><button type="button" data-a="portal" data-pane="'+p.id+'" data-v="client" aria-pressed="'+!staff+'">Client portal</button></div>'+
-   (staff?'<select data-c="pane" data-pane="'+p.id+'" data-k="role" aria-label="Role"><option value="admin"'+(p.role==='admin'?' selected':'')+'>Role: Admin</option><option value="manager"'+(p.role==='manager'?' selected':'')+'>Role: Manager</option><option value="employee"'+(p.role==='employee'?' selected':'')+'>Role: Employee</option></select>'+
-     (p.role==='employee'&&state.people.length?'<select data-c="pane" data-pane="'+p.id+'" data-k="user" aria-label="Employee">'+state.people.map(u=>'<option value="'+u.id+'"'+(p.user===u.id?' selected':'')+'>'+esc(u.name)+' ('+esc(u.job)+')</option>').join('')+'</select>':'')
-    :(state.clients.length?'<select data-c="pane" data-pane="'+p.id+'" data-k="client" aria-label="Client">'+state.clients.map(x=>'<option value="'+x.id+'"'+(p.client===x.id?' selected':'')+'>'+esc(x.name)+'</option>').join('')+'</select>':''))+'</div>';
+  const previewing=!staff&&authProfile.role!=='client';
+  const head='<div class="pane-head">'+
+    (previewing?'<button type="button" class="btn sm" data-a="backToStaff" data-pane="'+p.id+'">&larr; Back to Story Builder</button>'
+      :'<span class="pill">'+(staff?('Role: '+esc(authProfile.role==='admin'?'Admin':'Manager')):'Client portal')+'</span>')+
+    '<span class="sp"></span><span class="mini">'+esc(authProfile.email)+'</span>'+
+    '<button type="button" class="btn sm" data-a="logout">Log out</button></div>';
   const nav='<nav class="tabs" role="tablist">'+tabs.map(t=>'<button type="button" role="tab" data-a="tab" data-pane="'+p.id+'" data-v="'+t[0]+'" aria-selected="'+(p.tab===t[0])+'">'+t[1]+((t[0]==='approvals'&&badge)?'<span class="badge">'+badge+'</span>':'')+'</button>').join('')+'</nav>';
   let body='';
   if(staff){body=({overview:vOverview,clients:vClients,pipeline:vPipeline,board:vBoard,approvals:vApprovals,invoices:vInvoices,team:vTeam,myday:vMyDay}[p.tab]||vOverview)(p)}
@@ -584,7 +665,7 @@ function renderBackup(){
   const el=$('#backup');
   if(!showBackup){el.innerHTML='';$('#bk').textContent='Backup';return}
   $('#bk').textContent='Close backup';
-  el.innerHTML='<div class="backup"><div><h2>Backup and restore</h2><div class="mini">Your data lives in this browser only until the database is connected. Copy this text somewhere safe. It is also what we will import into the database.</div></div><textarea id="bkText" aria-label="Backup data">'+esc(JSON.stringify(state,null,1))+'</textarea><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-a="bkcopy">Copy</button><button type="button" class="btn" data-a="bkload">Load pasted data</button><button type="button" class="btn danger'+(armed==='all:clear'?' armed':'')+'" data-a="bkclear">'+(armed==='all:clear'?'Click again to erase everything':'Erase all data')+'</button></div></div>';
+  el.innerHTML='<div class="backup"><div><h2>Export your data</h2><div class="mini">Your data lives in the database now. This is a read-only copy for your own records.</div></div><textarea id="bkText" aria-label="Backup data" readonly>'+esc(JSON.stringify(state,null,1))+'</textarea><div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn primary" data-a="bkcopy">Copy</button></div></div>';
 }
 function render(){
   panes.forEach(p=>{
@@ -596,17 +677,52 @@ function render(){
   });
   const el=$('#panes');
   const y=window.scrollY,xs=[...el.querySelectorAll('.scroll-x')].map(s=>s.scrollLeft);
-  el.className='panes'+(layout==='split'?' split':'');
+  el.className='panes';
   el.innerHTML=panes.map(pane).join('');
   [...el.querySelectorAll('.scroll-x')].forEach((s,i)=>{if(xs[i])s.scrollLeft=xs[i]});
   window.scrollTo(0,y);
-  $('#l-single').setAttribute('aria-pressed',layout==='single');$('#l-split').setAttribute('aria-pressed',layout==='split');
   if(showBackup&&document.activeElement&&document.activeElement.id!=='bkText')renderBackup();
 }
 function tick(){
   document.querySelectorAll('[data-due]').forEach(e=>{const l=left(+e.dataset.due);e.textContent=l.txt;e.className='cd '+l.cls});
-  const s=Math.floor((Date.now()-lastSync)/1000);$('#synctxt').textContent=s<5?'Live · saved just now':'Live · saved '+(s<60?s+'s':Math.floor(s/60)+'m')+' ago';
+  const s=Math.floor((Date.now()-lastSync)/1000);const se=$('#synctxt');if(se)se.textContent=s<5?'Live · saved just now':'Live · saved '+(s<60?s+'s':Math.floor(s/60)+'m')+' ago';
 }
-init();render();tick();setInterval(tick,5000);
+
+/* ---------- auth / bootstrap ---------- */
+async function boot(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){$('#loginWrap').style.display='';$('#appWrap').style.display='none';return}
+  const {data:prof,error}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
+  if(error||!prof){
+    $('#loginError').textContent='No access configured for this account yet.';
+    await sb.auth.signOut();
+    return;
+  }
+  authProfile={id:prof.id,email:prof.email,role:prof.role,client_id:prof.client_id};
+  $('#loginWrap').style.display='none';
+  $('#appWrap').style.display='';
+  await loadFromDb();
+  panes=[{id:1,
+    portal:authProfile.role==='client'?'client':'staff',
+    role:authProfile.role==='client'?'admin':authProfile.role,
+    client:authProfile.role==='client'?authProfile.client_id:null,
+    tab:(authProfile.role==='client'?TABS.client:TABS[authProfile.role])[0][0],
+    filter:'all',form:null,user:null}];
+  render();
+}
+document.getElementById('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const email=document.getElementById('loginEmail').value.trim();
+  const pass=document.getElementById('loginPass').value;
+  const errEl=document.getElementById('loginError');
+  const btn=document.getElementById('loginBtn');
+  errEl.textContent='';btn.disabled=true;btn.textContent='Logging in…';
+  const {error}=await sb.auth.signInWithPassword({email,password:pass});
+  btn.disabled=false;btn.textContent='Log in';
+  if(error){errEl.textContent=error.message;return}
+  await boot();
+});
+boot();
+setInterval(tick,5000);
 })();
 </script>
