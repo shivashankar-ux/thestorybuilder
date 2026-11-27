@@ -256,6 +256,13 @@ textarea{width:100%;min-height:150px;background:var(--surface);color:var(--fg);b
   <div class="panel"><div class="skel" style="height:14px;width:30%;margin-bottom:12px"></div><div class="skel" style="height:60px;width:100%"></div></div>
 </div>
 
+<div class="wrap" id="bootErrorWrap" style="display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;gap:14px;padding:24px;text-align:center">
+  <div class="logo" style="width:48px;height:48px;font-size:22px">S</div>
+  <div style="font-weight:700;font-size:16px">Couldn't load the console</div>
+  <div class="mini" id="bootErrorMsg" style="max-width:320px;opacity:.8"></div>
+  <button type="button" class="btn" id="bootRetryBtn" onclick="location.reload()">Retry</button>
+</div>
+
 <div class="wrap" id="appWrap" style="display:none">
   <header class="topbar">
     <div class="brand"><div class="logo">S</div><div>Story Builder Console<small>Live · connected to your database</small></div></div>
@@ -278,9 +285,15 @@ textarea{width:100%;min-height:150px;background:var(--surface);color:var(--fg);b
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+<script>
+function _cdnLoadFailed(){
+  var w=document.getElementById('bootErrorWrap'),m=document.getElementById('bootErrorMsg');
+  if(w){w.style.display='flex';if(m)m.textContent='A required script failed to load from the network. Check your connection and retry.';}
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js" onerror="_cdnLoadFailed()"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.js" onerror="_cdnLoadFailed()"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js" onerror="_cdnLoadFailed()"></script>
 <script>
 (function(){
 const SUPABASE_URL='https://dvazqcphiyeqetbhkozn.supabase.co';
@@ -1029,29 +1042,38 @@ sb.auth.onAuthStateChange((event)=>{
   if(event==='PASSWORD_RECOVERY') showSetPasswordScreen();
 });
 async function boot(){
-  const {data:{session}}=await sb.auth.getSession();
-  if(!session){$('#loginWrap').style.display='';$('#appWrap').style.display='none';return}
-  const {data:prof,error}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
-  if(error||!prof){
-    $('#loginError').textContent='No access configured for this account yet.';
-    await sb.auth.signOut();
-    return;
+  $('#bootErrorWrap').style.display='none';
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    if(!session){$('#loginWrap').style.display='';$('#appWrap').style.display='none';return}
+    const {data:prof,error}=await sb.from('profiles').select('*').eq('id',session.user.id).single();
+    if(error||!prof){
+      $('#loginError').textContent='No access configured for this account yet.';
+      await sb.auth.signOut();
+      return;
+    }
+    authProfile={id:prof.id,email:prof.email,role:prof.role,client_id:prof.client_id};
+    $('#loginWrap').style.display='none';
+    $('#setPwWrap').style.display='none';
+    $('#appWrap').style.display='none';
+    $('#loadingWrap').style.display='';
+    await loadFromDb();
+    panes=[{id:1,
+      portal:authProfile.role==='client'?'client':'staff',
+      role:authProfile.role==='client'?'admin':authProfile.role,
+      client:authProfile.role==='client'?authProfile.client_id:null,
+      tab:(authProfile.role==='client'?TABS.client:TABS[authProfile.role])[0][0],
+      filter:'all',form:null,user:null}];
+    $('#loadingWrap').style.display='none';
+    $('#appWrap').style.display='';
+    render();
+  }catch(err){
+    $('#loadingWrap').style.display='none';
+    $('#loginWrap').style.display='none';
+    $('#appWrap').style.display='none';
+    $('#bootErrorMsg').textContent=(err&&err.message)?err.message:'Something went wrong while loading. Check your connection and try again.';
+    $('#bootErrorWrap').style.display='flex';
   }
-  authProfile={id:prof.id,email:prof.email,role:prof.role,client_id:prof.client_id};
-  $('#loginWrap').style.display='none';
-  $('#setPwWrap').style.display='none';
-  $('#appWrap').style.display='none';
-  $('#loadingWrap').style.display='';
-  await loadFromDb();
-  panes=[{id:1,
-    portal:authProfile.role==='client'?'client':'staff',
-    role:authProfile.role==='client'?'admin':authProfile.role,
-    client:authProfile.role==='client'?authProfile.client_id:null,
-    tab:(authProfile.role==='client'?TABS.client:TABS[authProfile.role])[0][0],
-    filter:'all',form:null,user:null}];
-  $('#loadingWrap').style.display='none';
-  $('#appWrap').style.display='';
-  render();
 }
 document.getElementById('loginForm').addEventListener('submit',async e=>{
   e.preventDefault();
@@ -1066,12 +1088,20 @@ document.getElementById('loginForm').addEventListener('submit',async e=>{
   await boot();
 });
 (async function start(){
-  const hash=window.location.hash||'';
-  if(hash.indexOf('type=invite')>-1||hash.indexOf('type=recovery')>-1){
-    await new Promise(r=>setTimeout(r,300)); // let supabase-js finish parsing the URL into a session
-    showSetPasswordScreen();
-  } else {
-    await boot();
+  try{
+    const hash=window.location.hash||'';
+    if(hash.indexOf('type=invite')>-1||hash.indexOf('type=recovery')>-1){
+      await new Promise(r=>setTimeout(r,300)); // let supabase-js finish parsing the URL into a session
+      showSetPasswordScreen();
+    } else {
+      await boot();
+    }
+  }catch(err){
+    $('#loadingWrap').style.display='none';
+    $('#loginWrap').style.display='none';
+    $('#appWrap').style.display='none';
+    $('#bootErrorMsg').textContent=(err&&err.message)?err.message:'Something went wrong while loading. Check your connection and try again.';
+    $('#bootErrorWrap').style.display='flex';
   }
 })();
 setInterval(tick,5000);

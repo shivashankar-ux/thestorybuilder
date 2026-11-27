@@ -1,6 +1,5 @@
-const CACHE_NAME = "sb-console-shell-v1";
+const CACHE_NAME = "sb-console-shell-v2";
 const SHELL_URLS = [
-  "/db",
   "/db/manifest.json",
   "/db/icon-192.png",
   "/db/icon-512.png",
@@ -30,20 +29,29 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Shell + CDN libraries: stale-while-revalidate so the app opens instantly, then updates in the background.
-  if (event.request.method === "GET") {
+  if (event.request.method !== "GET") return;
+
+  // The app shell HTML itself: always go to the network first so a fixed bug
+  // is never masked by an old cached page. Only fall back to cache if offline.
+  if (event.request.mode === "navigate") {
     event.respondWith(
-      caches.match(event.request).then((cached) => {
-        const network = fetch(event.request)
-          .then((response) => {
-            if (response && response.ok) {
-              caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
-            }
-            return response;
-          })
-          .catch(() => cached);
-        return cached || network;
-      })
+      fetch(event.request).catch(() => caches.match(event.request))
     );
+    return;
   }
+
+  // CDN libraries + static assets: stale-while-revalidate so they load instantly, then update in the background.
+  event.respondWith(
+    caches.match(event.request).then((cached) => {
+      const network = fetch(event.request)
+        .then((response) => {
+          if (response && response.ok) {
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+          }
+          return response;
+        })
+        .catch(() => cached);
+      return cached || network;
+    })
+  );
 });
